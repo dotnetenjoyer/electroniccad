@@ -14,6 +14,14 @@
 
     <ItemGroup>
       <Folder Include="Infrastructure" />
+      <Folder Include="Views\ActivityBar" />
+      <Folder Include="Views\Diagrams\Items" />
+      <Folder Include="Views\Properties" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+      <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.3" />
     </ItemGroup>
 
 </Project>

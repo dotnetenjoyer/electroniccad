@@ -10,8 +10,4 @@
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="ViewModels" />
-    </ItemGroup>
-
 </Project>
