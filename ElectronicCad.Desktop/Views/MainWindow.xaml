@@ -1,0 +1,32 @@
+﻿<Window x:Class="ElectronicCad.Desktop.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels;assembly=ElectronicCad.MVVM"
+        xmlns:views="clr-namespace:ElectronicCad.Desktop.Views"
+        xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
+        xmlns:diagrams="clr-namespace:ElectronicCad.Desktop.Views.Diagrams"
+        xmlns:activityBar="clr-namespace:ElectronicCad.Desktop.Views.ActivityBar"
+        xmlns:properties="clr-namespace:ElectronicCad.Desktop.Views.Properties"
+        d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel}"
+        mc:Ignorable="d"
+        Title="ElectronicCAD" WindowState="Maximized"
+        Background="{StaticResource BackgroundBrush}">
+    <DockPanel LastChildFill="True">
+        <views:TopMenu DockPanel.Dock="Top"/>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            
+            <activityBar:ActivityBar Grid.Column="0"/>
+            <diagrams:DiagramControl Grid.Column="1"/>
+            <properties:Properties Grid.Column="2"/>
+            
+        </Grid>
+    </DockPanel>
+</Window>

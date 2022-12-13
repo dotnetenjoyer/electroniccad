@@ -1,10 +1,10 @@
-<UserControl x:Class="ElectronicCad.Desktop.Views.Diagrams.DiagramControl"
+<UserControl x:Class="ElectronicCad.Desktop.Views.WelcomeDialog"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:diagramming="clr-namespace:NullSoft.Diagramming;assembly=NullSoft.Diagramming"
              mc:Ignorable="d">
-    <diagramming:Diagram/>
+    <Grid>
+        <TextBlock>Welcome dialog</TextBlock>
+    </Grid>
 </UserControl>
-     
