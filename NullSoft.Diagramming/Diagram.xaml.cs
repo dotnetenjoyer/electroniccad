@@ -1,17 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Collections.Specialized;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using NullSoft.Diagramming.Nodes;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 
@@ -20,29 +10,42 @@ namespace NullSoft.Diagramming
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class Diagram : UserControl
+    public partial class Diagram : UserControl, IDisposable
     {
-        private List<object> _items;
-        
+        public DiagramNodes Nodes { get; } = new();
         
         public Diagram()
         {
             InitializeComponent();
-            
+            Nodes.Add(new LineNode());
+            Nodes.Add(new Circle());
+            Nodes.CollectionChanged += NodesChanged;
             SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
+        }
+
+        private void NodesChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            SkiaCanvas.InvalidateVisual();
         }
 
         private void SkElementOnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
         {
             var canvas = e.Surface.Canvas;
-            
-            var paint = new SKPaint()
+            Draw(canvas);
+        }
+
+        private void Draw(SKCanvas canvas)
+        {
+            foreach (var node in Nodes)
             {
-                Color = SKColors.Red,
-                Style = SKPaintStyle.Fill
-            };
-            
-            canvas.
+                node.Draw(canvas);
+            }
+        }
+
+        public void Dispose()
+        {
+            Nodes.CollectionChanged -= NodesChanged;
+            SkiaCanvas.PaintSurface -= SkElementOnPaintSurface;
         }
     }
 }
