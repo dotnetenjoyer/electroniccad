@@ -1,3 +1,5 @@
+using System.Windows;
+using NullSoft.Diagramming.Utils;
 using SkiaSharp;
 
 namespace NullSoft.Diagramming.Nodes;
@@ -7,5 +9,27 @@ namespace NullSoft.Diagramming.Nodes;
 /// </summary>
 public abstract class DiagramNode
 {
-    public abstract void Draw(SKCanvas canvas);
+    /// <summary>
+    /// Layer.
+    /// </summary>
+    public Layer? Layer { get; set; }
+    
+    /// <summary>
+    /// Node z index.
+    /// </summary>
+    public int ZIndex { get; set; }
+    
+    /// <summary>
+    /// Diagram node bounds.
+    /// </summary>
+    public SKRect Bounds { get; set; }
+
+    /// <summary>
+    /// The method containing redirection logic.
+    /// </summary>
+    /// <param name="canvas">Skia canvas.</param>
+    public virtual void Draw(SKCanvas canvas)
+    {
+        canvas.DrawRect(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height, PaintUtils.RedStrokePaint);
+    }
 }

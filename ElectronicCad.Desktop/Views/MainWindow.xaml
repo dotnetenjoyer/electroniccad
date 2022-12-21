@@ -12,21 +12,24 @@
         d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel}"
         mc:Ignorable="d"
         Title="ElectronicCAD" WindowState="Maximized"
-        Background="{StaticResource BackgroundBrush}">
+        Background="{StaticResource GrayBrush}">
     <DockPanel LastChildFill="True">
         <views:TopMenu DockPanel.Dock="Top"/>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="250"/>
             </Grid.ColumnDefinitions>
             
             <activityBar:ActivityBar Grid.Column="0"/>
-            <diagrams:DiagramControl Grid.Column="1"/>
-            <properties:Properties Grid.Column="2"/>
+                
+            <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <diagrams:DiagramControl Background="{StaticResource WhiteBrush}" Width="1000" Height="600"/>
+            </Grid>
             
+            <properties:Properties Grid.Column="2"/>
         </Grid>
     </DockPanel>
 </Window>

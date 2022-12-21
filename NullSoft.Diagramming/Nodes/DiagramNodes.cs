@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -7,9 +8,14 @@ namespace NullSoft.Diagramming.Nodes;
 /// <summary>
 /// Diagram nodes collection.
 /// </summary>
-public class DiagramNodes : IList<DiagramNode>, INotifyCollectionChanged
+public class DiagramNodes : IList<DiagramNode>
 {
     private readonly List<DiagramNode> _diagramNodes = new();
+
+    /// <summary>
+    /// Diagram nodes changed event.
+    /// </summary>
+    public event EventHandler NodesChanged;
     
     /// <inheritdoc/>
     public IEnumerator<DiagramNode> GetEnumerator()
@@ -27,14 +33,14 @@ public class DiagramNodes : IList<DiagramNode>, INotifyCollectionChanged
     public void Add(DiagramNode item)
     {
         _diagramNodes.Add(item);
-        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add));
+        NodesChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc/>
     public void Clear()
     {
         _diagramNodes.Clear();
-        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
+        NodesChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc/>
@@ -47,13 +53,20 @@ public class DiagramNodes : IList<DiagramNode>, INotifyCollectionChanged
     public void CopyTo(DiagramNode[] array, int arrayIndex)
     {
         _diagramNodes.CopyTo(array, arrayIndex);
-        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add));
+        NodesChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc/>
     public bool Remove(DiagramNode item)
     {
-        return _diagramNodes.Remove(item);
+        var result = _diagramNodes.Remove(item);
+
+        if (result)
+        {
+            NodesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        return result;
     }
 
     /// <inheritdoc/>
@@ -72,14 +85,14 @@ public class DiagramNodes : IList<DiagramNode>, INotifyCollectionChanged
     public void Insert(int index, DiagramNode item)
     {
         _diagramNodes.Insert(index, item);
-        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add));
+        NodesChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc/>
     public void RemoveAt(int index)
     {
         _diagramNodes.RemoveAt(index);
-        CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove));
+        NodesChanged?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc/>
@@ -89,10 +102,7 @@ public class DiagramNodes : IList<DiagramNode>, INotifyCollectionChanged
         set
         {
             _diagramNodes[index] = value;
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace));
+            NodesChanged?.Invoke(this, EventArgs.Empty);
         }
-}
-
-    /// <inheritdoc/>
-    public event NotifyCollectionChangedEventHandler? CollectionChanged;
+    }
 }

@@ -17,7 +17,6 @@ namespace ElectronicCad.Desktop.Views
 
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
         {
-            
             // base.OnMouseDoubleClick(e);
         }
     }
