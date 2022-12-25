@@ -1,4 +1,3 @@
-using System.Drawing;
 using System.Windows.Input;
 
 namespace NullSoft.Diagramming.Modes;
@@ -8,11 +7,16 @@ namespace NullSoft.Diagramming.Modes;
 /// </summary>
 public abstract class BaseDiagramMode : IDiagramMode
 {
+    private Cursor _originalCursor;
+    
     /// <summary>
     /// Diagram control.
     /// </summary>
-    protected Diagram Diagram { get; private set; } 
+    protected Diagram Diagram { get; private set; }
     
+    /// <inheritdoc/>
+    public virtual Cursor Cursor => Cursors.Cross;
+
     /// <inheritdoc/>
     public virtual MouseButton PrimaryButton => MouseButton.Left;
 
@@ -27,6 +31,9 @@ public abstract class BaseDiagramMode : IDiagramMode
         Diagram.MouseDown += HandleDiagramMouseDown;
         Diagram.MouseUp += HandleDiagramMouseUp;
         Diagram.MouseMove += HandleDiagramMouseMove;
+        _originalCursor = Diagram.Cursor;
+        Diagram.Cursor = Cursor;
+        
     }
 
     private void HandleDiagramMouseDown(object sender, MouseButtonEventArgs eventArgs)
@@ -108,5 +115,6 @@ public abstract class BaseDiagramMode : IDiagramMode
         Diagram.MouseDown -= HandleDiagramMouseDown;
         Diagram.MouseUp -= HandleDiagramMouseUp;
         Diagram.MouseMove -= HandleDiagramMouseMove;
+        Diagram.Cursor = _originalCursor;
     }
 }

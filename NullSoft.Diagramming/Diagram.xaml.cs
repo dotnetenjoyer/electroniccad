@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Input;
 using NullSoft.Diagramming.Modes;
 using NullSoft.Diagramming.Nodes;
 using SkiaSharp;
@@ -111,6 +112,7 @@ namespace NullSoft.Diagramming
 
         private void Draw(SKCanvas canvas)
         {
+            canvas.Clear();
             foreach (var layer in _layers.OrderBy(layer => layer.Index))
             {
                 foreach (var node in layer.Nodes.OrderBy(x => x.ZIndex))

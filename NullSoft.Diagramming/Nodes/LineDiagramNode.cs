@@ -6,6 +6,7 @@ namespace NullSoft.Diagramming.Nodes;
 
 public class LineDiagramNode : DiagramNode
 {
+    /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
         base.Draw(canvas);

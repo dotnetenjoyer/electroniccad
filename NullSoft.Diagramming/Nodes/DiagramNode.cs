@@ -30,6 +30,6 @@ public abstract class DiagramNode
     /// <param name="canvas">Skia canvas.</param>
     public virtual void Draw(SKCanvas canvas)
     {
-        canvas.DrawRect(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height, PaintUtils.RedStrokePaint);
+        // canvas.DrawRect(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height, PaintUtils.RedStrokePaint);
     }
 }

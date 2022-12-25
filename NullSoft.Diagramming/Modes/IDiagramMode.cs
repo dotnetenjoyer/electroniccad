@@ -8,6 +8,11 @@ namespace NullSoft.Diagramming.Modes;
 public interface IDiagramMode
 {
     /// <summary>
+    /// Mode cursor.
+    /// </summary>
+    Cursor Cursor { get; }
+    
+    /// <summary>
     /// Start mode button.
     /// </summary>
     MouseButton PrimaryButton { get; }

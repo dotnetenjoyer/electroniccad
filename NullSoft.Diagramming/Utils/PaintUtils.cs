@@ -13,7 +13,7 @@ public static class PaintUtils
     public static SKPaint DarkFillPaint = new()
     {
         Color = SKColors.Black,
-        Style = SKPaintStyle.Fill
+        Style = SKPaintStyle.Fill,
     };
     
     /// <summary>
