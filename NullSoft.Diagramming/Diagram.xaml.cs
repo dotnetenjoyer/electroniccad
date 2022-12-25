@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
-using NullSoft.Diagramming.Behaviour;
+using NullSoft.Diagramming.Modes;
 using NullSoft.Diagramming.Nodes;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
@@ -14,62 +14,93 @@ namespace NullSoft.Diagramming
     /// </summary>
     public partial class Diagram : UserControl, IDisposable
     {
-        private readonly List<Layer> _layers = new();
-
-        private IDiagramBehaviour _currentDiagramBehaviour;
-        
-        public IEnumerable<DiagramNode> Nodes => _layers.SelectMany(layer => layer.Nodes);
-        
+      
         public Diagram()
         {
             InitializeComponent();
 
-            Layer layer = CreateLayer();
-            
-            layer.AddNode(new LineDiagramNode
-            {
-                Bounds = new SKRect(300, 300, 500, 500),
-            });
-            
-            layer.AddNode(new EllipseDiagramNode
-            {
-                Bounds = new SKRect(100, 100, 250, 200)
-            });
-            
-            layer.AddNode(new PolygonDiagramNode()
-            {
-                Bounds = new SKRect(0, 0, 100, 100)
-            });
-            
+            CreateLayer();
+            SetDiagramMode(new NewLineMode());
+
             SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
         }
 
+        #region Diagram mode
+
+        private IDiagramMode _diagramMode;
+
+        private void SetDiagramMode(IDiagramMode diagramMode)
+        {
+            if (_diagramMode != null)
+            {
+                _diagramMode.Finalize();
+            }
+            
+            _diagramMode = diagramMode;
+            diagramMode.Initialize(this);
+        }
+        
+        #endregion
+        
+        #region Layers
+        
         /// <summary>
-        /// Method that allow ddd new layer.
+        /// Diagram layers.
         /// </summary>
-        /// <returns>New layer.</returns>
+        public IEnumerable<Layer> Layers => _layers;
+        
+        /// <summary>
+        /// All diagram nodes.
+        /// </summary>
+        public IEnumerable<DiagramNode> AllNodes => _layers.SelectMany(layer => layer.Nodes);
+
+        /// <summary>
+        /// Active diagram layer.
+        /// </summary>
+        public Layer ActiveLayer => _activeLayer;
+        
+        private Layer _activeLayer;
+        
+        private readonly List<Layer> _layers = new();
+        
+        /// <summary>
+        /// Method to create new diagram layer.
+        /// </summary>
+        /// <returns>Created layer.</returns>
         public Layer CreateLayer()
         {
-            int maxLayerIndex = _layers.Count == 0 ? 0 : _layers.Max(layer => layer.Index);
-            Layer layer = new(maxLayerIndex + 1);
+            int maxLayerIndex = _layers.Count == 0 
+                ? 0 
+                : _layers.Max(layer => layer.Index);
+            
+            var layer = new Layer(maxLayerIndex + 1);
             layer.NodesChange += HandleNodesChange;
             _layers.Add(layer);
+            _activeLayer = layer;
+            
             return layer;
         }
 
         /// <summary>
-        /// Method that allow remove layer.
+        /// Method to remove layer.
         /// </summary>
-        /// <param name="layer"></param>
+        /// <param name="layer">Layer to remove.</param>
         public void RemoveLayer(Layer layer)
         {
             _layers.Remove(layer);
             layer.NodesChange -= HandleNodesChange;
         }
         
-        private void HandleNodesChange(object? sender, EventArgs e)
+        #endregion
+
+        public void RedrawDiagram()
         {
             SkiaCanvas.InvalidateVisual();
+        }
+
+        private void HandleNodesChange(object? sender, EventArgs e)
+        {
+            RedrawDiagram();
         }
 
         private void SkElementOnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)

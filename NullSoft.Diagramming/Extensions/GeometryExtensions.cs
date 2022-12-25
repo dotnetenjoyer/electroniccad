@@ -25,7 +25,7 @@ public static class GeometryExtensions
     /// <returns>Bottom right point.</returns>
     public static SKPoint BottomRight(this SKRect skRect)
     {
-        return new SKPoint(skRect.Bottom, skRect.Right);
+        return new SKPoint(skRect.Right, skRect.Bottom);
     }
 
     /// <summary>
