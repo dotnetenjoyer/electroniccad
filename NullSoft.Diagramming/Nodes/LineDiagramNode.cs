@@ -10,6 +10,6 @@ public class LineDiagramNode : DiagramNode
     public override void Draw(SKCanvas canvas)
     {
         base.Draw(canvas);
-        canvas.DrawLine(Bounds.TopLeft(), Bounds.BottomRight(), PaintUtils.DarkFillPaint);
+        canvas.DrawLine(Bounds.GetTopLeft(), Bounds.GetBottomRight(), PaintUtils.DarkFillPaint);
     }
 }

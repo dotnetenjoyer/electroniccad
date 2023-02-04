@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="NullSoft.Diagramming.DiagramControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NullSoft.Diagramming"
+             mc:Ignorable="d">
+    <Grid>
+        <!--<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="RosyBrown">
+            <Button Click="SetSelectionMode">Selection mode</Button>
+            <Button Click="SetNewLineMode">New line mode</Button>
+        </StackPanel>-->
+
+        <local:Ruler x:Name="Ruler">
+            <!--<local:Diagram Background="Blue"/>-->
+        </local:Ruler>
+    </Grid>
+    
+</UserControl>

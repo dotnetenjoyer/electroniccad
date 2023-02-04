@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using NullSoft.Diagramming.Modes;
 using NullSoft.Diagramming.Nodes;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
+using SelectionMode = NullSoft.Diagramming.Modes.SelectionMode;
 
 namespace NullSoft.Diagramming
 {
@@ -15,7 +16,6 @@ namespace NullSoft.Diagramming
     /// </summary>
     public partial class Diagram : UserControl, IDisposable
     {
-      
         public Diagram()
         {
             InitializeComponent();
@@ -130,6 +130,16 @@ namespace NullSoft.Diagramming
                 layer.NodesChange -= HandleNodesChange;
                 layer.Dispose();
             });
+        }
+
+        private void SetSelectionMode(object sender, RoutedEventArgs e)
+        {
+            SetDiagramMode(new SelectionMode());
+        }
+
+        private void SetNewLineMode(object sender, RoutedEventArgs e)
+        {
+            SetDiagramMode(new NewLineMode());
         }
     }
 }

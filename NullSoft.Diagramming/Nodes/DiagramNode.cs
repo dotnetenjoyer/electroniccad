@@ -1,11 +1,13 @@
 using System.Windows;
+using NullSoft.Diagramming.Extensions;
 using NullSoft.Diagramming.Utils;
 using SkiaSharp;
+using SkiaSharp.Views.WPF;
 
 namespace NullSoft.Diagramming.Nodes;
 
 /// <summary>
-/// The class that represent diagram node.
+/// The class that represent diagram node with visual presentation.
 /// </summary>
 public abstract class DiagramNode
 {
@@ -15,10 +17,10 @@ public abstract class DiagramNode
     public Layer? Layer { get; set; }
     
     /// <summary>
-    /// Node z index.
+    /// Z index.
     /// </summary>
     public int ZIndex { get; set; }
-    
+
     /// <summary>
     /// Diagram node bounds.
     /// </summary>
@@ -28,8 +30,19 @@ public abstract class DiagramNode
     /// The method containing redirection logic.
     /// </summary>
     /// <param name="canvas">Skia canvas.</param>
-    public virtual void Draw(SKCanvas canvas)
+    public virtual void Draw(SKCanvas canvas)   
     {
-        // canvas.DrawRect(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height, PaintUtils.RedStrokePaint);
+        // Debug rectangle.
+        canvas.DrawRect(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height, PaintUtils.RedStrokePaint);
+    }
+
+    /// <summary>
+    /// Method for checking point hitting with node.
+    /// </summary>
+    /// <param name="position">Point position.</param>
+    /// <returns>Whether hit or not </returns>
+    public virtual bool CheckHit(Point position)
+    {
+        return Bounds.ContainsTest(position.ToSKPoint());
     }
 }

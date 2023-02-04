@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NullSoft.Diagramming"
              xmlns:skia="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <skia:SKElement x:Name="SkiaCanvas"/>
+             mc:Ignorable="d">
+    <DockPanel LastChildFill="True" Background="Yellow">
+        <skia:SKElement x:Name="SkiaCanvas"/>
+    </DockPanel>
 </UserControl>

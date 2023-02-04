@@ -11,22 +11,70 @@
         xmlns:properties="clr-namespace:ElectronicCad.Desktop.Views.Properties"
         d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel}"
         mc:Ignorable="d"
-        Title="ElectronicCAD" WindowState="Maximized"
+        WindowState="Maximized"
         Background="{StaticResource GrayBrush}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="DarkGray"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <TextBlock
+                                Text="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=Button}}"
+                                />
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <Style x:Key="LinkButton" TargetType="Button">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <TextBlock
+                                LineStackingStrategy="BlockLineHeight"
+                                Foreground="{TemplateBinding Foreground}"
+                                TextTrimming="CharacterEllipsis"
+                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <ContentPresenter>
+                                  <ContentPresenter.Resources>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                      <Setter Property="TextWrapping" Value="NoWrap"/>
+                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                                    </Style>
+                                  </ContentPresenter.Resources>
+                                </ContentPresenter>
+                            </TextBlock>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <DockPanel LastChildFill="True">
         <views:TopMenu DockPanel.Dock="Top"/>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="320"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="320"/>
             </Grid.ColumnDefinitions>
             
             <activityBar:ActivityBar Grid.Column="0"/>
-                
-            <Grid Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <diagrams:DiagramControl Background="{StaticResource WhiteBrush}" Width="1000" Height="600"/>
+            
+            <Grid Grid.Column="1">
+                <diagrams:DiagramControl  
+                    Background="{StaticResource SecondaryBackgroundBrush}"
+                    Foreground="{StaticResource PrimaryForegroundBrush}"/>
             </Grid>
             
             <properties:Properties Grid.Column="2"/>

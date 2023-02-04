@@ -33,7 +33,6 @@ public abstract class BaseDiagramMode : IDiagramMode
         Diagram.MouseMove += HandleDiagramMouseMove;
         _originalCursor = Diagram.Cursor;
         Diagram.Cursor = Cursor;
-        
     }
 
     private void HandleDiagramMouseDown(object sender, MouseButtonEventArgs eventArgs)

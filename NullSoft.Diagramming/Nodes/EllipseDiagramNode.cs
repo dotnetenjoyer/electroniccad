@@ -14,7 +14,7 @@ public class EllipseDiagramNode : DiagramNode
     {
         base.Draw(canvas);
 
-        var center = Bounds.Center();
+        var center = Bounds.GetCenter();
         var xRadius = Bounds.Width / 2;
         var yRadius = Bounds.Height / 2;
 

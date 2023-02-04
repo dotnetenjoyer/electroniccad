@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d">
-    <Menu Height="40" Background="{StaticResource SecondaryBackgroundBrush}">
+    <Menu>
         <MenuItem Header="File">
             <MenuItem Header="Open project"/>
             <MenuItem Header="New project"/>
@@ -12,6 +12,5 @@
         </MenuItem>
         <MenuItem Header="Windows"/>
         <MenuItem Header="Views"/>
-        
     </Menu>
 </UserControl>
