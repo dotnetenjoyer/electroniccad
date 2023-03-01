@@ -5,27 +5,32 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              x:ClassModifier="internal"
              mc:Ignorable="d">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    
+    <UserControl.Template>
+        <ControlTemplate TargetType="UserControl">
+            <Grid Background="{TemplateBinding Background}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <DockPanel Grid.Column="1"/>
-        <DockPanel Grid.Row="1"/>
+                <DockPanel Grid.Row="0" Grid.Column="1"/>
+                <DockPanel Grid.Row="1" Grid.Column="0"/>
 
-        <Grid
-            Grid.Row="1"
-            Grid.Column="1"
-        >
-            <ContentPresenter 
-                Content="{Binding  RelativeSource={RelativeSource AncestorType=UserControl}}" 
-            />
-        </Grid>
-    </Grid>
+                <Grid
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                >
+                    <ContentPresenter Width="1000" Height="650"/>
+                </Grid>
+            </Grid>    
+        </ControlTemplate>
+    </UserControl.Template>
 </UserControl>

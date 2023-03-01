@@ -3,10 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:NullSoft.Diagramming"
              xmlns:skia="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
              mc:Ignorable="d">
-    <DockPanel LastChildFill="True" Background="Yellow">
+    <DockPanel LastChildFill="True">
         <skia:SKElement x:Name="SkiaCanvas"/>
     </DockPanel>
 </UserControl>

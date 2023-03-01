@@ -5,6 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:diagramming="clr-namespace:NullSoft.Diagramming;assembly=NullSoft.Diagramming"
              mc:Ignorable="d">
-    <diagramming:DiagramControl/>
+    <diagramming:DiagramControl 
+        Background="{StaticResource BackgroundBrush}"
+        DiagramBackground="{StaticResource SecondaryBackgroundBrush}"
+        Foreground="{StaticResource PrimaryForegroundBrush}"/>
 </UserControl>
      

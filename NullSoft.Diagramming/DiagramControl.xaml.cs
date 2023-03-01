@@ -20,6 +20,15 @@ namespace NullSoft.Diagramming
     /// </summary>
     public partial class DiagramControl : UserControl
     {
+        public readonly static DependencyProperty DiagramBackgroundProperty = DependencyProperty
+            .Register("DiagramBackground", typeof(Brush), typeof(DiagramControl));
+
+        public Brush DiagramBackground
+        {
+            get => (Brush)GetValue(DiagramBackgroundProperty);
+            set => SetValue(DiagramBackgroundProperty, value);
+        }
+
         public DiagramControl()
         {
             InitializeComponent();

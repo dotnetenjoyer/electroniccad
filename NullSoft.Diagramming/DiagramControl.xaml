@@ -6,13 +6,16 @@
              xmlns:local="clr-namespace:NullSoft.Diagramming"
              mc:Ignorable="d">
     <Grid>
-        <!--<StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="RosyBrown">
-            <Button Click="SetSelectionMode">Selection mode</Button>
-            <Button Click="SetNewLineMode">New line mode</Button>
-        </StackPanel>-->
+        <!-- <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Background="RosyBrown"> -->
+        <!--     ~1~ <Button Click="SetSelectionMode">Selection mode</Button> @1@ -->
+        <!--     ~1~ <Button Click="SetNewLineMode">New line mode</Button> @1@ -->
+        <!--     <Button>New line mode</Button> -->
+        <!-- </StackPanel> -->
 
-        <local:Ruler x:Name="Ruler">
-            <!--<local:Diagram Background="Blue"/>-->
+        <local:Ruler x:Name="Ruler" Background="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Background}">
+            <local:Diagram 
+                Background="{Binding RelativeSource={RelativeSource AncestorType=local:DiagramControl}, Path=DiagramBackground}"
+                Foreground="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Foreground}"/>
         </local:Ruler>
     </Grid>
     

@@ -72,9 +72,7 @@
             <activityBar:ActivityBar Grid.Column="0"/>
             
             <Grid Grid.Column="1">
-                <diagrams:DiagramControl  
-                    Background="{StaticResource SecondaryBackgroundBrush}"
-                    Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                <diagrams:DiagramControl/>
             </Grid>
             
             <properties:Properties Grid.Column="2"/>
