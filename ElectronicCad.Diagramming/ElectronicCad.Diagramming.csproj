@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWPF>true</UseWPF>
+        <RootNamespace>ElectronicCad.Diagramming</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ElectronicCad.Desktop.Styles\ElectronicCad.Desktop.Styles.csproj" />
+    </ItemGroup>
+
+</Project>

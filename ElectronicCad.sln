@@ -1,20 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.Desktop", "ElectronicCad.Desktop\ElectronicCad.Desktop.csproj", "{A9AD25B4-8E97-49C1-A2F1-627319D48DD3}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Desktop", "ElectronicCad.Desktop\ElectronicCad.Desktop.csproj", "{A9AD25B4-8E97-49C1-A2F1-627319D48DD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.Domain", "ElectronicCad.Domain\ElectronicCad.Domain.csproj", "{DF1F0B6E-0572-45BD-9312-29015D0392C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Domain", "ElectronicCad.Domain\ElectronicCad.Domain.csproj", "{DF1F0B6E-0572-45BD-9312-29015D0392C2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{0B4C09B3-5044-439D-A476-330D93D66C0F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{B3D55526-2B07-45CE-9E80-10D0EE850AEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.MVVM", "ElectronicCad.MVVM\ElectronicCad.MVVM.csproj", "{043AF8C9-65F0-4ACF-922C-4558B61D6CDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.MVVM", "ElectronicCad.MVVM\ElectronicCad.MVVM.csproj", "{043AF8C9-65F0-4ACF-922C-4558B61D6CDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.Desktop.Styles", "ElectronicCad.Desktop.Styles\ElectronicCad.Desktop.Styles.csproj", "{3029D5A9-A2E7-4AE7-81DE-B0B7B93CE1AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Desktop.Styles", "ElectronicCad.Desktop.Styles\ElectronicCad.Desktop.Styles.csproj", "{3029D5A9-A2E7-4AE7-81DE-B0B7B93CE1AA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diagramming", "Diagramming", "{A29C1788-8DF3-41A9-A948-273D9E8CE83C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NullSoft.Diagramming", "NullSoft.Diagramming\NullSoft.Diagramming.csproj", "{76F6D42D-D125-4C73-A342-48BCAD084D26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Diagramming", "ElectronicCad.Diagramming\ElectronicCad.Diagramming.csproj", "{76F6D42D-D125-4C73-A342-48BCAD084D26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,11 +44,17 @@ Global
 		{76F6D42D-D125-4C73-A342-48BCAD084D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76F6D42D-D125-4C73-A342-48BCAD084D26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A9AD25B4-8E97-49C1-A2F1-627319D48DD3} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
-		{043AF8C9-65F0-4ACF-922C-4558B61D6CDD} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
 		{DF1F0B6E-0572-45BD-9312-29015D0392C2} = {B3D55526-2B07-45CE-9E80-10D0EE850AEB}
+		{043AF8C9-65F0-4ACF-922C-4558B61D6CDD} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
 		{3029D5A9-A2E7-4AE7-81DE-B0B7B93CE1AA} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
-		{76F6D42D-D125-4C73-A342-48BCAD084D26} = {A29C1788-8DF3-41A9-A948-273D9E8CE83C}
+		{76F6D42D-D125-4C73-A342-48BCAD084D26} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25C8143E-0FDB-487D-B007-4A6763AC2421}
 	EndGlobalSection
 EndGlobal

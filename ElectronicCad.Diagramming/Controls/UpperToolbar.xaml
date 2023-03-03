@@ -1,0 +1,53 @@
+<UserControl x:Class="ElectronicCad.Diagramming.Controls.UpperToolbar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:componenets="clr-namespace:ElectronicCad.Desktop.Styles.Components;assembly=ElectronicCad.Desktop.Styles"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <Style TargetType="RepeatButton" BasedOn="{StaticResource IconButton}">
+            <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+            <Setter Property="Margin" Value="8 0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Width" Value="25"/>
+        </Style>
+    </UserControl.Resources>
+    
+    <Border Style="{StaticResource ComponentWrapper}">
+        <StackPanel Orientation="Horizontal">
+            <RepeatButton>
+                <componenets:Icon Path="{StaticResource CursorIcon}"/>
+            </RepeatButton>
+            
+            <RepeatButton>
+                <componenets:Icon Path="{StaticResource PenIcon}"/>
+            </RepeatButton>
+
+            <RepeatButton>
+                <componenets:Icon Path="{StaticResource LineIcon}"/>
+            </RepeatButton>
+
+            <RepeatButton>
+                <componenets:Icon Path="{StaticResource RectIcon}"/>
+            </RepeatButton>
+
+            <RepeatButton>
+                <componenets:Icon Path="{StaticResource ElipseIcon}"/>
+            </RepeatButton>
+
+            <RepeatButton>
+                <componenets:Icon Path="{StaticResource TextIcon}"/>
+            </RepeatButton>
+
+            <RepeatButton>
+                <componenets:Icon Path="{StaticResource UndoIcon}"/>
+            </RepeatButton>
+
+            <RepeatButton>
+                <componenets:Icon Path="{StaticResource RedoIcon}"/>
+            </RepeatButton>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -11,7 +11,7 @@
       <ProjectReference Include="..\ElectronicCad.Desktop.Styles\ElectronicCad.Desktop.Styles.csproj" />
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM\ElectronicCad.MVVM.csproj" />
-      <ProjectReference Include="..\NullSoft.Diagramming\NullSoft.Diagramming.csproj" />
+      <ProjectReference Include="..\ElectronicCad.Diagramming\ElectronicCad.Diagramming.csproj" />
     </ItemGroup>
 
     <ItemGroup>

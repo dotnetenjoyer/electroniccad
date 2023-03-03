@@ -2,7 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml"/>
-        <ResourceDictionary Source="Menu.xaml"/>
+        <ResourceDictionary Source="Icons.xaml"/>
+        <ResourceDictionary Source="Componenets/Menu.xaml"/>
+        <ResourceDictionary Source="Componenets/Icon.xaml"/>
+        <ResourceDictionary Source="Componenets/Buttons.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="ComponentWrapper" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SecondaryBackgroundBrush}"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="CornerRadius" Value="10"/>
+    </Style>
 
 </ResourceDictionary>
