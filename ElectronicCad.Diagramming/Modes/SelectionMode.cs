@@ -14,16 +14,15 @@ public class SelectionMode : BaseDiagramMode
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
         var position = args.GetPosition(Diagram);
-        var nodes = Diagram.AllNodes.Where(x => x.CheckHit(position));
-
-        if (nodes.Any())
-        {
-            Diagram.Cursor = Cursors.Hand;
-        }
-        else
-        {
-            Diagram.Cursor = Cursors.Arrow;
-        }
-        
+        // var nodes = Diagram.Layers.Items.Where(x => x.CheckHit(position));
+        //
+        // if (nodes.Any())
+        // {
+        //     Diagram.Cursor = Cursors.Hand;
+        // }
+        // else
+        // {
+        //     Diagram.Cursor = Cursors.Arrow;
+        // }
     }
 }

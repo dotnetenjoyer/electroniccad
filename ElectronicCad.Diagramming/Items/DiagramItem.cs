@@ -7,10 +7,15 @@ using SkiaSharp.Views.WPF;
 namespace ElectronicCad.Diagramming.Nodes;
 
 /// <summary>
-/// The class that represent diagram node with visual presentation.
+/// The class that represent diagram item with visual presentation.
 /// </summary>
-public abstract class DiagramNode
+public abstract class DiagramItem
 {
+    /// <summary>
+    /// Diagram node bounds.
+    /// </summary>
+    public SKRect Bounds { get; set; }
+    
     /// <summary>
     /// Layer.
     /// </summary>
@@ -20,11 +25,6 @@ public abstract class DiagramNode
     /// Z index.
     /// </summary>
     public int ZIndex { get; set; }
-
-    /// <summary>
-    /// Diagram node bounds.
-    /// </summary>
-    public SKRect Bounds { get; set; }
 
     /// <summary>
     /// The method containing redirection logic.
@@ -37,10 +37,10 @@ public abstract class DiagramNode
     }
 
     /// <summary>
-    /// Method for checking point hitting with node.
+    /// Check point hitting with diagram item.
     /// </summary>
     /// <param name="position">Point position.</param>
-    /// <returns>Whether hit or not </returns>
+    /// <returns>Whether hit or not.</returns>
     public virtual bool CheckHit(Point position)
     {
         return Bounds.ContainsTest(position.ToSKPoint());

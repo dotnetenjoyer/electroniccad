@@ -4,7 +4,7 @@ using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Nodes;
 
-public class LineDiagramNode : DiagramNode
+public class LineDiagramItem : DiagramItem
 {
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)

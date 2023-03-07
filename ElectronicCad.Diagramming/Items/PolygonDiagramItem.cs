@@ -6,7 +6,7 @@ namespace ElectronicCad.Diagramming.Nodes;
 /// <summary>
 /// Polygon diagram node.
 /// </summary>
-public class PolygonDiagramNode : DiagramNode
+public class PolygonDiagramItem : DiagramItem
 {
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)

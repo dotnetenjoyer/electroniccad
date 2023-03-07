@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection.Metadata;
 using ElectronicCad.Diagramming.Nodes;
 
 namespace ElectronicCad.Diagramming;
@@ -11,56 +15,59 @@ public class Layer : IDisposable
     /// <summary>
     /// Layer index.
     /// </summary>
-    public int Index { get; set; }
-
-    /// <summary>
-    /// Layer diagram nodes.
-    /// </summary>
-    public DiagramNodes Nodes { get; }
-
-    /// <summary>
-    /// Node event changes, raise when nodes changed.
-    /// </summary>
-    public event EventHandler NodesChange;
+    public int Index { get; }
     
+    /// <summary>
+    /// Raise when items changed.
+    /// </summary>
+    public event EventHandler ItemsChanged;
+
+    /// <summary>
+    /// Diagram items.
+    /// </summary>
+    public IEnumerable<DiagramItem> DiagramItems => _diagramItems;
+    
+    private readonly ObservableCollection<DiagramItem> _diagramItems;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     public Layer(int index)
     {
-        Nodes = new();
         Index = index;
-        Nodes.NodesChanged += HandleNodesChange;
+        _diagramItems = new();
+        _diagramItems.CollectionChanged += HandleItemsChanged;
     }
 
-    private void HandleNodesChange(object? sender, EventArgs e)
+    private void HandleItemsChanged(object? sender, EventArgs e)
     {
-        NodesChange?.Invoke(this, e);
-    }
-
-    /// <summary>
-    /// Add new node.
-    /// </summary>
-    /// <param name="node"></param>
-    public void AddNode(DiagramNode node)
-    {
-        node.Layer = this;
-        Nodes.Add(node);
+        ItemsChanged?.Invoke(this, e);
     }
 
     /// <summary>
-    /// Remove node.
+    /// Add diagram item.
     /// </summary>
-    /// <param name="node"></param>
-    public void RemoveNode(DiagramNode node)
+    /// <param name="item">Diagram item.</param>
+    public void AddItem(DiagramItem item)
     {
-        node.Layer = null;
-        Nodes.Remove(node);
+        item.Layer = this;
+        item.ZIndex = _diagramItems.Any() ? _diagramItems.Max(x => x.ZIndex) + 1 : 0;
+        _diagramItems.Add(item);
+    }
+
+    /// <summary>
+    /// Remove diagram item.
+    /// </summary>
+    /// <param name="item">Diagram item to remove.</param>
+    public void RemoveItem(DiagramItem item)
+    {
+        item.Layer = null;
+        _diagramItems.Remove(item);
     }
 
     /// <inheritdoc/>
     public void Dispose()
     {
-        Nodes.NodesChanged -= HandleNodesChange;
+        _diagramItems.CollectionChanged -= HandleItemsChanged;
     }
 }

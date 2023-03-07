@@ -7,7 +7,7 @@ namespace ElectronicCad.Diagramming.Modes;
 
 public class NewLineMode : BaseDiagramMode
 {
-    private LineDiagramNode? _line;
+    private LineDiagramItem? _line;
 
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
@@ -15,7 +15,7 @@ public class NewLineMode : BaseDiagramMode
         
         if (_line == null)
         {
-            _line = new LineDiagramNode
+            _line = new LineDiagramItem
             {
                 Bounds = new SKRect(position.X, position.Y, position.X, position.Y)
             };
@@ -24,13 +24,13 @@ public class NewLineMode : BaseDiagramMode
         {
             _line.Bounds = new SKRect(_line.Bounds.Left, _line.Bounds.Top, position.X, position.Y);
 
-            _line = new LineDiagramNode
+            _line = new LineDiagramItem
             {
                 Bounds = new SKRect(position.X, position.Y, position.X, position.Y)
             };
         }
         
-        Diagram.ActiveLayer.AddNode(_line);
+        Diagram.ActiveLayer.AddItem(_line);
     }
 
     protected override void ProcessMouseMove(MouseEventArgs args)
@@ -48,7 +48,7 @@ public class NewLineMode : BaseDiagramMode
     {
         if (_line != null)
         {
-            Diagram.ActiveLayer.RemoveNode(_line);
+            Diagram.ActiveLayer.RemoveItem(_line);
             Diagram.RedrawDiagram();
         }
     }

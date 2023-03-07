@@ -7,7 +7,7 @@ namespace ElectronicCad.Diagramming.Nodes;
 /// <summary>
 /// Ellipse diagram node.
 /// </summary>
-public class EllipseDiagramNode : DiagramNode
+public class EllipseDiagramItem : DiagramItem
 {
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
