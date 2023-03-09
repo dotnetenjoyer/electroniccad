@@ -11,8 +11,7 @@
         xmlns:properties="clr-namespace:ElectronicCad.Desktop.Views.Properties"
         d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel}"
         mc:Ignorable="d"
-        WindowState="Maximized"
-        ResizeMode="NoResize">
+        WindowState="Maximized">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -56,23 +55,29 @@
         </ResourceDictionary>
     </Window.Resources>
     
-    <DockPanel LastChildFill="True">
-        <views:TopMenu DockPanel.Dock="Top"/>
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <views:TopMenu DockPanel.Dock="Top"/>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="320"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="320"/>
-            </Grid.ColumnDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="320"/>
+                </Grid.ColumnDefinitions>
             
-            <activityBar:ActivityBar Grid.Column="0"/>
+                <activityBar:ActivityBar Grid.Column="0"/>
             
-            <Grid Grid.Column="1">
-                <diagrams:DiagramControl/>
+                <Grid Grid.Column="1">
+                    <diagrams:DiagramControl/>
+                </Grid>
+            
+                <properties:Properties Grid.Column="2"/>
             </Grid>
-            
-            <properties:Properties Grid.Column="2"/>
+        </DockPanel>
+        
+        <Grid Grid.ZIndex="1">
+            <Frame/>
         </Grid>
-    </DockPanel>
+    </Grid>
 </Window>
