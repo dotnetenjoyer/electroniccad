@@ -7,14 +7,10 @@
     <Color x:Key="PrimaryForeground">#FFFFFF</Color>
     <Color x:Key="SecondaryForeground">#98979a</Color>
 
-    <Color x:Key="Gray">#e5e5e5</Color>
-
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background}"/>
     <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="{StaticResource SecondaryBackground}"/>
     <SolidColorBrush x:Key="ComponentBackgroundBrush" Color="{StaticResource ComponentBackground}"/>
 
     <SolidColorBrush x:Key="PrimaryForegroundBrush" Color="{StaticResource PrimaryForeground}"/>
     <SolidColorBrush x:Key="SecondaryForegroundBrush" Color="{StaticResource SecondaryForeground}"/>
-
-    <SolidColorBrush x:Key="GrayBrush" Color="{StaticResource Gray}"/>
 </ResourceDictionary>

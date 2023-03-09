@@ -4,10 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:skia="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
-             Background="{StaticResource SecondaryBackgroundBrush}"
-             Foreground="{StaticResource PrimaryForegroundBrush}"
-             mc:Ignorable="d">
-    <DockPanel >
+             mc:Ignorable="d">         
+    <DockPanel>
         <skia:SKElement x:Name="SkiaCanvas"/>
     </DockPanel>        
 </UserControl>

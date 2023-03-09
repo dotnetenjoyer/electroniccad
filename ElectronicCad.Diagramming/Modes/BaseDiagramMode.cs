@@ -27,7 +27,6 @@ public abstract class BaseDiagramMode : IDiagramMode
     public void Initialize(Diagram diagram)
     {
         Diagram = diagram;
-        
         Diagram.MouseDown += HandleDiagramMouseDown;
         Diagram.MouseUp += HandleDiagramMouseUp;
         Diagram.MouseMove += HandleDiagramMouseMove;

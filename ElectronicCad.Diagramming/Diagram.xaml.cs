@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using ElectronicCad.Diagramming.Modes;
 using ElectronicCad.Diagramming.Nodes;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
-using SelectionMode = ElectronicCad.Diagramming.Modes.SelectionMode;
+using SkiaSharp.Views.WPF;
 
 namespace ElectronicCad.Diagramming
 {
@@ -63,15 +64,13 @@ namespace ElectronicCad.Diagramming
         {
             InitializeComponent();
 
-            AddLayer();
-
-            var line = new LineDiagramItem();
-            line.Bounds = new SKRect(0, 0, 300, 300);
-            AddItem(line);
-
-            SetDiagramMode(new NewLineMode());
-
+            var secondaryBackgroundColor = (Color)FindResource("SecondaryBackground");
+            _workspaceColor = secondaryBackgroundColor.ToSKColor();
+            
             SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
+
+            AddLayer();
+            SetDiagramMode(new NewLineMode());
         }
 
         #region Diagram mode
@@ -89,7 +88,22 @@ namespace ElectronicCad.Diagramming
             diagramMode.Initialize(this);
         }
         
+        private void SetSelectionMode(object sender, RoutedEventArgs e)
+        {
+            SetDiagramMode(new Modes.SelectionMode());
+        }
+
+        private void SetNewLineMode(object sender, RoutedEventArgs e)
+        {
+            SetDiagramMode(new NewLineMode());
+        }
+        
         #endregion
+
+        /// <summary>
+        /// All diagram items
+        /// </summary>
+        public IEnumerable<DiagramItem> DiagramItems => Layers.SelectMany(_ => _.DiagramItems);
 
         /// <summary>
         /// Add diagram item to active layer.
@@ -99,6 +113,10 @@ namespace ElectronicCad.Diagramming
         {
             ActiveLayer.AddItem(item);
         }
+
+        #region Drawing
+
+        private readonly SKColor _workspaceColor;
         
         public void RedrawDiagram()
         {
@@ -119,6 +137,8 @@ namespace ElectronicCad.Diagramming
         private void Draw(SKCanvas canvas)
         {
             canvas.Clear();
+
+            DrawWorkspaceArea(canvas);
             
             foreach (var layer in _layers)
             {
@@ -129,6 +149,22 @@ namespace ElectronicCad.Diagramming
             }
         }
 
+        private void DrawWorkspaceArea(SKCanvas canvas)
+        {
+            var size = new SKSize(850, 600);
+            var left = canvas.LocalClipBounds.MidX - size.Width / 2;
+            var top = canvas.LocalClipBounds.MidY - size.Height / 2;
+            var right = left + size.Width;
+            var bottom = top + size.Height;
+            var rectangle = new SKRect(left, top, right, bottom);
+            
+            var paint = new SKPaint { Color = _workspaceColor };
+
+            canvas.DrawRect(rectangle, paint);
+        }
+
+        #endregion
+
         /// <inheritdoc/>
         public void Dispose()
         {
@@ -137,16 +173,6 @@ namespace ElectronicCad.Diagramming
                 layer.ItemsChanged -= HandleItemsChanged;
                 layer.Dispose();
             });
-        }
-
-        private void SetSelectionMode(object sender, RoutedEventArgs e)
-        {
-            SetDiagramMode(new Modes.SelectionMode());
-        }
-
-        private void SetNewLineMode(object sender, RoutedEventArgs e)
-        {
-            SetDiagramMode(new NewLineMode());
         }
     }
 }

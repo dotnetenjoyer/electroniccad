@@ -1,5 +1,4 @@
 using System.Windows;
-using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Diagramming.Extensions;
 using SkiaSharp;
 using SkiaSharp.Views.WPF;
@@ -11,6 +10,11 @@ namespace ElectronicCad.Diagramming.Nodes;
 /// </summary>
 public abstract class DiagramItem
 {
+    /// <summary>
+    /// Indicate whether item is auxiliary. 
+    /// </summary>
+    internal virtual bool IsAuxiliary => false;
+    
     /// <summary>
     /// Diagram node bounds.
     /// </summary>
@@ -33,7 +37,7 @@ public abstract class DiagramItem
     public virtual void Draw(SKCanvas canvas)   
     {
         // Debug rectangle.
-        canvas.DrawRect(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height, PaintUtils.RedStrokePaint);
+        // canvas.DrawRect(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height, PaintUtils.RedStrokePaint);
     }
 
     /// <summary>
