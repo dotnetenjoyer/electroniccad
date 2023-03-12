@@ -1,5 +1,7 @@
 using System;
 using ElectronicCad.Desktop.Infrastructure.DependencyInjection;
+using ElectronicCad.Desktop.Views;
+using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectronicCad.Desktop;
@@ -29,6 +31,11 @@ internal class CompositionRoot
         return _instanse;
     }
 
+    /// <summary>
+    /// Main window.
+    /// </summary>
+    public static MainWindow MainWindow { get; set; }
+    
     private void Configure()
     {
         var serviceCollection = new ServiceCollection();
@@ -38,6 +45,6 @@ internal class CompositionRoot
 
     private void ConfigureServices(ServiceCollection serviceCollection)
     {
-        DesktopModule.Register(serviceCollection);
+        DesktopModule.Register(serviceCollection, MainWindow);
     }
 }

@@ -9,7 +9,7 @@
         xmlns:diagrams="clr-namespace:ElectronicCad.Desktop.Views.Diagrams"
         xmlns:activityBar="clr-namespace:ElectronicCad.Desktop.Views.ActivityBar"
         xmlns:properties="clr-namespace:ElectronicCad.Desktop.Views.Properties"
-        d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel}"
+        d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
         WindowState="Maximized">
 
@@ -76,8 +76,12 @@
             </Grid>
         </DockPanel>
         
-        <Grid Grid.ZIndex="1">
-            <Frame/>
-        </Grid>
+        <Frame
+            x:Name="Frame"
+            Grid.ZIndex="1"
+            NavigationUIVisibility="Hidden"
+            Visibility="Collapsed"
+            Background="#66000000"
+        />
     </Grid>
 </Window>

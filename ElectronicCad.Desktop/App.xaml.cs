@@ -1,5 +1,8 @@
 ﻿using System.Windows;
 using ElectronicCad.Desktop.Views;
+using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
+using ElectronicCad.MVVM.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectronicCad.Desktop
 {
@@ -13,8 +16,11 @@ namespace ElectronicCad.Desktop
         {
             var mainWindow = new MainWindow();
             mainWindow.Show();
-            
+
+            CompositionRoot.MainWindow = mainWindow;
             var compositionRoot = CompositionRoot.GetInstance();
+            var dialogService = compositionRoot.ServiceProvider.GetRequiredService<IDialogService>();
+            dialogService.OpenAsync<WelcomeViewModel>();
             base.OnStartup(e);
         }
     }

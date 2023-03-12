@@ -7,8 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
-      <ProjectReference Include="..\ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj" />
+      <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.0" />
     </ItemGroup>
 
 </Project>

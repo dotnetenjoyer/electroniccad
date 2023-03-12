@@ -12,12 +12,6 @@ namespace ElectronicCad.Desktop.Views
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
-        }
-
-        protected override void OnMouseDoubleClick(MouseButtonEventArgs e)
-        {
-            // base.OnMouseDoubleClick(e);
         }
     }
 }
