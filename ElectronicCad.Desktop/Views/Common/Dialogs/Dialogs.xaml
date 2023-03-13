@@ -12,10 +12,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type common:BaseNavigatedPage}">
-                    <Grid Background="{StaticResource SecondaryBackgroundBrush}">
+                    <Grid>
                         <Border Style="{StaticResource DialogCard}" x:Name="DialogShapeBorder"/>
 
-                        <Grid>
+                        <Grid Background="{StaticResource SecondaryBackgroundBrush}">
                             <Grid.OpacityMask>
                                 <VisualBrush Visual="{Binding ElementName=DialogShapeBorder}" />
                             </Grid.OpacityMask>

@@ -5,7 +5,12 @@
     <Color x:Key="ComponentBackground">#161c23</Color>
 
     <Color x:Key="PrimaryForeground">#FFFFFF</Color>
-    <Color x:Key="SecondaryForeground">#98979a</Color>
+    <Color x:Key="SecondaryForeground">#777f88</Color>
+    
+    <Color x:Key="Brand">#1677ff</Color>
+    <Color x:Key="Error">#ff4d4f</Color>
+    <Color x:Key="Warning">#faad14</Color>
+    <Color x:Key="Success">#52c41a</Color>
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background}"/>
     <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="{StaticResource SecondaryBackground}"/>
@@ -13,4 +18,9 @@
 
     <SolidColorBrush x:Key="PrimaryForegroundBrush" Color="{StaticResource PrimaryForeground}"/>
     <SolidColorBrush x:Key="SecondaryForegroundBrush" Color="{StaticResource SecondaryForeground}"/>
+    
+    <SolidColorBrush x:Key="BrandBrush" Color="{StaticResource Brand}"/>
+    <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource Error}"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource Warning}"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource Success}"/>
 </ResourceDictionary>

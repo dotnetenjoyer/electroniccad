@@ -7,7 +7,7 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
-        <Style TargetType="RepeatButton" BasedOn="{StaticResource IconButton}">
+        <Style TargetType="Button" BasedOn="{StaticResource IconButton}">
             <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
             <Setter Property="Margin" Value="8 0"/>
             <Setter Property="Padding" Value="5"/>
@@ -17,37 +17,37 @@
     
     <Border Style="{StaticResource ComponentWrapper}">
         <StackPanel Orientation="Horizontal">
-            <RepeatButton>
+            <Button>
                 <componenets:Icon Path="{StaticResource CursorIcon}"/>
-            </RepeatButton>
+            </Button>
             
-            <RepeatButton>
+            <Button>
                 <componenets:Icon Path="{StaticResource PenIcon}"/>
-            </RepeatButton>
+            </Button>
 
-            <RepeatButton>
+            <Button>
                 <componenets:Icon Path="{StaticResource LineIcon}"/>
-            </RepeatButton>
+            </Button>
 
-            <RepeatButton>
+            <Button>
                 <componenets:Icon Path="{StaticResource RectIcon}"/>
-            </RepeatButton>
+            </Button>
 
-            <RepeatButton>
+            <Button>
                 <componenets:Icon Path="{StaticResource ElipseIcon}"/>
-            </RepeatButton>
+            </Button>
 
-            <RepeatButton>
+            <Button>
                 <componenets:Icon Path="{StaticResource TextIcon}"/>
-            </RepeatButton>
+            </Button>
 
-            <RepeatButton>
+            <Button>
                 <componenets:Icon Path="{StaticResource UndoIcon}"/>
-            </RepeatButton>
+            </Button>
 
-            <RepeatButton>
+            <Button>
                 <componenets:Icon Path="{StaticResource RedoIcon}"/>
-            </RepeatButton>
+            </Button>
         </StackPanel>
     </Border>
 </UserControl>

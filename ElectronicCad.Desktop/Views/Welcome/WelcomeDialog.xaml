@@ -9,9 +9,9 @@
     mc:Ignorable="d"
     Width="800" 
     Height="300"
-    Title="Welcome">
+    Style="{StaticResource Dialog}">
     <StackPanel Orientation="Vertical">
-        <dialogs:DialogTitleBar/>
+        <dialogs:DialogTitleBar Title="Welcome"/>
         <TextBlock Foreground="White">Test view model</TextBlock>
     </StackPanel>
 </common:BaseNavigatedPage>
