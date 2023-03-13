@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ElectronicCad.Desktop.Styles\ElectronicCad.Desktop.Styles.csproj" />
+      <ProjectReference Include="..\ElectronicCad.Desktop.UI\ElectronicCad.Desktop.UI.csproj" />
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM\ElectronicCad.MVVM.csproj" />
       <ProjectReference Include="..\ElectronicCad.Diagramming\ElectronicCad.Diagramming.csproj" />
@@ -25,6 +25,11 @@
 
     <ItemGroup>
       <Page Update="Views\Welcome\WelcomeDialog.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+      <Page Update="Views\Common\Dialogs\Dialogs.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>

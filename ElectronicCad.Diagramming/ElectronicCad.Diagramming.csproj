@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ElectronicCad.Desktop.Styles\ElectronicCad.Desktop.Styles.csproj" />
+      <ProjectReference Include="..\ElectronicCad.Desktop.UI\ElectronicCad.Desktop.UI.csproj" />
     </ItemGroup>
 
 </Project>

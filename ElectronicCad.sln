@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{B3D555
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.MVVM", "ElectronicCad.MVVM\ElectronicCad.MVVM.csproj", "{043AF8C9-65F0-4ACF-922C-4558B61D6CDD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Desktop.Styles", "ElectronicCad.Desktop.Styles\ElectronicCad.Desktop.Styles.csproj", "{3029D5A9-A2E7-4AE7-81DE-B0B7B93CE1AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Desktop.UI", "ElectronicCad.Desktop.UI\ElectronicCad.Desktop.UI.csproj", "{3029D5A9-A2E7-4AE7-81DE-B0B7B93CE1AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Diagramming", "ElectronicCad.Diagramming\ElectronicCad.Diagramming.csproj", "{76F6D42D-D125-4C73-A342-48BCAD084D26}"
 EndProject

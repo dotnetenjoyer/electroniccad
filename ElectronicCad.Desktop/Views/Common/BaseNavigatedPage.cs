@@ -2,7 +2,7 @@ using System;
 using System.Windows.Controls;
 using ElectronicCad.MVVM.Common;
 
-namespace ElectronicCad.Desktop.Views;
+namespace ElectronicCad.Desktop.Views.Common;
 
 /// <summary>
 /// Base navigate page.

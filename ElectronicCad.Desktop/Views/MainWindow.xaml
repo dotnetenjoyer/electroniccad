@@ -57,7 +57,7 @@
     
     <Grid>
         <DockPanel LastChildFill="True">
-            <views:TopMenu DockPanel.Dock="Top"/>
+            <!-- <views:TopMenu DockPanel.Dock="Top"/> -->
 
             <Grid>
                 <Grid.ColumnDefinitions>

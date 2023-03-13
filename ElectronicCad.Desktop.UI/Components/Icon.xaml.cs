@@ -1,7 +1,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ElectronicCad.Desktop.Styles.Components;
+namespace ElectronicCad.Desktop.UI.Components;
 
 /// <summary>
 /// Icon control.

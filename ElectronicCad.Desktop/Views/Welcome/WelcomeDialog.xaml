@@ -1,12 +1,17 @@
-<local:BaseNavigatedPage x:Class="ElectronicCad.Desktop.Views.WelcomeDialog"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:ElectronicCad.Desktop.Views"
-      mc:Ignorable="d"
-      Title="WelcomeDialog" Height="450" Width="800" Background="{StaticResource SecondaryBackgroundBrush}">
-    <Grid>
+<common:BaseNavigatedPage 
+    x:Class="ElectronicCad.Desktop.Views.WelcomeDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:common="clr-namespace:ElectronicCad.Desktop.Views.Common"
+    xmlns:dialogs="clr-namespace:ElectronicCad.Desktop.Views.Common.Dialogs"
+    mc:Ignorable="d"
+    Width="800" 
+    Height="300"
+    Title="Welcome">
+    <StackPanel Orientation="Vertical">
+        <dialogs:DialogTitleBar/>
         <TextBlock Foreground="White">Test view model</TextBlock>
-    </Grid>
-</local:BaseNavigatedPage>
+    </StackPanel>
+</common:BaseNavigatedPage>

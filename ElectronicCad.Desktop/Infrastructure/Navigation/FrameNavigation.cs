@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using ElectronicCad.Desktop.Views;
+using ElectronicCad.Desktop.Views.Common;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.Common.Attributes;
 
