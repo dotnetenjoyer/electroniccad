@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ElectronicCad.Desktop.Views.Common.Dialogs" xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI"
              x:ClassModifier="internal"
              mc:Ignorable="d">
     <Grid Background="{StaticResource ComponentBackgroundBrush}" Height="35">
@@ -13,7 +12,6 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
-    
             <Image
                 Source="../../../Resources/Images/logo.png"
                 Width="20"  

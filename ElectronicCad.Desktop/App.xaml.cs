@@ -2,6 +2,7 @@
 using ElectronicCad.Desktop.Views;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
 using ElectronicCad.MVVM.ViewModels;
+using ElectronicCad.MVVM.ViewModels.Project;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectronicCad.Desktop
@@ -21,6 +22,7 @@ namespace ElectronicCad.Desktop
             var compositionRoot = CompositionRoot.GetInstance();
             var dialogService = compositionRoot.ServiceProvider.GetRequiredService<IDialogService>();
             dialogService.OpenAsync<WelcomeViewModel>();
+            dialogService.OpenAsync<ProjectPropertiesViewModel>();
             base.OnStartup(e);
         }
     }

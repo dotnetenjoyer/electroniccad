@@ -32,6 +32,6 @@ internal class DialogService : ObservableObject, IDialogService
     /// <inhertdoc/>
     public void Close()
     {
-        
+        _frameNavigation.Close();
     }
 }

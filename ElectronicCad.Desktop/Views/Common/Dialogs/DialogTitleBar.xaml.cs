@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using Microsoft.Toolkit.Mvvm.Input;
 
 namespace ElectronicCad.Desktop.Views.Common.Dialogs;
 
@@ -30,9 +30,9 @@ internal partial class DialogTitleBar : UserControl
     /// <summary>
     /// Close dialog command.
     /// </summary>
-    public ICommand CloseCommand
+    public RelayCommand CloseCommand
     {
-        get => (ICommand) GetValue(CloseCommandProperty); 
+        get => (RelayCommand) GetValue(CloseCommandProperty); 
         set => SetValue(CloseCommandProperty, value);
     }
 
@@ -41,7 +41,7 @@ internal partial class DialogTitleBar : UserControl
     /// </summary>
     public static readonly DependencyProperty CloseCommandProperty = DependencyProperty.Register(
         nameof(CloseCommand),
-        typeof(ICommand),
+        typeof(RelayCommand),
         typeof(DialogTitleBar),
         new PropertyMetadata());
     

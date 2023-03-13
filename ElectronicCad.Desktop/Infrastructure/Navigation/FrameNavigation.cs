@@ -18,12 +18,15 @@ internal class FrameNavigation
     private readonly Frame _frame;
     private readonly Dictionary<Type, Type> _viewModelToPageAssociations = new();
 
+    private readonly Stack<ViewState> _navigationStates;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     public FrameNavigation(Frame frame)
     {
         _frame = frame;
+        _navigationStates = new();
         InitializeViewModelToPageAssociations();
     }
 
@@ -46,16 +49,38 @@ internal class FrameNavigation
         }
     }
     
+    /// <summary>
+    /// Open new page.
+    /// </summary>
+    /// <param name="viewModel">The view model that associated with page.</param>
     public void Open(ViewModel viewModel)
     {
-        var page = _viewModelToPageAssociations[viewModel.GetType()];
+        var pageType = _viewModelToPageAssociations[viewModel.GetType()];
+        var page = (Page)Activator.CreateInstance(pageType)!;
+        page.DataContext = viewModel;
+        _navigationStates.Push(new ViewState(page, viewModel));
+        NavigateCurrentState();
+    }
 
-        if (page == null)
+    /// <summary>
+    /// Close current state.
+    /// </summary>
+    public void Close()
+    {
+        _navigationStates.Pop();
+        NavigateCurrentState();
+    }
+
+    private void NavigateCurrentState()
+    {
+        if (_navigationStates.Count == 0)
         {
+            _frame.Visibility = Visibility.Collapsed;
             return;
-        }
-
+        } 
+        
+        var currentState = _navigationStates.Peek();
         _frame.Visibility = Visibility.Visible;
-        _frame.Navigate(Activator.CreateInstance(page));
+        _frame.Navigate(currentState.Page);
     }
 }
