@@ -1,4 +1,5 @@
 using System;
+using ElectronicCad.Diagramming.Modes;
 using ElectronicCad.MVVM.Common;
 
 namespace ElectronicCad.Diagramming.ViewModels;
@@ -16,7 +17,7 @@ public class DiagramControlViewModel : ViewModel
     /// <summary>
     /// Raised when diagram mode changed.
     /// </summary>
-    public event EventHandler? DiagramModeChanged;
+    public event EventHandler<DiagramMode>? DiagramModeChanged;
     
     /// <summary>
     /// Constructor.
@@ -24,11 +25,27 @@ public class DiagramControlViewModel : ViewModel
     public DiagramControlViewModel()
     {
         UpperToolbar = new();
-        UpperToolbar.DiagramModeChanged += HandleDiagramModeChanged;
+        UpperToolbar.DiagramModeChanged += HandleDiagramModeChange;
     }
 
-    private void HandleDiagramModeChanged(object? sender, EventArgs args)
+    private void HandleDiagramModeChange(object? sender, DiagramMode newValue)
     {
-        DiagramModeChanged?.Invoke(sender, args);
+        DiagramModeChanged?.Invoke(sender, newValue);
+    }
+    
+    /// <inheritdoc />
+    protected override void Dispose(bool isDisposing)
+    {
+        if (IsDisposed)
+        {
+            return;
+        }
+
+        if (isDisposing)
+        {
+            UpperToolbar.DiagramModeChanged -= HandleDiagramModeChange;
+        }
+        
+        base.Dispose(isDisposing);
     }
 }

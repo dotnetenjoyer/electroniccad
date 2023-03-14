@@ -25,7 +25,7 @@ public class UpperToolbarViewModel : ViewModel
         {
             _diagramMode = value;
             OnPropertyChanged();
-            DiagramModeChanged?.Invoke(this, EventArgs.Empty);
+            DiagramModeChanged?.Invoke(this, value);
         }
     }
 
@@ -34,7 +34,7 @@ public class UpperToolbarViewModel : ViewModel
     /// <summary>
     /// Raised when diagram mode changed.
     /// </summary>
-    public event EventHandler? DiagramModeChanged;
+    public event EventHandler<DiagramMode>? DiagramModeChanged;
     
     /// <summary>
     /// Constructor.
