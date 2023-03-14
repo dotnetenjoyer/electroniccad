@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using ElectronicCad.Diagramming.ViewModels;
 
 namespace ElectronicCad.Diagramming
 {
@@ -10,6 +11,14 @@ namespace ElectronicCad.Diagramming
         public DiagramControl()
         {
             InitializeComponent();
+            var viewModel = new DiagramControlViewModel();
+            DataContext = viewModel;
+            
+            viewModel.DiagramModeChanged += (sender, args) =>
+            {
+                Diagram.SetDiagramMode(viewModel.UpperToolbar.DiagramMode);
+            };
+
         }
     }
 }

@@ -3,50 +3,72 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:componenets="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI"
-             mc:Ignorable="d">
+             xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI"
+             xmlns:viewModels="clr-namespace:ElectronicCad.Diagramming.ViewModels"
+             xmlns:control="clr-namespace:ElectronicCad.Diagramming.Controls"
+             xmlns:modes="clr-namespace:ElectronicCad.Diagramming.Modes"
+             d:DataContext="{d:DesignInstance viewModels:UpperToolbarViewModel}"
+             mc:Ignorable="d" x:ClassModifier="internal">
 
     <UserControl.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource IconButton}">
-            <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
             <Setter Property="Margin" Value="8 0"/>
             <Setter Property="Padding" Value="5"/>
-            <Setter Property="Width" Value="25"/>
+            <Setter Property="Width" Value="25"/> 
+            
+            <Style.Triggers>
+                <Trigger Property="control:UpperToolbarAssist.IsToolSelected" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
     
     <Border Style="{StaticResource ComponentWrapper}">
         <StackPanel Orientation="Horizontal">
-            <Button>
-                <componenets:Icon Path="{StaticResource CursorIcon}"/>
+            <Button 
+                Command="{Binding ChangeModeCommand}"
+                CommandParameter="{x:Static modes:DiagramMode.Selection}"
+                control:UpperToolbarAssist.IsToolSelected="True">
+                <components:Icon Path="{StaticResource CursorIcon}"/>
             </Button>
             
-            <Button>
-                <componenets:Icon Path="{StaticResource PenIcon}"/>
+            <Button
+                Command="{Binding ChangeModeCommand}"
+                CommandParameter="{x:Static modes:DiagramMode.Pen}">
+                <components:Icon Path="{StaticResource PenIcon}"/>
+            </Button>
+
+            <Button
+                Command="{Binding ChangeModeCommand}"
+                CommandParameter="{x:Static modes:DiagramMode.Line}">
+                <components:Icon Path="{StaticResource LineIcon}"/>
+            </Button>
+
+            <Button
+                Command="{Binding ChangeModeCommand}"
+                CommandParameter="{x:Static modes:DiagramMode.Polygon}">
+                <components:Icon Path="{StaticResource RectIcon}"/>
+            </Button>
+
+            <Button
+                Command="{Binding ChangeModeCommand}"
+                CommandParameter="{x:Static modes:DiagramMode.Elipse}">
+                <components:Icon Path="{StaticResource ElipseIcon}"/>
+            </Button>
+
+            <Button
+                Command="{Binding ChangeModeCommand}"
+                CommandParameter="{x:Static modes:DiagramMode.Text}">
+                <components:Icon Path="{StaticResource TextIcon}"/>
             </Button>
 
             <Button>
-                <componenets:Icon Path="{StaticResource LineIcon}"/>
+                <components:Icon Path="{StaticResource UndoIcon}"/>
             </Button>
 
             <Button>
-                <componenets:Icon Path="{StaticResource RectIcon}"/>
-            </Button>
-
-            <Button>
-                <componenets:Icon Path="{StaticResource ElipseIcon}"/>
-            </Button>
-
-            <Button>
-                <componenets:Icon Path="{StaticResource TextIcon}"/>
-            </Button>
-
-            <Button>
-                <componenets:Icon Path="{StaticResource UndoIcon}"/>
-            </Button>
-
-            <Button>
-                <componenets:Icon Path="{StaticResource RedoIcon}"/>
+                <components:Icon Path="{StaticResource RedoIcon}"/>
             </Button>
         </StackPanel>
     </Border>

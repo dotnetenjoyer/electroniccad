@@ -9,7 +9,7 @@ namespace ElectronicCad.Desktop.Infrastructure.Navigation;
 public class ViewState
 {
     /// <summary>
-    /// Page.
+    /// Page associated with view model.
     /// </summary>
     public Page Page { get; }
 

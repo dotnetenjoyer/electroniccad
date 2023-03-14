@@ -18,8 +18,7 @@
         
         <Border Padding="10">
             <StackPanel>
-                <TextBlock Foreground="White">Test view model</TextBlock>
-                <Button>Test</Button>
+                <TextBlock Foreground="White">Welcome dialog</TextBlock>
             </StackPanel>    
         </Border>
     </StackPanel>

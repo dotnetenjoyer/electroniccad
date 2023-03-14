@@ -70,32 +70,31 @@ namespace ElectronicCad.Diagramming
             SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
 
             AddLayer();
-            SetDiagramMode(new NewLineMode());
+            SetDiagramMode(DiagramMode.Selection);
         }
 
         #region Diagram mode
 
         private IDiagramMode _diagramMode;
 
-        private void SetDiagramMode(IDiagramMode diagramMode)
+        public void SetDiagramMode(DiagramMode diagramMode)
         {
-            if (_diagramMode != null)
+            switch (diagramMode)
             {
-                _diagramMode.Finalize();
+                case DiagramMode.Selection:
+                    SetDiagramMode(new Modes.SelectionMode());
+                    break;
+                case DiagramMode.Line:
+                    SetDiagramMode(new NewLineMode());
+                    break;
             }
-            
-            _diagramMode = diagramMode;
-            diagramMode.Initialize(this);
-        }
-        
-        private void SetSelectionMode(object sender, RoutedEventArgs e)
-        {
-            SetDiagramMode(new Modes.SelectionMode());
         }
 
-        private void SetNewLineMode(object sender, RoutedEventArgs e)
+        private void SetDiagramMode(IDiagramMode diagramMode)
         {
-            SetDiagramMode(new NewLineMode());
+            _diagramMode?.Finalize();
+            _diagramMode = diagramMode;
+            diagramMode.Initialize(this);
         }
         
         #endregion

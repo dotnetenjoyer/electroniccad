@@ -8,11 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.0" />
       <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.3" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ElectronicCad.Desktop.UI\ElectronicCad.Desktop.UI.csproj" />
+      <ProjectReference Include="..\ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj" />
     </ItemGroup>
 
 </Project>

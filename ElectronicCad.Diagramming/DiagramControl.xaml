@@ -1,18 +1,22 @@
-﻿<UserControl x:Class="ElectronicCad.Diagramming.DiagramControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ElectronicCad.Diagramming"
-             xmlns:controls="clr-namespace:ElectronicCad.Diagramming.Controls"
-             mc:Ignorable="d">
+﻿<UserControl 
+    x:Class="ElectronicCad.Diagramming.DiagramControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:ElectronicCad.Diagramming"
+    xmlns:controls="clr-namespace:ElectronicCad.Diagramming.Controls"
+    xmlns:viewModels="clr-namespace:ElectronicCad.Diagramming.ViewModels"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance viewModels:DiagramControlViewModel}">
     <Grid>
-        <local:Diagram/>
+        <local:Diagram x:Name="Diagram"/>
 
         <controls:UpperToolbar
             Grid.ZIndex="1"
             VerticalAlignment="Top"
             HorizontalAlignment="Center"
-            Margin="0 30 0 0"/>
+            Margin="0 30 0 0"
+            DataContext="{Binding UpperToolbar}"/>
     </Grid>
 </UserControl>

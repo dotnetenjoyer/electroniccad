@@ -11,6 +11,7 @@
         xmlns:properties="clr-namespace:ElectronicCad.Desktop.Views.Properties"
         d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
+        
         WindowState="Maximized">
 
     <Window.Resources>
