@@ -108,7 +108,7 @@ public abstract class BaseDiagramMode : IDiagramMode
     }
 
     /// <inheritdoc/>
-    public void Finalize()
+    public virtual void Finalize()
     {
         Diagram.MouseDown -= HandleDiagramMouseDown;
         Diagram.MouseUp -= HandleDiagramMouseUp;

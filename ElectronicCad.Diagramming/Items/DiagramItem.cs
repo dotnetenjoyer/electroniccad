@@ -3,6 +3,7 @@ using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using SkiaSharp;
 using SkiaSharp.Views.WPF;
+using SkiaExtensions = ElectronicCad.Diagramming.Extensions.SkiaExtensions;
 
 namespace ElectronicCad.Diagramming.Nodes;
 
@@ -42,12 +43,22 @@ public abstract class DiagramItem
     }
 
     /// <summary>
+    /// Check point hitting with diagram item bounds.
+    /// </summary>
+    /// <param name="position">Point position.</param>
+    /// <returns>Whether hit or not.</returns>
+    public bool CheckBoundsHit(Point position)
+    {
+        return SkiaExtensions.Contains(Bounds, position.ToSKPoint());
+    }
+
+    /// <summary>
     /// Check point hitting with diagram item.
     /// </summary>
     /// <param name="position">Point position.</param>
     /// <returns>Whether hit or not.</returns>
     public virtual bool CheckHit(Point position)
     {
-        return Bounds.ContainsTest(position.ToSKPoint());
+        return SkiaExtensions.Contains(Bounds, position.ToSKPoint());
     }
 }

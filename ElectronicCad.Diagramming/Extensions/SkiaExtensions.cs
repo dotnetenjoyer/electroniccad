@@ -1,4 +1,3 @@
-using System.Windows;
 using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Extensions;
@@ -19,6 +18,26 @@ public static class SkiaExtensions
     }
 
     /// <summary>
+    /// Get top right point of skia rectangle.
+    /// </summary>
+    /// <param name="skRect">Skia rectangle.</param>
+    /// <returns>Top right point.</returns>
+    public static SKPoint GetTopRight(this SKRect skRect)
+    {
+        return new SKPoint(skRect.Right, skRect.Top);
+    }
+    
+    /// <summary>
+    /// Get bottom left point of skia rectangle.
+    /// </summary>
+    /// <param name="skRect">Skia rectangle.</param>
+    /// <returns>Bottom left point.</returns>
+    public static SKPoint GetBottomLeft(this SKRect skRect)
+    {
+        return new SKPoint(skRect.Left, skRect.Bottom);
+    }
+    
+    /// <summary>
     /// Get bottom right point of skia rectangle.
     /// </summary>
     /// <param name="skRect">Skia rectangle.</param>
@@ -35,16 +54,53 @@ public static class SkiaExtensions
     /// <returns>Center point.</returns>
     public static SKPoint GetCenter(this SKRect skRect)
     {
-        return new SKPoint(skRect.Left + skRect.Width / 2, skRect.Top + skRect.Height / 2);
+        return new SKPoint(skRect.MidX, skRect.MidY);
+    }
+    
+    /// <summary>
+    /// Get top center point of ska rectangle.
+    /// </summary>
+    /// <param name="skRect">Skia rectangle.</param>
+    /// <returns>Top center point.</returns>
+    public static SKPoint GetTopCenter(this SKRect skRect)
+    {
+        return new SKPoint(skRect.MidX, skRect.Top);
+    }
+    
+    /// <summary>
+    /// Get bottom center point of ska rectangle.
+    /// </summary>
+    /// <param name="skRect">Skia rectangle.</param>
+    /// <returns>Bottom center point.</returns>
+    public static SKPoint GetBottomCenter(this SKRect skRect)
+    {
+        return new SKPoint(skRect.MidX, skRect.Bottom);
+    }
+    
+    /// <summary>
+    /// Get left center point of ska rectangle.
+    /// </summary>
+    /// <param name="skRect">Skia rectangle.</param>
+    /// <returns>Left center point.</returns>
+    public static SKPoint GetLeftCenter(this SKRect skRect)
+    {
+        return new SKPoint(skRect.Left, skRect.MidY);
     }
 
     /// <summary>
-    /// Extension method to i
+    /// Get right center point of ska rectangle.
     /// </summary>
-    /// <param name="skRect"></param>
-    /// <param name="point"></param>
-    /// <returns></returns>
-    public static bool ContainsTest(this SKRect skRect, SKPoint point)
+    /// <param name="skRect">Skia rectangle.</param>
+    /// <returns>Right center point.</returns>
+    public static SKPoint GetRightCenter(this SKRect skRect)
+    {
+        return new SKPoint(skRect.Right, skRect.MidY);
+    }
+    
+    /// <summary>
+    /// Return true if rectangle contains point
+    /// </summary>
+    public static bool Contains(this SKRect skRect, SKPoint point)
     {
         var topLeft = skRect.GetTopLeft();
         var bottomRight = skRect.GetBottomRight();

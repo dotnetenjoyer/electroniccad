@@ -1,6 +1,8 @@
+using System.Drawing;
 using System.Linq;
 using System.Windows.Input;
 using ElectronicCad.Diagramming.Nodes;
+using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Modes;
 
@@ -12,10 +14,10 @@ public class SelectionMode : BaseDiagramMode
     /// <inheritdoc/>
     public override Cursor Cursor => Cursors.Arrow;
 
+    /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
-        var position = args.GetPosition(Diagram);
-        if (Diagram.DiagramItems.Any(_ => _.CheckHit(position)))
+        if (GetHitItem(args, out var hitItem))
         {
             Diagram.Cursor = Cursors.Hand;
         }
@@ -25,20 +27,55 @@ public class SelectionMode : BaseDiagramMode
         }
     }
 
+    /// <inheritdoc/>
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        var position = args.GetPosition(Diagram);
-        var selectedItem = Diagram.DiagramItems.FirstOrDefault(_ => _.CheckHit(position));
-
-        if (selectedItem == null)
-        {
-            return;
-        }        
-        var selectionFrame = new SelectionFrameDiagramItem();
-        selectionFrame.Bounds = selectedItem.Bounds; 
-        Diagram.AddItem(selectionFrame);
-
-        
         base.ProcessPrimaryButtonUp(args);
+        
+        var selectionFrame = GetSelectionFrame();
+        selectionFrame.Bounds = GetHitItem(args, out var hitItem) 
+            ? hitItem!.Bounds 
+            : SKRect.Empty; 
+
+        Diagram.RedrawDiagram();
+    }
+
+    /// <inheritdoc/>
+    public override void Finalize()
+    {
+        base.Finalize();
+        
+        var selectionFrame = GetSelectionFrame();
+        selectionFrame.Bounds = SKRect.Empty;
+        Diagram.RedrawDiagram();
+    }
+
+    private bool GetHitItem(MouseEventArgs args, out DiagramItem? diagramItem)
+    {
+        var position = args.GetPosition(Diagram);
+       
+        var boundsHitItems = Diagram.DiagramItems
+            .Where(_ => !_.IsAuxiliary)
+            .Where(_ => _.CheckBoundsHit(position))
+            .ToList();
+
+        diagramItem = boundsHitItems.FirstOrDefault(_ => _.CheckHit(position));
+        
+        return diagramItem != null;
+    }
+
+    private SelectionFrameDiagramItem GetSelectionFrame()
+    {
+        var selectionFrame = Diagram.DiagramItems
+            .OfType<SelectionFrameDiagramItem>()
+            .FirstOrDefault();
+
+        if (selectionFrame == null)
+        {
+            selectionFrame = new SelectionFrameDiagramItem();
+            Diagram.AddItem(selectionFrame);
+        }
+
+        return selectionFrame;
     }
 }

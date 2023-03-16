@@ -6,9 +6,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using ElectronicCad.Diagramming.Modes;
 using ElectronicCad.Diagramming.Nodes;
+using ElectronicCad.Diagramming.Utils;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using SkiaSharp.Views.WPF;
+using Color = System.Drawing.Color;
+using Colors = ElectronicCad.Diagramming.Utils.Colors;
 
 namespace ElectronicCad.Diagramming
 {
@@ -63,12 +66,10 @@ namespace ElectronicCad.Diagramming
         public Diagram()
         {
             InitializeComponent();
+            Colors.Initialize(this);
 
-            var secondaryBackgroundColor = (Color)FindResource("SecondaryBackground");
-            _workspaceColor = secondaryBackgroundColor.ToSKColor();
-            
             SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
-
+            
             AddLayer();
             SetDiagramMode(DiagramMode.Selection);
         }
@@ -115,8 +116,6 @@ namespace ElectronicCad.Diagramming
 
         #region Drawing
 
-        private readonly SKColor _workspaceColor;
-        
         public void RedrawDiagram()
         {
             SkiaCanvas.InvalidateVisual();
@@ -157,8 +156,7 @@ namespace ElectronicCad.Diagramming
             var bottom = top + size.Height;
             var rectangle = new SKRect(left, top, right, bottom);
             
-            var paint = new SKPaint { Color = _workspaceColor };
-
+            var paint = new SKPaint { Color = Colors.SecondaryBackground };
             canvas.DrawRect(rectangle, paint);
         }
 
