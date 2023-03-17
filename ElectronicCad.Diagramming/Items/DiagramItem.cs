@@ -3,7 +3,6 @@ using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using SkiaSharp;
 using SkiaSharp.Views.WPF;
-using SkiaExtensions = ElectronicCad.Diagramming.Extensions.SkiaExtensions;
 
 namespace ElectronicCad.Diagramming.Nodes;
 
@@ -16,6 +15,11 @@ public abstract class DiagramItem
     /// Indicate whether item is auxiliary. 
     /// </summary>
     internal virtual bool IsAuxiliary => false;
+
+    /// <summary>
+    /// Indicates whether ite is visible.
+    /// </summary>
+    public bool IsVisible { get; set; } = true;
     
     /// <summary>
     /// Diagram node bounds.
@@ -49,7 +53,7 @@ public abstract class DiagramItem
     /// <returns>Whether hit or not.</returns>
     public bool CheckBoundsHit(Point position)
     {
-        return SkiaExtensions.Contains(Bounds, position.ToSKPoint());
+        return SkiaRectExtensions.Contains(Bounds, position.ToSKPoint());
     }
 
     /// <summary>
@@ -59,6 +63,6 @@ public abstract class DiagramItem
     /// <returns>Whether hit or not.</returns>
     public virtual bool CheckHit(Point position)
     {
-        return SkiaExtensions.Contains(Bounds, position.ToSKPoint());
+        return SkiaRectExtensions.Contains(Bounds, position.ToSKPoint());
     }
 }

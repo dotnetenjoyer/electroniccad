@@ -11,9 +11,9 @@ namespace ElectronicCad.Diagramming.Utils;
 internal static class Colors
 {
     /// <summary>
-    /// Brand color.
+    /// Primary color.
     /// </summary>
-    public static SKColor Brand { get; private set; }
+    public static SKColor Primary { get; private set; }
 
     /// <summary>
     /// Secondary background color.
@@ -21,14 +21,22 @@ internal static class Colors
     public static SKColor SecondaryBackground { get; private set; }
     
     /// <summary>
+    /// Primary foreground color.
+    /// </summary>
+    public static SKColor Foreground { get; private set; }
+    
+    /// <summary>
     /// Initialize.
     /// </summary>
     public static void Initialize(FrameworkElement element)
     {
-        var brandColor = (Color)element.FindResource("Brand");
-        Brand = brandColor.ToSKColor();
+        var primary = (Color)element.FindResource("Primary");
+        Primary = primary.ToSKColor();
         
-        var secondaryBackgroundColor = (Color)element.FindResource("SecondaryBackground");
-        SecondaryBackground = secondaryBackgroundColor.ToSKColor();
+        var secondaryBackground = (Color)element.FindResource("SecondaryBackground");
+        SecondaryBackground = secondaryBackground.ToSKColor();
+
+        var foreground = (Color)element.FindResource("PrimaryForeground");
+        Foreground = foreground.ToSKColor();
     }
 }

@@ -142,6 +142,11 @@ namespace ElectronicCad.Diagramming
             {
                 foreach (var item in layer.DiagramItems)
                 {
+                    if (!item.IsVisible)
+                    {
+                        continue;
+                    }
+                    
                     item.Draw(canvas);
                 }
             }

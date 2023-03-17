@@ -7,7 +7,7 @@
     <Color x:Key="PrimaryForeground">#FFFFFF</Color>
     <Color x:Key="SecondaryForeground">#777f88</Color>
     
-    <Color x:Key="Brand">#1677ff</Color>
+    <Color x:Key="Primary">#1677ff</Color>
     <Color x:Key="Error">#ff4d4f</Color>
     <Color x:Key="Warning">#faad14</Color>
     <Color x:Key="Success">#52c41a</Color>

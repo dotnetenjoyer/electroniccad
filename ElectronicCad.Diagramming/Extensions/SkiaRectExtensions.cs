@@ -3,9 +3,9 @@ using SkiaSharp;
 namespace ElectronicCad.Diagramming.Extensions;
 
 /// <summary>
-/// Geometry extensions.
+/// Skia rectangle extensions.
 /// </summary>
-public static class SkiaExtensions
+public static class SkiaRectExtensions
 {
     /// <summary>
     /// Get top left point of skia rectangle.

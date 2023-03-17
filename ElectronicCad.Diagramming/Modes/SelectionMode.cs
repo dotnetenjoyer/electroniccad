@@ -33,10 +33,17 @@ public class SelectionMode : BaseDiagramMode
         base.ProcessPrimaryButtonUp(args);
         
         var selectionFrame = GetSelectionFrame();
-        selectionFrame.Bounds = GetHitItem(args, out var hitItem) 
-            ? hitItem!.Bounds 
-            : SKRect.Empty; 
 
+        if (GetHitItem(args, out var hitItem))
+        {
+            selectionFrame.Bounds = hitItem!.Bounds;
+            selectionFrame.IsVisible = true;
+        }
+        else
+        {
+            selectionFrame.IsVisible = false;
+        }
+        
         Diagram.RedrawDiagram();
     }
 
@@ -46,7 +53,7 @@ public class SelectionMode : BaseDiagramMode
         base.Finalize();
         
         var selectionFrame = GetSelectionFrame();
-        selectionFrame.Bounds = SKRect.Empty;
+        selectionFrame.IsVisible = false;
         Diagram.RedrawDiagram();
     }
 

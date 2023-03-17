@@ -15,7 +15,7 @@ public class LineDiagramItem : DiagramItem
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
+        canvas.DrawLine(Bounds.GetTopLeft(), Bounds.GetBottomRight(), Paints.ForegroundSolid);
         base.Draw(canvas);
-        canvas.DrawLine(Bounds.GetTopLeft(), Bounds.GetBottomRight(), PaintUtils.DarkFillPaint);
     }
 }

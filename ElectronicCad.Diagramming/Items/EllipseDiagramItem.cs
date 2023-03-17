@@ -12,12 +12,11 @@ public class EllipseDiagramItem : DiagramItem
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
-        base.Draw(canvas);
-
         var center = Bounds.GetCenter();
         var xRadius = Bounds.Width / 2;
         var yRadius = Bounds.Height / 2;
 
-        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, PaintUtils.DarkStrokePaint);
+        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, Paints.ForegroundSolid);
+        base.Draw(canvas);
     }
 }
