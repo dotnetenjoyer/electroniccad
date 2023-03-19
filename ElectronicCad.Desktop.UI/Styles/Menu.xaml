@@ -23,7 +23,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Border Padding="14 8">
+                            <Border Padding="14 6">
                                 <ContentPresenter 
                                     Content="{TemplateBinding Header}" 
                                     ContentSource="Header" 

@@ -11,78 +11,81 @@
         xmlns:properties="clr-namespace:ElectronicCad.Desktop.Views.Properties"
         d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
-        
-        WindowState="Maximized">
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <Style x:Key="ButtonStyle" TargetType="Button">
-                <Setter Property="Background" Value="DarkGray"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <TextBlock
-                                Text="{Binding Path=Content, RelativeSource={RelativeSource AncestorType=Button}}"
-                                />
-
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="LinkButton" TargetType="Button">
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <TextBlock
-                                LineStackingStrategy="BlockLineHeight"
-                                Foreground="{TemplateBinding Foreground}"
-                                TextTrimming="CharacterEllipsis"
-                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                                <ContentPresenter>
-                                  <ContentPresenter.Resources>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                      <Setter Property="TextWrapping" Value="NoWrap"/>
-                                        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-                                    </Style>
-                                  </ContentPresenter.Resources>
-                                </ContentPresenter>
-                            </TextBlock>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </ResourceDictionary>
-    </Window.Resources>
+        Title="Electronics"
+        Icon="/Resources/Images/logo.png"
+        WindowStyle="None"
+        WindowState="Maximized" 
+        SourceInitialized="Window_SourceInitialized">
     
-    <Grid>
-        <DockPanel LastChildFill="True">
-            <views:TopMenu DockPanel.Dock="Top"/>
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="320"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="320"/>
-                </Grid.ColumnDefinitions>
-            
-                <activityBar:ActivityBar Grid.Column="0"/>
-            
-                <Grid Grid.Column="1">
-                    <diagrams:DiagramControl/>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+    
+    <DockPanel LastChildFill="True">
+    
+        <Border
+            DockPanel.Dock="Top"
+            Background="{StaticResource SecondaryBackgroundBrush}"
+            Height="36"
+        >
+            <DockPanel LastChildFill="True">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Style="{StaticResource MinimazeButton}" Width="50" Height="30" Click="HandleMinimazeButtonClick"/>
+                    <Button Style="{StaticResource MaximazeButton}" Width="50" Height="30" Click="HandleMaximazeButtonClick"/>
+                    <Button Style="{StaticResource CloseButton}" Width="50" Height="30" Click="HandleCloseButtonClick"/>
+                </StackPanel>
+    
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image
+                        Source="../../../Resources/Images/logo.png"
+                        Width="20"
+                        Height="20"
+                        Margin="10 0"/>
+    
+                    <TextBlock
+                        Text="Electronics"
+                        VerticalAlignment="Center"
+                        Margin="0 0 10 0"/>
+    
+                    <views:TopMenu DockPanel.Dock="Top"/>
+                </StackPanel>
+                
+                <!-- Panel for drag move -->
+                <StackPanel 
+                    Background="Transparent"
+                    PreviewMouseLeftButtonDown="HandleTopBarPreviewMouseLeftButtonDown"
+                    PreviewMouseLeftButtonUp="HandleTopBarPreviewMouseLeftButtonUp"
+                    PreviewMouseMove="HandleTopBarPreviewMouseMove"/>
+                
+            </DockPanel>
+        </Border>
+    
+        <Grid>
+            <DockPanel LastChildFill="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="320"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="320"/>
+                    </Grid.ColumnDefinitions>
+    
+                    <activityBar:ActivityBar Grid.Column="0"/>
+    
+                    <Grid Grid.Column="1">
+                        <diagrams:DiagramControl/>
+                    </Grid>
+    
+                    <properties:Properties Grid.Column="2"/>
                 </Grid>
-            
-                <properties:Properties Grid.Column="2"/>
-            </Grid>
-        </DockPanel>
-        
-        <Frame
-            x:Name="Frame"
-            Grid.ZIndex="1"
-            NavigationUIVisibility="Hidden"
-            Visibility="Collapsed"
-            Background="#66000000"
-        />
-    </Grid>
+            </DockPanel>
+    
+            <Frame
+                x:Name="Frame"
+                Grid.ZIndex="1"
+                NavigationUIVisibility="Hidden"
+                Visibility="Collapsed"
+                Background="#66000000"
+            />
+        </Grid>
+    </DockPanel>
 </Window>
