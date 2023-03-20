@@ -6,6 +6,7 @@
         <ResourceDictionary Source="Styles/Menu.xaml"/>
         <ResourceDictionary Source="Styles/Buttons.xaml"/>
         <ResourceDictionary Source="Styles/TabControl.xaml"/>
+        <ResourceDictionary Source="Styles/Typography.xaml"/>
         <ResourceDictionary Source="Components/Icon.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
@@ -14,8 +15,4 @@
         <Setter Property="Padding" Value="10"/>
         <Setter Property="CornerRadius" Value="10"/>
     </Style>
-
-    <!--<Style TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>    
-    </Style>-->
 </ResourceDictionary>

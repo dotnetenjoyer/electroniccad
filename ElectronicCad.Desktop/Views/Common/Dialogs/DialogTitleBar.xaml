@@ -20,6 +20,7 @@
             
             <TextBlock
                 Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Style="{StaticResource PrimaryText}"
                 VerticalAlignment="Center"/>
         </StackPanel>
         
