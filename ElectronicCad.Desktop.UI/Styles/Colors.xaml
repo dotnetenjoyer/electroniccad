@@ -18,6 +18,7 @@
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background}"/>
     <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="{StaticResource SecondaryBackground}"/>
     <SolidColorBrush x:Key="ComponentBackgroundBrush" Color="{StaticResource ComponentBackground}"/>
+    <SolidColorBrush x:Key="SecondaryComponentBackgroundBrush" Color="{StaticResource ComponentBackground}" Opacity=".45"/>
 
     <SolidColorBrush x:Key="PrimaryForegroundBrush" Color="{StaticResource PrimaryForeground}"/>
     <SolidColorBrush x:Key="SecondaryForegroundBrush" Color="{StaticResource SecondaryForeground}"/>

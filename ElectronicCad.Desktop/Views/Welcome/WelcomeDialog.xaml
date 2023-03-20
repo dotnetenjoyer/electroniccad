@@ -17,11 +17,8 @@
             CloseCommand="{Binding CloseCommand}"/>
 
         <DockPanel>
-            <Grid DockPanel.Dock="Bottom" Background="{StaticResource ComponentBackgroundBrush}" Height="84">
+            <Grid DockPanel.Dock="Bottom" Background="{StaticResource SecondaryComponentBackgroundBrush}" Height="84">
                 <Grid Margin="36, 0" VerticalAlignment="Center">
-                    <!-- <CheckBox Content="Display at startup" IsChecked="{Binding ShowWelcomeDialogOnStartup}" -->
-                    <!--           HorizontalAlignment="Left" VerticalAlignment="Center" /> -->
-
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <Button
                             Content="New Blank Project"
@@ -37,8 +34,19 @@
                 </Grid>
             </Grid>
 
-            <Grid Margin="0 20 ">
-                <TabControl Height="400" >
+            <StackPanel Margin="0 20" Orientation="Vertical">
+                <Border Padding="20 0">
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 20">
+                        <TextBlock FontSize="24" Style="{StaticResource PrimaryText}" Margin="0 0 0 8">
+                            Welcome Back
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource SecondaryText}" TextWrapping="Wrap">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+
+                <TabControl Height="400" Margin="0 0 0 20">
                     <TabItem>
                         <TabItem.Header>
                             <StackPanel Orientation="Horizontal">
@@ -91,7 +99,7 @@
                         </StackPanel>
                     </TabItem>
                 </TabControl>
-            </Grid>
+            </StackPanel>
         </DockPanel>
     </StackPanel>
 </common:BaseNavigatedPage>
