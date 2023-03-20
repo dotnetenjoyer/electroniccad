@@ -20,8 +20,8 @@ namespace ElectronicCad.Desktop
 
             CompositionRoot.MainWindow = mainWindow;
             var compositionRoot = CompositionRoot.GetInstance();
-            // var dialogService = compositionRoot.ServiceProvider.GetRequiredService<IDialogService>();
-            // dialogService.OpenAsync<WelcomeViewModel>();
+            var dialogService = compositionRoot.ServiceProvider.GetRequiredService<IDialogService>();
+            dialogService.OpenAsync<WelcomeViewModel>();
             base.OnStartup(e);
         }
     }

@@ -15,11 +15,31 @@
         <dialogs:DialogTitleBar 
             Title="Welcome"
             CloseCommand="{Binding CloseCommand}"/>
-        
-        <Border Padding="10">
-            <StackPanel>
+
+        <DockPanel>
+            <Grid DockPanel.Dock="Bottom" Background="{StaticResource ComponentBackgroundBrush}" Height="84">
+                <Grid Margin="36, 0" VerticalAlignment="Center">
+                    <!-- <CheckBox Content="Display at startup" IsChecked="{Binding ShowWelcomeDialogOnStartup}" -->
+                    <!--           HorizontalAlignment="Left" VerticalAlignment="Center" /> -->
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button
+                            Content="New Blank Project"
+                            Style="{StaticResource PrimaryButton}"
+                            Margin="16, 0"
+                            MinWidth="140"/>
+                        
+                        <Button
+                            Content="Open Project"
+                            Style="{StaticResource PrimaryButton}"
+                            MinWidth="140"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <Border Padding="10">
                 <TextBlock Foreground="White">Welcome dialog</TextBlock>
-            </StackPanel>    
-        </Border>
+            </Border>
+        </DockPanel>
     </StackPanel>
 </common:BaseNavigatedPage>
