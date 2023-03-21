@@ -23,12 +23,14 @@
                         <Button
                             Content="New Blank Project"
                             Style="{StaticResource PrimaryButton}"
+                            Command="{Binding CreateProjectCommand}"
                             Margin="16, 0"
                             MinWidth="140"/>
                         
                         <Button
                             Content="Open Project"
                             Style="{StaticResource PrimaryButton}"
+                            Command="{Binding OpenProjectCommand}"
                             MinWidth="140"/>
                     </StackPanel>
                 </Grid>

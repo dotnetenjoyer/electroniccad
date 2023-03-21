@@ -12,5 +12,7 @@ internal class DesktopModule
         services.AddSingleton<IDialogService, DialogService>();
         services.AddSingleton<FrameNavigation>((provider) => 
             new FrameNavigation(mainWindow.Frame));
+        
+        MediatorModule.Register(services);
     }
 }

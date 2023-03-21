@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Diagramming",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.MVVM.Common", "ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj", "{1FD98A36-A790-4573-B6B8-3CB953592C81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.UseCases", "ElectronicCad.UseCases\ElectronicCad.UseCases.csproj", "{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{1FD98A36-A790-4573-B6B8-3CB953592C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FD98A36-A790-4573-B6B8-3CB953592C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FD98A36-A790-4573-B6B8-3CB953592C81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{3029D5A9-A2E7-4AE7-81DE-B0B7B93CE1AA} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
 		{76F6D42D-D125-4C73-A342-48BCAD084D26} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
 		{1FD98A36-A790-4573-B6B8-3CB953592C81} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
+		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131} = {B3D55526-2B07-45CE-9E80-10D0EE850AEB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25C8143E-0FDB-487D-B007-4A6763AC2421}

@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj" />
+      <ProjectReference Include="..\ElectronicCad.UseCases\ElectronicCad.UseCases.csproj" />
     </ItemGroup>
 
 </Project>

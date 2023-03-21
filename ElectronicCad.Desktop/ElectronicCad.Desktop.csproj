@@ -12,6 +12,7 @@
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM\ElectronicCad.MVVM.csproj" />
       <ProjectReference Include="..\ElectronicCad.Diagramming\ElectronicCad.Diagramming.csproj" />
+      <ProjectReference Include="..\ElectronicCad.UseCases\ElectronicCad.UseCases.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,6 +21,7 @@
 
     <ItemGroup>
       <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     </ItemGroup>
 
