@@ -14,7 +14,7 @@ public class ProjectPropertiesViewModel : ViewModel
     /// <summary>
     /// Dialog title.
     /// </summary>
-    public string Title => "Project properties";
+    public string Title => "Project";
 
     /// <summary>
     /// Close dialog command.

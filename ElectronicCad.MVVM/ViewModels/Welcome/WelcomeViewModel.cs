@@ -1,11 +1,12 @@
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
+using ElectronicCad.MVVM.Utils;
 using ElectronicCad.MVVM.ViewModels.Project;
 using ElectronicCad.UseCases.Projects.CreateNewProject;
 using MediatR;
 using Microsoft.Toolkit.Mvvm.Input;
 
-namespace ElectronicCad.MVVM.ViewModels;
+namespace ElectronicCad.MVVM.ViewModels.Welcome;
 
 /// <summary>
 /// Welcome dialog view model.
@@ -14,6 +15,7 @@ public class WelcomeViewModel : ViewModel
 {
     private readonly IDialogService _dialogService;
     private readonly IMediator _mediator;
+    private readonly ViewModelFactory _viewModelFactory;
 
     /// <summary>
     /// Close dialog command.
@@ -44,30 +46,48 @@ public class WelcomeViewModel : ViewModel
     }
 
     private RelayCommand _openProjectCommand;
-    
+
     /// <summary>
     /// Create porject command.
     /// </summary>
     public RelayCommand CreateProjectCommand
     {
         get => _createProjectCommand;
-        private set 
+        private set
         {
             _createProjectCommand = value;
             OnPropertyChanged();
-        } 
+        }
     }
 
     private RelayCommand _createProjectCommand;
 
     /// <summary>
+    /// Recent projects view model.
+    /// </summary>
+    public RecentProjectsViewModel RecentProjects
+    {
+        get => _recentProjects;
+        set
+        {
+            _recentProjects = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private RecentProjectsViewModel _recentProjects;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
-    public WelcomeViewModel(IDialogService dialogService, IMediator mediator)
+    public WelcomeViewModel(IDialogService dialogService, IMediator mediator, ViewModelFactory viewModelFactory)
     {
         _dialogService = dialogService;
         _mediator = mediator;
-        
+        _viewModelFactory = viewModelFactory;
+
+        RecentProjects = _viewModelFactory.Create<RecentProjectsViewModel>();
+
         CloseCommand = new RelayCommand(CloseWelcomeDialog);
         CreateProjectCommand = new RelayCommand(CreateProject);
         OpenProjectCommand = new RelayCommand(OpenProject);
@@ -87,5 +107,11 @@ public class WelcomeViewModel : ViewModel
     private void OpenProject()
     {
         throw new NotImplementedException();
+    }
+
+    /// <inheritdoc/>
+    public override async Task LoadAsync()
+    {
+        await RecentProjects.LoadAsync();
     }
 }

@@ -17,9 +17,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Desktop.UI", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Diagramming", "ElectronicCad.Diagramming\ElectronicCad.Diagramming.csproj", "{76F6D42D-D125-4C73-A342-48BCAD084D26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.MVVM.Common", "ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj", "{1FD98A36-A790-4573-B6B8-3CB953592C81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.MVVM.Common", "ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj", "{1FD98A36-A790-4573-B6B8-3CB953592C81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.UseCases", "ElectronicCad.UseCases\ElectronicCad.UseCases.csproj", "{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.UseCases", "ElectronicCad.UseCases\ElectronicCad.UseCases.csproj", "{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.Infrastructure.Abstractions", "ElectronicCad.Infrastructure.Abstractions\ElectronicCad.Infrastructure.Abstractions.csproj", "{391FAA68-A58D-4F0E-B06B-48D6B645DAE5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastructures", "{8299F3CC-9C82-44E6-965D-365F4F234B43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.Infrastructure.Implementations", "ElectronicCad.Infrastructure.Implementations\ElectronicCad.Infrastructure.Implementations.csproj", "{5F7BCCBF-7EA5-4C99-8DAC-38CC139F12A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +61,14 @@ Global
 		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{391FAA68-A58D-4F0E-B06B-48D6B645DAE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{391FAA68-A58D-4F0E-B06B-48D6B645DAE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{391FAA68-A58D-4F0E-B06B-48D6B645DAE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{391FAA68-A58D-4F0E-B06B-48D6B645DAE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F7BCCBF-7EA5-4C99-8DAC-38CC139F12A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F7BCCBF-7EA5-4C99-8DAC-38CC139F12A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F7BCCBF-7EA5-4C99-8DAC-38CC139F12A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F7BCCBF-7EA5-4C99-8DAC-38CC139F12A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +81,8 @@ Global
 		{76F6D42D-D125-4C73-A342-48BCAD084D26} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
 		{1FD98A36-A790-4573-B6B8-3CB953592C81} = {0B4C09B3-5044-439D-A476-330D93D66C0F}
 		{84B9F5BE-C6BC-43BC-8C85-E70663AC3131} = {B3D55526-2B07-45CE-9E80-10D0EE850AEB}
+		{391FAA68-A58D-4F0E-B06B-48D6B645DAE5} = {B3D55526-2B07-45CE-9E80-10D0EE850AEB}
+		{5F7BCCBF-7EA5-4C99-8DAC-38CC139F12A3} = {8299F3CC-9C82-44E6-965D-365F4F234B43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25C8143E-0FDB-487D-B007-4A6763AC2421}

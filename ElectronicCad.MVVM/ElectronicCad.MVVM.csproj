@@ -7,7 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
+      <ProjectReference Include="..\ElectronicCad.Infrastructure.Abstractions\ElectronicCad.Infrastructure.Abstractions.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj" />
       <ProjectReference Include="..\ElectronicCad.UseCases\ElectronicCad.UseCases.csproj" />
     </ItemGroup>

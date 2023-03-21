@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using ElectronicCad.Desktop.Infrastructure.DependencyInjection;
 using ElectronicCad.Desktop.Views;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
@@ -18,6 +19,11 @@ internal class CompositionRoot
     public IServiceProvider ServiceProvider => _serviceProvider;
 
     /// <summary>
+    /// Main window.
+    /// </summary>
+    public static MainWindow MainWindow { get; set; }
+
+    /// <summary>
     /// Get an instance of composition root.
     /// </summary>
     public static CompositionRoot GetInstance()
@@ -32,10 +38,15 @@ internal class CompositionRoot
     }
 
     /// <summary>
-    /// Main window.
+    /// Return application data folder path.
     /// </summary>
-    public static MainWindow MainWindow { get; set; }
-    
+    /// <returns>Path to application data folder.</returns>
+    public static string GetApplicationDataFolder()
+    {
+        var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        return Path.Combine(folderPath, "ECAD");
+    }
+
     private void Configure()
     {
         var serviceCollection = new ServiceCollection();

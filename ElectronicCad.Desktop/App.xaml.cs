@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using ElectronicCad.Desktop.Views;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
-using ElectronicCad.MVVM.ViewModels;
 using ElectronicCad.MVVM.ViewModels.Project;
+using ElectronicCad.MVVM.ViewModels.Welcome;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectronicCad.Desktop

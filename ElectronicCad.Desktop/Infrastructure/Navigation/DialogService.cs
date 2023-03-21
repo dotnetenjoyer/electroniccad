@@ -1,30 +1,29 @@
-using System;
 using System.Threading.Tasks;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
-using Microsoft.Extensions.DependencyInjection;
+using ElectronicCad.MVVM.Utils;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace ElectronicCad.Desktop.Infrastructure.Navigation;
 
 internal class DialogService : ObservableObject, IDialogService
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly ViewModelFactory _viewModelFactory;
     private readonly FrameNavigation _frameNavigation;
     
     /// <summary>
     /// Constructor.
     /// </summary>
-    public DialogService(IServiceProvider serviceProvider, FrameNavigation frameNavigation)
+    public DialogService(ViewModelFactory viewModelFactory, FrameNavigation frameNavigation)
     {
-        _serviceProvider = serviceProvider;
+        _viewModelFactory = viewModelFactory;
         _frameNavigation = frameNavigation;
     }
 
     /// <inhertdoc/>
     public Task OpenAsync<TViewModel>(params object[] parameters) where TViewModel : ViewModel
     {
-        var viewModel = ActivatorUtilities.CreateInstance<TViewModel>(_serviceProvider, parameters);
+        var viewModel = _viewModelFactory.Create<TViewModel>(parameters);
         _frameNavigation.Open(viewModel);
         return Task.CompletedTask;
     }

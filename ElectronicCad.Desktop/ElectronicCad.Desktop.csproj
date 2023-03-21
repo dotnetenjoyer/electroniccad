@@ -10,6 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\ElectronicCad.Desktop.UI\ElectronicCad.Desktop.UI.csproj" />
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
+      <ProjectReference Include="..\ElectronicCad.Infrastructure.Implementations\ElectronicCad.Infrastructure.Implementations.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM\ElectronicCad.MVVM.csproj" />
       <ProjectReference Include="..\ElectronicCad.Diagramming\ElectronicCad.Diagramming.csproj" />
       <ProjectReference Include="..\ElectronicCad.UseCases\ElectronicCad.UseCases.csproj" />
