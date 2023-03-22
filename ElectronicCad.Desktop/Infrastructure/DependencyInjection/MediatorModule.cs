@@ -1,4 +1,4 @@
-using ElectronicCad.UseCases.Projects.CreateNewProject;
+using ElectronicCad.UseCases.Projects.CreateProject;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +14,6 @@ internal static class MediatorModule
     /// </summary>
     public static void Register(IServiceCollection services)
     {
-        services.AddMediatR(typeof(CreateNewProjectCommand));
+        services.AddMediatR(typeof(CreateProjectCommand));
     }
 }
