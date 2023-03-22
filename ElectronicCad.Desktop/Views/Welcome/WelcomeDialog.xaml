@@ -6,7 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:common="clr-namespace:ElectronicCad.Desktop.Views.Common"
     xmlns:dialogs="clr-namespace:ElectronicCad.Desktop.Views.Common.Dialogs"
-    xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels;assembly=ElectronicCad.MVVM" xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI"
+    xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI"
+    xmlns:local="clr-namespace:ElectronicCad.Desktop.Views.Welcome"
+    xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels.Welcome;assembly=ElectronicCad.MVVM"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance viewModels:WelcomeViewModel}"
     Width="800" 
@@ -48,58 +50,13 @@
                     </StackPanel>
                 </Border>
 
-                <TabControl Height="400" Margin="0 0 0 20">
-                    <TabItem>
-                        <TabItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <components:Icon 
-                                    Path="{StaticResource ClockIcon}"
-                                    Margin="0 0 8 0"/>
-                                <TextBlock Text="Recent Projects"/>
-                            </StackPanel>
-                        </TabItem.Header>
-                        
-                        <StackPanel>
-                            <TextBlock>
-                                Recent Projects
-                            </TextBlock>
-                        </StackPanel>
-                    </TabItem>
-                    
-                    <TabItem>
-                        <TabItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <components:Icon 
-                                    Path="{StaticResource TemplatesIcon}"
-                                    Margin="0 0 8 0"/>
-                                <TextBlock Text="Templates"/>
-                            </StackPanel>
-                        </TabItem.Header>
-
-                        <StackPanel >
-                            <TextBlock>
-                                Templates
-                            </TextBlock>
-                        </StackPanel>
-                    </TabItem>
-
-                    <TabItem>
-                        <TabItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <components:Icon 
-                                    Path="{StaticResource HelpIcon}"
-                                    Width="16"
-                                    Margin="0 0 8 0"/>
-                                <TextBlock Text="Tips"/>
-                            </StackPanel>
-                        </TabItem.Header>
-
-                        <StackPanel >
-                            <TextBlock>
-                                Tips
-                            </TextBlock>
-                        </StackPanel>
-                    </TabItem>
+                <TabControl 
+                    Height="400" 
+                    Margin="0 0 0 20"
+                    Style="{StaticResource TabControl}">
+                    <local:RecentProjectsTabItem DataContext="{Binding RecentProjects}"/>
+                    <local:TemplatesTabItem DataContext="{Binding Templates}"/>
+                    <local:TipsTabItem DataContext="{Binding Tips}"/>
                 </TabControl>
             </StackPanel>
         </DockPanel>

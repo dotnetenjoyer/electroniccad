@@ -1,0 +1,27 @@
+﻿<TabItem
+    x:Class="ElectronicCad.Desktop.Views.Welcome.TipsTabItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels.Welcome;assembly=ElectronicCad.MVVM"
+    xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI"
+    mc:Ignorable="d" 
+    Style="{StaticResource TabItem}"
+    d:DataContext="{d:DesignInstance viewModels:TipsViewModel}">
+    
+    <TabItem.Header>
+        <StackPanel Orientation="Horizontal">
+            <components:Icon 
+                Path="{StaticResource HelpIcon}"
+                Margin="0 0 8 0"/>
+            <TextBlock Text="Tips"/>
+        </StackPanel>
+    </TabItem.Header>
+    
+    <StackPanel>
+        <TextBlock>
+            Tips
+        </TextBlock>
+    </StackPanel>
+</TabItem>

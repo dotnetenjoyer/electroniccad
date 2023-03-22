@@ -2,7 +2,7 @@ using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
 using ElectronicCad.MVVM.Utils;
 using ElectronicCad.MVVM.ViewModels.Project;
-using ElectronicCad.UseCases.Projects.CreateNewProject;
+using ElectronicCad.UseCases.Projects.CreateProject;
 using MediatR;
 using Microsoft.Toolkit.Mvvm.Input;
 
@@ -65,18 +65,18 @@ public class WelcomeViewModel : ViewModel
     /// <summary>
     /// Recent projects view model.
     /// </summary>
-    public RecentProjectsViewModel RecentProjects
-    {
-        get => _recentProjects;
-        set
-        {
-            _recentProjects = value;
-            OnPropertyChanged();
-        }
-    }
+    public RecentProjectsViewModel RecentProjects { get; }
+    
+    /// <summary>
+    /// Templates view model.
+    /// </summary>
+    public TemplatesViewModel Templates { get; }
 
-    private RecentProjectsViewModel _recentProjects;
-
+    /// <summary>
+    /// Tips view model.
+    /// </summary>    
+    public TipsViewModel Tips { get; }
+    
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -87,7 +87,9 @@ public class WelcomeViewModel : ViewModel
         _viewModelFactory = viewModelFactory;
 
         RecentProjects = _viewModelFactory.Create<RecentProjectsViewModel>();
-
+        Templates = _viewModelFactory.Create<TemplatesViewModel>();
+        Tips = _viewModelFactory.Create<TipsViewModel>();
+            
         CloseCommand = new RelayCommand(CloseWelcomeDialog);
         CreateProjectCommand = new RelayCommand(CreateProject);
         OpenProjectCommand = new RelayCommand(OpenProject);
@@ -100,7 +102,7 @@ public class WelcomeViewModel : ViewModel
 
     private void CreateProject()
     {
-        _mediator.Send(new CreateNewProjectCommand());
+        _mediator.Send(new CreateProjectCommand());
         _dialogService.OpenAsync<ProjectPropertiesViewModel>();
     }
 
