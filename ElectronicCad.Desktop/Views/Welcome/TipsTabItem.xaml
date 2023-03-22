@@ -14,6 +14,7 @@
         <StackPanel Orientation="Horizontal">
             <components:Icon 
                 Path="{StaticResource HelpIcon}"
+                Width="16"
                 Margin="0 0 8 0"/>
             <TextBlock Text="Tips"/>
         </StackPanel>

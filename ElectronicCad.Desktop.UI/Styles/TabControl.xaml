@@ -5,7 +5,7 @@
         <ResourceDictionary Source="Colors.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <Style TargetType="TabControl">
+    <Style x:Key="TabControl" TargetType="TabControl">
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontSize" Value="15"/>
@@ -40,11 +40,11 @@
         </Setter>
     </Style>
 
-    <Style TargetType="TabItem">
+    <Style x:Key="TabItem" TargetType="TabItem">
         <Setter Property="Foreground" Value="{StaticResource SecondaryForegroundBrush}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderThickness" Value="1 1 1 0"/>
         <Setter Property="Padding" Value="12 6 12 10"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="14"/>
@@ -60,7 +60,7 @@
                         Height="Auto"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        BorderThickness="1 1 1 0"
+                        BorderThickness="0"
                         Padding="0 0 6 0"
                         Focusable="False">
                         <Border
@@ -88,6 +88,10 @@
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
                 <Setter Property="Background" Value="{StaticResource ComponentBackgroundBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BackgroundBrush}"/>
+            </Trigger>
+            
+            <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource BackgroundBrush}"/>
             </Trigger>
         </Style.Triggers>
