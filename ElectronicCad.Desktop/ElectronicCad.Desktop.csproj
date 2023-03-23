@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
       <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
       <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
@@ -37,10 +38,31 @@
         <XamlRuntime>Wpf</XamlRuntime>
         <SubType>Designer</SubType>
       </Page>
+      <Page Update="Views\Welcome\TemplatesTabItem.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+      <Page Update="Views\Welcome\TipsTabItem.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
     </ItemGroup>
 
     <ItemGroup>
       <Resource Include="Resources\Images\logo.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\Welcome\TemplatesTabItem.xaml.cs">
+        <SubType>Code</SubType>
+        <DependentUpon>TemplateTabItem.xaml</DependentUpon>
+      </Compile>
+      <Compile Update="Views\Welcome\TipsTabItem.xaml.cs">
+        <SubType>Code</SubType>
+        <DependentUpon>TipsTabItem.xaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

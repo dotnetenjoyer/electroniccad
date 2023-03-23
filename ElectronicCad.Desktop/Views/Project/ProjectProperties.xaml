@@ -6,20 +6,50 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:common="clr-namespace:ElectronicCad.Desktop.Views.Common"
     xmlns:dialogs="clr-namespace:ElectronicCad.Desktop.Views.Common.Dialogs"
-    xmlns:project="clr-namespace:ElectronicCad.MVVM.ViewModels.Project;assembly=ElectronicCad.MVVM"
+    xmlns:project="clr-namespace:ElectronicCad.MVVM.ViewModels.Project;assembly=ElectronicCad.MVVM" xmlns:components="clr-namespace:ElectronicCad.Desktop.Styles.Components;assembly=ElectronicCad.Desktop.UI"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance project:ProjectPropertiesViewModel}"
     Width="500"
     Style="{StaticResource Dialog}">
-    <StackPanel Orientation="Vertical">
+    <DockPanel>
         <dialogs:DialogTitleBar 
+            DockPanel.Dock="Top"
             Title="{Binding Title}"
             CloseCommand="{Binding CloseCommand}"/>
         
-        <Border Padding="10">
+        <Grid DockPanel.Dock="Bottom" Background="{StaticResource SecondaryComponentBackgroundBrush}" Height="84">
+            <Grid Margin="36, 0" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Button
+                        Content="Create project"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding SaveCommand}"
+                        Margin="16, 0"
+                        MinWidth="140"/>
+
+                    <Button
+                        Content="Cancel"
+                        Style="{StaticResource SecondaryButton}"
+                        Command="{Binding CloseCommand}"
+                        MinWidth="140"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Border Padding="20">
             <StackPanel>
-                <TextBlock Foreground="White">Project properties.</TextBlock>
-            </StackPanel>    
+                <components:InputControl 
+                    Margin="0 0 0 10"
+                    Title="Project Name (required)"
+                    Placeholder="Project Name"
+                    Value="{Binding Model.ProjectName}"/>
+
+                <components:InputControl 
+                    Title="Project Id (required)"
+                    Placeholder="Project Id"
+                    Value="{Binding Model.ProjectFolderName}"/>
+
+            </StackPanel>
         </Border>
-    </StackPanel>
+    </DockPanel>
 </common:BaseNavigatedPage>

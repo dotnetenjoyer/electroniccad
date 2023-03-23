@@ -12,8 +12,16 @@
     <Color x:Key="PrimaryActive">#0958d9</Color>
 
     <Color x:Key="Error">#ff4d4f</Color>
+    <Color x:Key="ErrorHover">#ff7875</Color>
+    <Color x:Key="ErrorActive">#d9363e</Color>
+
     <Color x:Key="Warning">#faad14</Color>
+    <Color x:Key="WarningHover">#ffd666</Color>
+    <Color x:Key="WarningActive">#d48806</Color>
+
     <Color x:Key="Success">#52c41a</Color>
+    <Color x:Key="SuccessHover">#95de64</Color>
+    <Color x:Key="SuccessActive">#389e0d</Color>
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background}"/>
     <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="{StaticResource SecondaryBackground}"/>
@@ -26,8 +34,16 @@
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHover}"/>
     <SolidColorBrush x:Key="PrimaryActiveBrush" Color="{StaticResource PrimaryActive}"/>
-    
+
     <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource Error}"/>
+    <SolidColorBrush x:Key="ErrorHoverBrush" Color="{StaticResource ErrorHover}"/>
+    <SolidColorBrush x:Key="ErrorActiveBrush" Color="{StaticResource ErrorActive}"/>
+
     <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource Warning}"/>
+    <SolidColorBrush x:Key="WarningHoverBrush" Color="{StaticResource WarningHover}"/>
+    <SolidColorBrush x:Key="WarningActiveBrush" Color="{StaticResource WarningActive}"/>
+
     <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource Success}"/>
+    <SolidColorBrush x:Key="SuccessHoverBrush" Color="{StaticResource SuccessHover}"/>
+    <SolidColorBrush x:Key="SuccessActiveBrush" Color="{StaticResource SuccessHover}"/>
 </ResourceDictionary>
