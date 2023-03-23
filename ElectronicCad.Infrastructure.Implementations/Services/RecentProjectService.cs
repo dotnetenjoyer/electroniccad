@@ -22,26 +22,57 @@ public class RecentProjectService : IRecentProjectsService
     /// <inheritdoc/>
     public async Task<IEnumerable<LocalProject>> GetRecentProjects()
     {
-        var content = await File.ReadAllTextAsync(GetFilePath());
-        var recentProjects = JsonConvert.DeserializeObject<IEnumerable<LocalProject>>(content);
+        var recentProjects = await GetRecentProjectsInternal();
+        return recentProjects;
+    }
 
-        throw new NotImplementedException();
+    private async Task<List<LocalProject>> GetRecentProjectsInternal()
+    {
+        var content = await File.ReadAllTextAsync(GetFilePath());
+        return JsonConvert.DeserializeObject<List<LocalProject>>(content) ?? new List<LocalProject>();
     }
     
     /// <inheritdoc/>
-    public Task AddRecentProjectInfo(LocalProject localProject)
+    public async Task AddRecentProjectInfo(LocalProject project)
     {
-        throw new NotImplementedException();
+        var recentProjects = await GetRecentProjectsInternal();
+        recentProjects.Add(project);
+
+        await RefreshRecentProjects(recentProjects);
     }
 
     /// <inheritdoc/>
-    public Task UpdateRecentProjectInfo(LocalProject localProject)
+    public async Task UpdateRecentProjectInfo(LocalProject project)
     {
-        throw new NotImplementedException();
+        if(project.Id == Guid.Empty)
+        {
+            throw new Exception();
+        }
+        
+        
+        var recentProjects = await GetRecentProjectsInternal();
+        
+        var index = recentProjects.FindIndex(_ => _.Id == project.Id);
+        if(index == 0)
+        {
+            throw new Exception();
+        }
+
+        recentProjects[index] = project;
+
+
+        await RefreshRecentProjects(recentProjects);
+    
     }
 
     private string GetFilePath()
     {
         return Path.Combine(_applicationDataFolderPath, "recentProjects.json");
+    }
+
+    private async Task RefreshRecentProjects(IEnumerable<LocalProject> projects)
+    {
+        var newContent = JsonConvert.SerializeObject(projects);
+        await File.WriteAllTextAsync(GetFilePath(), newContent);
     }
 }

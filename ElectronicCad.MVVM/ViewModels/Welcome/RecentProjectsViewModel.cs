@@ -2,48 +2,42 @@
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.UseCases.Projects.RecentProjects;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ElectronicCad.MVVM.ViewModels.Welcome
+namespace ElectronicCad.MVVM.ViewModels.Welcome;
+
+/// <summary>
+/// Recent projects view model.
+/// </summary>
+public class RecentProjectsViewModel : ViewModel
 {
+    private readonly IMediator _mediator;
+
     /// <summary>
-    /// Recent projects view model.
+    /// Constructor.
     /// </summary>
-    public class RecentProjectsViewModel : ViewModel
+    public RecentProjectsViewModel(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public RecentProjectsViewModel(IMediator mediator)
+    /// <summary>
+    /// Recent projects
+    /// </summary>
+    public IEnumerable<LocalProject> RecentProjects
+    { 
+        get => _recentProjects;
+        set 
         {
-            _mediator = mediator;
+            _recentProjects = value;
+            OnPropertyChanged();
         }
+    }
 
-        /// <summary>
-        /// Recent projects
-        /// </summary>
-        public IEnumerable<LocalProject> RecentProjects
-        { 
-            get => _recentProjects;
-            set 
-            {
-                _recentProjects = value;
-                OnPropertyChanged();
-            }
-        }
+    private IEnumerable<LocalProject> _recentProjects;
 
-        private IEnumerable<LocalProject> _recentProjects;
-
-        /// <inheritdoc/>
-        public async override Task LoadAsync()
-        {
-            var recentProjects = await _mediator.Send(new GetRecentProjectsQuery());
-        }
+    /// <inheritdoc/>
+    public async override Task LoadAsync()
+    {
+        var recentProjects = await _mediator.Send(new GetRecentProjectsQuery());
     }
 }

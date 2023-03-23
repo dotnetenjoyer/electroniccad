@@ -13,7 +13,7 @@ public class CreateProjectCommand : IRequest
     public string ProjectName { get; set; }
 
     /// <summary>
-    /// Project directory name.
+    /// Project folder name.
     /// </summary>
-    public string ProjectDirectoryName { get; set; }
+    public string ProjectFolderName { get; set; }
 }

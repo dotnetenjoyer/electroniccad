@@ -102,7 +102,6 @@ public class WelcomeViewModel : ViewModel
 
     private void CreateProject()
     {
-        _mediator.Send(new CreateProjectCommand());
         _dialogService.OpenAsync<ProjectPropertiesViewModel>();
     }
 
