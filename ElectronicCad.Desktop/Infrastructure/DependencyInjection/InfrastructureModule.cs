@@ -14,6 +14,8 @@ internal static class InfrastructureModule
     /// </summary>
     public static void Register(IServiceCollection services)
     {
+        services.AddTransient<IFolderPicker, FolderPicker>();
+
         services.AddTransient<IRecentProjectsService>((services) =>
         {
             var applicationDataFolder = CompositionRoot.GetApplicationDataFolder();
