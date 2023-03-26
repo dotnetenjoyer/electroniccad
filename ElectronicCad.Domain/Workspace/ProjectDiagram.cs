@@ -1,4 +1,4 @@
-namespace ElectronicCad.Domain.Woorkbook;
+namespace ElectronicCad.Domain.Workspace;
 
 public class ProjectDiagram : Diagram
 {

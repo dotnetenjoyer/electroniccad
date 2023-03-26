@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
       <ProjectReference Include="..\ElectronicCad.Infrastructure.Abstractions\ElectronicCad.Infrastructure.Abstractions.csproj" />
     </ItemGroup>
 

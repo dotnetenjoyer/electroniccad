@@ -1,4 +1,4 @@
-namespace ElectronicCad.Domain.Woorkbook;
+namespace ElectronicCad.Domain.Workspace;
 
 /// <summary>
 /// Woorkbook diagram base.

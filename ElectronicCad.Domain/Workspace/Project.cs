@@ -1,4 +1,7 @@
-namespace ElectronicCad.Domain.Woorkbook;
+using ElectronicCad.Domain.Workspace;
+using ElectronicCad.Domain.Workspace.Commands;
+
+namespace ElectronicCad.Domain.Workspace;
 
 /// <summary>
 /// Project.
@@ -6,14 +9,14 @@ namespace ElectronicCad.Domain.Woorkbook;
 public class Project
 {
     /// <summary>
-    /// Project id.
-    /// </summary>
-    public Guid Id { get; }
-
-    /// <summary>
     /// Project name.
     /// </summary>
-    public string Name { get;  }
+    public string Name { get; internal set; }
+
+    /// <summary>
+    /// Project creation date.
+    /// </summary>
+    public DateTime CreatedAt { get; internal set; }
 
     /// <summary>
     /// Project diagrams.
@@ -25,8 +28,23 @@ public class Project
     /// <summary>
     /// Constructor.
     /// </summary>
-    public Project()
+    internal Project()
     {
         _diagrams = new List<Diagram>();
+    }
+
+    /// <summary>
+    /// Create a new project.
+    /// </summary>
+    /// <returns></returns>
+    public static Project Create(CreateProjectCommand command)
+    {
+        var project = new Project()
+        {
+            Name = command.Name,
+            CreatedAt = DateTime.Now
+        };
+
+        return project;
     }
 }

@@ -2,14 +2,14 @@
 using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
 using Newtonsoft.Json;
 
-namespace ElectronicCad.Infrastructure.Implementations.Services;
+namespace ElectronicCad.Infrastructure.Implementations.Services.Projects;
 
 /// <summary>
 /// Implementation of recent project service.
 /// </summary>
 public class RecentProjectService : IRecentProjectsService
 {
-    private readonly string _applicationDataFolderPath; 
+    private readonly string _applicationDataFolderPath;
 
     /// <summary>
     /// Constructor.
@@ -31,7 +31,7 @@ public class RecentProjectService : IRecentProjectsService
         var content = await File.ReadAllTextAsync(GetFilePath());
         return JsonConvert.DeserializeObject<List<LocalProject>>(content) ?? new List<LocalProject>();
     }
-    
+
     /// <inheritdoc/>
     public async Task AddRecentProjectInfo(LocalProject project)
     {
@@ -44,16 +44,16 @@ public class RecentProjectService : IRecentProjectsService
     /// <inheritdoc/>
     public async Task UpdateRecentProjectInfo(LocalProject project)
     {
-        if(project.Id == Guid.Empty)
+        if (project.Id == Guid.Empty)
         {
             throw new Exception();
         }
-        
-        
+
+
         var recentProjects = await GetRecentProjectsInternal();
-        
+
         var index = recentProjects.FindIndex(_ => _.Id == project.Id);
-        if(index == 0)
+        if (index == 0)
         {
             throw new Exception();
         }
@@ -62,7 +62,7 @@ public class RecentProjectService : IRecentProjectsService
 
 
         await RefreshRecentProjects(recentProjects);
-    
+
     }
 
     private string GetFilePath()

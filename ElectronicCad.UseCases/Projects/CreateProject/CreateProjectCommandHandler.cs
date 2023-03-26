@@ -1,6 +1,8 @@
-using System.Diagnostics;
-using ElectronicCad.Infrastructure.Abstractions.Interfaces;
 using MediatR;
+using ElectronicCad.Infrastructure.Abstractions.Interfaces;
+using ElectronicCad.Domain.Workspace;
+using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
+using CreateProjectDomainCommand = ElectronicCad.Domain.Workspace.Commands.CreateProjectCommand;
 
 namespace ElectronicCad.UseCases.Projects.CreateProject;
 
@@ -10,20 +12,37 @@ namespace ElectronicCad.UseCases.Projects.CreateProject;
 public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand>
 {
     private readonly IFolderPicker _folderPicker;
+    private readonly IProjectSaver _projectSaver;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public CreateProjectCommandHandler(IFolderPicker folderPicker)
+    public CreateProjectCommandHandler(IFolderPicker folderPicker, IProjectSaver projectSaver)
     {
         _folderPicker = folderPicker;
+        _projectSaver = projectSaver;
     }
     
     /// <inheritdoc/>
-    public async Task<Unit> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(CreateProjectCommand command, CancellationToken cancellationToken)
+    {
+        var project = CreateProject(command);
+        var projectFolderPath = GetProjectFolderPath(command.ProjectFolderName);
+        await _projectSaver.Save(project, projectFolderPath, cancellationToken);
+        return new Unit();
+    }
+
+    private Project CreateProject(CreateProjectCommand command)
+    {
+        var createCommand = new CreateProjectDomainCommand { Name = command.ProjectName };
+        var project = Project.Create(createCommand);
+        return project;
+    }
+
+    private string GetProjectFolderPath(string projectFolderName)
     {
         var projectLocation = _folderPicker.PickFolder("Select project folder");
-        var projectFolder = Path.Combine(projectLocation, request.ProjectFolderName);
+        var projectFolder = Path.Combine(projectLocation, projectFolderName);
 
         if (Directory.Exists(projectFolder) && Directory.GetFiles(projectFolder).Any())
         {
@@ -31,11 +50,6 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand>
                                 $"same name already exits and contains files.");
         }
 
-        // create project 
-        // add created project to recent.
-
-        Directory.CreateDirectory(projectFolder);
-        
-        return new Unit();
+        return projectFolder;
     }
 }
