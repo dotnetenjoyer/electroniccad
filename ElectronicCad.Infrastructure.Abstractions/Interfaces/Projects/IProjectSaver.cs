@@ -11,7 +11,7 @@ public interface IProjectSaver
     /// Save project to local file space.
     /// </summary>
     /// <param name="project">Project to save.</param>
-    /// <param name="project">Locaiton of project.</param>
+    /// <param name="folderPath">Location of project.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    Task Save(Project project, string folderPath, CancellationToken cancellationToken);
+    Task Save(Domain.Workspace.Project project, string folderPath, CancellationToken cancellationToken);
 }

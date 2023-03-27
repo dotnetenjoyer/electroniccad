@@ -14,20 +14,20 @@ public class LocalProject
     /// <summary>
     /// Project id.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Project name.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; init; }
 
     /// <summary>
     /// Local project path.
     /// </summary>
-    public string Path { get; set; }
+    public string Path { get; init; }
 
     /// <summary>
     /// Last access time.
     /// </summary>
-    public DateTime LastAccessTime { get; set; }
+    public DateTime LastAccessTime { get; init; }
 }

@@ -1,7 +1,7 @@
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
 using ElectronicCad.MVVM.Utils;
-using ElectronicCad.MVVM.ViewModels.Project;
+using ElectronicCad.MVVM.ViewModels.Projects;
 using ElectronicCad.UseCases.Projects.CreateProject;
 using MediatR;
 using Microsoft.Toolkit.Mvvm.Input;
@@ -14,53 +14,23 @@ namespace ElectronicCad.MVVM.ViewModels.Welcome;
 public class WelcomeViewModel : ViewModel
 {
     private readonly IDialogService _dialogService;
-    private readonly IMediator _mediator;
     private readonly ViewModelFactory _viewModelFactory;
+    private readonly IMediator _mediator;
 
     /// <summary>
     /// Close dialog command.
     /// </summary>
-    public RelayCommand CloseCommand
-    {
-        get => _closeCommand;
-        private set
-        {
-            _closeCommand = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private RelayCommand _closeCommand;
+    public RelayCommand CloseCommand { get; }
 
     /// <summary>
     /// Open project command.
     /// </summary>
-    public RelayCommand OpenProjectCommand
-    {
-        get => _openProjectCommand;
-        private set
-        {
-            _openProjectCommand = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private RelayCommand _openProjectCommand;
+    public RelayCommand OpenProjectCommand { get; }
 
     /// <summary>
-    /// Create porject command.
+    /// Create project command.
     /// </summary>
-    public RelayCommand CreateProjectCommand
-    {
-        get => _createProjectCommand;
-        private set
-        {
-            _createProjectCommand = value;
-            OnPropertyChanged();
-        }
-    }
-
-    private RelayCommand _createProjectCommand;
+    public RelayCommand CreateProjectCommand { get; }
 
     /// <summary>
     /// Recent projects view model.

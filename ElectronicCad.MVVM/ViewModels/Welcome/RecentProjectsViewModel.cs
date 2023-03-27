@@ -1,7 +1,7 @@
-﻿using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
+﻿using MediatR;
+using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
 using ElectronicCad.MVVM.Common;
-using ElectronicCad.UseCases.Projects.RecentProjects;
-using MediatR;
+using ElectronicCad.UseCases.Projects.GetRecentProjects;
 
 namespace ElectronicCad.MVVM.ViewModels.Welcome;
 
@@ -26,11 +26,7 @@ public class RecentProjectsViewModel : ViewModel
     public IEnumerable<LocalProject> RecentProjects
     { 
         get => _recentProjects;
-        set 
-        {
-            _recentProjects = value;
-            OnPropertyChanged();
-        }
+        private set => SetProperty(ref _recentProjects, value);
     }
 
     private IEnumerable<LocalProject> _recentProjects;
@@ -39,5 +35,6 @@ public class RecentProjectsViewModel : ViewModel
     public async override Task LoadAsync()
     {
         var recentProjects = await _mediator.Send(new GetRecentProjectsQuery());
+        RecentProjects = recentProjects;
     }
 }

@@ -1,6 +1,7 @@
-﻿using ElectronicCad.Infrastructure.Abstractions.Interfaces;
-using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
+﻿using System.Text;
 using Newtonsoft.Json;
+using ElectronicCad.Infrastructure.Abstractions.Interfaces.Project;
+using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
 
 namespace ElectronicCad.Infrastructure.Implementations.Services.Projects;
 
@@ -20,38 +21,30 @@ public class RecentProjectService : IRecentProjectsService
     }
 
     /// <inheritdoc/>
-    public async Task<IEnumerable<LocalProject>> GetRecentProjects()
+    public async Task<IEnumerable<LocalProject>> GetRecentProjects(CancellationToken cancellationToken)
     {
-        var recentProjects = await GetRecentProjectsInternal();
+        var recentProjects = await GetRecentProjectsInternal(cancellationToken);
         return recentProjects;
     }
 
-    private async Task<List<LocalProject>> GetRecentProjectsInternal()
-    {
-        var content = await File.ReadAllTextAsync(GetFilePath());
-        return JsonConvert.DeserializeObject<List<LocalProject>>(content) ?? new List<LocalProject>();
-    }
-
     /// <inheritdoc/>
-    public async Task AddRecentProjectInfo(LocalProject project)
+    public async Task AddRecentProject(LocalProject project, CancellationToken cancellationToken)
     {
-        var recentProjects = await GetRecentProjectsInternal();
+        var recentProjects = await GetRecentProjectsInternal(cancellationToken);
         recentProjects.Add(project);
 
-        await RefreshRecentProjects(recentProjects);
+        await SaveRecentProjects(recentProjects, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public async Task UpdateRecentProjectInfo(LocalProject project)
+    public async Task UpdateRecentProject(LocalProject project, CancellationToken cancellationToken)
     {
         if (project.Id == Guid.Empty)
         {
             throw new Exception();
         }
 
-
-        var recentProjects = await GetRecentProjectsInternal();
-
+        var recentProjects = await GetRecentProjectsInternal(cancellationToken);
         var index = recentProjects.FindIndex(_ => _.Id == project.Id);
         if (index == 0)
         {
@@ -59,20 +52,34 @@ public class RecentProjectService : IRecentProjectsService
         }
 
         recentProjects[index] = project;
-
-
-        await RefreshRecentProjects(recentProjects);
-
+        await SaveRecentProjects(recentProjects, cancellationToken);
     }
 
-    private string GetFilePath()
+    private async Task<List<LocalProject>> GetRecentProjectsInternal(CancellationToken cancellationToken)
+    {
+        var filePath = GetDataFilePath();
+        if(!File.Exists(filePath))
+        {
+            return new List<LocalProject>();
+        }
+
+        var content = await File.ReadAllTextAsync(filePath, cancellationToken);
+        return JsonConvert.DeserializeObject<List<LocalProject>>(content) ?? new List<LocalProject>();
+    }
+
+    private string GetDataFilePath()
     {
         return Path.Combine(_applicationDataFolderPath, "recentProjects.json");
     }
 
-    private async Task RefreshRecentProjects(IEnumerable<LocalProject> projects)
+    private async Task SaveRecentProjects(IEnumerable<LocalProject> projects, CancellationToken cancellationToken)
     {
-        var newContent = JsonConvert.SerializeObject(projects);
-        await File.WriteAllTextAsync(GetFilePath(), newContent);
+        var filePath = GetDataFilePath();
+        await using var fileStream = File.Open(filePath, FileMode.OpenOrCreate);
+        
+        var json = JsonConvert.SerializeObject(projects, Formatting.Indented);
+        var fileContent = Encoding.UTF8.GetBytes(json);
+        
+        await fileStream.WriteAsync(fileContent, cancellationToken);
     }
 }

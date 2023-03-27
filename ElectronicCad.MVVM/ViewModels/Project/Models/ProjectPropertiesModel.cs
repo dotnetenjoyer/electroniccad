@@ -1,6 +1,6 @@
 ﻿using ElectronicCad.MVVM.Utils;
 
-namespace ElectronicCad.MVVM.ViewModels.Project.Models
+namespace ElectronicCad.MVVM.ViewModels.Projects.Models
 {
     public class ProjectPropertiesModel : EditableModel
     {

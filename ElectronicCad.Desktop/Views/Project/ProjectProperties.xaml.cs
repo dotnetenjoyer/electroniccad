@@ -1,6 +1,6 @@
 using ElectronicCad.Desktop.Views.Common;
 using ElectronicCad.MVVM.Common.Attributes;
-using ElectronicCad.MVVM.ViewModels.Project;
+using ElectronicCad.MVVM.ViewModels.Projects;
 
 namespace ElectronicCad.Desktop.Views.Project;
 

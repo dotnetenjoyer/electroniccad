@@ -19,9 +19,54 @@
         </StackPanel>
     </TabItem.Header>
     
-    <StackPanel>
-        <TextBlock>
-            Recent Projects
-        </TextBlock>
-    </StackPanel>
+    <DockPanel LastChildFill="True">
+        <DataGrid 
+            AutoGenerateColumns="False"
+            SelectionMode="Single"
+            ItemsSource="{Binding RecentProjects}">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource BaseDataGridRow}">
+                    <Setter Property="ToolTip">
+                        <Setter.Value>
+                            <ToolTip>
+                                <TextBlock Text="{Binding Path}"/>
+                            </ToolTip>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle>
+            
+            <DataGrid.Columns>
+                <DataGridTemplateColumn 
+                    Header="Project Name"
+                    CanUserResize="False"
+                    Width="35*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <components:Icon
+                                    Path="{StaticResource FileIcon}"
+                                    Width="12"
+                                    Focusable="False"
+                                    Margin="0 0 10 0"/>
+                                <TextBlock Text="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <DataGridTextColumn 
+                    Header="Project Id" 
+                    Width="35*"
+                    CanUserResize="False"
+                    Binding="{Binding Name}"/>
+                
+                <DataGridTextColumn 
+                    Header="Last Access" 
+                    Width="30*"
+                    CanUserResize="False"
+                    Binding="{Binding LastAccessTime}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
 </TabItem>

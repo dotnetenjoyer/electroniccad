@@ -47,8 +47,22 @@ internal class CompositionRoot
         return Path.Combine(folderPath, "ECAD");
     }
 
+    /// <summary>
+    /// Creates an application data folder if it doesn't exist.
+    /// </summary>
+    public static void EnsureApplicationDataFolderExsisting()
+    {
+        var applicationDataFolderPath = GetApplicationDataFolder();
+        if (!Directory.Exists(applicationDataFolderPath))
+        {
+            Directory.CreateDirectory(applicationDataFolderPath);
+        }
+    }
+
     private void Configure()
     {
+        EnsureApplicationDataFolderExsisting();
+
         var serviceCollection = new ServiceCollection();
         ConfigureServices(serviceCollection);
         _serviceProvider = serviceCollection.BuildServiceProvider();

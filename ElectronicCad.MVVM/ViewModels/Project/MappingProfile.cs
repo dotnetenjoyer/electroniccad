@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using ElectronicCad.MVVM.ViewModels.Project.Models;
+using ElectronicCad.MVVM.ViewModels.Projects.Models;
 using ElectronicCad.UseCases.Projects.CreateProject;
 using ElectronicCad.UseCases.Projects.UpdateProject;
 
-namespace ElectronicCad.MVVM.ViewModels.Project
+namespace ElectronicCad.MVVM.ViewModels.Projects
 {
     public class MappingProfile : Profile
     {

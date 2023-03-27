@@ -1,13 +1,13 @@
 using AutoMapper;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
-using ElectronicCad.MVVM.ViewModels.Project.Models;
+using ElectronicCad.MVVM.ViewModels.Projects.Models;
 using ElectronicCad.UseCases.Projects.CreateProject;
 using ElectronicCad.UseCases.Projects.UpdateProject;
 using MediatR;
 using Microsoft.Toolkit.Mvvm.Input;
 
-namespace ElectronicCad.MVVM.ViewModels.Project;
+namespace ElectronicCad.MVVM.ViewModels.Projects;
 
 /// <summary>
 /// Project properties dialog view model.
