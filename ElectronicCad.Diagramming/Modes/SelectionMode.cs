@@ -36,7 +36,7 @@ public class SelectionMode : BaseDiagramMode
 
         if (GetHitItem(args, out var hitItem))
         {
-            selectionFrame.Bounds = hitItem!.Bounds;
+            selectionFrame.BoundingBox = hitItem!.BoundingBox;
             selectionFrame.IsVisible = true;
         }
         else

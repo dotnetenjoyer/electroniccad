@@ -1,15 +1,18 @@
-using System.Windows;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Diagramming.Extensions;
 using SkiaSharp;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Nodes;
 
-public class LineDiagramItem : DiagramItem
+public class LineDiagramItem : DiagramItem<Line>
 {
-    public override bool CheckHit(Point position)
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    public LineDiagramItem(Line line) : base(line)
     {
-        return base.CheckHit(position);
+        var a = line.CalculateBoundingBox();
     }
 
     /// <inheritdoc/>

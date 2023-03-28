@@ -96,39 +96,4 @@ public static class SkiaRectExtensions
     {
         return new SKPoint(skRect.Right, skRect.MidY);
     }
-    
-    /// <summary>
-    /// Return true if rectangle contains point
-    /// </summary>
-    public static bool Contains(this SKRect skRect, SKPoint point)
-    {
-        var topLeft = skRect.GetTopLeft();
-        var bottomRight = skRect.GetBottomRight();
-
-        double maxX, minX, maxY, minY;
-
-        if (topLeft.X > bottomRight.X)
-        {
-            maxX = topLeft.X;
-            minX = bottomRight.X;
-        }
-        else
-        {
-            maxX = bottomRight.X;
-            minX = topLeft.X;
-        }
-
-        if (topLeft.Y > bottomRight.Y)
-        {
-            maxY = topLeft.Y;
-            minY = bottomRight.Y;
-        }
-        else
-        {
-            minY = topLeft.Y;
-            maxY = bottomRight.Y;
-        }
-
-        return point.X > minX && point.X < maxX && point.Y > minY && point.Y < maxY;
-    }
 }

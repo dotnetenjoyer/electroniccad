@@ -37,21 +37,21 @@ internal class SelectionFrameDiagramItem : DiagramItem
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
-        canvas.DrawRect(Bounds, _areaPaint);
+        canvas.DrawRect(BoundingBox, _areaPaint);
         DrawGizmos(canvas);
     }
 
     private void DrawGizmos(SKCanvas canvas)
     {
-        DrawGizmo(canvas, Bounds.GetTopLeft());
-        DrawGizmo(canvas, Bounds.GetTopRight());
-        DrawGizmo(canvas, Bounds.GetBottomLeft());
-        DrawGizmo(canvas, Bounds.GetBottomRight());
-        DrawGizmo(canvas, Bounds.GetCenter());
-        DrawGizmo(canvas, Bounds.GetLeftCenter());
-        DrawGizmo(canvas, Bounds.GetRightCenter());
-        DrawGizmo(canvas, Bounds.GetTopCenter());
-        DrawGizmo(canvas, Bounds.GetBottomCenter());
+        DrawGizmo(canvas, BoundingBox.GetTopLeft());
+        DrawGizmo(canvas, BoundingBox.GetTopRight());
+        DrawGizmo(canvas, BoundingBox.GetBottomLeft());
+        DrawGizmo(canvas, BoundingBox.GetBottomRight());
+        DrawGizmo(canvas, BoundingBox.GetCenter());
+        DrawGizmo(canvas, BoundingBox.GetLeftCenter());
+        DrawGizmo(canvas, BoundingBox.GetRightCenter());
+        DrawGizmo(canvas, BoundingBox.GetTopCenter());
+        DrawGizmo(canvas, BoundingBox.GetBottomCenter());
     }
 
     private void DrawGizmo(SKCanvas canvas, SKPoint point)

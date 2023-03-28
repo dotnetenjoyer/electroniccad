@@ -1,15 +1,14 @@
 using System.Windows;
-using ElectronicCad.Diagramming.Extensions;
-using ElectronicCad.Diagramming.Utils;
 using SkiaSharp;
 using SkiaSharp.Views.WPF;
+using ElectronicCad.Diagramming.Utils;
 
 namespace ElectronicCad.Diagramming.Nodes;
 
 /// <summary>
 /// The class that represent diagram item with visual presentation.
 /// </summary>
-public abstract class DiagramItem
+internal abstract class DiagramItem
 {
     /// <summary>
     /// Indicate whether item is auxiliary. 
@@ -17,14 +16,14 @@ public abstract class DiagramItem
     internal virtual bool IsAuxiliary => false;
 
     /// <summary>
-    /// Indicates whether ite is visible.
+    /// Indicates whether it is visible.
     /// </summary>
-    public bool IsVisible { get; set; } = true;
+    public virtual bool IsVisible { get; set; } = true;
     
     /// <summary>
-    /// Diagram node bounds.
+    /// Diagram item bounding box.
     /// </summary>
-    public SKRect Bounds { get; set; }
+    public SKRect BoundingBox { get; set; }
     
     /// <summary>
     /// Layer.
@@ -37,32 +36,23 @@ public abstract class DiagramItem
     public int ZIndex { get; set; }
 
     /// <summary>
-    /// The method containing redirection logic.
+    /// Draws itself on canvas.
     /// </summary>
     /// <param name="canvas">Skia canvas.</param>
     public virtual void Draw(SKCanvas canvas)   
     {
         // Debug rectangle.
-        // canvas.DrawRect(Bounds.Left, Bounds.Top, Bounds.Width, Bounds.Height, PaintUtils.RedStrokePaint);
+        canvas.DrawRect(BoundingBox, Paints.DebugPaint);
     }
-
+    
     /// <summary>
-    /// Check point hitting with diagram item bounds.
-    /// </summary>
-    /// <param name="position">Point position.</param>
-    /// <returns>Whether hit or not.</returns>
-    public bool CheckBoundsHit(Point position)
-    {
-        return SkiaRectExtensions.Contains(Bounds, position.ToSKPoint());
-    }
-
-    /// <summary>
-    /// Check point hitting with diagram item.
+    /// Check point hitting.
     /// </summary>
     /// <param name="position">Point position.</param>
     /// <returns>Whether hit or not.</returns>
     public virtual bool CheckHit(Point position)
     {
-        return SkiaRectExtensions.Contains(Bounds, position.ToSKPoint());
+        var skPoint = position.ToSKPoint();
+        return BoundingBox.Contains(skPoint);
     }
 }

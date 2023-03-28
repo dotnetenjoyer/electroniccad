@@ -12,6 +12,8 @@ internal class Paints
     /// </summary>
     public static SKPaint ForegroundSolid { get; private set; }
 
+    public static SKPaint DebugPaint { get; private set; }
+
     /// <summary>
     /// Static constructor.
     /// </summary>
@@ -20,6 +22,12 @@ internal class Paints
         ForegroundSolid = new SKPaint
         {
             Color = Colors.Foreground,
+            Style = SKPaintStyle.StrokeAndFill
+        };
+
+        DebugPaint = new SKPaint
+        {
+            Color = SKColors.Green,
             Style = SKPaintStyle.StrokeAndFill
         };
     }

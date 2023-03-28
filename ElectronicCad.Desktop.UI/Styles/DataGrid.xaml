@@ -30,8 +30,6 @@
         <Setter Property="Padding" Value="5 10"/>
     </Style>
 
-    <Style TargetType="DataGridRow" BasedOn="{StaticResource BaseDataGridRow}"/>
-
     <Style x:Key="BaseDataGridRow" TargetType="DataGridRow">
         <Setter Property="Background" Value="{StaticResource ComponentBackgroundBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
@@ -47,6 +45,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <Style TargetType="DataGridRow" BasedOn="{StaticResource BaseDataGridRow}"/>
 
     <Style TargetType="DataGridCell">
         <Setter Property="Padding" Value="4 10"/>

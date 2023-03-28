@@ -11,7 +11,7 @@ public class PolygonDiagramItem : DiagramItem
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
-        canvas.DrawRect(Bounds, Paints.ForegroundSolid);
+        canvas.DrawRect(BoundingBox, Paints.ForegroundSolid);
         base.Draw(canvas);
     }
 }

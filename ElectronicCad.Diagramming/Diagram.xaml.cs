@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using ElectronicCad.Diagramming.Modes;
 using ElectronicCad.Diagramming.Nodes;
-using ElectronicCad.Diagramming.Utils;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
-using SkiaSharp.Views.WPF;
-using Color = System.Drawing.Color;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
+
+using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
 
 namespace ElectronicCad.Diagramming
 {
@@ -22,41 +19,41 @@ namespace ElectronicCad.Diagramming
     {
         #region Layers
         
-        /// <summary>
-        /// Diagram layers.
-        /// </summary>
-        public IEnumerable<Layer> Layers => _layers;
+        ///// <summary>
+        ///// Diagram layers.
+        ///// </summary>
+        //public IEnumerable<Layer> Layers => _layers;
 
-        private readonly List<Layer> _layers = new();
+        //private readonly List<Layer> _layers = new();
         
-        /// <summary>
-        /// Active diagram layer.
-        /// </summary>
-        public Layer ActiveLayer { get; private set; }
+        ///// <summary>
+        ///// Active diagram layer.
+        ///// </summary>
+        //public Layer ActiveLayer { get; private set; }
         
-        /// <summary>
-        /// Add a new diagram layer.
-        /// </summary>
-        /// <returns>Created layer.</returns>
-        public Layer AddLayer()
-        {
-            int layerIndex = _layers.Any() ? _layers.Max(layer => layer.Index) + 1 : 0;
-            var layer = new Layer(layerIndex);
-            layer.ItemsChanged += HandleItemsChanged;
-            _layers!.Add(layer);
-            ActiveLayer = layer;
-            return layer;
-        }
+        ///// <summary>
+        ///// Add a new diagram layer.
+        ///// </summary>
+        ///// <returns>Created layer.</returns>
+        //public Layer AddLayer()
+        //{
+        //    int layerIndex = _layers.Any() ? _layers.Max(layer => layer.Index) + 1 : 0;
+        //    var layer = new Layer(layerIndex);
+        //    layer.ItemsChanged += HandleItemsChanged;
+        //    _layers!.Add(layer);
+        //    ActiveLayer = layer;
+        //    return layer;
+        //}
 
-        /// <summary>
-        /// Remove specified layer.
-        /// </summary>
-        /// <param name="layer">Layer to remove.</param>
-        public void RemoveLayer(Layer layer)
-        {
-            layer.ItemsChanged -= HandleItemsChanged;
-            _layers.Remove(layer);
-        }
+        ///// <summary>
+        ///// Remove specified layer.
+        ///// </summary>
+        ///// <param name="layer">Layer to remove.</param>
+        //public void RemoveLayer(Layer layer)
+        //{
+        //    layer.ItemsChanged -= HandleItemsChanged;
+        //    _layers.Remove(layer);
+        //}
         
         #endregion
         
@@ -69,10 +66,23 @@ namespace ElectronicCad.Diagramming
             Colors.Initialize(this);
 
             SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
-            
-            AddLayer();
+
+            DomainDiagram = new DomainDiagram();
+            DomainDiagram.VersionChanged += HandleDiagramVersionChanged;
+
             SetDiagramMode(DiagramMode.Selection);
         }
+
+        #region DomainDiagram
+
+        public DomainDiagram DomainDiagram { get; private set; }
+       
+        private void HandleDiagramVersionChanged(object? sender, EventArgs eventArgs)
+        {
+            Redraw();
+        }
+
+        #endregion
 
         #region Diagram mode
 
@@ -100,30 +110,25 @@ namespace ElectronicCad.Diagramming
         
         #endregion
 
-        /// <summary>
-        /// All diagram items
-        /// </summary>
-        public IEnumerable<DiagramItem> DiagramItems => Layers.SelectMany(_ => _.DiagramItems);
+        ///// <summary>
+        ///// All diagram items
+        ///// </summary>
+        //public IEnumerable<DiagramItem> DiagramItems => Layers.SelectMany(_ => _.DiagramItems);
 
-        /// <summary>
-        /// Add diagram item to active layer.
-        /// </summary>
-        /// <param name="item">Diagram item to add.</param>
-        public void AddItem(DiagramItem item)
-        {
-            ActiveLayer.AddItem(item);
-        }
+        ///// <summary>
+        ///// Add diagram item to active layer.
+        ///// </summary>
+        ///// <param name="item">Diagram item to add.</param>
+        //public void AddItem(DiagramItem item)
+        //{
+        //    ActiveLayer.AddItem(item);
+        //}
 
         #region Drawing
 
-        public void RedrawDiagram()
+        public void Redraw()
         {
             SkiaCanvas.InvalidateVisual();
-        }
-
-        private void HandleItemsChanged(object? sender, EventArgs e)
-        {
-            RedrawDiagram();
         }
 
         private void SkElementOnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
@@ -138,18 +143,18 @@ namespace ElectronicCad.Diagramming
 
             DrawWorkspaceArea(canvas);
             
-            foreach (var layer in _layers)
-            {
-                foreach (var item in layer.DiagramItems)
-                {
-                    if (!item.IsVisible)
-                    {
-                        continue;
-                    }
+            //foreach (var layer in _layers)
+            //{
+            //    foreach (var item in layer.DiagramItems)
+            //    {
+            //        if (!item.IsVisible)
+            //        {
+            //            continue;
+            //        }
                     
-                    item.Draw(canvas);
-                }
-            }
+            //        item.Draw(canvas);
+            //    }
+            //}
         }
 
         private void DrawWorkspaceArea(SKCanvas canvas)
@@ -170,11 +175,7 @@ namespace ElectronicCad.Diagramming
         /// <inheritdoc/>
         public void Dispose()
         {
-            _layers.ForEach(layer =>
-            {
-                layer.ItemsChanged -= HandleItemsChanged;
-                layer.Dispose();
-            });
+            DomainDiagram.VersionChanged -= HandleDiagramVersionChanged;
         }
     }
 }
