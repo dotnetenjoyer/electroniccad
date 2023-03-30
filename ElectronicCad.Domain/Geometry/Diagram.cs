@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
@@ -21,9 +23,14 @@ public class Diagram : IDisposable
     public double Height { get; set; } = 1000;
 
     /// <summary>
-    /// The event fires on geometry changes within diagram.
+    /// The event fires on geometry added within diagram.
     /// </summary>
-    public event EventHandler<GeometryChangedEventArgs> GeometryChanged;
+    public event EventHandler<GeometryObject> GeometryAdded;
+
+    /// <summary>
+    /// The event fires on geometry removed  withing diagram.
+    /// </summary>
+    public event EventHandler<GeometryObject> GeometryRemoved;
 
     /// <summary>
     /// Diagram active layer.
@@ -46,16 +53,33 @@ public class Diagram : IDisposable
     }
 
     /// <summary>
+    /// Notify diagram to add layer geometry
+    /// </summary>
+    /// <param name="geometryObject">Geometry that has been added.</param>
+    internal void HandleLayerGeometryAdd(GeometryObject geometryObject)
+    {
+        GeometryAdded?.Invoke(this, geometryObject);
+    }
+
+    /// <summary>
+    /// Notify diagram to add layer geometry
+    /// </summary>
+    /// <param name="geometryObject">Geometry that has been removed.</param>
+    internal void HandleLayerGeometryRemove(GeometryObject geometryObject)
+    {
+        GeometryRemoved?.Invoke(this, geometryObject);
+    }
+
+    /// <summary>
     /// Add layer to diagram.
     /// </summary>
     /// <param name="name">Layer name.</param>
-    public void AddLayer(string name)
+    public Layer AddLayer(string name)
     {
-        var layer = new Layer(name);
-        layer.GeometryChanged += HandleLayerGeometryChanged;
-
+        var layer = new Layer(name, this);
         _layers.Add(layer);
         ActiveLayer = layer;
+        return layer;
     }
 
     /// <summary>
@@ -64,26 +88,25 @@ public class Diagram : IDisposable
     /// <param name="layer"></param>
     public void RemoveLayer(Layer layer)
     {
-        layer.GeometryChanged -= HandleLayerGeometryChanged;
         _layers.Remove(layer);
     }
 
-    private void HandleLayerGeometryChanged(object? sender, GeometryChangedEventArgs eventArgs)
-    {
-        GeometryChanged?.Invoke(this, eventArgs);
-    }
-
     public void AddGeometry(GeometryObject geometry, Layer? layer = null)
-    {   
-        if(!_layers.Contains(layer))
+    {
+        layer ??= ActiveLayer;
+
+        if (!_layers.Contains(layer))
         {
             throw new Exception("This layer does not belong to the chart.");
         }
         
-        layer ??= ActiveLayer;
         layer.AddGeometry(geometry);
+        IncrementVersion();
     }
 
+    /// <summary>
+    /// The event fires when diagram geometry updates.
+    /// </summary>
     public event EventHandler VersionChanged;
 
     /// <summary>
@@ -108,7 +131,7 @@ public class Diagram : IDisposable
     /// <returns></returns>
     public ModificationScope StartModification()
     {
-        if(ModificationScope != null)
+        if (ModificationScope != null)
         {
             return ModificationScope;
         }
@@ -118,7 +141,7 @@ public class Diagram : IDisposable
     }
 
     #region Dispose
- 
+
     /// <inheritdoc />
     public void Dispose()
     {
@@ -141,7 +164,7 @@ public class Diagram : IDisposable
 
         if (isDisposing)
         {
-            _layers.ForEach(_ => _.GeometryChanged -= HandleLayerGeometryChanged);
+        
         }
 
         _disposed = true;

@@ -1,14 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Windows.Controls;
-using ElectronicCad.Diagramming.Modes;
-using ElectronicCad.Diagramming.Nodes;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
+using ElectronicCad.Diagramming.Modes;
+using ElectronicCad.Diagramming.Items;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
-
 using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming
 {
@@ -69,8 +69,19 @@ namespace ElectronicCad.Diagramming
 
             DomainDiagram = new DomainDiagram();
             DomainDiagram.VersionChanged += HandleDiagramVersionChanged;
+            DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
+            DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
 
             SetDiagramMode(DiagramMode.Selection);
+
+            Line line = new Line();
+            line.ControlPoints = new System.Drawing.PointF[]
+            {
+               new System.Drawing.PointF(50, 100),
+               new System.Drawing.PointF(100, 100),
+            };
+
+            DomainDiagram.AddGeometry(line);
         }
 
         #region DomainDiagram
@@ -80,6 +91,18 @@ namespace ElectronicCad.Diagramming
         private void HandleDiagramVersionChanged(object? sender, EventArgs eventArgs)
         {
             Redraw();
+        }
+
+        private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
+        {
+            var diagramItem = DiagramItemsFactory.Create(geometryObject);
+            DiagramItems.Add(diagramItem);
+            Redraw();
+        }
+
+        private void HandleDiagramGeometryRemoved(object? sender, GeometryObject geometryObject)
+        {
+            Debug.WriteLine("Geomtry was deleted");
         }
 
         #endregion
@@ -107,7 +130,7 @@ namespace ElectronicCad.Diagramming
             _diagramMode = diagramMode;
             diagramMode.Initialize(this);
         }
-        
+
         #endregion
 
         ///// <summary>
@@ -126,6 +149,8 @@ namespace ElectronicCad.Diagramming
 
         #region Drawing
 
+        private List<DiagramItem> DiagramItems = new();
+
         public void Redraw()
         {
             SkiaCanvas.InvalidateVisual();
@@ -142,6 +167,11 @@ namespace ElectronicCad.Diagramming
             canvas.Clear();
 
             DrawWorkspaceArea(canvas);
+
+            foreach(var item in DiagramItems)
+            {
+                item.Draw(canvas);
+            }
             
             //foreach (var layer in _layers)
             //{

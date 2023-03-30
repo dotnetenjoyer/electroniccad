@@ -16,25 +16,27 @@ public class Layer
     public string Name { get; init; }
 
     /// <summary>
-    /// The event fires on geometry add on the layer.
+    /// Related diagram.
     /// </summary>
-    public event EventHandler<GeometryChangedEventArgs> GeometryChanged;
+    public Diagram Diagram { get; set; }
 
     /// <summary>
     /// Geometry objects.
     /// </summary>
     public IEnumerable<GeometryObject> GeometryObjects => _geometryObjects;
 
-    private List<GeometryObject> _geometryObjects = new();
+    public List<GeometryObject> _geometryObjects = new();
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="name">Layer name.</param>
-    public Layer(string name)
+    /// <param name="name">Related diagram.</param>
+    public Layer(string name, Diagram diagram)
     {
         Id = Guid.NewGuid();
         Name = name;
+        Diagram = diagram;
     }
 
     /// <summary>
@@ -44,9 +46,7 @@ public class Layer
     public void AddGeometry(GeometryObject geometry)
     {
         _geometryObjects.Add(geometry);
-
-        var eventArgs = new GeometryChangedEventArgs(GeometryChangeType.Add, geometry);
-        GeometryChanged?.Invoke(this, eventArgs);
+        Diagram.HandleLayerGeometryAdd(geometry);
     }
 
     /// <summary>
@@ -56,7 +56,6 @@ public class Layer
     public void RemoveGeometry(GeometryObject geometry)
     {
         _geometryObjects.Remove(geometry);
-        var eventArgs = new GeometryChangedEventArgs(GeometryChangeType.Remove, geometry);
-        GeometryChanged?.Invoke(this, eventArgs);
+        Diagram.HandleLayerGeometryRemove(geometry);
     }
 }

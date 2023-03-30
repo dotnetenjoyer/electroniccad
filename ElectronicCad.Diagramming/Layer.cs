@@ -1,49 +1,41 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection.Metadata;
-using ElectronicCad.Diagramming.Nodes;
+using ElectronicCad.Diagramming.Items;
 
 namespace ElectronicCad.Diagramming;
 
 /// <summary>
 /// Diagram layer.
 /// </summary>
-public class Layer : IDisposable
+internal class Layer
 {
+    /// <summary>
+    /// Layer id.
+    /// </summary>
+    public Guid Id { get; }
+
     /// <summary>
     /// Layer index.
     /// </summary>
     public int Index { get; }
     
     /// <summary>
-    /// Raise when items changed.
-    /// </summary>
-    public event EventHandler ItemsChanged;
-
-    /// <summary>
     /// Diagram items.
     /// </summary>
     public IEnumerable<DiagramItem> DiagramItems => _diagramItems;
     
-    private readonly ObservableCollection<DiagramItem> _diagramItems;
+    private readonly List<DiagramItem> _diagramItems = new();
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public Layer(int index)
     {
+        Id = Guid.NewGuid();
         Index = index;
-        _diagramItems = new();
-        _diagramItems.CollectionChanged += HandleItemsChanged;
     }
-
-    private void HandleItemsChanged(object? sender, EventArgs e)
-    {
-        ItemsChanged?.Invoke(this, e);
-    }
-
+    
     /// <summary>
     /// Add diagram item.
     /// </summary>
@@ -63,11 +55,5 @@ public class Layer : IDisposable
     {
         item.Layer = null;
         _diagramItems.Remove(item);
-    }
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        _diagramItems.CollectionChanged -= HandleItemsChanged;
     }
 }

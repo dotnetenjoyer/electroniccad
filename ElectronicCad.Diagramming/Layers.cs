@@ -1,11 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ElectronicCad.Diagramming;
 
-public class Layers
+internal class Layers
 {
     private readonly List<Layer> _layers = new();
 

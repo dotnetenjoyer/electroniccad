@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Input;
-using ElectronicCad.Diagramming.Nodes;
+using ElectronicCad.Diagramming.Items;
 using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Modes;
@@ -17,72 +17,72 @@ public class SelectionMode : BaseDiagramMode
     /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
-        if (GetHitItem(args, out var hitItem))
-        {
-            Diagram.Cursor = Cursors.Hand;
-        }
-        else
-        {
-            Diagram.Cursor = Cursors.Arrow;
-        }
+        //if (GetHitItem(args, out var hitItem))
+        //{
+        //    Diagram.Cursor = Cursors.Hand;
+        //}
+        //else
+        //{
+        //    Diagram.Cursor = Cursors.Arrow;
+        //}
     }
 
     /// <inheritdoc/>
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        base.ProcessPrimaryButtonUp(args);
+        //base.ProcessPrimaryButtonUp(args);
         
-        var selectionFrame = GetSelectionFrame();
+        //var selectionFrame = GetSelectionFrame();
 
-        if (GetHitItem(args, out var hitItem))
-        {
-            selectionFrame.BoundingBox = hitItem!.BoundingBox;
-            selectionFrame.IsVisible = true;
-        }
-        else
-        {
-            selectionFrame.IsVisible = false;
-        }
+        //if (GetHitItem(args, out var hitItem))
+        //{
+        //    selectionFrame.BoundingBox = hitItem!.BoundingBox;
+        //    selectionFrame.IsVisible = true;
+        //}
+        //else
+        //{
+        //    selectionFrame.IsVisible = false;
+        //}
         
-        Diagram.RedrawDiagram();
+        //Diagram.RedrawDiagram();
     }
 
     /// <inheritdoc/>
     public override void Finalize()
     {
-        base.Finalize();
+        //base.Finalize();
         
-        var selectionFrame = GetSelectionFrame();
-        selectionFrame.IsVisible = false;
-        Diagram.RedrawDiagram();
+        //var selectionFrame = GetSelectionFrame();
+        //selectionFrame.IsVisible = false;
+        //Diagram.RedrawDiagram();
     }
 
-    private bool GetHitItem(MouseEventArgs args, out DiagramItem? diagramItem)
-    {
-        var position = args.GetPosition(Diagram);
+    //private bool GetHitItem(MouseEventArgs args, out DiagramItem? diagramItem)
+    //{
+        //var position = args.GetPosition(Diagram);
        
-        var boundsHitItems = Diagram.DiagramItems
-            .Where(_ => !_.IsAuxiliary)
-            .Where(_ => _.CheckBoundsHit(position))
-            .ToList();
+        //var boundsHitItems = Diagram.DiagramItems
+        //    .Where(_ => !_.IsAuxiliary)
+        //    .Where(_ => _.CheckBoundsHit(position))
+        //    .ToList();
 
-        diagramItem = boundsHitItems.FirstOrDefault(_ => _.CheckHit(position));
+        //diagramItem = boundsHitItems.FirstOrDefault(_ => _.CheckHit(position));
         
-        return diagramItem != null;
-    }
+        //return diagramItem != null;
+    //}
 
-    private SelectionFrameDiagramItem GetSelectionFrame()
-    {
-        var selectionFrame = Diagram.DiagramItems
-            .OfType<SelectionFrameDiagramItem>()
-            .FirstOrDefault();
+    //private SelectionFrameDiagramItem GetSelectionFrame()
+    //{
+    //    var selectionFrame = Diagram.DiagramItems
+    //        .OfType<SelectionFrameDiagramItem>()
+    //        .FirstOrDefault();
 
-        if (selectionFrame == null)
-        {
-            selectionFrame = new SelectionFrameDiagramItem();
-            Diagram.AddItem(selectionFrame);
-        }
+    //    if (selectionFrame == null)
+    //    {
+    //        selectionFrame = new SelectionFrameDiagramItem();
+    //        Diagram.AddItem(selectionFrame);
+    //    }
 
-        return selectionFrame;
-    }
+    //    return selectionFrame;
+    //}
 }

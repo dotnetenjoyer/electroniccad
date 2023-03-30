@@ -2,7 +2,7 @@ using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using SkiaSharp;
 
-namespace ElectronicCad.Diagramming.Nodes;
+namespace ElectronicCad.Diagramming.Items;
 
 /// <summary>
 /// Selection frame diagram item.

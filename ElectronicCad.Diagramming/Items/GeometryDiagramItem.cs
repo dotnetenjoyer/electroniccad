@@ -1,12 +1,13 @@
-﻿using ElectronicCad.Diagramming.Nodes;
-using ElectronicCad.Domain.Geometry;
+﻿using ElectronicCad.Domain.Geometry;
+using SkiaSharp.Views.Desktop;
+using System.Windows;
 
 namespace ElectronicCad.Diagramming.Items;
 
 /// <summary>
-/// 
+/// Base class for diagram items, that binds with domain geomtry objects.
 /// </summary>
-internal class GeometryDiagramItem<TGeometry> : DiagramItem where TGeometry : GeometryObject
+internal abstract class GeometryDiagramItem<TGeometry> : DiagramItem where TGeometry : GeometryObject
 {
     /// <summary>
     /// Domain geometry object.
@@ -20,11 +21,16 @@ internal class GeometryDiagramItem<TGeometry> : DiagramItem where TGeometry : Ge
     public GeometryDiagramItem(TGeometry domainObject)
     {
         DomainObject = domainObject;
+        RecalculateBoundingBox();
     }
 
-    protected void CalculateBoundingBox()
+    /// <summary>
+    /// Recalculate bounding box.
+    /// </summary>
+    protected void RecalculateBoundingBox()
     {
         var boundingBox = DomainObject.CalculateBoundingBox();
+        BoundingBox = boundingBox.ToSKRect();
     }
 
     /// <summary>

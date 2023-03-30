@@ -28,7 +28,7 @@ internal class Paints
         DebugPaint = new SKPaint
         {
             Color = SKColors.Green,
-            Style = SKPaintStyle.StrokeAndFill
+            Style = SKPaintStyle.Stroke
         };
     }
 }

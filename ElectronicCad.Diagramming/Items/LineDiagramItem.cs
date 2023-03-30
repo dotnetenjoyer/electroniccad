@@ -1,24 +1,30 @@
-using ElectronicCad.Diagramming.Utils;
-using ElectronicCad.Diagramming.Extensions;
 using SkiaSharp;
+using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Diagramming.Utils;
 
-namespace ElectronicCad.Diagramming.Nodes;
+namespace ElectronicCad.Diagramming.Items;
 
-public class LineDiagramItem : DiagramItem<Line>
+/// <summary>
+/// Line diagram item that bind with domain geometry object.
+/// </summary>
+internal class LineDiagramItem : GeometryDiagramItem<Line>
 {
     /// <summary>
     /// Constructor
     /// </summary>
     public LineDiagramItem(Line line) : base(line)
     {
-        var a = line.CalculateBoundingBox();
     }
 
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
-        canvas.DrawLine(Bounds.GetTopLeft(), Bounds.GetBottomRight(), Paints.ForegroundSolid);
         base.Draw(canvas);
+
+        var firstPoint = DomainObject.ControlPoints[0].ToSKPoint();
+        var secondPoint = DomainObject.ControlPoints[1].ToSKPoint();
+
+        canvas.DrawLine(firstPoint, secondPoint, Paints.ForegroundSolid);
     }
 }

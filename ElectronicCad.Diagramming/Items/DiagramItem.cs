@@ -3,7 +3,7 @@ using SkiaSharp;
 using SkiaSharp.Views.WPF;
 using ElectronicCad.Diagramming.Utils;
 
-namespace ElectronicCad.Diagramming.Nodes;
+namespace ElectronicCad.Diagramming.Items;
 
 /// <summary>
 /// The class that represent diagram item with visual presentation.
