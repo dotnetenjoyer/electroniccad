@@ -23,9 +23,9 @@ public class Layer
     /// <summary>
     /// Geometry objects.
     /// </summary>
-    public IEnumerable<GeometryObject> GeometryObjects => _geometryObjects;
+    public IEnumerable<GeometryObject> GeometryObjects => geometryObjects;
 
-    public List<GeometryObject> _geometryObjects = new();
+    private readonly List<GeometryObject> geometryObjects = new();
 
     /// <summary>
     /// Constructor.
@@ -45,7 +45,8 @@ public class Layer
     /// <param name="geometry">Geometry object.</param>
     public void AddGeometry(GeometryObject geometry)
     {
-        _geometryObjects.Add(geometry);
+        geometry.Layer = this;
+        geometryObjects.Add(geometry);
         Diagram.HandleLayerGeometryAdd(geometry);
     }
 
@@ -55,7 +56,8 @@ public class Layer
     /// <param name="geometry">Geometry object.</param>
     public void RemoveGeometry(GeometryObject geometry)
     {
-        _geometryObjects.Remove(geometry);
+        geometry.Layer = null;
+        geometryObjects.Remove(geometry);
         Diagram.HandleLayerGeometryRemove(geometry);
     }
 }

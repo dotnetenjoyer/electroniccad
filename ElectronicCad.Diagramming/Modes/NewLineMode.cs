@@ -1,55 +1,51 @@
 using System.Windows.Input;
-using ElectronicCad.Diagramming.Items;
-using SkiaSharp;
-using SkiaSharp.Views.WPF;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Modes;
 
 public class NewLineMode : BaseDiagramMode
 {
-    private LineDiagramItem? _line;
+    private Line? tempLine;
 
+    /// <inheritdoc />
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-    //    var position = args.GetPosition(Diagram).ToSKPoint();
-        
-    //    if (_line == null)
-    //    {
-    //        _line = new LineDiagramItem
-    //        {
-    //            Bounds = new SKRect(position.X, position.Y, position.X, position.Y)
-    //        };
-    //    }
-    //    else
-    //    {
-    //        _line.Bounds = new SKRect(_line.Bounds.Left, _line.Bounds.Top, position.X, position.Y);
+        var position = args.GetPosition(Diagram);
 
-    //        _line = new LineDiagramItem
-    //        {
-    //            Bounds = new SKRect(position.X, position.Y, position.X, position.Y)
-    //        };
-    //    }
-        
-    //    Diagram.ActiveLayer.AddItem(_line);
+        if (tempLine == null)
+        {
+            var firstPoint = new Point(position.X, position.Y);
+            var secondPoint = new Point(position.X, position.Y);
+            tempLine = new Line(firstPoint, secondPoint);
+            Diagram.DomainDiagram.AddGeometry(tempLine);
+        }
+        else
+        {
+            using var scope = Diagram.DomainDiagram.StartModification();
+            tempLine.UpdateControlPoint(Line.SecondPointIndex, position.X, position.Y);
+            tempLine = null;
+        }
     }
 
+    /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
-        //var position = args.GetPosition(Diagram).ToSKPoint();
+        var position = args.GetPosition(Diagram);
 
-        //if (_line != null)
-        //{
-        //    _line.Bounds = new SKRect(_line.Bounds.Left, _line.Bounds.Top, position.X, position.Y);
-        //    Diagram.RedrawDiagram();
-        //}
+        if (tempLine != null)
+        {
+            using var scope = Diagram.DomainDiagram.StartModification();
+            tempLine.UpdateControlPoint(Line.SecondPointIndex, position.X, position.Y);
+        }
     }
 
+    /// <inheritdoc />
     protected override void Cancel()
     {
-        //if (_line != null)
-        //{
-        //    Diagram.ActiveLayer.RemoveItem(_line);
-        //    Diagram.RedrawDiagram();
-        //}
+        if (tempLine != null)
+        {
+            Diagram.DomainDiagram.RemoveGeometry(tempLine);
+            tempLine = null;
+        }
     }
 }

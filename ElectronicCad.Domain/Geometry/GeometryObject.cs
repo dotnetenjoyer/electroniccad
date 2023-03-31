@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 
 namespace ElectronicCad.Domain.Geometry;
@@ -17,7 +18,17 @@ public abstract class GeometryObject
     /// <summary>
     /// Control points.
     /// </summary>
-    public PointF[] ControlPoints { get; set; }
+    public IReadOnlyList<Point> ControlPoints => controlPoints;
+
+    /// <summary>
+    /// Set of geometry control points.
+    /// </summary>
+    protected Point[] controlPoints;
+
+    /// <summary>
+    /// Related layer.
+    /// </summary>
+    public Layer? Layer { get; set; }
 
     /// <summary>
     /// Constructor.
@@ -25,6 +36,37 @@ public abstract class GeometryObject
     protected GeometryObject()
     {
         Id = Guid.NewGuid();
+    }
+
+    /// <summary>
+    /// Updates control point values.
+    /// </summary>
+    /// <param name="index">Index of control point.</param>
+    /// <param name="x">X value.</param>
+    /// <param name="y">Y value.</param>
+    public void UpdateControlPoint(int index, double x, double y)
+    {
+        ValidateModification();
+
+        var point = controlPoints[index];
+        if(point != null)
+        {
+            point.SetValues(x, y);
+        }
+        else
+        {
+            controlPoints[index] = new Point(x, y);
+        }
+
+        Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
+    }
+
+    private void ValidateModification()
+    {
+        if(Layer == null || Layer.Diagram == null || Layer.Diagram.ModificationScope == null)
+        {
+            throw new Exception("Modification outisde scope are prohibited.");
+        }
     }
 
     /// <summary>
@@ -50,7 +92,8 @@ public abstract class GeometryObject
     /// </summary>
     public RectangleF CalculateBoundingBox()
     {
-        return CalculateBoundingBox(ControlPoints);
+        return RectangleF.Empty;
+        //return CalculateBoundingBox(ControlPoints);
     }
 
     /// <summary>

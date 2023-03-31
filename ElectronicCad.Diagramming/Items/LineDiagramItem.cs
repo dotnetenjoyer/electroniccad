@@ -2,13 +2,14 @@ using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Diagramming.Utils;
+using ElectronicCad.Diagramming.Extensions;
 
 namespace ElectronicCad.Diagramming.Items;
 
 /// <summary>
 /// Line diagram item that bind with domain geometry object.
 /// </summary>
-internal class LineDiagramItem : GeometryDiagramItem<Line>
+internal class LineDiagramItem : GeometryObjectDiagramItem
 {
     /// <summary>
     /// Constructor
@@ -22,9 +23,8 @@ internal class LineDiagramItem : GeometryDiagramItem<Line>
     {
         base.Draw(canvas);
 
-        var firstPoint = DomainObject.ControlPoints[0].ToSKPoint();
-        var secondPoint = DomainObject.ControlPoints[1].ToSKPoint();
-
+        var firstPoint = GeometryObject.ControlPoints[Line.FirstPointIndex].ToSKPoint();
+        var secondPoint = GeometryObject.ControlPoints[Line.SecondPointIndex].ToSKPoint();
         canvas.DrawLine(firstPoint, secondPoint, Paints.ForegroundSolid);
     }
 }

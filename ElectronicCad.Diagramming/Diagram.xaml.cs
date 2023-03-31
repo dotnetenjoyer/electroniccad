@@ -9,6 +9,7 @@ using ElectronicCad.Diagramming.Items;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using ElectronicCad.Domain.Geometry;
+using System.Linq;
 
 namespace ElectronicCad.Diagramming
 {
@@ -68,27 +69,18 @@ namespace ElectronicCad.Diagramming
             SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
 
             DomainDiagram = new DomainDiagram();
-            DomainDiagram.VersionChanged += HandleDiagramVersionChanged;
             DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
+            DomainDiagram.GeometryModified += HandleGeometryModified;
             DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
 
             SetDiagramMode(DiagramMode.Selection);
-
-            Line line = new Line();
-            line.ControlPoints = new System.Drawing.PointF[]
-            {
-               new System.Drawing.PointF(50, 100),
-               new System.Drawing.PointF(100, 100),
-            };
-
-            DomainDiagram.AddGeometry(line);
         }
 
         #region DomainDiagram
 
         public DomainDiagram DomainDiagram { get; private set; }
        
-        private void HandleDiagramVersionChanged(object? sender, EventArgs eventArgs)
+        private void HandleGeometryModified(object? sender, EventArgs eventArgs)
         {
             Redraw();
         }
@@ -102,7 +94,15 @@ namespace ElectronicCad.Diagramming
 
         private void HandleDiagramGeometryRemoved(object? sender, GeometryObject geometryObject)
         {
-            Debug.WriteLine("Geomtry was deleted");
+            var diagramItem = DiagramItems
+                .OfType<GeometryObjectDiagramItem>()
+                .FirstOrDefault(item => item.GeometryObject == geometryObject);
+
+            if(diagramItem != null)
+            {
+                DiagramItems.Remove(diagramItem);
+                Redraw();
+            }
         }
 
         #endregion
@@ -205,7 +205,9 @@ namespace ElectronicCad.Diagramming
         /// <inheritdoc/>
         public void Dispose()
         {
-            DomainDiagram.VersionChanged -= HandleDiagramVersionChanged;
+            DomainDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
+            DomainDiagram.GeometryModified -= HandleGeometryModified;
+            DomainDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
         }
     }
 }

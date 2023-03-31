@@ -2,7 +2,12 @@
 
 public class ModificationScope : IDisposable
 {
-    public Diagram Diagram { get; private set; }
+    /// <summary>
+    /// The diagram that releated with scope
+    /// </summary>
+    internal Diagram Diagram { get; private set; }
+
+    private readonly List<GeometryObject> modifiedGeometry = new();
 
     /// <summary>
     /// Constructor.
@@ -13,9 +18,21 @@ public class ModificationScope : IDisposable
         Diagram = diagram;
     }
 
+    /// <summary>
+    /// Marks a geometry object as modified.
+    /// </summary>
+    /// <param name="geometryObject">Modified geometry object.</param>
+    internal void AddModifiedItem(GeometryObject geometryObject)
+    {
+        modifiedGeometry.Add(geometryObject);
+    }
+
     /// <inheritdoc />
     public void Dispose()
     {
-        Diagram.IncrementVersion();
+        if (modifiedGeometry.Any())
+        {
+            Diagram.HandleGeometryModification();
+        }
     }
 }

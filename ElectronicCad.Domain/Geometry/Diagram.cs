@@ -23,6 +23,84 @@ public class Diagram : IDisposable
     public double Height { get; set; } = 1000;
 
     /// <summary>
+    /// Constructor.
+    /// </summary>
+    public Diagram()
+    {
+        AddLayer("Default");
+    }
+
+    #region Layer
+
+    /// <summary>
+    /// Diagram active layer.
+    /// </summary>
+    public Layer ActiveLayer { get; private set; }
+
+    /// <summary>
+    /// Collection of layers.
+    /// </summary>
+    public IEnumerable<Layer> Layers => layers;
+
+    private readonly List<Layer> layers = new();
+
+    /// <summary>
+    /// Add layer to diagram.
+    /// </summary>
+    /// <param name="name">Layer name.</param>
+    public Layer AddLayer(string name)
+    {
+        var layer = new Layer(name, this);
+        layers.Add(layer);
+        ActiveLayer = layer;
+        return layer;
+    }
+
+    /// <summary>
+    /// Remove layer from diagram.
+    /// </summary>
+    /// <param name="layer"></param>
+    public void RemoveLayer(Layer layer)
+    {
+        layers.Remove(layer);
+    }
+
+    /// <summary>
+    /// Add a geometry object to the specified layer, 
+    /// if the layer is null, then the geometry will be added to the active layer.
+    /// </summary>
+    /// <param name="geometry">Geometry object to add.</param>
+    /// <param name="layer">Layer.</param>
+    public void AddGeometry(GeometryObject geometry, Layer? layer = null)
+    {
+        layer ??= ActiveLayer;
+
+        if (!layers.Contains(layer))
+        {
+            throw new Exception("This layer does not belong to the chart.");
+        }
+
+        layer.AddGeometry(geometry);
+    }
+
+    /// <summary>
+    /// Removes geometry object from diagram.
+    /// </summary>
+    /// <param name="geometry">Geometry object that will be deleted.</param>
+    public void RemoveGeometry(GeometryObject geometry)
+    {
+        var layer = layers.FirstOrDefault(layer => layer.GeometryObjects.Contains(geometry));
+        if(layer != null)
+        {
+            layer.RemoveGeometry(geometry);
+        }
+    }
+
+    #endregion
+
+    #region DiagramChangingNotification
+
+    /// <summary>
     /// The event fires on geometry added within diagram.
     /// </summary>
     public event EventHandler<GeometryObject> GeometryAdded;
@@ -33,24 +111,9 @@ public class Diagram : IDisposable
     public event EventHandler<GeometryObject> GeometryRemoved;
 
     /// <summary>
-    /// Diagram active layer.
+    /// The event fires when diagram geometry modified.
     /// </summary>
-    public Layer ActiveLayer { get; private set; }
-
-    /// <summary>
-    /// Collection of layers.
-    /// </summary>
-    public IEnumerable<Layer> Layers => _layers;
-
-    private List<Layer> _layers = new();
-    
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    public Diagram()
-    {
-        AddLayer("Default");
-    }
+    public event EventHandler GeometryModified;
 
     /// <summary>
     /// Notify diagram to add layer geometry
@@ -71,59 +134,14 @@ public class Diagram : IDisposable
     }
 
     /// <summary>
-    /// Add layer to diagram.
+    /// Notify diagram about geometry modification.
     /// </summary>
-    /// <param name="name">Layer name.</param>
-    public Layer AddLayer(string name)
+    internal void HandleGeometryModification()
     {
-        var layer = new Layer(name, this);
-        _layers.Add(layer);
-        ActiveLayer = layer;
-        return layer;
+        GeometryModified.Invoke(this, EventArgs.Empty);
     }
 
-    /// <summary>
-    /// Remove layer from diagram.
-    /// </summary>
-    /// <param name="layer"></param>
-    public void RemoveLayer(Layer layer)
-    {
-        _layers.Remove(layer);
-    }
-
-    public void AddGeometry(GeometryObject geometry, Layer? layer = null)
-    {
-        layer ??= ActiveLayer;
-
-        if (!_layers.Contains(layer))
-        {
-            throw new Exception("This layer does not belong to the chart.");
-        }
-        
-        layer.AddGeometry(geometry);
-        IncrementVersion();
-    }
-
-    /// <summary>
-    /// The event fires when diagram geometry updates.
-    /// </summary>
-    public event EventHandler VersionChanged;
-
-    /// <summary>
-    /// Current version of the diagram.
-    /// </summary>
-    internal int Version { get; private set; }
-
-    /// <summary>
-    /// Increments current version.
-    /// </summary>
-    public void IncrementVersion()
-    {
-        Version++;
-        VersionChanged?.Invoke(this, EventArgs.Empty);
-    }
-
-    public ModificationScope ModificationScope { get; private set; }
+    internal ModificationScope? ModificationScope { get; private set; }
 
     /// <summary>
     /// 
@@ -139,6 +157,8 @@ public class Diagram : IDisposable
         ModificationScope = new ModificationScope(this);
         return ModificationScope;
     }
+
+    #endregion
 
     #region Dispose
 
