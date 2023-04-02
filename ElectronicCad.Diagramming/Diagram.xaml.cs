@@ -10,6 +10,11 @@ using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using ElectronicCad.Domain.Geometry;
 using System.Linq;
+using System.Windows;
+
+using WindowsPoint = System.Windows.Point;
+using System.Windows.Input;
+using SkiaSharp.Views.WPF;
 
 namespace ElectronicCad.Diagramming
 {
@@ -74,33 +79,47 @@ namespace ElectronicCad.Diagramming
             DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
 
             SetDiagramMode(DiagramMode.Selection);
+
+            MouseMove += HandleDiagramMouseMove;
+            MouseUp += HandleDiagramMouseUp;
+            MouseDown += HandleDiagramMouseDown;
         }
 
         #region DomainDiagram
 
         public DomainDiagram DomainDiagram { get; private set; }
        
-        private void HandleGeometryModified(object? sender, EventArgs eventArgs)
+        private void HandleGeometryModified(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
         {
+            var modifiedItems = diagramItems
+                .OfType<GeometryObjectDiagramItem>()
+                .Where(item => modifiedGeometryObjects.Contains(item.GeometryObject))
+                .ToList();
+
+            foreach (var item in modifiedItems)
+            {
+                item.UpdateViewState();
+            }
+            
             Redraw();
         }
 
         private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
         {
             var diagramItem = DiagramItemsFactory.Create(geometryObject);
-            DiagramItems.Add(diagramItem);
+            diagramItems.Add(diagramItem);
             Redraw();
         }
 
         private void HandleDiagramGeometryRemoved(object? sender, GeometryObject geometryObject)
         {
-            var diagramItem = DiagramItems
+            var diagramItem = diagramItems
                 .OfType<GeometryObjectDiagramItem>()
                 .FirstOrDefault(item => item.GeometryObject == geometryObject);
 
             if(diagramItem != null)
             {
-                DiagramItems.Remove(diagramItem);
+                diagramItems.Remove(diagramItem);
                 Redraw();
             }
         }
@@ -133,6 +152,68 @@ namespace ElectronicCad.Diagramming
 
         #endregion
 
+        internal WindowsPoint Position
+        {
+            get => (WindowsPoint)GetValue(PositionProperty);
+            set => SetValue(PositionProperty, value);
+        }
+
+        private static readonly DependencyProperty PositionProperty =
+            DependencyProperty.Register(nameof(Position), typeof(WindowsPoint),
+                typeof(Diagram), new PropertyMetadata());
+
+        internal DiagramItem? FocusedItem { get; private set; }
+
+        private void HandleDiagramMouseMove(object sender, MouseEventArgs eventArgs)
+        {
+            Position = eventArgs.GetPosition(this);
+            var skiaPoint = Position.ToSKPoint();
+            
+            if (TryHitItem(ref skiaPoint, out var hitItem))
+            {
+                FocusedItem = hitItem;
+                FocusedItem!.HandleMouseMove(skiaPoint);
+            }
+            else
+            {   
+                FocusedItem = null;
+            }
+        }
+
+        private bool TryHitItem(ref SKPoint point, out DiagramItem? hitItem)
+        {
+            hitItem = null;
+            var result = false;
+
+            foreach(var item in DiagramItems)
+            {
+                if(item.CheckHit(ref point))
+                {
+                    hitItem = item;
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        private void HandleDiagramMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(FocusedItem != null)
+            {
+                FocusedItem.HandleMouseDown(Position.ToSKPoint());
+            }
+        }
+
+        private void HandleDiagramMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (FocusedItem != null)
+            {
+                FocusedItem.HandleMouseUp(Position.ToSKPoint());
+            }
+        }
+
         ///// <summary>
         ///// All diagram items
         ///// </summary>
@@ -149,7 +230,20 @@ namespace ElectronicCad.Diagramming
 
         #region Drawing
 
-        private List<DiagramItem> DiagramItems = new();
+        /// <summary>
+        /// Collection of all diagram item on the diagram.
+        /// </summary>
+        internal IEnumerable<DiagramItem> DiagramItems => diagramItems;
+
+        private List<DiagramItem> diagramItems = new();
+
+        internal void AddDiagramItem(DiagramItem diagramItem)
+        {
+            diagramItems.Add(diagramItem);
+            diagramItems = diagramItems
+                .OrderByDescending(item => item.ZIndex)
+                .ToList();
+        }
 
         public void Redraw()
         {
@@ -165,10 +259,9 @@ namespace ElectronicCad.Diagramming
         private void Draw(SKCanvas canvas)
         {
             canvas.Clear();
-
             DrawWorkspaceArea(canvas);
 
-            foreach(var item in DiagramItems)
+            foreach(var item in diagramItems)
             {
                 item.Draw(canvas);
             }
@@ -208,6 +301,10 @@ namespace ElectronicCad.Diagramming
             DomainDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
             DomainDiagram.GeometryModified -= HandleGeometryModified;
             DomainDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
+
+            MouseMove -= HandleDiagramMouseMove;
+            MouseUp -= HandleDiagramMouseUp;
+            MouseDown -= HandleDiagramMouseDown;
         }
     }
 }

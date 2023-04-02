@@ -32,7 +32,7 @@ public class ModificationScope : IDisposable
     {
         if (modifiedGeometry.Any())
         {
-            Diagram.HandleGeometryModification();
+            Diagram.HandleGeometryModification(modifiedGeometry);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using ElectronicCad.Domain.Geometry;
+﻿using ElectronicCad.Diagramming.Extensions;
+using ElectronicCad.Domain.Geometry;
+using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 
 namespace ElectronicCad.Diagramming.Items;
@@ -20,6 +22,12 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     public GeometryObjectDiagramItem(GeometryObject domainObject)
     {
         GeometryObject = domainObject;
+        UpdateViewState();
+    }
+
+    /// <inheritdoc />
+    public virtual void UpdateViewState()
+    {
         RecalculateBoundingBox();
     }
 
@@ -32,14 +40,10 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
         BoundingBox = boundingBox.ToSKRect();
     }
 
-    /// <summary>
-    /// Check point hitting.
-    /// </summary>
-    /// <param name="position">Point position.</param>
-    /// <returns>Whether hit or not.</returns>
-    //public override bool CheckHit(Point position)
-    //{
-    //    var pointF = new System.Drawing.PointF((float)position.X, (float)position.Y);
-    //    return DomainObject.CheckHit(pointF);
-    //}
+    /// <inheritdoc />
+    public override bool CheckHit(ref SKPoint position)
+    {
+        var domainPoint = new Point(position.X, position.Y);
+        return GeometryObject.CheckHit(domainPoint);
+    }
 }

@@ -1,7 +1,4 @@
-using System.Windows;
 using SkiaSharp;
-using SkiaSharp.Views.WPF;
-using ElectronicCad.Diagramming.Utils;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -42,7 +39,7 @@ internal abstract class DiagramItem
     public virtual void Draw(SKCanvas canvas)   
     {
         // Debug rectangle.
-        canvas.DrawRect(BoundingBox, Paints.DebugPaint);
+        //canvas.DrawRect(BoundingBox, Paints.DebugPaint);
     }
     
     /// <summary>
@@ -50,9 +47,32 @@ internal abstract class DiagramItem
     /// </summary>
     /// <param name="position">Point position.</param>
     /// <returns>Whether hit or not.</returns>
-    public virtual bool CheckHit(Point position)
+    public virtual bool CheckHit(ref SKPoint point)
     {
-        var skPoint = position.ToSKPoint();
-        return BoundingBox.Contains(skPoint);
+        return BoundingBox.Contains(point);
+    }
+
+    /// <summary>
+    /// Handling mouse movements over a diagram element.
+    /// </summary>
+    /// <param name="position"></param>
+    public virtual void HandleMouseMove(SKPoint mousePosition)
+    {
+    }
+
+    /// <summary>
+    /// Handling left mouse up over a diagram element
+    /// </summary>
+    /// <param name="position"></param>
+    public virtual void HandleMouseUp(SKPoint mousePosition)
+    {
+    }
+
+    /// <summary>
+    /// Handling left mouse down over a diagram element
+    /// </summary>
+    /// <param name="position"></param>
+    public virtual void HandleMouseDown(SKPoint mousePosition)
+    {
     }
 }

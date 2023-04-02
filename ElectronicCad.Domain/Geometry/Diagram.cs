@@ -113,7 +113,7 @@ public class Diagram : IDisposable
     /// <summary>
     /// The event fires when diagram geometry modified.
     /// </summary>
-    public event EventHandler GeometryModified;
+    public event EventHandler<IEnumerable<GeometryObject>> GeometryModified;
 
     /// <summary>
     /// Notify diagram to add layer geometry
@@ -136,9 +136,9 @@ public class Diagram : IDisposable
     /// <summary>
     /// Notify diagram about geometry modification.
     /// </summary>
-    internal void HandleGeometryModification()
+    internal void HandleGeometryModification(IEnumerable<GeometryObject> modifiedGeometryObjects)
     {
-        GeometryModified.Invoke(this, EventArgs.Empty);
+        GeometryModified.Invoke(this, modifiedGeometryObjects);
     }
 
     internal ModificationScope? ModificationScope { get; private set; }

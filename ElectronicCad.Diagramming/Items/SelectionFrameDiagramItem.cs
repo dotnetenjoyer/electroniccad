@@ -1,5 +1,6 @@
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
+using ElectronicCad.Domain.Geometry;
 using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Items;
@@ -9,35 +10,83 @@ namespace ElectronicCad.Diagramming.Items;
 /// </summary>
 internal class SelectionFrameDiagramItem : DiagramItem
 {
-    private readonly SKPaint _gizmoPaint;
-    private readonly SKPaint _areaPaint;
+    private static readonly SKPaint gizmoPaint;
+    private static readonly SKPaint areaPaint;
+
+    private bool isMoving;
+    private SKPoint startMovingPosition;
+
 
     /// <inhertidoc/>
     internal override bool IsAuxiliary => true;
 
     /// <summary>
-    /// Constructor.
+    /// Selected geometry object.
     /// </summary>
-    public SelectionFrameDiagramItem()
+    public GeometryObject SelectedItem { get; internal set; }
+
+    /// <summary>
+    /// Static constructor.
+    /// </summary>
+    static SelectionFrameDiagramItem()
     {
-        _gizmoPaint = new SKPaint
+        gizmoPaint = new SKPaint
         {
             Color = Colors.Foreground,
             Style = SKPaintStyle.StrokeAndFill,
         };
-        
-        _areaPaint = new SKPaint
+
+        areaPaint = new SKPaint
         {
             Color = Colors.Primary,
             Style = SKPaintStyle.Stroke,
-            PathEffect = SKPathEffect.CreateDash(new float[] {5, 5}, 0),
+            PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
         };
     }
-    
+
+    /// <inheritdoc />
+    public override void HandleMouseDown(SKPoint position)
+    {
+        if(SelectedItem != null)
+        {
+            isMoving = true;
+            startMovingPosition = position;
+        }
+    }
+
+    /// <inheritdoc />
+    public override void HandleMouseUp(SKPoint position)
+    {
+        isMoving = false;
+    }
+
+    /// <inheritdoc />
+    public override void HandleMouseMove(SKPoint currentPosition)
+    {
+        if (isMoving && SelectedItem != null)
+        {
+            var delta = currentPosition - startMovingPosition;
+            startMovingPosition = currentPosition;
+            
+            using var scope = SelectedItem.Layer.Diagram.StartModification();
+            for (int i = 0; i < SelectedItem.ControlPoints.Count; i++)
+            {
+                var controlPoint = SelectedItem.ControlPoints[i];
+                SelectedItem.UpdateControlPoint(i, controlPoint.X + delta.X, controlPoint.Y + delta.Y);
+            }
+        }
+    }
+
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
-        canvas.DrawRect(BoundingBox, _areaPaint);
+        if(SelectedItem != null)
+        {
+            var boundingBox = SelectedItem.CalculateBoundingBox();
+            BoundingBox = boundingBox.ToSKRect();
+        }
+
+        canvas.DrawRect(BoundingBox, areaPaint);
         DrawGizmos(canvas);
     }
 
@@ -48,16 +97,12 @@ internal class SelectionFrameDiagramItem : DiagramItem
         DrawGizmo(canvas, BoundingBox.GetBottomLeft());
         DrawGizmo(canvas, BoundingBox.GetBottomRight());
         DrawGizmo(canvas, BoundingBox.GetCenter());
-        DrawGizmo(canvas, BoundingBox.GetLeftCenter());
-        DrawGizmo(canvas, BoundingBox.GetRightCenter());
-        DrawGizmo(canvas, BoundingBox.GetTopCenter());
-        DrawGizmo(canvas, BoundingBox.GetBottomCenter());
     }
 
     private void DrawGizmo(SKCanvas canvas, SKPoint point)
     {
         var width = 8;
         var halfWidth = width / 2;
-        canvas.DrawRect(point.X - halfWidth, point.Y - halfWidth, width, width, _gizmoPaint);
+        canvas.DrawRect(point.X - halfWidth, point.Y - halfWidth, width, width, gizmoPaint);
     }
 }

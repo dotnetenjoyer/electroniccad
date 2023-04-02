@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Modes;
@@ -14,15 +15,15 @@ public class NewLineMode : BaseDiagramMode
 
         if (tempLine == null)
         {
-            var firstPoint = new Point(position.X, position.Y);
-            var secondPoint = new Point(position.X, position.Y);
+            var firstPoint = position.ToDomainPoint();
+            var secondPoint = position.ToDomainPoint();
             tempLine = new Line(firstPoint, secondPoint);
             Diagram.DomainDiagram.AddGeometry(tempLine);
         }
         else
         {
             using var scope = Diagram.DomainDiagram.StartModification();
-            tempLine.UpdateControlPoint(Line.SecondPointIndex, position.X, position.Y);
+            tempLine.UpdateControlPoint(Line.SecondPointIndex, (float)position.X, (float)position.Y);
             tempLine = null;
         }
     }
@@ -35,7 +36,7 @@ public class NewLineMode : BaseDiagramMode
         if (tempLine != null)
         {
             using var scope = Diagram.DomainDiagram.StartModification();
-            tempLine.UpdateControlPoint(Line.SecondPointIndex, position.X, position.Y);
+            tempLine.UpdateControlPoint(Line.SecondPointIndex, (float)position.X, (float)position.Y);
         }
     }
 

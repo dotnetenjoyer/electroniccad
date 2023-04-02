@@ -1,6 +1,3 @@
-using System;
-using System.Drawing;
-
 namespace ElectronicCad.Domain.Geometry;
 
 public abstract class GeometryObject
@@ -44,7 +41,7 @@ public abstract class GeometryObject
     /// <param name="index">Index of control point.</param>
     /// <param name="x">X value.</param>
     /// <param name="y">Y value.</param>
-    public void UpdateControlPoint(int index, double x, double y)
+    public void UpdateControlPoint(int index, float x, float y)
     {
         ValidateModification();
 
@@ -74,14 +71,14 @@ public abstract class GeometryObject
     /// </summary>
     /// <param name="point">Target point to hit.</param>
     /// <returns><c>true</c> if point hit geomtry.</returns>
-    public virtual bool CheckHit(PointF point) => CheckHitToBoundingBox(point);
+    public virtual bool CheckHit(Point point) => CheckHitToBoundingBox(point);
 
     /// <summary>
     /// Check hit to geometry bounding box.
     /// </summary>
     /// <param name="point">Target point ot hit</param>
     /// <returns><c>true</c> if point hit bounding box.</returns>
-    public bool CheckHitToBoundingBox(PointF point)
+    public bool CheckHitToBoundingBox(Point point)
     {
         var boundingBox = CalculateBoundingBox();
         return boundingBox.Contains(point);
@@ -90,10 +87,9 @@ public abstract class GeometryObject
     /// <summary>
     /// Calculates objects bounding box.
     /// </summary>
-    public RectangleF CalculateBoundingBox()
+    public Rectangle CalculateBoundingBox()
     {
-        return RectangleF.Empty;
-        //return CalculateBoundingBox(ControlPoints);
+        return CalculateBoundingBox(controlPoints);
     }
 
     /// <summary>
@@ -101,11 +97,11 @@ public abstract class GeometryObject
     /// </summary>
     /// <param name="points">Set of points.</param>
     /// <returns>Bounding box.</returns>
-    private RectangleF CalculateBoundingBox(PointF[] points)
+    private Rectangle CalculateBoundingBox(Point[] points)
     {
         if(points.Length == 0)
         {
-            return RectangleF.Empty;
+            return Rectangle.Empty;
         }
 
         float 
@@ -124,6 +120,6 @@ public abstract class GeometryObject
 
         var width = maxX - minX;
         var height = maxY - minY;
-        return new RectangleF(minX, minY, width, height);
+        return new Rectangle(minX, minY, width, height);
     }
 }

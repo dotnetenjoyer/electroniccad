@@ -4,8 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:skia="clr-namespace:SkiaSharp.Views.WPF;assembly=SkiaSharp.Views.WPF"
-             mc:Ignorable="d">         
-    <DockPanel>
+             mc:Ignorable="d">
+    <DockPanel LastChildFill="True">
+        <StackPanel DockPanel.Dock="Bottom" Background="Black" Orientation="Horizontal">
+            <TextBlock 
+                Foreground="White" 
+                Margin="10 0"
+                Text="{Binding StringFormat=X: {0}, Path=Position.X, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+            
+            <TextBlock 
+                Foreground="White"
+                Text="{Binding StringFormat=Y: {0}, Path=Position.Y, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+        </StackPanel>
+        
         <skia:SKElement x:Name="SkiaCanvas"/>
     </DockPanel>        
 </UserControl>
