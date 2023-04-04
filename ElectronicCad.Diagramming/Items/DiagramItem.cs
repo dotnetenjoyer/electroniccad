@@ -1,4 +1,5 @@
 using SkiaSharp;
+using System;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -33,6 +34,11 @@ internal abstract class DiagramItem
     public int ZIndex { get; set; }
 
     /// <summary>
+    /// 
+    /// </summary>
+    public bool IsFocused { get; private set; }
+
+    /// <summary>
     /// Draws itself on canvas.
     /// </summary>
     /// <param name="canvas">Skia canvas.</param>
@@ -53,26 +59,28 @@ internal abstract class DiagramItem
     }
 
     /// <summary>
-    /// Handling mouse movements over a diagram element.
-    /// </summary>
-    /// <param name="position"></param>
-    public virtual void HandleMouseMove(SKPoint mousePosition)
-    {
-    }
-
-    /// <summary>
     /// Handling left mouse up over a diagram element
     /// </summary>
-    /// <param name="position"></param>
-    public virtual void HandleMouseUp(SKPoint mousePosition)
+    /// <param name="mouse">Mouse parameters.</param>
+    internal void HandleMouseUp(MouseParameters mouse)
     {
     }
 
     /// <summary>
     /// Handling left mouse down over a diagram element
     /// </summary>
-    /// <param name="position"></param>
-    public virtual void HandleMouseDown(SKPoint mousePosition)
+    /// <param name="mouse">Mouse parameters.</param>
+    public virtual void HandleMouseDown(MouseParameters mouse)
     {
+    
+    }
+
+    /// <summary>
+    /// Handling mouse movements over a diagram element.
+    /// </summary>
+    /// <param name="mouse">Mouse parameters.</param>
+    public virtual void HandleMouseMove(MovingMouseParameters mouse)
+    {
+    
     }
 }

@@ -15,12 +15,12 @@ public class Diagram : IDisposable
     /// <summary>
     /// Diagram width.
     /// </summary>
-    public double Width { get; set; } = 1400;
+    public float Width { get; set; } = 850;
 
     /// <summary>
     /// Diagram height.
     /// </summary>
-    public double Height { get; set; } = 1000;
+    public float Height { get; set; } = 600;
 
     /// <summary>
     /// Constructor.

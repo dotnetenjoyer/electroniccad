@@ -28,11 +28,28 @@ public abstract class GeometryObject
     public Layer? Layer { get; set; }
 
     /// <summary>
+    /// Indicates if geometry object is temporary.
+    /// </summary>
+    public bool IsTemporary { get; set; }
+
+    /// <summary>
     /// Constructor.
     /// </summary>
-    protected GeometryObject()
+    public GeometryObject()
     {
         Id = Guid.NewGuid();
+    }
+
+    /// <summary>
+    /// Set control points without modification validation.
+    /// </summary>
+    /// <param name="points">Points to set.</param>
+    internal void SetControlPoints(Point[] points)
+    {
+        for (int i = 0; i < controlPoints.Length; i++)
+        {
+            controlPoints[i] = points[i];
+        }
     }
 
     /// <summary>
@@ -45,22 +62,13 @@ public abstract class GeometryObject
     {
         ValidateModification();
 
-        var point = controlPoints[index];
-        if(point != null)
-        {
-            point.SetValues(x, y);
-        }
-        else
-        {
-            controlPoints[index] = new Point(x, y);
-        }
-
+        controlPoints[index].SetValues(x, y);
         Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
     }
 
     private void ValidateModification()
     {
-        if(Layer == null || Layer.Diagram == null || Layer.Diagram.ModificationScope == null)
+        if (Layer == null || Layer.Diagram == null || Layer.Diagram.ModificationScope == null)
         {
             throw new Exception("Modification outisde scope are prohibited.");
         }

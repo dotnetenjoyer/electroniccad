@@ -7,7 +7,7 @@ public class ModificationScope : IDisposable
     /// </summary>
     internal Diagram Diagram { get; private set; }
 
-    private readonly List<GeometryObject> modifiedGeometry = new();
+    private readonly HashSet<GeometryObject> modifiedGeometry = new();
 
     /// <summary>
     /// Constructor.

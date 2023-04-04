@@ -1,10 +1,17 @@
 namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
-/// Elipse.
+/// Ellipse.
 /// </summary>
-public class Elipse : GeometryObject
+public class Ellipse : ContentGeometry
 {
     /// <inheritdoc/>
-    public override string Name { get; init; } = nameof(Elipse);
+    public override string Name { get; init; } = nameof(Ellipse);
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public Ellipse(params Point[] points) : base(points)
+    {
+    }
 }

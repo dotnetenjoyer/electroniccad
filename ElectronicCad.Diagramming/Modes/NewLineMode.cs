@@ -6,47 +6,53 @@ namespace ElectronicCad.Diagramming.Modes;
 
 public class NewLineMode : BaseDiagramMode
 {
-    private Line? tempLine;
+    private Line? temporaryLine;
 
     /// <inheritdoc />
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        var position = args.GetPosition(Diagram);
+        var position = Diagram.GetPosition(args);
 
-        if (tempLine == null)
+        if (temporaryLine == null)
         {
             var firstPoint = position.ToDomainPoint();
             var secondPoint = position.ToDomainPoint();
-            tempLine = new Line(firstPoint, secondPoint);
-            Diagram.DomainDiagram.AddGeometry(tempLine);
+            temporaryLine = new Line(firstPoint, secondPoint)
+            {
+                IsTemporary = true
+            };
+
+            Diagram.DomainDiagram.AddGeometry(temporaryLine);
         }
         else
         {
             using var scope = Diagram.DomainDiagram.StartModification();
-            tempLine.UpdateControlPoint(Line.SecondPointIndex, (float)position.X, (float)position.Y);
-            tempLine = null;
+            temporaryLine.UpdateControlPoint(Line.SecondPointIndex, position.X, position.Y);
+            temporaryLine.IsTemporary = false;
+            temporaryLine = null;
         }
     }
 
     /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
-        var position = args.GetPosition(Diagram);
-
-        if (tempLine != null)
+        if(temporaryLine == null)
         {
-            using var scope = Diagram.DomainDiagram.StartModification();
-            tempLine.UpdateControlPoint(Line.SecondPointIndex, (float)position.X, (float)position.Y);
+            return;
         }
+
+        var position = Diagram.GetPosition(args);
+        using var scope = Diagram.DomainDiagram.StartModification();
+        temporaryLine.UpdateControlPoint(Line.SecondPointIndex, position.X, position.Y);
     }
 
     /// <inheritdoc />
     protected override void Cancel()
     {
-        if (tempLine != null)
+        if (temporaryLine != null)
         {
-            Diagram.DomainDiagram.RemoveGeometry(tempLine);
-            tempLine = null;
+            Diagram.DomainDiagram.RemoveGeometry(temporaryLine);
+            temporaryLine = null;
         }
     }
 }

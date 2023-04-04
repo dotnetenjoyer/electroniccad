@@ -11,7 +11,15 @@ internal class Paints
     /// Foreground solid paint.
     /// </summary>
     public static SKPaint ForegroundSolid { get; private set; }
+    
+    /// <summary>
+    /// Foreground stroke paint.
+    /// </summary>
+    public static SKPaint ForegroundStroke { get; private set; }
 
+    /// <summary>
+    /// Debug paint.
+    /// </summary>
     public static SKPaint DebugPaint { get; private set; }
 
     /// <summary>
@@ -22,7 +30,15 @@ internal class Paints
         ForegroundSolid = new SKPaint
         {
             Color = Colors.Foreground,
-            Style = SKPaintStyle.StrokeAndFill
+            Style = SKPaintStyle.StrokeAndFill,
+            StrokeWidth = 2,
+        };
+
+        ForegroundStroke = new SKPaint
+        {
+            Color = Colors.Foreground,
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = 2,
         };
 
         DebugPaint = new SKPaint

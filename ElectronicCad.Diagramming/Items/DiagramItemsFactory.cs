@@ -11,7 +11,8 @@ internal static class DiagramItemsFactory
 {
     private static readonly Dictionary<Type, Func<GeometryObject, DiagramItem>> _factories = new()
     {
-        [typeof(Line)] = (GeometryObject line) => new LineDiagramItem((Line)line) 
+        [typeof(Line)] = (GeometryObject line) => new LineDiagramItem((Line)line),
+        [typeof(Ellipse)] = (GeometryObject ellipse) => new EllipseDiagramItem((Ellipse)ellipse) 
     };
 
     /// <summary>

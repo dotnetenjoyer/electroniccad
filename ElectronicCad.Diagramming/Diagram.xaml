@@ -16,7 +16,7 @@
                 Foreground="White"
                 Text="{Binding StringFormat=Y: {0}, Path=Position.Y, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
         </StackPanel>
-        
-        <skia:SKElement x:Name="SkiaCanvas"/>
+
+        <skia:SKElement x:Name="SkiaCanvas" />
     </DockPanel>        
 </UserControl>

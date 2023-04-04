@@ -44,7 +44,7 @@
 
             <Button
                 Command="{Binding ChangeModeCommand}"
-                CommandParameter="{x:Static modes:DiagramMode.Line}"
+                CommandParameter="{x:Static modes:DiagramMode.NewLine}"
                 control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Line)'}">
                 <components:Icon Path="{StaticResource LineIcon}"/>
             </Button>
@@ -58,7 +58,7 @@
 
             <Button
                 Command="{Binding ChangeModeCommand}"
-                CommandParameter="{x:Static modes:DiagramMode.Elipse}"
+                CommandParameter="{x:Static modes:DiagramMode.NewEllipse}"
                 control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Elipse)'}">
                 <components:Icon Path="{StaticResource ElipseIcon}"/>
             </Button>

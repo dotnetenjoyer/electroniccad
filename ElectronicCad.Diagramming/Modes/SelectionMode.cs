@@ -12,13 +12,10 @@ public class SelectionMode : BaseDiagramMode
     /// <inheritdoc/>
     public override Cursor Cursor => Cursors.Arrow;
 
-    private GeometryObjectDiagramItem selectedItem;
-    private System.Windows.Point startPosition;
-
     /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
-        if (Diagram.FocusedItem != null && Diagram.FocusedItem is GeometryObjectDiagramItem geometryDiagramItem)
+        if (Diagram.FocusItem != null && Diagram.FocusItem is GeometryObjectDiagramItem geometryDiagramItem)
         {
             Diagram.Cursor = Cursors.Hand;
         }
@@ -32,15 +29,19 @@ public class SelectionMode : BaseDiagramMode
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
         var selectionFrame = GetSelectionFrame();
-
-        if (Diagram.FocusedItem != null && Diagram.FocusedItem is GeometryObjectDiagramItem geometryDiagramItem)
+        
+        if(Diagram.FocusItem == selectionFrame || Diagram.FocusItem is GizmoDiagramItem)
         {
-            selectionFrame.SelectedItem = geometryDiagramItem.GeometryObject;
+            return;
+        }
+        
+        if (Diagram.FocusItem is GeometryObjectDiagramItem geometryDiagramItem)
+        {
             selectionFrame.IsVisible = true;
+            selectionFrame.SelectedItem = geometryDiagramItem.GeometryObject;
         }
         else
         {
-            selectedItem = null;
             selectionFrame.IsVisible = false;
         }
 
@@ -72,6 +73,7 @@ public class SelectionMode : BaseDiagramMode
         
         var selectionFrame = GetSelectionFrame();
         selectionFrame.IsVisible = false;
+
         Diagram.Redraw();
     }
 }

@@ -1,5 +1,5 @@
-﻿using ElectronicCad.Domain.Geometry;
-using SkiaSharp;
+﻿using SkiaSharp;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Extensions;
 
@@ -16,6 +16,16 @@ internal static class GeometryExtensions
     public static SKPoint ToSKPoint(this Point point)
     {
         return new SKPoint(point.X, point.Y);
+    }
+
+    /// <summary>
+    /// Converts skia point to domain point.
+    /// </summary>
+    /// <param name="point">Point to convert.</param>
+    /// <returns>Domain point.</returns>
+    public static Point ToDomainPoint(this SKPoint point)
+    {
+        return new Point(point.X, point.Y);
     }
 
     /// <summary>

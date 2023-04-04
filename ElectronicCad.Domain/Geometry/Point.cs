@@ -1,9 +1,11 @@
-﻿namespace ElectronicCad.Domain.Geometry;
+﻿using System.Data.Common;
+
+namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
 /// Representation of a two demension point on a plane.
 /// </summary>
-public class Point
+public struct Point
 {
     /// <summary>
     /// X coordinate value.
@@ -47,5 +49,16 @@ public class Point
     {
         this.x = x;
         this.y = y;
+    }
+
+    /// <summary>
+    /// Override the difference operator.
+    /// </summary>
+    /// <param name="first">First point.</param>
+    /// <param name="second">Second point.</param>
+    /// <returns>Point that describe difference.</returns>
+    public static Point operator - (Point first, Point second)
+    {
+        return new Point(first.X - second.X, first.Y - second.Y);
     }
 }
