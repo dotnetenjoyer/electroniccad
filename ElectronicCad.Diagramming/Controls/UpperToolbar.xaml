@@ -51,7 +51,7 @@
 
             <Button
                 Command="{Binding ChangeModeCommand}"
-                CommandParameter="{x:Static modes:DiagramMode.Polygon}"
+                CommandParameter="{x:Static modes:DiagramMode.NewPolygon}"
                 control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Polygon)'}">
                 <components:Icon Path="{StaticResource RectIcon}"/>
             </Button>

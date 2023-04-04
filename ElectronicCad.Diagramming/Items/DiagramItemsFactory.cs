@@ -1,6 +1,6 @@
-﻿using ElectronicCad.Domain.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -12,7 +12,8 @@ internal static class DiagramItemsFactory
     private static readonly Dictionary<Type, Func<GeometryObject, DiagramItem>> _factories = new()
     {
         [typeof(Line)] = (GeometryObject line) => new LineDiagramItem((Line)line),
-        [typeof(Ellipse)] = (GeometryObject ellipse) => new EllipseDiagramItem((Ellipse)ellipse) 
+        [typeof(Ellipse)] = (GeometryObject ellipse) => new EllipseDiagramItem((Ellipse)ellipse),
+        [typeof(Polygon)] = (GeometryObject polygon) => new PolygonDiagramItem((Polygon)polygon),
     };
 
     /// <summary>

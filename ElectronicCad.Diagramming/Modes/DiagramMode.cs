@@ -8,7 +8,7 @@ public enum DiagramMode
     Selection,
     NewLine,
     Pen,
-    Polygon,
+    NewPolygon,
     NewEllipse,
     Text,
 }

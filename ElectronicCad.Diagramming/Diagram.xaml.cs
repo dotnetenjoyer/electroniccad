@@ -138,11 +138,17 @@ namespace ElectronicCad.Diagramming
                 case DiagramMode.Selection:
                     SetDiagramMode(new Modes.SelectionMode());
                     break;
+
                 case DiagramMode.NewLine:
                     SetDiagramMode(new NewLineMode());
                     break;
+
                 case DiagramMode.NewEllipse:
                     SetDiagramMode(new NewEllipseMode());
+                    break;
+
+                case DiagramMode.NewPolygon:
+                    SetDiagramMode(new NewPolygonMode());
                     break;
             }
 
