@@ -14,6 +14,7 @@ internal static class DiagramItemsFactory
         [typeof(Line)] = (GeometryObject line) => new LineDiagramItem((Line)line),
         [typeof(Ellipse)] = (GeometryObject ellipse) => new EllipseDiagramItem((Ellipse)ellipse),
         [typeof(Polygon)] = (GeometryObject polygon) => new PolygonDiagramItem((Polygon)polygon),
+        [typeof(Text)] = (GeometryObject text) => new TextDiagramItem((Text)text)
     };
 
     /// <summary>

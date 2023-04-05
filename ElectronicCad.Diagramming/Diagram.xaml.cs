@@ -150,6 +150,10 @@ namespace ElectronicCad.Diagramming
                 case DiagramMode.NewPolygon:
                     SetDiagramMode(new NewPolygonMode());
                     break;
+
+                case DiagramMode.NewText:
+                    SetDiagramMode(new NewTextMode());
+                    break;
             }
 
             currentMode = diagramMode;

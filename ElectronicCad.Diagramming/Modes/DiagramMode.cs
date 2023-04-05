@@ -10,5 +10,5 @@ public enum DiagramMode
     Pen,
     NewPolygon,
     NewEllipse,
-    Text,
+    NewText,
 }

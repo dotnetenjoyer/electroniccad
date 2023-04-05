@@ -65,7 +65,7 @@
 
             <Button
                 Command="{Binding ChangeModeCommand}"
-                CommandParameter="{x:Static modes:DiagramMode.Text}"
+                CommandParameter="{x:Static modes:DiagramMode.NewText}"
                 control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Text)'}">
                 <components:Icon Path="{StaticResource TextIcon}"/>
             </Button>
