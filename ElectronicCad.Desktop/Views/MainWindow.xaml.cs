@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ElectronicCad.Domain.Geometry;
+using ElectronicCad.MVVM.ViewModels;
+using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
@@ -12,10 +14,16 @@ namespace ElectronicCad.Desktop.Views
     public partial class MainWindow : Window
     {
         private bool restoreIfMove;
-        
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+         
+            var viewModel = new MainViewModel();
+            DataContext = viewModel;
         }
 
         private void HandleMinimazeButtonClick(object sender, RoutedEventArgs e)

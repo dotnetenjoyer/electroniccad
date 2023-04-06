@@ -1,6 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using ElectronicCad.Diagramming.Modes;
-using ElectronicCad.Diagramming.ViewModels;
+using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
 
 namespace ElectronicCad.Diagramming
 {
@@ -9,17 +10,30 @@ namespace ElectronicCad.Diagramming
     /// </summary>
     public partial class DiagramControl : UserControl
     {
+        /// <summary>
+        /// Related domain diagram..
+        /// </summary>
+        public DomainDiagram DomainDiagram 
+        { 
+            get => (DomainDiagram)GetValue(DomainDiagramProperty);
+            set => SetValue(DomainDiagramProperty, value);
+        }
+
+        private static readonly DependencyProperty DomainDiagramProperty = DependencyProperty
+            .Register(nameof(DomainDiagram),
+                typeof(DomainDiagram),
+                typeof(DiagramControl),
+                new PropertyMetadata());
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public DiagramControl()
         {
             InitializeComponent();
-
-            var viewModel = new DiagramControlViewModel();
-            //TODO: Dispose
-            viewModel.DiagramModeChanged += HandleDiagramModeChange;
-            DataContext = viewModel;
         }
 
-        private void HandleDiagramModeChange(object? sender, DiagramMode newMode)
+        private void HandleToolbarModeChanged(object? sender, DiagramMode newMode)
         {
             Diagram.SetDiagramMode(newMode);
         }

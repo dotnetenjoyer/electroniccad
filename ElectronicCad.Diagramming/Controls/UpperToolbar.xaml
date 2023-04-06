@@ -5,12 +5,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI"
-    xmlns:viewModels="clr-namespace:ElectronicCad.Diagramming.ViewModels"
     xmlns:control="clr-namespace:ElectronicCad.Diagramming.Controls"
     xmlns:modes="clr-namespace:ElectronicCad.Diagramming.Modes"
     xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
-    d:DataContext="{d:DesignInstance viewModels:UpperToolbarViewModel}"
-    mc:Ignorable="d" x:ClassModifier="internal">
+    mc:Ignorable="d" x:ClassModifier="internal" x:Name="Toolbar">
 
     <UserControl.Resources>
         <Style TargetType="Button" BasedOn="{StaticResource IconButton}">
@@ -29,44 +27,44 @@
     <Border Style="{StaticResource ComponentWrapper}">
         <StackPanel Orientation="Horizontal">
             <Button 
-                Command="{Binding ChangeModeCommand}"
+                Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
                 CommandParameter="{x:Static modes:DiagramMode.Selection}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Selection)'}">
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Selection)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource CursorIcon}"/>
             </Button>
             
             <Button
-                Command="{Binding ChangeModeCommand}"
+                Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
                 CommandParameter="{x:Static modes:DiagramMode.Pen}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Pen)'}">
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Pen)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource PenIcon}"/>
             </Button>
 
             <Button
-                Command="{Binding ChangeModeCommand}"
+                Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
                 CommandParameter="{x:Static modes:DiagramMode.NewLine}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Line)'}">
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.NewLine)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource LineIcon}"/>
             </Button>
 
             <Button
-                Command="{Binding ChangeModeCommand}"
+                Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
                 CommandParameter="{x:Static modes:DiagramMode.NewPolygon}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Polygon)'}">
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.NewPolygon)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource RectIcon}"/>
             </Button>
 
             <Button
-                Command="{Binding ChangeModeCommand}"
+                Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
                 CommandParameter="{x:Static modes:DiagramMode.NewEllipse}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Elipse)'}">
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.NewEllipse)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource ElipseIcon}"/>
             </Button>
 
             <Button
-                Command="{Binding ChangeModeCommand}"
+                Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
                 CommandParameter="{x:Static modes:DiagramMode.NewText}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.Text)'}">
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.NewText)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource TextIcon}"/>
             </Button>
 

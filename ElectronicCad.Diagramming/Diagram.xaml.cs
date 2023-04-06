@@ -21,20 +21,64 @@ namespace ElectronicCad.Diagramming
     /// </summary>
     public partial class Diagram : UserControl, IDisposable
     {
+        /// <summary>
+        /// Related domain diagram.
+        /// </summary>
+        public DomainDiagram DomainDiagram
+        {
+            get => (DomainDiagram)GetValue(DomainDiagramProperty);
+            set => SetValue(DomainDiagramProperty, value);
+        }
+
+        private static readonly DependencyProperty DomainDiagramProperty = DependencyProperty
+            .Register(nameof(DomainDiagram),
+                typeof(DomainDiagram),
+                typeof(Diagram),
+                new PropertyMetadata(DomainDiagramChanged));
+
+        private static void DomainDiagramChanged(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
+        {
+            var diagram = (Diagram)obj;
+            diagram.DeinitializeDomainDiagram();
+            diagram.InitializeDomainDiagram((DomainDiagram)eventArgs.NewValue);
+        }
+
+        private void InitializeDomainDiagram(DomainDiagram domainDiagram)
+        {
+            DomainDiagram = domainDiagram;
+            DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
+            DomainDiagram.GeometryModified += HandleGeometryModified;
+            DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+
+            CalculateDeltas();
+        }
+
+        private void DeinitializeDomainDiagram()
+        {
+            if(DomainDiagram == null)
+            {
+                return;
+            }
+
+            DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
+            DomainDiagram.GeometryModified += HandleGeometryModified;
+            DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+        }
+
         #region Layers
-        
+
         ///// <summary>
         ///// Diagram layers.
         ///// </summary>
         //public IEnumerable<Layer> Layers => _layers;
 
         //private readonly List<Layer> _layers = new();
-        
+
         ///// <summary>
         ///// Active diagram layer.
         ///// </summary>
         //public Layer ActiveLayer { get; private set; }
-        
+
         ///// <summary>
         ///// Add a new diagram layer.
         ///// </summary>
@@ -58,9 +102,9 @@ namespace ElectronicCad.Diagramming
         //    layer.ItemsChanged -= HandleItemsChanged;
         //    _layers.Remove(layer);
         //}
-        
+
         #endregion
-        
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -70,12 +114,6 @@ namespace ElectronicCad.Diagramming
             Colors.Initialize(this);
 
             SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
-            SkiaCanvas.Loaded += HandleCanvasLoaded;
-
-            DomainDiagram = new DomainDiagram();
-            DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
-            DomainDiagram.GeometryModified += HandleGeometryModified;
-            DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
 
             MouseMove += HandleDiagramMouseMove;
             MouseUp += HandleDiagramMouseUp;
@@ -85,8 +123,6 @@ namespace ElectronicCad.Diagramming
         }
 
         #region DomainDiagram
-
-        public DomainDiagram DomainDiagram { get; private set; }
        
         private void HandleGeometryModified(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
         {
@@ -327,11 +363,6 @@ namespace ElectronicCad.Diagramming
             return false;
         }
 
-        private void HandleCanvasLoaded(object sender, RoutedEventArgs e)
-        {
-            CalculateDeltas();
-        }
-
         private void CalculateDeltas()
         {
             DeltaX = ((float)SkiaCanvas.ActualWidth - DomainDiagram.Width) / 2;
@@ -351,10 +382,14 @@ namespace ElectronicCad.Diagramming
 
         private void Draw(SKCanvas canvas)
         {
-            canvas.Clear();
+            if (DomainDiagram == null)
+            {
+                return;
+            }
 
+            canvas.Clear();
             canvas.Translate((float)DeltaX, (float)DeltaY);
-            
+
             DrawWorkspaceArea(canvas);
 
             var sortedDiagramItems = diagramItems
@@ -381,15 +416,12 @@ namespace ElectronicCad.Diagramming
         public void Dispose()
         {
             SkiaCanvas.PaintSurface -= SkElementOnPaintSurface;
-            SkiaCanvas.Loaded -= HandleCanvasLoaded;
-
-            DomainDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
-            DomainDiagram.GeometryModified -= HandleGeometryModified;
-            DomainDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
 
             MouseMove -= HandleDiagramMouseMove;
             MouseUp -= HandleDiagramMouseUp;
             MouseDown -= HandleDiagramMouseDown;
+
+            DeinitializeDomainDiagram();
         }
     }
 }

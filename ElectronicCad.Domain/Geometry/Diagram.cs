@@ -27,6 +27,7 @@ public class Diagram : IDisposable
     /// </summary>
     public Diagram()
     {
+        Id = Guid.NewGuid();
         AddLayer("Default");
     }
 
