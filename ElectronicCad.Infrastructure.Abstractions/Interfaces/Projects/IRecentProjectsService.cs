@@ -1,6 +1,6 @@
 ﻿using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
 
-namespace ElectronicCad.Infrastructure.Abstractions.Interfaces.Project;
+namespace ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 
 /// <summary>
 /// Recnet projects service interface.

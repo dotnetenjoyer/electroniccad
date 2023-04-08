@@ -1,0 +1,15 @@
+﻿<UserControl 
+    x:Class="ElectronicCad.Desktop.Views.ActivityBar.ProjectDiagrams"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    mc:Ignorable="d"
+    xmlns:local="clr-namespace:ElectronicCad.Desktop.Views.ActivityBar"
+    xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels.ActivityBar;assembly=ElectronicCad.MVVM"
+    d:DataContext="{d:DesignInstance Type=viewModels:ProjectDiagramsViewModel, IsDesignTimeCreatable=True}">
+    
+    <Grid>
+        <DataGrid ItemsSource="{Binding GeometryObjects}"/>
+    </Grid>
+</UserControl>

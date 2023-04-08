@@ -68,7 +68,7 @@
                         <ColumnDefinition Width="320"/>
                     </Grid.ColumnDefinitions>
     
-                    <activityBar:ActivityBar Grid.Column="0"/>
+                    <activityBar:ActivityBar Grid.Column="0" DataContext="{Binding ActivityBar}"/>
     
                     <Grid Grid.Column="1">
                         <diagramming:DiagramControl 

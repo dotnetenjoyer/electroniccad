@@ -21,9 +21,6 @@ namespace ElectronicCad.Desktop.Views
         public MainWindow()
         {
             InitializeComponent();
-         
-            var viewModel = new MainViewModel();
-            DataContext = viewModel;
         }
 
         private void HandleMinimazeButtonClick(object sender, RoutedEventArgs e)

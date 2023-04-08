@@ -3,7 +3,7 @@ using ElectronicCad.Infrastructure.Abstractions.Interfaces;
 using ElectronicCad.Domain.Workspace;
 using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using CreateProjectDomainCommand = ElectronicCad.Domain.Workspace.Commands.CreateProjectCommand;
-using ElectronicCad.Infrastructure.Abstractions.Interfaces.Project;
+using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
 
 namespace ElectronicCad.UseCases.Projects.CreateProject;

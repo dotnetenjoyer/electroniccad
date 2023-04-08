@@ -1,5 +1,5 @@
 using MediatR;
-using ElectronicCad.Infrastructure.Abstractions.Interfaces.Project;
+using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
 
 namespace ElectronicCad.UseCases.Projects.GetRecentProjects;

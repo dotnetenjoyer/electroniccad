@@ -1,9 +1,11 @@
+using ElectronicCad.Domain.Common;
+
 namespace ElectronicCad.Domain.Workspace;
 
 /// <summary>
 /// Woorkbook diagram base.
 /// </summary>
-public abstract class Diagram
+public abstract class Diagram : DomainObservableObject
 {
     /// <summary>
     /// Diagram id.
@@ -20,6 +22,11 @@ public abstract class Diagram
     /// </summary>
     public Geometry.Diagram GeometryDiagram { get; }
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="geometryDiagram"></param>
     public Diagram(string name, Geometry.Diagram geometryDiagram)
     {
         Id = Guid.NewGuid();

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
-using ElectronicCad.Infrastructure.Abstractions.Interfaces.Project;
+using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
 
 namespace ElectronicCad.Infrastructure.Implementations.Services.Projects;

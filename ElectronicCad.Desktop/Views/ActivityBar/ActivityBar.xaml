@@ -4,10 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ElectronicCad.Desktop.Views.ActivityBar"
     mc:Ignorable="d"
+    xmlns:local="clr-namespace:ElectronicCad.Desktop.Views.ActivityBar"
+    xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels.ActivityBar;assembly=ElectronicCad.MVVM"
+    d:DataContext="{d:DesignInstance Type=viewModels:ActivityBarViewModel}"
     Background="{StaticResource SecondaryBackgroundBrush}">
+
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-        <TextBlock Foreground="White">Activity bar.</TextBlock>
+        <local:ProjectDiagrams DataContext="{Binding Diagrams}"/>
     </Grid>
 </UserControl>

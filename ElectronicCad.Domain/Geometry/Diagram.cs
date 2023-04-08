@@ -67,6 +67,12 @@ public class Diagram : IDisposable
     }
 
     /// <summary>
+    /// All diagram geometry objects.
+    /// </summary>
+    public IEnumerable<GeometryObject> GeometryObjects 
+        => layers.SelectMany(layer => layer.GeometryObjects);
+
+    /// <summary>
     /// Add a geometry object to the specified layer, 
     /// if the layer is null, then the geometry will be added to the active layer.
     /// </summary>

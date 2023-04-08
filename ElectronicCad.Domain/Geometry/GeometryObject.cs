@@ -1,6 +1,8 @@
+using ElectronicCad.Domain.Common;
+
 namespace ElectronicCad.Domain.Geometry;
 
-public abstract class GeometryObject
+public abstract class GeometryObject : DomainObservableObject
 {
     /// <summary>
     /// Geometry object id.

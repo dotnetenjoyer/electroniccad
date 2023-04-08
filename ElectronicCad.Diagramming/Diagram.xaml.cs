@@ -60,9 +60,9 @@ namespace ElectronicCad.Diagramming
                 return;
             }
 
-            DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
-            DomainDiagram.GeometryModified += HandleGeometryModified;
-            DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+            DomainDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
+            DomainDiagram.GeometryModified -= HandleGeometryModified;
+            DomainDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
         }
 
         #region Layers
