@@ -1,4 +1,3 @@
-using ElectronicCad.Domain.Workspace;
 using ElectronicCad.Domain.Workspace.Commands;
 
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
@@ -35,7 +34,7 @@ public class Project
         _diagrams = new List<Diagram>();
 
         var geometryDiagram = new GeometryDiagram();
-        var diagram = new ProjectDiagram("Dummy", geometryDiagram);
+        var diagram = new ProjectDiagram("Diagram", geometryDiagram);
         _diagrams.Add(diagram);
     }
 

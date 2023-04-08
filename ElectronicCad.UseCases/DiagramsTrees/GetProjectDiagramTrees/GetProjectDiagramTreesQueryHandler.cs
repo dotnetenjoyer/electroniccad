@@ -24,26 +24,24 @@ public class GetProjectDiagramTreesQueryHandler : IRequestHandler<GetProjectDiag
     public async Task<DiagramTrees> Handle(GetProjectDiagramTreesQuery request, CancellationToken cancellationToken)
     {
         var project = projectProvider.GetCurrentProject();
+        var projectDiagrams = project.Diagrams.Where(d => d is ProjectDiagram);
 
-        var diagramTree = new DiagramTrees();
-        var diagrams = new List<DiagramTreeNode>();
-
-        var projectDiagrams = project.Diagrams.Where(x => x is ProjectDiagram);
+        var diagramNodes = new List<DiagramTreeNode>();
         foreach (var projectDiagram in projectDiagrams)
         {
-            var diagramNodes = projectDiagram.GeometryDiagram.GeometryObjects.Select(geometryObject => new DiagramTreeNode
+            var geometryObjects = projectDiagram.GeometryDiagram.GeometryObjects;
+            var diagramNode = new WorkspaceDiagramDiagramTreeNode(projectDiagram)
             {
-                DomainObject = geometryObject
-            });
-
-            var diagram = new DiagramTreeNode
-            {
-                DomainObject = projectDiagram,
-                Nodes = diagramNodes
+                Nodes = geometryObjects.Select(g => new GeometryDiagramTreeNode(g))
             };
-            diagrams.Add(diagram);
+            
+            diagramNodes.Add(diagramNode);
         }
-        diagramTree.Diagrams = diagrams;
+        
+        var diagramTree = new DiagramTrees()
+        {
+            Diagrams = diagramNodes
+        };
 
         return diagramTree;
     }

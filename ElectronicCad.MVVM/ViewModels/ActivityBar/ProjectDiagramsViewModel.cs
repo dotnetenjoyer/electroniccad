@@ -18,14 +18,14 @@ public class ProjectDiagramsViewModel : ViewModel
     /// <summary>
     /// Project diagram trees.
     /// </summary>
-    public DiagramTrees DiagramTrees 
+    public DiagramTrees? DiagramTrees 
     { 
         get => diagramTrees;
         set => SetProperty(ref diagramTrees, value); 
     }
 
-    private DiagramTrees diagramTrees;
-    
+    private DiagramTrees? diagramTrees;
+
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -49,14 +49,14 @@ public class ProjectDiagramsViewModel : ViewModel
         await UpdateDiagramTrees();
     }
 
-    private void HandleGeometryAdd(object? sender, GeometryObject geometry)
+    private async void HandleGeometryAdd(object? sender, GeometryObject geometry)
     {
-        UpdateDiagramTrees();
+        await UpdateDiagramTrees();
     }
 
-    private void HandleGeometryRemove(object? sender, GeometryObject geometry)
+    private async void HandleGeometryRemove(object? sender, GeometryObject geometry)
     {
-        UpdateDiagramTrees();
+        await UpdateDiagramTrees();
     }
 
     private async Task UpdateDiagramTrees()

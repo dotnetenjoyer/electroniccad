@@ -10,7 +10,7 @@
     d:DataContext="{d:DesignInstance Type=viewModels:ActivityBarViewModel}"
     Background="{StaticResource SecondaryBackgroundBrush}">
 
-    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-        <local:ProjectDiagrams DataContext="{Binding Diagrams}"/>
+    <Grid>
+        <local:ProjectDiagrams DataContext="{Binding ProjectDiagrams}"/>
     </Grid>
 </UserControl>
