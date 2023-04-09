@@ -59,28 +59,82 @@ internal abstract class DiagramItem
     }
 
     /// <summary>
-    /// Handling left mouse up over a diagram element
+    /// Raises when clicked mouse button up on diagram item.
+    /// </summary>
+    public event EventHandler<MouseParameters> MouseUp;
+
+    /// <summary>
+    /// Raises when click on diagram item.
+    /// </summary>
+    public event EventHandler<MouseParameters> MouseDown;   
+
+    /// <summary>
+    /// Raises when mouse move on diagram item.
+    /// </summary>
+    public event EventHandler<MovingMouseParameters> MouseMove;   
+
+    /// <summary>
+    /// Checks if mouse ups on the diagram item.
+    /// If so, invokes the apropriate event.
     /// </summary>
     /// <param name="mouse">Mouse parameters.</param>
-    internal void HandleMouseUp(MouseParameters mouse)
+    /// <returns>True if ups on the diagram item.</returns>
+    public virtual bool CheckMouseUp(MouseParameters mouse)
     {
+        var position = mouse.Position;
+        if (CheckHit(ref position))
+        {
+            MouseUp?.Invoke(this, mouse);
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
-    /// Handling left mouse down over a diagram element
+    /// Checks if mouse downs on the diagram item.
+    /// If so, invokes the apropriate event.
     /// </summary>
     /// <param name="mouse">Mouse parameters.</param>
-    public virtual void HandleMouseDown(MouseParameters mouse)
+    /// <returns>True if downs on the diagram item.</returns>
+    public virtual bool CheckMouseDown(MouseParameters mouse)
     {
-    
+        var position = mouse.Position;
+        if (CheckHit(ref position))
+        {
+            MouseDown?.Invoke(this, mouse);
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
-    /// Handling mouse movements over a diagram element.
+    /// Checks if mouse moves on the diagram item.
+    /// If so, invokes the apropriate event.
     /// </summary>
     /// <param name="mouse">Mouse parameters.</param>
-    public virtual void HandleMouseMove(MovingMouseParameters mouse)
+    /// <returns>True if moves on the diagram item.</returns>
+    public virtual bool CheckMouseMove(MovingMouseParameters mouse)
     {
-    
+        var position = mouse.Position;
+        if (CheckHit(ref position))
+        {
+            MouseMove?.Invoke(this, mouse);
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// HACK: Raise mouse move event directly,
+    /// can cite to wrong relative positions calculations,
+    /// because geometry diagram item bounding box may not have time to update.
+    /// </summary>
+    /// <param name="mouse">Mouse parameters.</param>
+    public void RaiseMouseMove(MovingMouseParameters mouse)
+    {
+        MouseMove?.Invoke(this, mouse);
     }
 }

@@ -24,7 +24,7 @@ public abstract class BaseDiagramMode : IDiagramMode
     public virtual MouseButton SecondaryButton => MouseButton.Right;
     
     /// <inheritdoc/>
-    public void Initialize(Diagram diagram)
+    public virtual void Initialize(Diagram diagram)
     {
         Diagram = diagram;
         Diagram.MouseDown += HandleDiagramMouseDown;

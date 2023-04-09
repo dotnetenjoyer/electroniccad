@@ -1,18 +1,16 @@
+using SkiaSharp;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Domain.Geometry;
-using SkiaSharp;
-using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace ElectronicCad.Diagramming.Items;
 
 /// <summary>
 /// Selection frame diagram item.
 /// </summary>
-internal class SelectionFrameDiagramItem : DiagramItem
+internal class SelectionFrameDiagramItem : GroupDiagramItem
 {
-    private static readonly SKPaint areaPaint;
-
     /// <inhertidoc/>
     internal override bool IsAuxiliary => true;
 
@@ -21,32 +19,41 @@ internal class SelectionFrameDiagramItem : DiagramItem
     /// </summary>
     public GeometryObject? SelectedItem { get; internal set; }
 
-    /// <summary>
-    /// Static constructor.
-    /// </summary>
-    static SelectionFrameDiagramItem()
-    {
-        areaPaint = new SKPaint
-        {
-            Color = Colors.Primary,
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = 2,
-            PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
-        };
-    }
+    private readonly SelectionFrameArea selectionFrameArea;
+
+    private readonly GizmoDiagramItem topLefGizmo;
+    private readonly GizmoDiagramItem topRigthGizmo;
+    private readonly GizmoDiagramItem bottomLeftGizmo;
+    private readonly GizmoDiagramItem bottomRigthGizmo;
 
     public SelectionFrameDiagramItem()
     {
         ZIndex = int.MaxValue;
+
+        selectionFrameArea = new SelectionFrameArea();
+        GroupedItems.Add(selectionFrameArea);
+
+        topLefGizmo = new GizmoDiagramItem();
+        GroupedItems.Add(topLefGizmo);
+
+        topRigthGizmo = new GizmoDiagramItem();
+        GroupedItems.Add(topRigthGizmo);
+
+        bottomLeftGizmo = new GizmoDiagramItem();
+        GroupedItems.Add(bottomLeftGizmo);
+
+        bottomRigthGizmo = new GizmoDiagramItem();
+        GroupedItems.Add(bottomRigthGizmo);
+
+        MouseMove += HandleMouseMove;
     }
 
-    /// <inheritdoc />
-    public override void HandleMouseMove(MovingMouseParameters mouse)
+    private void HandleMouseMove(object? sender, MovingMouseParameters mouse)
     {
-        if (mouse.LeftButton == MouseButtonState.Pressed && SelectedItem != null)
+        if (SelectedItem != null && mouse.LeftButton == MouseButtonState.Pressed)
         {
             using var scope = SelectedItem.Layer.Diagram.StartModification();
-         
+
             for (int i = 0; i < SelectedItem.ControlPoints.Count; i++)
             {
                 var controlPoint = SelectedItem.ControlPoints[i];
@@ -58,30 +65,66 @@ internal class SelectionFrameDiagramItem : DiagramItem
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
-        if(SelectedItem != null)
+        if(SelectedItem == null)
         {
-            var boundingBox = SelectedItem.CalculateBoundingBox();
-            BoundingBox = boundingBox.ToSKRect();
+            return;
         }
 
-        canvas.DrawRect(BoundingBox, areaPaint);
+        var boundingBox = SelectedItem.CalculateBoundingBox().ToSKRect();
+        selectionFrameArea.BoundingBox = boundingBox;
+        topLefGizmo.SetCenterPoint(boundingBox.GetTopLeft());
+        topRigthGizmo.SetCenterPoint(boundingBox.GetTopRight());
+        bottomLeftGizmo.SetCenterPoint(boundingBox.GetBottomLeft());
+        bottomRigthGizmo.SetCenterPoint(boundingBox.GetBottomRight());
 
-        var gizmo = new GizmoDiagramItem();
-        gizmo.SetCenterPoint(BoundingBox.GetTopRight());
-        gizmo.Draw(canvas);
+        base.Draw(canvas);
+    }
+}
+
+internal class SelectionFrameArea : DiagramItem
+{
+    private static readonly SKPaint areaPaint;
+
+    static SelectionFrameArea()
+    {
+        areaPaint = new SKPaint
+        {
+            Color = SKColors.White,
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = 1,
+            PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
+        };
+    }
+
+    public override void Draw(SKCanvas canvas)
+    {
+        canvas.DrawRect(BoundingBox, areaPaint);
     }
 }
 
 internal class GizmoDiagramItem : DiagramItem
 {
-    private static readonly SKPaint gizmoPaint = new SKPaint
+    private static readonly SKPaint paint = new SKPaint
     {
         Color = Colors.Foreground,
         Style = SKPaintStyle.StrokeAndFill,
     };
 
-    private readonly SKSize size = new SKSize(10, 10);
+    private static readonly SKSize size = new SKSize(8, 8);
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public GizmoDiagramItem()
+    {
+        MouseMove += GizmoDiagramItem_MouseMove;
+    }
+
+    private void GizmoDiagramItem_MouseMove(object? sender, MovingMouseParameters e)
+    {
+        Debug.WriteLine("");
+    }
+     
     public void SetCenterPoint(SKPoint point)
     {
         point.Offset(-(size.Width / 2), -(size.Height / 2));
@@ -91,19 +134,6 @@ internal class GizmoDiagramItem : DiagramItem
     /// <inheritdoc />
     public override void Draw(SKCanvas canvas)
     {
-        canvas.DrawRect(BoundingBox.Left, BoundingBox.Top, BoundingBox.Width, BoundingBox.Height, gizmoPaint);
-    }
-}
-
-internal class GroupDiagramItem : DiagramItem
-{
-    private readonly List<DiagramItem> groupedItems = new();
-
-    public override void Draw(SKCanvas canvas)
-    {
-        foreach (DiagramItem item in groupedItems)
-        {
-            item.Draw(canvas);
-        }
+        canvas.DrawRect(BoundingBox.Left, BoundingBox.Top, BoundingBox.Width, BoundingBox.Height, paint);
     }
 }

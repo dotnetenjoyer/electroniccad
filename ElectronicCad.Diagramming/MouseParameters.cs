@@ -11,11 +11,6 @@ internal class MouseParameters
     /// Mouse position in global canvas coordinates.
     /// </summary>
     public SKPoint Position { get; init; }
-
-    /// <summary>
-    /// Mouse positino relative focused item.
-    /// </summary>
-    public SKPoint RelativePosition { get; init; }
     
     /// <summary>
     /// Left button state.

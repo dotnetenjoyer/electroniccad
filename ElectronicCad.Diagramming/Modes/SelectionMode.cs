@@ -9,8 +9,37 @@ namespace ElectronicCad.Diagramming.Modes;
 /// </summary>
 public class SelectionMode : BaseDiagramMode
 {
+    private SelectionFrameDiagramItem selectionFrame;
+
     /// <inheritdoc/>
     public override Cursor Cursor => Cursors.Arrow;
+
+    /// <inheritdoc />
+    public override void Initialize(Diagram diagram)
+    {
+        base.Initialize(diagram);
+
+        selectionFrame = GetOrCreateSelectionFrame();
+    }
+
+    private SelectionFrameDiagramItem GetOrCreateSelectionFrame()
+    {
+        var selectionFrame = Diagram.DiagramItems
+            .OfType<SelectionFrameDiagramItem>()
+            .FirstOrDefault();
+
+        if (selectionFrame == null)
+        {
+            selectionFrame = new SelectionFrameDiagramItem()
+            {
+                IsVisible = false
+            };
+
+            Diagram.AddDiagramItem(selectionFrame);
+        }
+
+        return selectionFrame;
+    }
 
     /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
@@ -28,15 +57,13 @@ public class SelectionMode : BaseDiagramMode
     /// <inheritdoc/>
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        var selectionFrame = GetSelectionFrame();
-        
-        if(Diagram.FocusItem == selectionFrame || Diagram.FocusItem is GizmoDiagramItem)
+        if(Diagram.FocusItem == selectionFrame)
         {
             return;
         }
         
         if (Diagram.FocusItem is GeometryObjectDiagramItem geometryDiagramItem)
-        {
+        {   
             selectionFrame.IsVisible = true;
             selectionFrame.SelectedItem = geometryDiagramItem.GeometryObject;
         }
@@ -48,32 +75,12 @@ public class SelectionMode : BaseDiagramMode
         Diagram.Redraw();
     }
 
-    private SelectionFrameDiagramItem GetSelectionFrame()
-    {
-        SelectionFrameDiagramItem? selectionFrame = Diagram.DiagramItems
-            .FirstOrDefault(item => item is SelectionFrameDiagramItem) as SelectionFrameDiagramItem;
-
-        if (selectionFrame == null)
-        {
-            selectionFrame = new SelectionFrameDiagramItem()
-            {
-                IsVisible = false
-            };
-
-            Diagram.AddDiagramItem(selectionFrame);
-        }
-
-        return selectionFrame;
-    }
-
     /// <inheritdoc/>
     public override void Finalize()
     {
         base.Finalize();
         
-        var selectionFrame = GetSelectionFrame();
         selectionFrame.IsVisible = false;
-
         Diagram.Redraw();
     }
 }

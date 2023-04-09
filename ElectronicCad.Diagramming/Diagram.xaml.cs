@@ -13,6 +13,7 @@ using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Diagramming.Extensions;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
+using System.Reflection;
 
 namespace ElectronicCad.Diagramming
 {
@@ -21,50 +22,6 @@ namespace ElectronicCad.Diagramming
     /// </summary>
     public partial class Diagram : UserControl, IDisposable
     {
-        /// <summary>
-        /// Related domain diagram.
-        /// </summary>
-        public DomainDiagram DomainDiagram
-        {
-            get => (DomainDiagram)GetValue(DomainDiagramProperty);
-            set => SetValue(DomainDiagramProperty, value);
-        }
-
-        private static readonly DependencyProperty DomainDiagramProperty = DependencyProperty
-            .Register(nameof(DomainDiagram),
-                typeof(DomainDiagram),
-                typeof(Diagram),
-                new PropertyMetadata(DomainDiagramChanged));
-
-        private static void DomainDiagramChanged(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
-        {
-            var diagram = (Diagram)obj;
-            diagram.DeinitializeDomainDiagram();
-            diagram.InitializeDomainDiagram((DomainDiagram)eventArgs.NewValue);
-        }
-
-        private void InitializeDomainDiagram(DomainDiagram domainDiagram)
-        {
-            DomainDiagram = domainDiagram;
-            DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
-            DomainDiagram.GeometryModified += HandleGeometryModified;
-            DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
-
-            CalculateDeltas();
-        }
-
-        private void DeinitializeDomainDiagram()
-        {
-            if(DomainDiagram == null)
-            {
-                return;
-            }
-
-            DomainDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
-            DomainDiagram.GeometryModified -= HandleGeometryModified;
-            DomainDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
-        }
-
         #region Layers
 
         ///// <summary>
@@ -123,7 +80,59 @@ namespace ElectronicCad.Diagramming
         }
 
         #region DomainDiagram
+
+        /// <summary>
+        /// Related domain diagram.
+        /// </summary>
+        public DomainDiagram DomainDiagram
+        {
+            get => (DomainDiagram)GetValue(DomainDiagramProperty);
+            set => SetValue(DomainDiagramProperty, value);
+        }
+
+        private static readonly DependencyProperty DomainDiagramProperty = DependencyProperty
+            .Register(nameof(DomainDiagram),
+                typeof(DomainDiagram),
+                typeof(Diagram),
+                new PropertyMetadata(DomainDiagramChanged));
+
+        private static void DomainDiagramChanged(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
+        {
+            var diagram = (Diagram)obj;
+            diagram.DeinitializeDomainDiagram();
+            diagram.InitializeDomainDiagram((DomainDiagram)eventArgs.NewValue);
+        }
+
+        private void InitializeDomainDiagram(DomainDiagram domainDiagram)
+        {
+            DeinitializeDomainDiagram();
+
+            DomainDiagram = domainDiagram;
+            DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
+            DomainDiagram.GeometryModified += HandleGeometryModified;
+            DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+
+            CalculateDeltas();
+        }
        
+        private void DeinitializeDomainDiagram()
+        {
+            if (DomainDiagram == null)
+            {
+                return;
+            }
+
+            DomainDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
+            DomainDiagram.GeometryModified -= HandleGeometryModified;
+            DomainDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
+        }
+
+        private void CalculateDeltas()
+        {
+            DeltaX = ((float)SkiaCanvas.ActualWidth - DomainDiagram.Width) / 2;
+            DeltaY = ((float)SkiaCanvas.ActualHeight - DomainDiagram.Height) / 2;
+        }
+
         private void HandleGeometryModified(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
         {
             var modifiedItems = diagramItems
@@ -259,6 +268,11 @@ namespace ElectronicCad.Diagramming
         internal DiagramItem? FocusItem { get; private set; }
 
         /// <summary>
+        /// Diagram item that is now being interacted.
+        /// </summary>
+        internal DiagramItem? InteractingItem { get; private set; }
+
+        /// <summary>
         /// Diagram delta x.
         /// </summary>
         internal float DeltaX { get; private set; }
@@ -267,6 +281,7 @@ namespace ElectronicCad.Diagramming
         /// 
         /// </summary>
         internal float DeltaY { get; private  set; }
+
 
         /// <summary>
         /// Calculates canvas position.
@@ -282,91 +297,85 @@ namespace ElectronicCad.Diagramming
 
         private void HandleDiagramMouseDown(object sender, MouseButtonEventArgs eventArgs)
         {
+            var mouse = new MouseParameters
+            {
+                LeftButton = (MouseButtonState)eventArgs.LeftButton,
+                RightButton = (MouseButtonState)eventArgs.RightButton,
+                Position = Position
+            };
+
             if (FocusItem != null)
             {
-                var mouse = new MouseParameters
-                {
-                    LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                    RightButton = (MouseButtonState)eventArgs.RightButton,
-                    RelativePosition = Position - FocusItem.BoundingBox.GetTopLeft(),
-                    Position = Position
-                };
-
-                FocusItem.HandleMouseDown(mouse);
+                InteractingItem = FocusItem;
+                FocusItem.CheckMouseDown(mouse);
             }
         }
 
         private void HandleDiagramMouseUp(object sender, MouseButtonEventArgs eventArgs)
         {
+            var mouse = new MouseParameters
+            {
+                LeftButton = (MouseButtonState)eventArgs.LeftButton,
+                RightButton = (MouseButtonState)eventArgs.RightButton,
+                Position = Position
+            };
+
             if (FocusItem != null)
             {
-                var mouse = new MouseParameters
-                {
-                    LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                    RightButton = (MouseButtonState)eventArgs.RightButton,
-                    RelativePosition = Position - FocusItem.BoundingBox.GetTopLeft(),
-                    Position = Position
-                };
-
-                FocusItem.HandleMouseUp(mouse);
+                FocusItem.CheckMouseUp(mouse);
             }
+
+            InteractingItem = null;
         }
 
         private void HandleDiagramMouseMove(object sender, MouseEventArgs eventArgs)
         {
-            var position = GetPosition(eventArgs);
-            var delta = position - Position;
-            Position = position;
+            var previousPosition = Position;
+            Position = GetPosition(eventArgs);
 
-            if (TryHitItem(ref position, out var hitItem))
+            var mouse = new MovingMouseParameters
             {
-                FocusItem = hitItem;
+                LeftButton = (MouseButtonState)eventArgs.LeftButton,
+                RightButton = (MouseButtonState)eventArgs.RightButton,
+                Position = Position,
+                Delta = Position - previousPosition
+            };
 
-                var mouse = new MovingMouseParameters
-                {
-                    LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                    RightButton = (MouseButtonState)eventArgs.RightButton,
-                    RelativePosition = position - hitItem!.BoundingBox.GetTopLeft(),
-                    Position = position,
-                    Delta = delta
-                };
+            if(InteractingItem != null)
+            {
+                InteractingItem.RaiseMouseMove(mouse);
+            }
+            else if(FocusItem == null && currentMode == DiagramMode.Selection && mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                DeltaX += mouse.Delta.X;
+                DeltaY += mouse.Delta.Y;
+                Position = GetPosition(eventArgs);
 
-                FocusItem!.HandleMouseMove(mouse);
+                Redraw();
             }
             else
             {
-                FocusItem = null;
-
-                if (currentMode == DiagramMode.Selection && eventArgs.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-                {
-                    DeltaX += delta.X;
-                    DeltaY += delta.Y;
-                    Position = GetPosition(eventArgs);
-                    
-                    Redraw();
-                }
+                UpdateFocuItem(mouse);
             }
         }
 
-        private bool TryHitItem(ref SKPoint point, out DiagramItem? hitItem)
+        private void UpdateFocuItem(MovingMouseParameters mouse)
         {
-            foreach (var item in DiagramItems.Where(item => item.IsVisible))
+            var interactableItems = DiagramItems
+                .Where(item => item.IsVisible)
+                .OrderByDescending(item => item.ZIndex);
+            
+            foreach (var item in interactableItems)
             {
-                if (item.CheckHit(ref point))
+                if (item.CheckMouseMove(mouse))
                 {
-                    hitItem = item;
-                    return true;
+                    FocusItem = item;
+                    return;
                 }
             }
 
-            hitItem = null;
-            return false;
-        }
-
-        private void CalculateDeltas()
-        {
-            DeltaX = ((float)SkiaCanvas.ActualWidth - DomainDiagram.Width) / 2;
-            DeltaY = ((float)SkiaCanvas.ActualHeight - DomainDiagram.Height) / 2;
+            FocusItem = null;
+            return;
         }
 
         public void Redraw()

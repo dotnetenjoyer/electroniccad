@@ -6,10 +6,10 @@
 
     <Color x:Key="PrimaryForeground">#FFFFFF</Color>
     <Color x:Key="SecondaryForeground">#777f88</Color>
-    
-    <Color x:Key="Primary">#1677ff</Color>
-    <Color x:Key="PrimaryHover">#69b1ff</Color>
-    <Color x:Key="PrimaryActive">#0958d9</Color>
+
+    <Color x:Key="Primary">#0c8ce9</Color>
+    <Color x:Key="PrimaryHover">#5ec7ff</Color>
+    <Color x:Key="PrimaryActive">#006bc2</Color>
 
     <Color x:Key="Error">#ff4d4f</Color>
     <Color x:Key="ErrorHover">#ff7875</Color>

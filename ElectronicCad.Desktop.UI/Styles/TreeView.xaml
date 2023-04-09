@@ -13,5 +13,6 @@
 
     <Style TargetType="TreeViewItem">
         <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+        <Setter Property="IsExpanded" Value="True"/>
     </Style>
 </ResourceDictionary>
