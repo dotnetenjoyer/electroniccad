@@ -1,6 +1,6 @@
 ﻿namespace ElectronicCad.MVVM.Properties.Abstractions;
 
-public interface IPropertyProxy
+public interface IProxy
 {
     void UpdateFromEntity();
 

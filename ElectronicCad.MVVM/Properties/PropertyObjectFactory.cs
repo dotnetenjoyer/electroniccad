@@ -1,6 +1,6 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
 using ElectronicCad.MVVM.Properties.Configuration;
-using ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;
+using System.Reflection;
 
 namespace ElectronicCad.MVVM.Properties;
 
@@ -9,53 +9,67 @@ namespace ElectronicCad.MVVM.Properties;
 /// </summary>
 public static class PropertyObjectFactory
 {
-    private static IEnumerable<PropertyObjectConfiguration> propertyObjectsConfigurations;
+    private readonly static IEnumerable<IPropertyObjectConfiguration> propertyObjectsConfigurations;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     static PropertyObjectFactory()
     {
-        
+        propertyObjectsConfigurations = FindAllPropertyObjectConfigurations();
+    }
+
+    private static IEnumerable<IPropertyObjectConfiguration> FindAllPropertyObjectConfigurations()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var baseProfile = typeof(PropertyObjectProfile);
+        var profiles = assembly.GetTypes().Where(type => baseProfile.IsAssignableFrom(type));
+
+        var objectConfigurations = new List<IPropertyObjectConfiguration>();
+        foreach (var profile in profiles)
+        {
+            var instance = Activator.CreateInstance(profile) 
+                ?? throw new InvalidOperationException($"Cannot create property object profile - {profile.Name}");
+            var profileInstance = (PropertyObjectProfile)instance;
+            objectConfigurations.AddRange(profileInstance.PropertyObjectConfigurations);
+        }
+
+        return objectConfigurations;
     }
 
     /// <summary>
     /// Creates property object.
     /// </summary>
     /// <returns></returns>
-    public static PropertyObject Create(object source)
+    public static PropertyObject Create<TProxy>(TProxy proxy) where TProxy : IProxy
+    {
+        var configuration = GetConfiguration(proxy);
+        
+        var properties = new List<IProperty>();
+        foreach (var propertyConfiguration in configuration.PropertyConfigurations)
+        {
+            var property = PropertyFactory.Create(propertyConfiguration, proxy);
+            properties.Add(property);
+        }
+
+        var propertyObject = new PropertyObject()
+        {
+            Properties = properties
+        };
+        
+        return propertyObject;
+    }
+
+    private static IPropertyObjectConfiguration GetConfiguration(object source)
     {
         var configuration = propertyObjectsConfigurations
             .FirstOrDefault(c => c.SourceType == source.GetType());
 
-        if(configuration == null)
+        if (configuration == null)
         {
-            return null;
+            throw new ArgumentException($"Cannot create property object for type - {source.GetType()}", nameof(source));
         }
 
-        var properties = new List<IProperty>();
-
-        foreach (var propertyConfiguration in configuration.PropertyConfigurations)
-        {
-            var propty = new PrimitiveProperty()
-            {
-                Name = propertyConfiguration.Name
-            };
-            properties.Add(propty);
-        }
-        var propertyObject = new PropertyObject();
-        return propertyObject;
-
-        //propertyObjectsConfiguration.
-        //var propertyObject = configuration.Create(source);
-
-        //var properties = new List<IProperty>();
-        //properties.Add(new PrimitiveProperty { Name = "First" });
-        //properties.Add(new PrimitiveProperty { Name = "Second" });
-        //properties.Add(new PrimitiveProperty { Name = "Third" });
-        //properties.Add(new PrimitiveProperty { Name = "Fourth" });
-
-        //var propertyObject = new PropertyObject() { Properties = properties };
-        //return propertyObject;
+        return configuration;
     }
 }

@@ -1,23 +1,37 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
-using ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;
 
 namespace ElectronicCad.MVVM.Properties.Configuration;
 
 /// <summary>
 /// Builds property object configuration.
 /// </summary>
-public class PropertyObjectConfigurationBuilder<TPropertyModel> where TPropertyModel : IPropertyModel
+public class PropertyObjectConfigurationBuilder<SELF, TPropertyModel> where SELF : PropertyObjectConfigurationBuilder<SELF, TPropertyModel>
 {
+    /// <summary>
+    /// Property object configuration.
+    /// </summary>
+    protected readonly PropertyObjectConfiguration Configuration = new(typeof(TPropertyModel));
+
+    /// <summary>
+    /// Set of property configurations.
+    /// </summary>
     protected readonly List<IPropertyConfiguration> PropertyConfigurations = new();
 
     /// <summary>
-    /// Builder with ability to add primitive properties.
+    /// Constructor.
     /// </summary>
-    //public PropertyObjectConfigurationBuilderWithPrimitive<TPropertyModel> Primitives => new();
+    public PropertyObjectConfigurationBuilder()
+    {
+        PropertyConfigurations = new();
+        Configuration = new(typeof(TPropertyModel))
+        {
+            PropertyConfigurations = PropertyConfigurations
+        };
+    }
 
     /// <summary>
     /// Build property object configuration.
     /// </summary>
     /// <returns></returns>
-    //public IPropertyObjectConfiguration Build() => ObjectConfiguration;
+    public IPropertyObjectConfiguration Build() => Configuration;
 }

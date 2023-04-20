@@ -1,11 +1,13 @@
-﻿using ElectronicCad.MVVM.Properties.Abstractions;
+﻿using ElectronicCad.Domain.Geometry;
+using ElectronicCad.MVVM.Properties.Abstractions;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 /// <summary>
 /// Geometry object property proxy.
 /// </summary>
-public class GeometryObjectPropertyProxy : IPropertyModel
+public abstract class GeometryObjectPropertyProxy<TGeometryObject> : PropertyProxy<TGeometryObject>, IPropertyModel 
+    where TGeometryObject : GeometryObject
 {
     /// <summary>
     /// Width.
@@ -26,4 +28,29 @@ public class GeometryObjectPropertyProxy : IPropertyModel
     /// Center Y coordinate
     /// </summary>
     public float Y { get; set; }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="geometryObject">Geometry object.</param>
+    public GeometryObjectPropertyProxy(TGeometryObject geometryObject) : base(geometryObject)
+    {
+    }
+
+    /// <inheritdoc />
+    public override void UpdateFromEntity()
+    {
+        var boundingBox = Source.CalculateBoundingBox();
+
+        X = boundingBox.X; 
+        Y = boundingBox.Y;
+        Width = boundingBox.Width;
+        Height = boundingBox.Height;
+    }
+    
+    /// <inheritdoc />
+    public override void UpdateToEntity()
+    {
+        throw new NotImplementedException();
+    }
 }

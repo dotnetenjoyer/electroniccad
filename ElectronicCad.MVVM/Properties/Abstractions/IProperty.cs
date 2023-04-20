@@ -11,7 +11,7 @@ public interface IProperty
     string Name { get; }
 
     /// <summary>
-    /// Indicates if property read only.
+    /// Indicates if property read only.-
     /// </summary>
     bool IsReadOnly { get; }
 }
