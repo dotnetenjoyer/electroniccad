@@ -36,45 +36,45 @@ internal class GroupDiagramItem : DiagramItem
         return false;
     }
 
-    ///// <inheritdoc />
-    //public override bool CheckMouseDown(MouseParameters mouse)
-    //{
-    //    foreach(var item in GroupedItems)
-    //    {
-    //        if (item.CheckMouseDown(mouse))
-    //        {
-    //            return true;
-    //        }
-    //    }
+    /// <inheritdoc />
+    public override bool CheckMouseDown(MouseParameters mouse)
+    {
+        foreach (var item in GroupedItems)
+        {
+            if (item.CheckMouseDown(mouse))
+            {
+                return true;
+            }
+        }
 
-    //    return false;
-    //}
+        return false;
+    }
 
-    ///// <inheritdoc />
-    //public override bool CheckMouseUp(MouseParameters mouse)
-    //{
-    //    foreach (var item in GroupedItems)
-    //    {
-    //        if (item.CheckMouseUp(mouse))
-    //        {
-    //            return true;
-    //        }
-    //    }
+    /// <inheritdoc />
+    public override bool CheckMouseUp(MouseParameters mouse)
+    {
+        foreach (var item in GroupedItems)
+        {
+            if (item.CheckMouseUp(mouse))
+            {
+                return true;
+            }
+        }
 
-    //    return false;
-    //}
+        return false;
+    }
 
-    ///// <inheritdoc />
-    //public override bool CheckMouseMove(MovingMouseParameters mouse)
-    //{
-    //    foreach (var item in GroupedItems)
-    //    {
-    //        if (item.CheckMouseMove(mouse))
-    //        {
-    //            return true;
-    //        }
-    //    }
+    /// <inheritdoc />
+    public override bool CheckMouseMove(MovingMouseParameters mouse)
+    {
+        foreach (var item in GroupedItems)
+        {
+            if (item.CheckMouseMove(mouse))
+            {
+                return true;
+            }
+        }
 
-    //    return false;
-    //}
+        return false;
+    }
 }

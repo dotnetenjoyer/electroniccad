@@ -15,7 +15,12 @@ public abstract class DiagramTreeNode
     /// <summary>
     /// Indicates if current node expanded.
     /// </summary>
-    public bool IsExpanded { get; set; }
+    public bool IsExpanded { get; set; } = true;
+
+    /// <summary>
+    /// Indicates if current node selected.
+    /// </summary>
+    public bool IsSelected { get; set; }
 
     /// <summary>
     /// Related diagram node.

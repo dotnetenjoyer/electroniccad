@@ -4,6 +4,7 @@ using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.UseCases.DiagramsTrees.Dtos;
 using ElectronicCad.UseCases.DiagramsTrees.GetDiagramsTree;
+using ElectronicCad.Infrastructure.Abstractions.Services;
 
 namespace ElectronicCad.MVVM.ViewModels.ActivityBar;
 
@@ -14,6 +15,7 @@ public class ProjectDiagramsViewModel : ViewModel
 {
     private readonly ICurrentProjectProvider projectProvider;
     private readonly IMediator mediator;
+    private readonly ISelectionService selectionService;
 
     /// <summary>
     /// Project diagram trees.
@@ -27,12 +29,30 @@ public class ProjectDiagramsViewModel : ViewModel
     private DiagramTrees? diagramTrees;
 
     /// <summary>
+    /// Selected node.
+    /// </summary>
+    public DiagramTreeNode SelectedNode
+    {
+        get => selectedNode;
+        set
+        {
+            var selectedObjects = new[] { value.DomainObject };
+            selectionService.Select(selectedObjects);
+            SetProperty(ref selectedNode, value);
+        }
+    }
+
+    private DiagramTreeNode selectedNode;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
-    public ProjectDiagramsViewModel(ICurrentProjectProvider projectProvider, IMediator mediator)
+    public ProjectDiagramsViewModel(ICurrentProjectProvider projectProvider, IMediator mediator,
+        ISelectionService selectionService)
     {
         this.projectProvider = projectProvider;
         this.mediator = mediator;
+        this.selectionService = selectionService;
     }
 
     /// <inheritdoc />

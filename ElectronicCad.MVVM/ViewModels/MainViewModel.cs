@@ -3,6 +3,7 @@ using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.Utils;
 using ElectronicCad.MVVM.ViewModels.ActivityBar;
+using ElectronicCad.MVVM.ViewModels.Properties;
 
 namespace ElectronicCad.MVVM.ViewModels;
 
@@ -25,6 +26,9 @@ public class MainViewModel : ViewModel
 
     private Diagram diagram;
 
+    /// <summary>
+    /// Activity bar view model.
+    /// </summary>
     public ActivityBarViewModel ActivityBar
     {
         get => activityBar;
@@ -32,6 +36,17 @@ public class MainViewModel : ViewModel
     }
 
     private ActivityBarViewModel activityBar;
+
+    /// <summary>
+    /// Property view model.
+    /// </summary>
+    public PropertyViewModel Property
+    {
+        get => property;
+        set => SetProperty(ref property, value);
+    }
+
+    private PropertyViewModel property;
 
     /// <summary>
     /// Constructor.
@@ -45,6 +60,7 @@ public class MainViewModel : ViewModel
         Diagram = currentProject.Diagrams.First().GeometryDiagram;
 
         ActivityBar = viewModelFactory.Create<ActivityBarViewModel>();
+        Property = viewModelFactory.Create<PropertyViewModel>();
     }
 
     /// <inheritdoc />

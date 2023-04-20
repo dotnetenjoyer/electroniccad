@@ -1,5 +1,6 @@
 ﻿using ElectronicCad.Infrastructure.Abstractions.Interfaces;
 using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
+using ElectronicCad.Infrastructure.Abstractions.Services;
 using ElectronicCad.Infrastructure.Implementations.Services;
 using ElectronicCad.Infrastructure.Implementations.Services.Projects;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ internal static class InfrastructureModule
         services.AddTransient<IFolderPicker, FolderPicker>();
         services.AddTransient<IProjectSaver, ProjectSaver>();
         services.AddSingleton<ICurrentProjectProvider, CurrentProjectProvider>();
+        services.AddSingleton<ISelectionService, SelectionService>();   
 
         services.AddTransient<IRecentProjectsService>(services =>
         {

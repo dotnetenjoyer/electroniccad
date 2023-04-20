@@ -76,7 +76,7 @@
                             Background="{StaticResource BackgroundBrush}"/>
                     </Grid>
 
-                    <properties:Properties Grid.Column="2"/>
+                    <properties:Properties Grid.Column="2" DataContext="{Binding Property}"/>
                 </Grid>
             </DockPanel>
 
