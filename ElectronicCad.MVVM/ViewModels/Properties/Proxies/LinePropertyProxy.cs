@@ -7,6 +7,10 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// </summary>
 public class LinePropertyProxy : GeometryObjectPropertyProxy<Line>
 {
+    public bool IsEnable { get; set; }
+
+    public Color Color { get; set; }
+
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -15,4 +19,11 @@ public class LinePropertyProxy : GeometryObjectPropertyProxy<Line>
     {
 
     }
+}
+
+public enum Color
+{
+    Red,
+    Gree,
+    Blue
 }

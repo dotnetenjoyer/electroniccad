@@ -71,6 +71,7 @@
 
     <ItemGroup>
       <Folder Include="Views\Diagrams\" />
+      <Folder Include="Views\Properties\Templates\NewFolder\" />
     </ItemGroup>
 
 </Project>

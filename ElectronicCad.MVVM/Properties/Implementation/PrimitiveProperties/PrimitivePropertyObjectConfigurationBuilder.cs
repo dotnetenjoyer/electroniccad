@@ -1,4 +1,6 @@
 ﻿using ElectronicCad.MVVM.Properties.Configuration;
+using ElectronicCad.MVVM.Properties.Helpers;
+using System.Linq.Expressions;
 
 namespace ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;
 
@@ -12,9 +14,18 @@ public class PrimitivePropertyObjectConfigurationBuilder<SELF, TPropertyModel> :
     /// Adds primitive property to configuration.
     /// </summary>
     /// <param name="name">Name of primitive property.</param>
-    public SELF HasPrimitive(string name)
+    public SELF HasPrimitive<TValue>(Expression<Func<TPropertyModel, TValue>> propertySelector)
     {
-        PropertyConfigurations.Add(new PrimitivePropertyConfiguration() { Name = name });
+        var property = ReflectionHelper.FindPropertyInfo(propertySelector);
+
+        var primitive = new PrimitivePropertyConfiguration() 
+        { 
+            Name = property.Name,
+            SourceProperty = property,
+        };
+
+        PropertyConfigurations.Add(primitive);
+        
         return (SELF)this;
     }
 }

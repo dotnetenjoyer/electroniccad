@@ -8,10 +8,10 @@ public interface IProperty
     /// <summary>
     /// Property name.
     /// </summary>
-    string Name { get; }
+    string Name { get; set; }
 
     /// <summary>
-    /// Indicates if property read only.-
+    /// Indicates if property read only.
     /// </summary>
     bool IsReadOnly { get; }
 }

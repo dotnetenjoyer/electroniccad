@@ -4,19 +4,42 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
-    xmlns:properties="clr-namespace:ElectronicCad.MVVM.ViewModels.Properties;assembly=ElectronicCad.MVVM"
-    d:DataContext="{d:DesignInstance Type=properties:PropertyViewModel}"
+    xmlns:primitiveProperties="clr-namespace:ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;assembly=ElectronicCad.MVVM"
+    xmlns:selectors="clr-namespace:ElectronicCad.Desktop.Views.Properties.DataTemplateSelectors"
     Background="{StaticResource SecondaryBackgroundBrush}">
-    <Grid>
-        <ListView ItemsSource="{Binding PropertyObject.Properties}">
-            <ListView.ItemTemplate>
-                <ItemContainerTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="{Binding Name}"/>
-                        <TextBox/>
-                    </StackPanel>
-                </ItemContainerTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </Grid>
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./Templates/PrimitivePropertyDataTemplate.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <selectors:PrimitivePropertyDataTemplateSelector
+                x:Key="PrimitivePropertyDataTemplateSelector"
+                BooleanValueDataTemplate="{StaticResource PrimitiveBooleanValueDataTemplate}"
+                EnumValueDataTemplate="{StaticResource PrimitiveEnumValueDataTemplate}"
+                InputValueDataTemplate="{StaticResource PrimitiveInputValueDataTemplate}"
+            />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <Border Padding="10">
+        <DockPanel LastChildFill="True">
+
+            <StackPanel DockPanel.Dock="Top" Margin="0 0 0 20">
+                <TextBlock Text="Properties" Foreground="White"/>
+            </StackPanel>
+
+            <ItemsControl ItemsSource="{Binding PropertyObject.Properties}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl
+                            Content="{Binding}"
+                            ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
+                        />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </DockPanel>
+    </Border>
 </UserControl>

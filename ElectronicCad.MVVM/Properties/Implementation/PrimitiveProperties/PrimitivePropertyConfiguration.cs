@@ -14,6 +14,8 @@ internal class PrimitivePropertyConfiguration : IPropertyConfiguration
     /// <inheritdoc />
     public string GroupName => throw new NotImplementedException();
 
-    /// <inheritdoc />
-    public PropertyInfo Source { get; set; }
+    /// <summary>
+    /// Source property info.
+    /// </summary>
+    public PropertyInfo SourceProperty { get; set; }
 }
