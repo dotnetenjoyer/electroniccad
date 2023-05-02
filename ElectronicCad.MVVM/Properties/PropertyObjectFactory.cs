@@ -1,15 +1,18 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
 using ElectronicCad.MVVM.Properties.Configuration;
+using ElectronicCad.MVVM.Properties.Implementation.CustomSections;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace ElectronicCad.MVVM.Properties;
 
 /// <summary>
 /// Property object factory.
 /// </summary>
-public static class PropertyObjectFactory
+public class PropertyObjectFactory
 {
     private readonly static IEnumerable<IPropertyObjectConfiguration> propertyObjectsConfigurations;
+    //private readonly static IEnumerable<Type> 
 
     /// <summary>
     /// Constructor.
@@ -37,23 +40,34 @@ public static class PropertyObjectFactory
         return objectConfigurations;
     }
 
+    private readonly IServiceProvider serviceProvider;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public PropertyObjectFactory(IServiceProvider serviceProvider)
+    {
+        this.serviceProvider = serviceProvider;
+    }
+
     /// <summary>
     /// Creates property object.
     /// </summary>
     /// <returns></returns>
-    public static PropertyObject Create<TProxy>(TProxy proxy) where TProxy : IProxy
+    public PropertyObject Create<TProxy>(TProxy proxy) where TProxy : IProxy
     {
         var configuration = GetConfiguration(proxy);
 
         var propertyObject = new PropertyObject()
         {
-            Groups = CreatePropertyGroups(configuration, proxy)
+            CustomSections = CreateCustomSections(configuration, proxy),
+            Groups = CreatePropertyGroups(configuration, proxy),
         };
         
         return propertyObject;
     }
 
-    private static IPropertyObjectConfiguration GetConfiguration(IProxy proxy)
+    private IPropertyObjectConfiguration GetConfiguration(IProxy proxy)
     {
         var configuration = propertyObjectsConfigurations
             .FirstOrDefault(c => c.SourceType == proxy.GetType());
@@ -66,7 +80,25 @@ public static class PropertyObjectFactory
         return configuration;
     }
 
-    private static IEnumerable<PropertyGroup> CreatePropertyGroups(IPropertyObjectConfiguration configuration, IProxy proxy) 
+    private IEnumerable<ICustomSection> CreateCustomSections(IPropertyObjectConfiguration configuration, IProxy proxy)
+    {
+        var sections = new List<ICustomSection>();
+
+        foreach (var sectionConfiguration in configuration.CustomSectionConfigurations)
+        {
+            var factory = CustomSectionFactoriesFactory.CreateFactory(serviceProvider, sectionConfiguration.CustomSectionType);
+         
+            if (factory.CanCreate(proxy))
+            {
+                var section = factory.Create(proxy);
+                sections.Add(section);
+            }
+        }
+
+        return sections;
+    }
+
+    private IEnumerable<PropertyGroup> CreatePropertyGroups(IPropertyObjectConfiguration configuration, IProxy proxy) 
     {
         var properties = new List<IProperty>();
         foreach (var propertyConfiguration in configuration.PropertyConfigurations)

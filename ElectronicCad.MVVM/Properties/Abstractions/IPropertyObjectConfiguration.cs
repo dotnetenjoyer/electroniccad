@@ -1,4 +1,6 @@
-﻿namespace ElectronicCad.MVVM.Properties.Abstractions;
+﻿using ElectronicCad.MVVM.Properties.Configuration;
+
+namespace ElectronicCad.MVVM.Properties.Abstractions;
 
 /// <summary>
 /// Describe property object configuraiton.
@@ -14,4 +16,9 @@ public interface IPropertyObjectConfiguration
     /// Property configurations.
     /// </summary>
     IEnumerable<IPropertyConfiguration> PropertyConfigurations { get; }
+
+    /// <summary>
+    /// Custom section configurations.
+    /// </summary>
+    IEnumerable<CustomSectionConfiguration> CustomSectionConfigurations { get; }
 }

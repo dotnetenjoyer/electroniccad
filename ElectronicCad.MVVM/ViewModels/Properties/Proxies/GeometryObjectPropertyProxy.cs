@@ -1,33 +1,26 @@
 ﻿using ElectronicCad.Domain.Geometry;
 using ElectronicCad.MVVM.Properties.Abstractions;
+using ElectronicCad.MVVM.Properties.Implementation.CustomSections.Transformation;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 /// <summary>
 /// Geometry object property proxy.
 /// </summary>
-public abstract class GeometryObjectPropertyProxy<TGeometryObject> : PropertyProxy<TGeometryObject>, IPropertyModel 
+public abstract class GeometryObjectPropertyProxy<TGeometryObject> : PropertyProxy<TGeometryObject>, IPropertyModel, ITransformationProxy 
     where TGeometryObject : GeometryObject
 {
-    /// <summary>
-    /// Width.
-    /// </summary>
-    public float Width { get; set; }
-
-    /// <summary>
-    /// Height
-    /// </summary>
-    public float Height { get; set; }
-
-    /// <summary>
-    /// Center X coordinate.
-    /// </summary>
+    /// <inheritdoc />
     public float X { get; set; }
 
-    /// <summary>
-    /// Center Y coordinate
-    /// </summary>
+    /// <inheritdoc />
     public float Y { get; set; }
+
+    /// <inheritdoc />
+    public float Width { get; set; }
+
+    /// <inheritdoc />
+    public float Height { get; set; }
 
     /// <summary>
     /// Geometry object stroke color

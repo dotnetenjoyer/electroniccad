@@ -1,4 +1,6 @@
 ﻿using ElectronicCad.MVVM.Properties.Configuration;
+using ElectronicCad.MVVM.Properties.Implementation.CustomSections.Colors;
+using ElectronicCad.MVVM.Properties.Implementation.CustomSections.Transformation;
 using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Profiles;
@@ -19,6 +21,8 @@ internal class PolygoneObjectProfile : PropertyObjectProfile
             .HasPrimitive(source => source.Width)
             .HasPrimitive(source => source.Height)
             .HasPrimitive(source => source.StrokeColor)
-            .HasPrimitive(source => source.FillColor);
+            .HasPrimitive(source => source.FillColor)
+            .HasCustomSection<TransformationCustomSection>()
+            .HasCustomSection<ColorsCustomSection>();
     }
 }

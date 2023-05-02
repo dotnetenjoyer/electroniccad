@@ -12,10 +12,11 @@ public class PropertyObjectConfiguration : IPropertyObjectConfiguration
     /// </summary>
     public Type SourceType { get; set; }
 
-    /// <summary>
-    /// Property configurations.
-    /// </summary>
+    /// <inheritdoc />
     public IEnumerable<IPropertyConfiguration> PropertyConfigurations { get; set; }
+
+    /// <inheritdoc />
+    public IEnumerable<CustomSectionConfiguration> CustomSectionConfigurations { get; set; }
 
     /// <summary>
     /// Constructor.

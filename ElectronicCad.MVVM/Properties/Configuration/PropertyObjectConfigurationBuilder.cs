@@ -18,6 +18,11 @@ public class PropertyObjectConfigurationBuilder<SELF, TPropertyModel> where SELF
     protected readonly List<IPropertyConfiguration> PropertyConfigurations = new();
 
     /// <summary>
+    /// Set of custom section configuration.
+    /// </summary>
+    protected readonly List<CustomSectionConfiguration> CustomSectionConfigurations = new();
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     public PropertyObjectConfigurationBuilder()
@@ -25,7 +30,8 @@ public class PropertyObjectConfigurationBuilder<SELF, TPropertyModel> where SELF
         PropertyConfigurations = new();
         Configuration = new(typeof(TPropertyModel))
         {
-            PropertyConfigurations = PropertyConfigurations
+            PropertyConfigurations = PropertyConfigurations,
+            CustomSectionConfigurations = CustomSectionConfigurations,
         };
     }
 
@@ -34,4 +40,16 @@ public class PropertyObjectConfigurationBuilder<SELF, TPropertyModel> where SELF
     /// </summary>
     /// <returns></returns>
     public IPropertyObjectConfiguration Build() => Configuration;
+
+    /// <summary>
+    /// Add custom section configuration.
+    /// </summary>
+    /// <typeparam name="T">Type of custom section.</typeparam>
+    /// <param name="factoryCreator">Factory creator.</param>
+    /// <returns></returns>
+    public SELF HasCustomSection<T>() where T : ICustomSection
+    {
+        CustomSectionConfigurations.Add(new CustomSectionConfiguration<T>());
+        return (SELF)this;
+    }
 }

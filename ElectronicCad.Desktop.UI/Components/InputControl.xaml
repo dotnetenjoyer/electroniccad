@@ -13,6 +13,6 @@
             Target="{Binding ElementName=TextBox}" 
             Content="{Binding Title, ElementName=Current}"/>
         
-        <TextBox x:Name="TextBox" Text="{Binding Value, ElementName=Current}"/>
+        <TextBox x:Name="TextBox" Text="{Binding Value, ElementName=Current, UpdateSourceTrigger=LostFocus}" />
   </StackPanel>
 </UserControl>

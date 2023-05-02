@@ -20,12 +20,47 @@
                 EnumValueDataTemplate="{StaticResource PrimitiveEnumValueDataTemplate}"
                 InputValueDataTemplate="{StaticResource PrimitiveInputValueDataTemplate}"
             />
+
+            <DataTemplate x:Key="TransformationTemplate">
+                <StackPanel Background="Red">
+                    <TextBlock Text="Transformation."/>
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ColorsTemplate">
+                <StackPanel Background="Blue">
+                    <TextBlock Text="Colors."/>
+                </StackPanel>
+            </DataTemplate>
+
+            <selectors:CustomSectionDataTemplateSelector
+                x:Key="CustomSectionDataTemplateSelector"
+                TransformationSectionDataTemplate="{StaticResource TransformationTemplate}"
+                ColorsSectionDataTemplate="{StaticResource ColorsTemplate}"
+            />
+
         </ResourceDictionary>
     </UserControl.Resources>
     
     <Border Padding="10">
         <DockPanel LastChildFill="True">
 
+            <!-- Custom sections. -->
+            <ItemsControl 
+                DockPanel.Dock="Top" 
+                ItemsSource="{Binding PropertyObject.CustomSections}"
+                Margin="0 0 0 20">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl
+                            Content="{Binding}"
+                            ContentTemplateSelector="{StaticResource CustomSectionDataTemplateSelector }"
+                        />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Primitive properties. -->
             <ItemsControl ItemsSource="{Binding PropertyObject.Groups}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -35,6 +70,7 @@
                                     <DataTemplate>
                                         <ContentControl
                                             Content="{Binding}"
+                                            Margin="0 0 0 20"
                                             ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
                                         />
                                     </DataTemplate>

@@ -3,6 +3,7 @@ using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.Infrastructure.Abstractions.Services;
 using ElectronicCad.Infrastructure.Implementations.Services;
 using ElectronicCad.Infrastructure.Implementations.Services.Projects;
+using ElectronicCad.MVVM.Properties;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectronicCad.Desktop.Infrastructure.DependencyInjection;
@@ -27,5 +28,7 @@ internal static class InfrastructureModule
             var applicationDataFolder = CompositionRoot.GetApplicationDataFolder();
             return new RecentProjectService(applicationDataFolder);
         });
+
+        services.AddScoped<PropertyObjectFactory>();
     }
 }

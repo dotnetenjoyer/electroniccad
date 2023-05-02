@@ -11,6 +11,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties;
 public class PropertyViewModel : ViewModel
 {
     private readonly ISelectionService selectionService;
+    private readonly PropertyObjectFactory propertyObjectFactory;
 
     public string Name
     {
@@ -35,9 +36,10 @@ public class PropertyViewModel : ViewModel
     /// <summary>
     /// Constructor.
     /// </summary>
-    public PropertyViewModel(ISelectionService selectionService)
+    public PropertyViewModel(ISelectionService selectionService, PropertyObjectFactory propertyObjectFactory)
     {
         this.selectionService = selectionService;
+        this.propertyObjectFactory = propertyObjectFactory;
 
         selectionService.SelectionChanged += SelectionService_SelectionChanged;
     }
@@ -47,7 +49,7 @@ public class PropertyViewModel : ViewModel
         if (selectionService.SelectedObjects.Any())
         {
             var proxy = ProxyFactory.Create(selectionService.SelectedObjects.First());
-            PropertyObject = PropertyObjectFactory.Create(proxy);
+            PropertyObject = propertyObjectFactory.Create(proxy);
         }
     }
 }
