@@ -9,11 +9,17 @@ namespace ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;
 /// </summary>
 public class PrimitiveProperty<TValue> : ObservableObject, IProperty
 {
-    /// <inheritdoc />
-    public string Name { get; set; }
+    private readonly PropertyInfo sourceProperty;
+    private readonly IProxy sourceObject;
 
     /// <inheritdoc />
-    public bool IsReadOnly { get; }
+    public string Name { get; init; }
+
+    /// <inheritdoc />
+    public string GroupName { get; init; } = "Properties";
+
+    /// <inheritdoc />
+    public bool IsReadOnly { get; init; }
 
     /// <summary>
     /// Value of property.
@@ -21,44 +27,49 @@ public class PrimitiveProperty<TValue> : ObservableObject, IProperty
     public TValue Value
     {
         get => propertyValue;
-        set => SetProperty(ref propertyValue, value);
+        set
+        {
+            SetProperty(ref propertyValue, value);
+            UpdateSource();
+        }
     }
 
     private TValue propertyValue;
-
-    public TValue OriginValue { get; private set; }
-
-    /// <summary>
-    /// Source property.
-    /// </summary>
-    public PropertyInfo SourceProperty { get; }
-
-    /// <summary>
-    /// Source object.
-    /// </summary>
-    public object SourceObject { get; }
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="sourceObject">Source object.</param>
     /// <param name="sourceProperty">Source property.</param>
-    public PrimitiveProperty(object sourceObject, PropertyInfo sourceProperty)
+    public PrimitiveProperty(IProxy sourceObject, PropertyInfo sourceProperty, string name)
     {
-        SourceObject = sourceObject;
-        SourceProperty = sourceProperty;
+        this.sourceObject = sourceObject;
+        this.sourceProperty = sourceProperty;
+        Name = name;
 
-        UpdateFromSourceObject();
+        //TODO: optimize initialization;
+        UpdateFromSource();
+        sourceObject.Updated += HandleSourceChanges;
     }
 
-    void UpdateFromSourceObject()
+    private void HandleSourceChanges(object? sender, EventArgs eventArgs)
     {
-        var value = SourceProperty.GetValue(SourceObject);
-        Value = (TValue)value;
+        UpdateFromSource();
     }
 
-    void UpdateSourceObject()
+    private void UpdateFromSource()
     {
+        var propertyValue = sourceProperty.GetValue(sourceObject);
+        
+        if (propertyValue is TValue value)
+        {
+            Value = value;
+        }
+    }
 
+    private void UpdateSource()
+    {
+        sourceProperty.SetValue(sourceObject, Value);
+        sourceObject.UpdateEntity();
     }
 }

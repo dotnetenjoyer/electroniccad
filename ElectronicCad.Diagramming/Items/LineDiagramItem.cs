@@ -3,6 +3,9 @@ using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Diagramming.Extensions;
+using System.Windows.Controls;
+using System.Drawing;
+using System;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -22,9 +25,9 @@ internal class LineDiagramItem : GeometryObjectDiagramItem
     public override void Draw(SKCanvas canvas)
     {
         base.Draw(canvas);
-
+        
         var firstPoint = GeometryObject.ControlPoints[Line.FirstPointIndex].ToSKPoint();
         var secondPoint = GeometryObject.ControlPoints[Line.SecondPointIndex].ToSKPoint();
-        canvas.DrawLine(firstPoint, secondPoint, Paints.ForegroundSolid);
+        canvas.DrawLine(firstPoint, secondPoint, StrokePaint);
     }
 }

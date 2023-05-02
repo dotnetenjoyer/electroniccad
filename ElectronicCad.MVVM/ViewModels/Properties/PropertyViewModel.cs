@@ -1,6 +1,4 @@
-﻿using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Domain.Workspace;
-using ElectronicCad.Infrastructure.Abstractions.Services;
+﻿using ElectronicCad.Infrastructure.Abstractions.Services;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.Properties;
 using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
@@ -46,9 +44,10 @@ public class PropertyViewModel : ViewModel
 
     private void SelectionService_SelectionChanged(object? sender, EventArgs e)
     {
-        var selectedObject = selectionService.SelectedObjects.First();
-
-        var proxy = ProxyFactory.Create(selectedObject);
-        PropertyObject = PropertyObjectFactory.Create(proxy);
+        if (selectionService.SelectedObjects.Any())
+        {
+            var proxy = ProxyFactory.Create(selectionService.SelectedObjects.First());
+            PropertyObject = PropertyObjectFactory.Create(proxy);
+        }
     }
 }

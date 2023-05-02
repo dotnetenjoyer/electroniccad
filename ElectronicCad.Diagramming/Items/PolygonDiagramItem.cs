@@ -20,7 +20,9 @@ internal class PolygonDiagramItem : GeometryObjectDiagramItem
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
-        canvas.DrawRect(BoundingBox, Paints.ForegroundStroke);
         base.Draw(canvas);
+        
+        canvas.DrawRect(BoundingBox, FillPaint);
+        canvas.DrawRect(BoundingBox, StrokePaint);
     }
 }

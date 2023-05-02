@@ -44,7 +44,30 @@ public static class PropertyObjectFactory
     public static PropertyObject Create<TProxy>(TProxy proxy) where TProxy : IProxy
     {
         var configuration = GetConfiguration(proxy);
+
+        var propertyObject = new PropertyObject()
+        {
+            Groups = CreatePropertyGroups(configuration, proxy)
+        };
         
+        return propertyObject;
+    }
+
+    private static IPropertyObjectConfiguration GetConfiguration(IProxy proxy)
+    {
+        var configuration = propertyObjectsConfigurations
+            .FirstOrDefault(c => c.SourceType == proxy.GetType());
+
+        if (configuration == null)
+        {
+            throw new ArgumentException($"Cannot create property object for type - {proxy.GetType()}", nameof(proxy));
+        }
+
+        return configuration;
+    }
+
+    private static IEnumerable<PropertyGroup> CreatePropertyGroups(IPropertyObjectConfiguration configuration, IProxy proxy) 
+    {
         var properties = new List<IProperty>();
         foreach (var propertyConfiguration in configuration.PropertyConfigurations)
         {
@@ -52,24 +75,14 @@ public static class PropertyObjectFactory
             properties.Add(property);
         }
 
-        var propertyObject = new PropertyObject()
-        {
-            Properties = properties
-        };
-        
-        return propertyObject;
-    }
+        var groups = properties
+            .GroupBy(property => property.GroupName)
+            .Select(properties => new PropertyGroup
+                {
+                    Name = properties.Key,
+                    Properties = properties
+                });
 
-    private static IPropertyObjectConfiguration GetConfiguration(object source)
-    {
-        var configuration = propertyObjectsConfigurations
-            .FirstOrDefault(c => c.SourceType == source.GetType());
-
-        if (configuration == null)
-        {
-            throw new ArgumentException($"Cannot create property object for type - {source.GetType()}", nameof(source));
-        }
-
-        return configuration;
+        return groups;
     }
 }

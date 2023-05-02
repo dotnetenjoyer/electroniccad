@@ -30,6 +30,16 @@ public abstract class GeometryObjectPropertyProxy<TGeometryObject> : PropertyPro
     public float Y { get; set; }
 
     /// <summary>
+    /// Geometry object stroke color
+    /// </summary>
+    public string StrokeColor { get; set; }
+
+    /// <summary>
+    /// Geometry object fill color
+    /// </summary>
+    public string FillColor { get; set; }
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="geometryObject">Geometry object.</param>
@@ -42,15 +52,22 @@ public abstract class GeometryObjectPropertyProxy<TGeometryObject> : PropertyPro
     {
         var boundingBox = Source.CalculateBoundingBox();
 
-        X = boundingBox.X; 
-        Y = boundingBox.Y;
+        X = boundingBox.X + boundingBox.Width / 2; 
+        Y = boundingBox.Y + boundingBox.Height / 2;
         Width = boundingBox.Width;
         Height = boundingBox.Height;
+        StrokeColor = Source.Stroke;
+        FillColor = Source.Fill;
+
+        OnUpdateFromEntity();
     }
     
     /// <inheritdoc />
-    public override void UpdateToEntity()
+    public override void UpdateEntity()
     {
-        throw new NotImplementedException();
+        using var scope = Source.Layer.Diagram.StartModification();
+        Source.UpdateBoundingBox(X, Y, Width, Height);
+        Source.Stroke = StrokeColor;
+        Source.Fill = FillColor;
     }
 }

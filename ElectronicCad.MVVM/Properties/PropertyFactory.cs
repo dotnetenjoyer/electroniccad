@@ -18,18 +18,21 @@ public static class PropertyFactory
     {
         if (configuration is PrimitivePropertyConfiguration primitiveConfiguration)
         {
-            var propertyType = primitiveConfiguration.SourceProperty.PropertyType;
-            var propertyName = primitiveConfiguration.SourceProperty.Name;
-
-            var primitivePropertyType = typeof(PrimitiveProperty<>).MakeGenericType(propertyType);
-            var property = (IProperty)Activator.CreateInstance(primitivePropertyType, proxy, primitiveConfiguration.SourceProperty);
-            property.Name = propertyName;
-
-            return property;
+            return CreatePrimitiveProperty(primitiveConfiguration, proxy);
         }
 
         throw new NotSupportedException();
-        //var property = Activator.CreateInstance(primitivePropertyType, proxy, primitiveConfiguration.SourceProperty);
-        //return (IProperty)property;
+    }
+
+    private static IProperty CreatePrimitiveProperty(PrimitivePropertyConfiguration primitiveConfiguration, IProxy proxy)
+    {
+        var propertyType = primitiveConfiguration.SourceProperty.PropertyType;
+        var propertyName = primitiveConfiguration.SourceProperty.Name;
+
+        var primitivePropertyType = typeof(PrimitiveProperty<>).MakeGenericType(propertyType);
+        var property = (IProperty)Activator.CreateInstance(primitivePropertyType, proxy,
+            primitiveConfiguration.SourceProperty, propertyName)!;
+
+        return property;
     }
 }

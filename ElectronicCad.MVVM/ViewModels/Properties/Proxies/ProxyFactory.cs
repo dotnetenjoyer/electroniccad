@@ -9,13 +9,15 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 public static class ProxyFactory
 {
     /// <summary>
-    /// 
+    /// Creates proxy object.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Proxy object.</returns>
     public static IProxy Create(object sourceObject)
         => sourceObject switch
         {
             Line line => new LinePropertyProxy(line),
+            Polygon polygon => new PolygonPropertyProxy(polygon),
+            Ellipse ellipse => new EllipsePropertyProxy(ellipse),
             _ => throw new InvalidOperationException()
         };
 }

@@ -1,5 +1,3 @@
-using System.Drawing;
-
 namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
@@ -38,5 +36,32 @@ public class Line : GeometryObject
         {
             controlPoints[i] = points[i];
         }
+    }
+
+    /// <inheritdoc />
+    public override void UpdateBoundingBox(float centerX, float centerY, float width, float height)
+    {
+        var firstPoinX = CalculateXPosition(centerX, width, FirstPointIndex, SecondPointIndex);
+        var firstPointY = CalculateYPosition(centerY, height, FirstPointIndex, SecondPointIndex);
+
+        var secondPointX = CalculateXPosition(centerX, width, SecondPointIndex, FirstPointIndex);
+        var secondPointY = CalculateYPosition(centerY, height, SecondPointIndex, FirstPointIndex);
+        
+        UpdateControlPoint(FirstPointIndex, firstPoinX, firstPointY);
+        UpdateControlPoint(SecondPointIndex, secondPointX, secondPointY);
+    }
+
+    private float CalculateXPosition(float centerX, float width, int firstPoint, int secondPoint)
+    {
+        return ControlPoints[firstPoint].X > ControlPoints[secondPoint].X
+            ? centerX + width / 2
+            : centerX - width / 2;
+    }
+
+    private float CalculateYPosition(float centerY, float height, int firstPoint, int secondPoint)
+    {
+        return ControlPoints[firstPoint].Y > ControlPoints[secondPoint].Y
+            ? centerY + height/ 2
+            : centerY - height / 2;
     }
 }

@@ -6,9 +6,14 @@
 public interface IProperty
 {
     /// <summary>
-    /// Property name.
+    /// Name of property.
     /// </summary>
-    string Name { get; set; }
+    string Name { get; }
+
+    /// <summary>
+    /// Name of group.
+    /// </summary>
+    string GroupName { get; }
 
     /// <summary>
     /// Indicates if property read only.

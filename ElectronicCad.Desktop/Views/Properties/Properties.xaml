@@ -26,17 +26,21 @@
     <Border Padding="10">
         <DockPanel LastChildFill="True">
 
-            <StackPanel DockPanel.Dock="Top" Margin="0 0 0 20">
-                <TextBlock Text="Properties" Foreground="White"/>
-            </StackPanel>
-
-            <ItemsControl ItemsSource="{Binding PropertyObject.Properties}">
+            <ItemsControl ItemsSource="{Binding PropertyObject.Groups}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <ContentControl
-                            Content="{Binding}"
-                            ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
-                        />
+                        <Expander IsExpanded="True" Header="{Binding Name}">
+                            <ItemsControl ItemsSource="{Binding Properties}" Margin="0 12 0 0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentControl
+                                            Content="{Binding}"
+                                            ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
+                                        />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Expander>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

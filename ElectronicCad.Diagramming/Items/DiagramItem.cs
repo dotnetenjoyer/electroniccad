@@ -9,6 +9,14 @@ namespace ElectronicCad.Diagramming.Items;
 internal abstract class DiagramItem
 {
     /// <summary>
+    /// Transparent skia paint.
+    /// </summary>
+    public readonly static SKPaint TransparentPaint = new SKPaint
+    {
+        Color = SKColors.Transparent
+    };
+
+    /// <summary>
     /// Indicate whether item is auxiliary. 
     /// </summary>
     internal virtual bool IsAuxiliary => false;
@@ -34,9 +42,14 @@ internal abstract class DiagramItem
     public int ZIndex { get; set; }
 
     /// <summary>
-    /// 
+    /// Diagram item fill paint.
     /// </summary>
-    public bool IsFocused { get; private set; }
+    public SKPaint FillPaint { get; set; }
+
+    /// <summary>
+    /// Diagram item stroke paint.
+    /// </summary>
+    public SKPaint StrokePaint { get; set; }
 
     /// <summary>
     /// Draws itself on canvas.

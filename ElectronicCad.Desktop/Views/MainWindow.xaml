@@ -9,7 +9,7 @@
     xmlns:diagramming="clr-namespace:ElectronicCad.Diagramming;assembly=ElectronicCad.Diagramming"
     xmlns:activityBar="clr-namespace:ElectronicCad.Desktop.Views.ActivityBar"
     xmlns:properties="clr-namespace:ElectronicCad.Desktop.Views.Properties"
-    d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel, IsDesignTimeCreatable=True}"
+    d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d"
     Title="Electronics" Icon="/Resources/Images/logo.png"
     WindowStyle="None" WindowState="Maximized" 
@@ -20,7 +20,6 @@
     </WindowChrome.WindowChrome>
     
     <DockPanel LastChildFill="True">
-    
         <Border
             DockPanel.Dock="Top"
             Background="{StaticResource SecondaryBackgroundBrush}"
@@ -35,7 +34,7 @@
     
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                     <Image
-                        Source="../../../Resources/Images/logo.png"
+                        Source="../Resources/Images/logo.png"
                         Width="20"
                         Height="20"
                         Margin="10 0"/>

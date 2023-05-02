@@ -21,11 +21,13 @@ internal class EllipseDiagramItem : GeometryObjectDiagramItem
     /// <inheritdoc/>
     public override void Draw(SKCanvas canvas)
     {
+        base.Draw(canvas);
+
         var center = BoundingBox.GetCenter();
         var xRadius = BoundingBox.Width / 2;
         var yRadius = BoundingBox.Height / 2;
 
-        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, Paints.ForegroundStroke);
-        base.Draw(canvas);
+        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, FillPaint);
+        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, StrokePaint);
     }
 }

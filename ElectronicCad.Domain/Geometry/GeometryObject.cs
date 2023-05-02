@@ -35,6 +35,16 @@ public abstract class GeometryObject : DomainObservableObject
     public bool IsTemporary { get; set; }
 
     /// <summary>
+    /// Fill color.
+    /// </summary>
+    public string Fill { get; set; }
+
+    /// <summary>
+    /// Stroke color.
+    /// </summary>
+    public string Stroke { get; set; } = "#ffffff";
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     public GeometryObject()
@@ -68,7 +78,19 @@ public abstract class GeometryObject : DomainObservableObject
         Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
     }
 
-    private void ValidateModification()
+    /// <summary>
+    /// Update geometry object bounding box.
+    /// </summary>
+    /// <param name="centerX">Center X position.</param>
+    /// <param name="centerY">Center Y position.</param>
+    /// <param name="width">Width.</param>
+    /// <param name="height">Height.</param>
+    public abstract void UpdateBoundingBox(float centerX, float centerY, float width, float height);
+
+    /// <summary>
+    /// Validates availability of modification.
+    /// </summary>
+    protected void ValidateModification()
     {
         if (Layer == null || Layer.Diagram == null || Layer.Diagram.ModificationScope == null)
         {

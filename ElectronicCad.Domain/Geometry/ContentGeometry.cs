@@ -41,4 +41,17 @@ public abstract class ContentGeometry : GeometryObject
     {
         SetControlPoints(points);
     }
+
+    /// <inheritdoc />
+    public override void UpdateBoundingBox(float x, float y, float width, float height)
+    {
+        ValidateModification();
+
+        var halfWidth = width / 2;
+        var halfHeight = height / 2;
+        UpdateControlPoint(LeftTopPointIndex, x - halfWidth, y - halfHeight);
+        UpdateControlPoint(LeftBottomPointIndex, x - halfWidth, y + halfHeight);
+        UpdateControlPoint(RigthTopPointIndex, x + halfWidth, y - halfHeight);
+        UpdateControlPoint(RigthBottomPointIndex, x + halfWidth, y + halfHeight);
+    }
 }

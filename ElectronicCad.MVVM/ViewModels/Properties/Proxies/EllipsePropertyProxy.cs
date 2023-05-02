@@ -3,15 +3,14 @@
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 /// <summary>
-/// Line proxy.
+/// Ellipse proxy.
 /// </summary>
-public class LinePropertyProxy : GeometryObjectPropertyProxy<Line>
+public class EllipsePropertyProxy : GeometryObjectPropertyProxy<Ellipse>
 {
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="line">Line.</param>
-    public LinePropertyProxy(Line line) : base(line)
+    public EllipsePropertyProxy(Ellipse ellipse) : base(ellipse)
     {
     }
 }

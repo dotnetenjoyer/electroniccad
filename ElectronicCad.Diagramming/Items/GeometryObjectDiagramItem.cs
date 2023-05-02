@@ -2,6 +2,7 @@
 using ElectronicCad.Domain.Geometry;
 using SkiaSharp;
 using SkiaSharp.Views.Desktop;
+using System;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -29,6 +30,9 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     public virtual void UpdateViewState()
     {
         RecalculateBoundingBox();
+
+        FillPaint = CreateFillPaint();
+        StrokePaint = CreateStrokePaint();
     }
 
     /// <summary>
@@ -45,5 +49,56 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     {
         var domainPoint = new Point(position.X, position.Y);
         return GeometryObject.CheckHit(domainPoint);
+    }
+
+    private SKPaint CreateFillPaint()
+    {
+        if (string.IsNullOrEmpty(GeometryObject.Fill))
+        {
+            return TransparentPaint;
+        }
+
+        var fill = ConvertToColor(GeometryObject.Fill);
+        var fillColor = new SKColor(fill.red, fill.green, fill.blue);
+      
+        var paint = new SKPaint
+        {
+            Color = SKColors.Transparent,
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = 2,
+        };
+
+        return paint;
+    }
+
+    private SKPaint CreateStrokePaint()
+    {
+        if (string.IsNullOrEmpty(GeometryObject.Stroke))
+        {
+            return TransparentPaint;
+        }
+
+        var stroke = ConvertToColor(GeometryObject.Stroke);
+        var strokeColor = new SKColor(stroke.red, stroke.green, stroke.blue);
+
+        var paint = new SKPaint
+        {
+            Color = strokeColor,
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = 2,
+        };
+
+        return paint;
+    }
+
+    private (byte red, byte green, byte blue) ConvertToColor(string hexColor)
+    {
+        hexColor = hexColor.Replace("#", "");
+
+        var red = Convert.ToByte(hexColor.Substring(0, 2), 16);
+        var green = Convert.ToByte(hexColor.Substring(2, 2), 16);
+        var blue = Convert.ToByte(hexColor.Substring(4, 2), 16);
+
+        return (red, green, blue);
     }
 }

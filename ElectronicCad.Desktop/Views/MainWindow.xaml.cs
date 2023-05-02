@@ -1,6 +1,4 @@
-﻿using ElectronicCad.Domain.Geometry;
-using ElectronicCad.MVVM.ViewModels;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
@@ -203,7 +201,7 @@ namespace ElectronicCad.Desktop.Views
                 Right = right; 
                 Bottom = bottom;
             }
-        } 
+        }
 
         #endregion
     }
