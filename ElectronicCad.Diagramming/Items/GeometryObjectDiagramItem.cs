@@ -63,8 +63,8 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
       
         var paint = new SKPaint
         {
-            Color = SKColors.Transparent,
-            Style = SKPaintStyle.Stroke,
+            Color = fillColor,
+            Style = SKPaintStyle.StrokeAndFill,
             StrokeWidth = 2,
         };
 
