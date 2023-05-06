@@ -8,14 +8,14 @@ namespace ElectronicCad.MVVM.Utils;
 /// </summary>
 public class ViewModelFactory
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider serviceProvider;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public ViewModelFactory(IServiceProvider serviceProvider)
     {
-        _serviceProvider = serviceProvider;
+        this.serviceProvider = serviceProvider;
     }
 
     /// <summary>
@@ -26,6 +26,6 @@ public class ViewModelFactory
     /// <returns></returns>
     public TViewModel Create<TViewModel>(params object[] parameters) where TViewModel : ViewModel
     {
-        return ActivatorUtilities.CreateInstance<TViewModel>(_serviceProvider, parameters);
+        return ActivatorUtilities.CreateInstance<TViewModel>(serviceProvider, parameters);
     }
 }

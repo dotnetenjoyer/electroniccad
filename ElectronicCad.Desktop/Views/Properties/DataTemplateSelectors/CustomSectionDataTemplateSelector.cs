@@ -1,5 +1,5 @@
-﻿using ElectronicCad.MVVM.Properties.Implementation.CustomSections.Colors;
-using ElectronicCad.MVVM.Properties.Implementation.CustomSections.Transformation;
+﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Colors;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using System;
 using System.Windows;
 using System.Windows.Controls;

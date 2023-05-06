@@ -1,8 +1,9 @@
 using ElectronicCad.Domain.Common;
+using System.Numerics;
 
 namespace ElectronicCad.Domain.Geometry;
 
-public abstract class GeometryObject : DomainObservableObject
+public abstract class GeometryObject : DomainObservableObject, IVersionable
 {
     /// <summary>
     /// Geometry object id.
@@ -12,7 +13,7 @@ public abstract class GeometryObject : DomainObservableObject
     /// <summary>
     /// Name.
     /// </summary>
-    public virtual string Name { get; init; }
+    public virtual string Name { get; init; } = "Geometry object";
 
     /// <summary>
     /// Control points.
@@ -43,6 +44,25 @@ public abstract class GeometryObject : DomainObservableObject
     /// Stroke color.
     /// </summary>
     public string Stroke { get; set; } = "#ffffff";
+
+    #region Versioning
+
+    /// <inheritdoc />
+    public int Version { get; private set; }
+
+    /// <inheritdoc />
+    public event EventHandler? VersionChanged;
+
+    /// <summary>
+    /// Increases the version of the geometry object and invokes the <see cref="VersionChanged">.
+    /// </summary>
+    public void IncreaseVersion()
+    {
+        Version++;
+        VersionChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    #endregion
 
     /// <summary>
     /// Constructor.

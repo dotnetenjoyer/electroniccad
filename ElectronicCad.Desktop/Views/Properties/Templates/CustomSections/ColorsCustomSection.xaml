@@ -1,0 +1,49 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:components="clr-namespace:ElectronicCad.Desktop.Styles.Components;assembly=ElectronicCad.Desktop.UI">
+
+    <DataTemplate x:Key="ColorsCustomSection">
+        <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <Label 
+                        Margin="0 0 0 5"
+                        Foreground="White" 
+                        Target="{Binding ElementName=StrokeColorPicker}" 
+                        Content="Stroke color"/>
+
+                    <xctk:ColorPicker
+                        Name="StrokeColorPicker"
+                        />
+                </StackPanel>
+
+                <components:InputControl 
+                    Title="Weight"
+                    Placeholder="Project Name"
+                    Grid.Column="1"/>
+            </Grid>
+
+            <Grid>
+                <StackPanel>
+                    <Label 
+                        Margin="0 0 0 5"
+                        Foreground="White" 
+                        Target="{Binding ElementName=FillColorPicker}" 
+                        Content="Fill color"/>
+
+                    <xctk:ColorPicker
+                        Name="FillColorPicker"
+                        />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </DataTemplate>
+    
+</ResourceDictionary>

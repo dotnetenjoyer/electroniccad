@@ -1,7 +1,10 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
 
-namespace ElectronicCad.MVVM.Properties.Implementation.CustomSections.Transformation;
+namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 
+/// <summary>
+/// Factory to create transformation custom section.
+/// </summary>
 public class TransformationCustomSectionFactory : ICustomSectionFactory
 {
     /// <inheritdoc />
@@ -23,6 +26,6 @@ public class TransformationCustomSectionFactory : ICustomSectionFactory
             throw new InvalidOperationException($"Cannot create {nameof(TransformationCustomSection)}.");
         }
 
-        return new TransformationCustomSection();
+        return new TransformationCustomSection(proxy as ITransformationProxy);
     }
 }

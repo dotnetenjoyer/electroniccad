@@ -1,13 +1,13 @@
 ﻿using ElectronicCad.Domain.Geometry;
 using ElectronicCad.MVVM.Properties.Abstractions;
-using ElectronicCad.MVVM.Properties.Implementation.CustomSections.Transformation;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 /// <summary>
 /// Geometry object property proxy.
 /// </summary>
-public abstract class GeometryObjectPropertyProxy<TGeometryObject> : PropertyProxy<TGeometryObject>, IPropertyModel, ITransformationProxy 
+public abstract class GeometryObjectPropertyProxy<TGeometryObject> : BaseProxy<TGeometryObject>, IPropertyModel, ITransformationProxy 
     where TGeometryObject : GeometryObject
 {
     /// <inheritdoc />

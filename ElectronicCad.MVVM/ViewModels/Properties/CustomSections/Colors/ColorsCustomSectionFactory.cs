@@ -1,6 +1,6 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
 
-namespace ElectronicCad.MVVM.Properties.Implementation.CustomSections.Colors;
+namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Colors;
 
 /// <summary>
 /// Creates colors custom sections.

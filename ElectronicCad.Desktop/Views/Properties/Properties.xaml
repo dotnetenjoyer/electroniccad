@@ -12,6 +12,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="./Templates/PrimitivePropertyDataTemplate.xaml"/>
+                <ResourceDictionary Source="./Templates/CustomSections/ColorsCustomSection.xaml"/>
+                <ResourceDictionary Source="./Templates/CustomSections/TransformationCustomSection.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <selectors:PrimitivePropertyDataTemplateSelector
@@ -21,22 +23,10 @@
                 InputValueDataTemplate="{StaticResource PrimitiveInputValueDataTemplate}"
             />
 
-            <DataTemplate x:Key="TransformationTemplate">
-                <StackPanel Background="Red">
-                    <TextBlock Text="Transformation."/>
-                </StackPanel>
-            </DataTemplate>
-
-            <DataTemplate x:Key="ColorsTemplate">
-                <StackPanel Background="Blue">
-                    <TextBlock Text="Colors."/>
-                </StackPanel>
-            </DataTemplate>
-
             <selectors:CustomSectionDataTemplateSelector
                 x:Key="CustomSectionDataTemplateSelector"
-                TransformationSectionDataTemplate="{StaticResource TransformationTemplate}"
-                ColorsSectionDataTemplate="{StaticResource ColorsTemplate}"
+                TransformationSectionDataTemplate="{StaticResource TransformationCustomSection}"
+                ColorsSectionDataTemplate="{StaticResource ColorsCustomSection}"
             />
 
         </ResourceDictionary>

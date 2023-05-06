@@ -1,0 +1,48 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:ElectronicCad.Desktop.Styles.Components;assembly=ElectronicCad.Desktop.UI">
+
+    <DataTemplate x:Key="TransformationCustomSection">
+        <StackPanel Orientation="Vertical">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <components:InputControl
+                    Title="X"
+                    Value="{Binding TransformationModel.X}"
+                />
+                
+                <components:InputControl
+                    Title="Y"
+                    Grid.Column="2"
+                    Value="{Binding TransformationModel.Y}"
+                />
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <components:InputControl
+                    Title="Width"
+                    Value="{Binding TransformationModel.Width}"
+                />
+
+                <components:InputControl
+                    Title="Height"
+                    Grid.Column="2"
+                    Value="{Binding TransformationModel.Height}"
+                />
+            </Grid>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>

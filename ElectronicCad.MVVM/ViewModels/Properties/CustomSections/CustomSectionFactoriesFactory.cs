@@ -1,21 +1,25 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
-using ElectronicCad.MVVM.Properties.Implementation.CustomSections.Colors;
-using ElectronicCad.MVVM.Properties.Implementation.CustomSections.Transformation;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Colors;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectronicCad.MVVM.Properties.Implementation.CustomSections;
 
-/// <summary>
-/// Factory of custom section factories.
-/// </summary>
-public static class CustomSectionFactoriesFactory
+/// <inheritdoc cref="ICustomSectionFactoriesFactory">
+public class CustomSectionFactoriesFactory : ICustomSectionFactoriesFactory
 {
+    private readonly IServiceProvider serviceProvider;
+
     /// <summary>
-    /// Creates custom section factory.
+    /// Constructor.
     /// </summary>
-    /// <param name="customSectionType">Custom section type.</param>
-    /// <returns>Custom section factory.</returns>
-    public static ICustomSectionFactory CreateFactory(IServiceProvider serviceProvider, Type customSectionType)
+    public CustomSectionFactoriesFactory(IServiceProvider serviceProvider)
+    {
+        this.serviceProvider = serviceProvider;
+    }
+
+    /// <inheritdoc />
+    public ICustomSectionFactory CreateFactory(Type customSectionType)
     {
         if (customSectionType == typeof(TransformationCustomSection))
         {

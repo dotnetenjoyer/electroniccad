@@ -2,7 +2,6 @@
 using ElectronicCad.MVVM.Properties.Configuration;
 using ElectronicCad.MVVM.Properties.Implementation.CustomSections;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace ElectronicCad.MVVM.Properties;
 
@@ -12,7 +11,6 @@ namespace ElectronicCad.MVVM.Properties;
 public class PropertyObjectFactory
 {
     private readonly static IEnumerable<IPropertyObjectConfiguration> propertyObjectsConfigurations;
-    //private readonly static IEnumerable<Type> 
 
     /// <summary>
     /// Constructor.
@@ -40,14 +38,14 @@ public class PropertyObjectFactory
         return objectConfigurations;
     }
 
-    private readonly IServiceProvider serviceProvider;
+    private readonly ICustomSectionFactoriesFactory customSectionFactoriesFactory;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public PropertyObjectFactory(IServiceProvider serviceProvider)
+    public PropertyObjectFactory(ICustomSectionFactoriesFactory customSectionFactoriesFactory)
     {
-        this.serviceProvider = serviceProvider;
+        this.customSectionFactoriesFactory = customSectionFactoriesFactory;
     }
 
     /// <summary>
@@ -86,7 +84,7 @@ public class PropertyObjectFactory
 
         foreach (var sectionConfiguration in configuration.CustomSectionConfigurations)
         {
-            var factory = CustomSectionFactoriesFactory.CreateFactory(serviceProvider, sectionConfiguration.CustomSectionType);
+            var factory = customSectionFactoriesFactory.CreateFactory(sectionConfiguration.CustomSectionType);
          
             if (factory.CanCreate(proxy))
             {

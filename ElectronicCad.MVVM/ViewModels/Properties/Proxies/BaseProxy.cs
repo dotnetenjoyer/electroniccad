@@ -1,4 +1,5 @@
-﻿using ElectronicCad.MVVM.Properties.Abstractions;
+﻿using ElectronicCad.Domain.Common;
+using ElectronicCad.MVVM.Properties.Abstractions;
 using System.ComponentModel;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
@@ -7,7 +8,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// Base proxy class.
 /// </summary>
 /// <typeparam name="TSource">Type of source object.</typeparam>
-public abstract class PropertyProxy<TSource> : IProxy where TSource : INotifyPropertyChanged
+public abstract class BaseProxy<TSource> : IProxy where TSource : INotifyPropertyChanged
 {
     /// <summary>
     /// Proxy source object.
@@ -18,10 +19,18 @@ public abstract class PropertyProxy<TSource> : IProxy where TSource : INotifyPro
     /// Constructor.
     /// </summary>
     /// <param name="source">Proxy source object.</param>
-    public PropertyProxy(TSource source)
+    public BaseProxy(TSource source)
     {
         Source = source;
         UpdateFromEntity();
+
+        if (source is IVersionable objWithVersion)
+        {
+            objWithVersion.VersionChanged += (sender, args) =>
+            {
+                UpdateFromEntity();
+            };
+        }
 
         Source.PropertyChanged += HandleSourceChanged;
     }
