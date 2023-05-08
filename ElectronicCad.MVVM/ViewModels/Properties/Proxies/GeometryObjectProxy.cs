@@ -7,7 +7,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Geometry object property proxy.
 /// </summary>
-public abstract class GeometryObjectPropertyProxy<TGeometryObject> : BaseProxy<TGeometryObject>, IPropertyModel, ITransformationProxy 
+public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometryObject>, IPropertyModel, ITransformationProxy 
     where TGeometryObject : GeometryObject
 {
     /// <inheritdoc />
@@ -36,9 +36,16 @@ public abstract class GeometryObjectPropertyProxy<TGeometryObject> : BaseProxy<T
     /// Constructor.
     /// </summary>
     /// <param name="geometryObject">Geometry object.</param>
-    public GeometryObjectPropertyProxy(TGeometryObject geometryObject) : base(geometryObject)
+    public GeometryObjectProxy(TGeometryObject geometryObject) : base(geometryObject)
     {
+        geometryObject.VersionChanged += HandleVersionChanged;
     }
+
+    private void HandleVersionChanged(object? sender, EventArgs eventArgs)
+    {
+        UpdateFromEntity();
+    }
+
 
     /// <inheritdoc />
     public override void UpdateFromEntity()

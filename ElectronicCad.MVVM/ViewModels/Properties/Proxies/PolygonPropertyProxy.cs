@@ -5,7 +5,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Polygone property proxy.
 /// </summary>
-public class PolygonPropertyProxy : GeometryObjectPropertyProxy<Polygon>
+public class PolygonPropertyProxy : GeometryObjectProxy<Polygon>
 {
     /// <summary>
     /// Constructor.

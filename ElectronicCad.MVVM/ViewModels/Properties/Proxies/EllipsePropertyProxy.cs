@@ -5,7 +5,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Ellipse proxy.
 /// </summary>
-public class EllipsePropertyProxy : GeometryObjectPropertyProxy<Ellipse>
+public class EllipsePropertyProxy : GeometryObjectProxy<Ellipse>
 {
     /// <summary>
     /// Constructor.

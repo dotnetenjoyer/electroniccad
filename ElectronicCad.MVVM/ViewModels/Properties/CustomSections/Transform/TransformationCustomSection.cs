@@ -21,34 +21,42 @@ public class TransformationCustomSection : ICustomSection
     public TransformationCustomSection(ITransformationProxy transformationProxy)
     {
         this.transformationProxy = transformationProxy;
-        transformationProxy.Updated += (object sedner, EventArgs args) =>
-        {
-            UpdateFromProxy();
-        };
+        this.transformationProxy.Updated += HandleProxyUpdate;
 
         TransformationModel = new();
-        TransformationModel.PropertyChanged += (object sender, PropertyChangedEventArgs args) =>
-        {
-            Console.WriteLine();
-        };
 
-        
         UpdateFromProxy();
     }
 
-    public void UpdateFromProxy()
+    private void HandleProxyUpdate(object? sender, EventArgs args)
     {
+        UpdateFromProxy();
+    }
+
+    private void HandleTransformationModelChanged(object? sender, PropertyChangedEventArgs args)
+    {
+        UpdateProxy();
+    }
+
+    private void UpdateFromProxy()
+    {
+        TransformationModel.PropertyChanged -= HandleTransformationModelChanged;
+
         TransformationModel.X = transformationProxy.X;
         TransformationModel.Y = transformationProxy.Y;
         TransformationModel.Width = transformationProxy.Width;
         TransformationModel.Height = transformationProxy.Height;
+
+        TransformationModel.PropertyChanged += HandleTransformationModelChanged;
     }
 
-    //public void UpdateProxy()
-    //{
-    //    proxy.X = TransformationModel.X;
-    //    proxy.Y = TransformationModel.Y;
-    //    proxy.Width = TransformationModel.Width;
-    //    proxy.Height = TransformationModel.Height;
-    //}
+    private void UpdateProxy()
+    {
+        transformationProxy.X = TransformationModel.X;
+        transformationProxy.Y = TransformationModel.Y;
+        transformationProxy.Width = TransformationModel.Width;
+        transformationProxy.Height = TransformationModel.Height;
+
+        transformationProxy.UpdateEntity();
+    }
 }

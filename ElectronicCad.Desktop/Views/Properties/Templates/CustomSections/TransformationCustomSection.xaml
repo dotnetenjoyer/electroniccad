@@ -6,7 +6,7 @@
     <DataTemplate x:Key="TransformationCustomSection">
         <StackPanel Orientation="Vertical">
 
-            <Grid>
+            <Grid Margin="0 0 0 15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>

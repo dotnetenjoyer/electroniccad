@@ -44,6 +44,7 @@
                     <DataTemplate>
                         <ContentControl
                             Content="{Binding}"
+                            Margin="0 0 0 15"
                             ContentTemplateSelector="{StaticResource CustomSectionDataTemplateSelector }"
                         />
                     </DataTemplate>

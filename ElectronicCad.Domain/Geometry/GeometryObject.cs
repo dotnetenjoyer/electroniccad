@@ -99,6 +99,8 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
             var newPoint = Vector2.Transform(point, transformation);
             SetControlPoint(i, newPoint.X, newPoint.Y, false);
         }
+
+        IncreaseVersion();
     }
 
     /// <summary>
@@ -110,6 +112,7 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     public void SetControlPoint(int index, float x, float y)
     {
         SetControlPoint(index, x, y, true);
+        IncreaseVersion();
     }
 
     private void SetControlPoint(int index, float x, float y, bool validateModification)
