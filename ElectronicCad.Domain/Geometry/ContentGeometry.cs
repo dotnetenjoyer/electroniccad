@@ -49,9 +49,9 @@ public abstract class ContentGeometry : GeometryObject
 
         var halfWidth = width / 2;
         var halfHeight = height / 2;
-        UpdateControlPoint(LeftTopPointIndex, x - halfWidth, y - halfHeight);
-        UpdateControlPoint(LeftBottomPointIndex, x - halfWidth, y + halfHeight);
-        UpdateControlPoint(RigthTopPointIndex, x + halfWidth, y - halfHeight);
-        UpdateControlPoint(RigthBottomPointIndex, x + halfWidth, y + halfHeight);
+        SetControlPoint(LeftTopPointIndex, x - halfWidth, y - halfHeight);
+        SetControlPoint(LeftBottomPointIndex, x - halfWidth, y + halfHeight);
+        SetControlPoint(RigthTopPointIndex, x + halfWidth, y - halfHeight);
+        SetControlPoint(RigthBottomPointIndex, x + halfWidth, y + halfHeight);
     }
 }

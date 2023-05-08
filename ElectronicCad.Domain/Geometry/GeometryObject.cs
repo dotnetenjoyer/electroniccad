@@ -1,4 +1,5 @@
 using ElectronicCad.Domain.Common;
+using ElectronicCad.Domain.Utils;
 using System.Numerics;
 
 namespace ElectronicCad.Domain.Geometry;
@@ -85,17 +86,40 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     }
 
     /// <summary>
-    /// Updates control point values.
+    /// Transforms geometry object with transfromation matrix.
+    /// </summary>
+    /// <param name="transformation">Transformation matrix.</param>
+    public void Transform(Matrix3x2 transformation)
+    {
+        ValidateModification();
+
+        for (int i = 0; i < ControlPoints.Count; i++)
+        {
+            var point = ControlPoints[i].ToVector2();
+            var newPoint = Vector2.Transform(point, transformation);
+            SetControlPoint(i, newPoint.X, newPoint.Y, false);
+        }
+    }
+
+    /// <summary>
+    /// Set control point values.
     /// </summary>
     /// <param name="index">Index of control point.</param>
     /// <param name="x">X value.</param>
     /// <param name="y">Y value.</param>
-    public void UpdateControlPoint(int index, float x, float y)
+    public void SetControlPoint(int index, float x, float y)
     {
-        ValidateModification();
+        SetControlPoint(index, x, y, true);
+    }
+
+    private void SetControlPoint(int index, float x, float y, bool validateModification)
+    {
+        if (validateModification)
+        {
+            ValidateModification();
+        }
 
         controlPoints[index].SetValues(x, y);
-        Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
     }
 
     /// <summary>
@@ -116,6 +140,8 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
         {
             throw new Exception("Modification outisde scope are prohibited.");
         }
+
+        Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
     }
 
     /// <summary>

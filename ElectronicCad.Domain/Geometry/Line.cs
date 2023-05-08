@@ -47,8 +47,8 @@ public class Line : GeometryObject
         var secondPointX = CalculateXPosition(centerX, width, SecondPointIndex, FirstPointIndex);
         var secondPointY = CalculateYPosition(centerY, height, SecondPointIndex, FirstPointIndex);
         
-        UpdateControlPoint(FirstPointIndex, firstPoinX, firstPointY);
-        UpdateControlPoint(SecondPointIndex, secondPointX, secondPointY);
+        SetControlPoint(FirstPointIndex, firstPoinX, firstPointY);
+        SetControlPoint(SecondPointIndex, secondPointX, secondPointY);
     }
 
     private float CalculateXPosition(float centerX, float width, int firstPoint, int secondPoint)

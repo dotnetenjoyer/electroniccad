@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using ElectronicCad.Domain.Geometry;
+using System.Numerics;
 
 namespace ElectronicCad.Diagramming.Extensions;
 
@@ -26,6 +27,16 @@ internal static class GeometryExtensions
     public static Point ToDomainPoint(this SKPoint point)
     {
         return new Point(point.X, point.Y);
+    }
+
+    /// <summary>
+    /// Converts a skia point to Vector2.
+    /// </summary>
+    /// <param name="point">Point to convert.</param>
+    /// <returns>A two dimensions vector.</returns>
+    public static Vector2 ToVector2(this SKPoint point)
+    {
+        return new Vector2(point.X, point.Y);
     }
 
     /// <summary>

@@ -27,7 +27,7 @@ public class NewLineMode : BaseDiagramMode
         else
         {
             using var scope = Diagram.DomainDiagram.StartModification();
-            temporaryLine.UpdateControlPoint(Line.SecondPointIndex, position.X, position.Y);
+            temporaryLine.SetControlPoint(Line.SecondPointIndex, position.X, position.Y);
             temporaryLine.IsTemporary = false;
             temporaryLine = null;
         }
@@ -43,7 +43,7 @@ public class NewLineMode : BaseDiagramMode
 
         var position = Diagram.GetPosition(args);
         using var scope = Diagram.DomainDiagram.StartModification();
-        temporaryLine.UpdateControlPoint(Line.SecondPointIndex, position.X, position.Y);
+        temporaryLine.SetControlPoint(Line.SecondPointIndex, position.X, position.Y);
     }
 
     /// <inheritdoc />

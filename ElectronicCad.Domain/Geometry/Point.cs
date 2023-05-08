@@ -61,4 +61,15 @@ public struct Point
     {
         return new Point(first.X - second.X, first.Y - second.Y);
     }
+
+    /// <summary>
+    /// Override the sum operator.
+    /// </summary>
+    /// <param name="first">First point.</param>
+    /// <param name="second">Second point.</param>
+    /// <returns>Point that describe sum.</returns>
+    public static Point operator +(Point first, Point second)
+    {
+        return new Point(first.X + second.X, first.Y + second.Y);
+    }
 }
