@@ -4,7 +4,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Input;
 using ElectronicCad.Desktop.Styles.Utils;
-using System.Windows.Media.TextFormatting;
 using System;
 
 namespace ElectronicCad.Desktop.UI.Components
@@ -17,6 +16,8 @@ namespace ElectronicCad.Desktop.UI.Components
         private static readonly Brush HueSpectrumBrush;
         private static readonly Brush SpectrumWhiteBrush;
         private static readonly Brush SpectrumBlackBrush;
+
+        private static readonly Color[] SystemColors;
 
         /// <summary>
         /// Static constructor.
@@ -46,6 +47,26 @@ namespace ElectronicCad.Desktop.UI.Components
             blackGradient.GradientStops.Add(new GradientStop(Colors.Transparent, 0));
             blackGradient.GradientStops.Add(new GradientStop(Colors.Black, 1));
             SpectrumBlackBrush = blackGradient;
+
+            SystemColors = new[]
+            {
+                Color.FromRgb(255, 255, 255),
+                Color.FromRgb(255, 251, 13),
+                Color.FromRgb(5, 50, 255),
+                Color.FromRgb(255, 147, 0),
+                Color.FromRgb(0, 249, 26),
+                Color.FromRgb(255, 39, 0),
+                Color.FromRgb(57, 0, 153),
+                Color.FromRgb(10, 77, 104),
+                Color.FromRgb(0, 0, 0),
+                Color.FromRgb(104, 104, 104),
+                Color.FromRgb(238, 84, 100),
+                Color.FromRgb(210, 122, 238),
+                Color.FromRgb(91, 168, 196),
+                Color.FromRgb(230, 74, 169),
+                Color.FromRgb(60, 72, 75),
+                Color.FromRgb(200, 198, 167),
+            };
         }
 
         /// <summary>
@@ -64,6 +85,22 @@ namespace ElectronicCad.Desktop.UI.Components
                 typeof(ColorPicker),
                 new PropertyMetadata());
 
+        /// <summary>
+        /// Palette of system color.
+        /// </summary>
+        public Color[] SystemColorPalette
+        {
+            get => (Color[])GetValue(SystemColorPaletteProperty);
+            private set => SetValue(SystemColorPaletteProperty, value);
+        }
+
+        private readonly static DependencyProperty SystemColorPaletteProperty =
+            DependencyProperty.Register(
+                nameof(SystemColorPalette),
+                typeof(Color[]),
+                typeof(ColorPicker),
+                new PropertyMetadata());
+
         private float hue;
         private Color hueColor;
         private Point? hueCurrentPosition;
@@ -77,8 +114,11 @@ namespace ElectronicCad.Desktop.UI.Components
         /// </summary>
         public ColorPicker()
         {
+            SystemColorPalette = SystemColors;
+
             hueColor = Colors.Red;
             Value = Colors.Gray;
+            
             Loaded += HandleColorPickerLoad;
 
             InitializeComponent();
@@ -155,8 +195,8 @@ namespace ElectronicCad.Desktop.UI.Components
             {
                 var rectangle = new Rectangle();
                 rectangle.Fill = brush;
-                rectangle.Width = 150;
-                rectangle.Height = 150;
+                rectangle.Width = SpectrumCanvas.ActualWidth;
+                rectangle.Height = SpectrumCanvas.ActualHeight;
 
                 SpectrumCanvas.Children.Add(rectangle);
             }
