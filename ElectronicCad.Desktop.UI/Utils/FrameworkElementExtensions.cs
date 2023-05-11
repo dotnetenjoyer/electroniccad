@@ -34,7 +34,7 @@ public static class FrameworkElementExtensions
         }
         else if (elementPosition.X > element.ActualWidth)
         {
-            elementPosition.Y = element.ActualWidth;
+            elementPosition.X = element.ActualWidth;
         }
 
         return elementPosition;
