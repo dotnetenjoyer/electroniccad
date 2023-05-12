@@ -1,5 +1,5 @@
 ﻿using ElectronicCad.MVVM.Properties.Configuration;
-using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Colors;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
@@ -17,6 +17,6 @@ internal class PolygoneObjectProfile : PropertyObjectProfile
     {
         CreateConfiguration<PolygonPropertyProxy>()
             .HasCustomSection<TransformationCustomSection>()
-            .HasCustomSection<ColorsCustomSection>();
+            .HasCustomSection<ShapeCustomSection>();
     }
 }

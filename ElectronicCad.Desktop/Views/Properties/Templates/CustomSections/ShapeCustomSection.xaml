@@ -1,15 +1,18 @@
 ﻿<ResourceDictionary 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:converters="clr-namespace:ElectronicCad.Desktop.Infrastructure.Converters"
     xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI">
 
-    <DataTemplate x:Key="ColorsCustomSection">
+    <converters:DomainColorToWpfColorConverter x:Key="DomainColorToWpfColorConverter"/>
+
+    <DataTemplate x:Key="ShapeCustomSection">
         <StackPanel Orientation="Vertical">
-            <Grid>
+            <Grid Margin="0 0 0 15">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel>
@@ -19,13 +22,16 @@
                         Target="{Binding ElementName=StrokeColorPicker}" 
                         Content="Stroke color"/>
 
-                    <components:ColorPicker Name="StrokeColorPicker"/>
+                    <components:ColorPicker 
+                        x:Name="StrokeColorPicker"
+                        Value="{Binding ShapeModel.StrokeColor, Converter={StaticResource DomainColorToWpfColorConverter}, Mode=TwoWay}"/>
                 </StackPanel>
 
                 <components:InputControl 
                     Title="Weight"
                     Placeholder="Project Name"
-                    Grid.Column="1"/>
+                    Value="{Binding ShapeModel.StrokeWidth}"
+                    Grid.Column="3"/>
             </Grid>
 
             <Grid>
@@ -36,7 +42,9 @@
                         Target="{Binding ElementName=FillColorPicker}" 
                         Content="Fill color"/>
                     
-                    <components:ColorPicker Name="FillColorPicker"/>
+                    <components:ColorPicker 
+                        x:Name="FillColorPicker"
+                        Value="{Binding ShapeModel.FillColor, Converter={StaticResource DomainColorToWpfColorConverter}, Mode=TwoWay}"/>
                 </StackPanel>
             </Grid>
 

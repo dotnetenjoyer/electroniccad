@@ -31,8 +31,18 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     {
         RecalculateBoundingBox();
 
-        FillPaint = CreateFillPaint();
-        StrokePaint = CreateStrokePaint();
+        FillPaint = new SKPaint
+        {
+            Color = GeometryObject.Fill.ToSKColor(),
+            Style = SKPaintStyle.Fill,
+        };
+
+        StrokePaint = new SKPaint
+        {
+            Color = GeometryObject.Stroke.ToSKColor(),
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = GeometryObject.StrokeWidth,
+        };
     }
 
     /// <summary>
@@ -49,56 +59,5 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     {
         var domainPoint = new Point(position.X, position.Y);
         return GeometryObject.CheckHit(domainPoint);
-    }
-
-    private SKPaint CreateFillPaint()
-    {
-        if (string.IsNullOrEmpty(GeometryObject.Fill))
-        {
-            return TransparentPaint;
-        }
-
-        var fill = ConvertToColor(GeometryObject.Fill);
-        var fillColor = new SKColor(fill.red, fill.green, fill.blue);
-      
-        var paint = new SKPaint
-        {
-            Color = fillColor,
-            Style = SKPaintStyle.StrokeAndFill,
-            StrokeWidth = 2,
-        };
-
-        return paint;
-    }
-
-    private SKPaint CreateStrokePaint()
-    {
-        if (string.IsNullOrEmpty(GeometryObject.Stroke))
-        {
-            return TransparentPaint;
-        }
-
-        var stroke = ConvertToColor(GeometryObject.Stroke);
-        var strokeColor = new SKColor(stroke.red, stroke.green, stroke.blue);
-
-        var paint = new SKPaint
-        {
-            Color = strokeColor,
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = 2,
-        };
-
-        return paint;
-    }
-
-    private (byte red, byte green, byte blue) ConvertToColor(string hexColor)
-    {
-        hexColor = hexColor.Replace("#", "");
-
-        var red = Convert.ToByte(hexColor.Substring(0, 2), 16);
-        var green = Convert.ToByte(hexColor.Substring(2, 2), 16);
-        var blue = Convert.ToByte(hexColor.Substring(4, 2), 16);
-
-        return (red, green, blue);
     }
 }

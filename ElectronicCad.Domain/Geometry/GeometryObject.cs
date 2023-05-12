@@ -39,12 +39,17 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     /// <summary>
     /// Fill color.
     /// </summary>
-    public string Fill { get; set; }
+    public Color Fill { get; set; } = Color.Transparent;
 
     /// <summary>
     /// Stroke color.
     /// </summary>
-    public string Stroke { get; set; } = "#ffffff";
+    public Color Stroke { get; set; } = Color.White;
+
+    /// <summary>
+    /// Determines the geometry object stoke thickness.
+    /// </summary>
+    public float StrokeWidth { get; set; } = 2;
 
     #region Versioning
 

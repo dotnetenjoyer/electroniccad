@@ -48,4 +48,14 @@ internal static class GeometryExtensions
     {
         return new SKRect(rectangle.X, rectangle.Y, rectangle.X + rectangle.Width, rectangle.Y + rectangle.Height);
     }
+
+    /// <summary>
+    /// Converts domain color to skia color.
+    /// </summary>
+    /// <param name="color">Domain color.</param>
+    /// <returns>Skia color.</returns>
+    public static SKColor ToSKColor(this Color color)
+    {
+        return new SKColor(color.Red, color.Green, color.Blue, color.Alpha);
+    }
 }

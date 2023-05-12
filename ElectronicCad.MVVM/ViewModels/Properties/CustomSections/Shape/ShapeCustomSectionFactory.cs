@@ -1,16 +1,16 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
 
-namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Colors;
+namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 
 /// <summary>
-/// Creates colors custom sections.
+/// Creates shape custom sections.
 /// </summary>
-public class ColorsCustomSectionFactory : ICustomSectionFactory
+public class ShapeCustomSectionFactory : ICustomSectionFactory
 {
     /// <inheritdoc />
     public bool CanCreate(IProxy proxy)
     {
-        if (proxy is object)
+        if (proxy is IShapeProxy)
         {
             return true;
         }
@@ -24,9 +24,9 @@ public class ColorsCustomSectionFactory : ICustomSectionFactory
     {
         if (!CanCreate(proxy))
         {
-            throw new InvalidOperationException($"Cannot create {nameof(ColorsCustomSection)}.");
+            throw new InvalidOperationException($"Cannot create {nameof(ShapeCustomSection)}.");
         }
 
-        return new ColorsCustomSection();
+        return new ShapeCustomSection(proxy as IShapeProxy);
     }
 }
