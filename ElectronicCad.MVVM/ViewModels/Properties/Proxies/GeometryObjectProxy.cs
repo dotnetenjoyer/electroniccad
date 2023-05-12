@@ -1,5 +1,6 @@
 ﻿using ElectronicCad.Domain.Geometry;
 using ElectronicCad.MVVM.Properties.Abstractions;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
@@ -7,7 +8,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Geometry object property proxy.
 /// </summary>
-public abstract class GeometryObjectPropertyProxy<TGeometryObject> : BaseProxy<TGeometryObject>, IPropertyModel, ITransformationProxy 
+public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometryObject>, IPropertyModel, ITransformationProxy, IShapeProxy 
     where TGeometryObject : GeometryObject
 {
     /// <inheritdoc />
@@ -22,23 +23,29 @@ public abstract class GeometryObjectPropertyProxy<TGeometryObject> : BaseProxy<T
     /// <inheritdoc />
     public float Height { get; set; }
 
-    /// <summary>
-    /// Geometry object stroke color
-    /// </summary>
-    public string StrokeColor { get; set; }
-
-    /// <summary>
-    /// Geometry object fill color
-    /// </summary>
-    public string FillColor { get; set; }
+    /// <inheritdoc />
+    public Color FillColor { get; set; }
+    
+    /// <inheritdoc />
+    public Color StrokeColor { get; set; }
+    
+    /// <inheritdoc />
+    public float StrokeWidth { get; set; }
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="geometryObject">Geometry object.</param>
-    public GeometryObjectPropertyProxy(TGeometryObject geometryObject) : base(geometryObject)
+    public GeometryObjectProxy(TGeometryObject geometryObject) : base(geometryObject)
     {
+        geometryObject.VersionChanged += HandleVersionChanged;
     }
+
+    private void HandleVersionChanged(object? sender, EventArgs eventArgs)
+    {
+        UpdateFromEntity();
+    }
+
 
     /// <inheritdoc />
     public override void UpdateFromEntity()
@@ -49,8 +56,9 @@ public abstract class GeometryObjectPropertyProxy<TGeometryObject> : BaseProxy<T
         Y = boundingBox.Y + boundingBox.Height / 2;
         Width = boundingBox.Width;
         Height = boundingBox.Height;
-        StrokeColor = Source.Stroke;
         FillColor = Source.Fill;
+        StrokeColor = Source.Stroke;
+        StrokeWidth = Source.StrokeWidth;
 
         OnUpdateFromEntity();
     }
@@ -58,9 +66,11 @@ public abstract class GeometryObjectPropertyProxy<TGeometryObject> : BaseProxy<T
     /// <inheritdoc />
     public override void UpdateEntity()
     {
+        // TODO: Consider unsubscribing from version changes when updating an object.
         using var scope = Source.Layer.Diagram.StartModification();
-        Source.UpdateBoundingBox(X, Y, Width, Height);
         Source.Stroke = StrokeColor;
         Source.Fill = FillColor;
+        Source.StrokeWidth = StrokeWidth;
+        Source.UpdateBoundingBox(X, Y, Width, Height);
     }
 }

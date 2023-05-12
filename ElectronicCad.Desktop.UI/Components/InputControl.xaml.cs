@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace ElectronicCad.Desktop.Styles.Components
+namespace ElectronicCad.Desktop.UI.Components
 {
     /// <summary>
     /// Interaction logic for u.xaml
@@ -60,6 +60,23 @@ namespace ElectronicCad.Desktop.Styles.Components
                     BindsTwoWayByDefault = true,
                     DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 });
+
+        /// <summary>
+        /// String format.
+        /// </summary>
+        public string StringFormat
+        {
+            get => (string)GetValue(StringFormatProperty);
+            set => SetValue(StringFormatProperty, value);
+        }
+
+        private static DependencyProperty StringFormatProperty =
+            DependencyProperty.Register(
+                nameof(StringFormat),
+                typeof(string),
+                typeof(InputControl),
+                new FrameworkPropertyMetadata(string.Empty));
+
 
         /// <summary>
         /// Constructor.

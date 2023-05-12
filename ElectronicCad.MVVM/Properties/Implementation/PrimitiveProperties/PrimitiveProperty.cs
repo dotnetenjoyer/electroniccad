@@ -37,6 +37,17 @@ public class PrimitiveProperty<TValue> : ObservableObject, IProperty
     private TValue propertyValue;
 
     /// <summary>
+    /// Value presentation format.
+    /// </summary>
+    public string ValueFormat 
+    { 
+        get => valueFormat; 
+        set => SetProperty(ref valueFormat, value); 
+    }
+
+    private string valueFormat;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="sourceObject">Source object.</param>

@@ -48,10 +48,10 @@ public class NewPolygonMode : BaseDiagramMode
         var delta = position - startDrawingPosition;
 
         using var modificationScope = Diagram.DomainDiagram.StartModification();
-        temporaryPolygon.UpdateControlPoint(ContentGeometry.LeftTopPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y - delta.Y);
-        temporaryPolygon.UpdateControlPoint(ContentGeometry.RigthTopPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y - delta.Y);
-        temporaryPolygon.UpdateControlPoint(ContentGeometry.RigthBottomPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y + delta.Y);
-        temporaryPolygon.UpdateControlPoint(ContentGeometry.LeftBottomPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y + delta.Y);
+        temporaryPolygon.SetControlPoint(ContentGeometry.LeftTopPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y - delta.Y);
+        temporaryPolygon.SetControlPoint(ContentGeometry.RigthTopPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y - delta.Y);
+        temporaryPolygon.SetControlPoint(ContentGeometry.RigthBottomPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y + delta.Y);
+        temporaryPolygon.SetControlPoint(ContentGeometry.LeftBottomPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y + delta.Y);
     }
 
     /// <inheritdoc />

@@ -3,6 +3,7 @@ using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Domain.Geometry;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -52,13 +53,9 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     {
         if (SelectedItem != null && mouse.LeftButton == MouseButtonState.Pressed)
         {
-            using var scope = SelectedItem.Layer.Diagram.StartModification();
-
-            for (int i = 0; i < SelectedItem.ControlPoints.Count; i++)
-            {
-                var controlPoint = SelectedItem.ControlPoints[i];
-                SelectedItem.UpdateControlPoint(i, controlPoint.X + mouse.Delta.X, controlPoint.Y + mouse.Delta.Y);
-            }
+            using var scope = SelectedItem.Layer!.Diagram.StartModification();
+            var translateMatrix = Matrix3x2.CreateTranslation(mouse.Delta.ToVector2());
+            SelectedItem.Transform(translateMatrix);
         }
     }
 

@@ -1,4 +1,4 @@
-﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Colors;
+﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using System;
 using System.Windows;
@@ -17,9 +17,9 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
     public DataTemplate TransformationSectionDataTemplate { get; set; }
 
     /// <summary>
-    /// Data template for colors custom section.
+    /// Data template for shape custom section.
     /// </summary>
-    public DataTemplate ColorsSectionDataTemplate { get; set; }
+    public DataTemplate ShapeSectionDataTemplate { get; set; }
 
     /// <inheritdoc />
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -28,9 +28,9 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
         {
             return TransformationSectionDataTemplate;
         }
-        else if (item is ColorsCustomSection)
+        else if (item is ShapeCustomSection)
         {
-            return ColorsSectionDataTemplate;
+            return ShapeSectionDataTemplate;
         }
 
         throw new NotSupportedException($"{item.GetType()} is not supported.");

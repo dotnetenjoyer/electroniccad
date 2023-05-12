@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace ElectronicCad.Desktop.Styles.Converters
+namespace ElectronicCad.Desktop.UI.Converters
 {
     /// <summary>
     /// Tooltip visiblity converter, defines a visibility value for a text block.

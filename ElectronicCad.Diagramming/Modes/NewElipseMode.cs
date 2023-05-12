@@ -1,6 +1,9 @@
 ﻿using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Domain.Geometry;
 using SkiaSharp;
+using SkiaSharp.Views.WPF;
+using System;
+using System.Numerics;
 using System.Windows.Input;
 
 namespace ElectronicCad.Diagramming.Modes;
@@ -45,13 +48,13 @@ internal class NewEllipseMode : BaseDiagramMode
             return;
         }
 
-        var delta = position - startDrawingPosition;
-        
         using var modificationScope = Diagram.DomainDiagram.StartModification();
-        temporaryEllipse.UpdateControlPoint(ContentGeometry.LeftTopPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y - delta.Y);
-        temporaryEllipse.UpdateControlPoint(ContentGeometry.RigthTopPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y - delta.Y);
-        temporaryEllipse.UpdateControlPoint(ContentGeometry.RigthBottomPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y + delta.Y);
-        temporaryEllipse.UpdateControlPoint(ContentGeometry.LeftBottomPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y + delta.Y);
+        var delta = position - startDrawingPosition;
+
+        temporaryEllipse.SetControlPoint(ContentGeometry.LeftTopPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y - delta.Y);
+        temporaryEllipse.SetControlPoint(ContentGeometry.RigthTopPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y - delta.Y);
+        temporaryEllipse.SetControlPoint(ContentGeometry.RigthBottomPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y + delta.Y);
+        temporaryEllipse.SetControlPoint(ContentGeometry.LeftBottomPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y + delta.Y);
     }
 
     /// <inheritdoc />
