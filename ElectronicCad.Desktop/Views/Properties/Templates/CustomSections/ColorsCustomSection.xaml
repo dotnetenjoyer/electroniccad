@@ -19,9 +19,7 @@
                         Target="{Binding ElementName=StrokeColorPicker}" 
                         Content="Stroke color"/>
 
-                    <xctk:ColorPicker
-                        Name="StrokeColorPicker"
-                        />
+                    <components:ColorPicker Name="StrokeColorPicker"/>
                 </StackPanel>
 
                 <components:InputControl 
@@ -37,12 +35,11 @@
                         Foreground="White" 
                         Target="{Binding ElementName=FillColorPicker}" 
                         Content="Fill color"/>
-
-                    <xctk:ColorPicker
-                        Name="FillColorPicker"
-                        />
+                    
+                    <components:ColorPicker Name="FillColorPicker"/>
                 </StackPanel>
             </Grid>
+
         </StackPanel>
     </DataTemplate>
     

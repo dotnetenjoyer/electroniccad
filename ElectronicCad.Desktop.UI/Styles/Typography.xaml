@@ -17,7 +17,7 @@
                 <ToolTip
                     Visibility="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}, Converter={StaticResource TooltipVisibilityConverter}}"
                     Content="{Binding Path=PlacementTarget.Text, RelativeSource={RelativeSource Self}}"
-                    />
+                />
             </Setter.Value>
         </Setter>
     </Style>

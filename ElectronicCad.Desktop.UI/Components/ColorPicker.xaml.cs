@@ -5,6 +5,7 @@ using System.Windows.Shapes;
 using System.Windows.Input;
 using ElectronicCad.Desktop.Styles.Utils;
 using System;
+using System.Security.Permissions;
 
 namespace ElectronicCad.Desktop.UI.Components
 {
@@ -101,6 +102,22 @@ namespace ElectronicCad.Desktop.UI.Components
                 typeof(ColorPicker),
                 new PropertyMetadata());
 
+        /// <summary>
+        /// Indicates whether the color picker is open.
+        /// </summary>
+        public bool IsOpen
+        {
+            get => (bool)GetValue(IsOpenProperty);
+            set => SetValue(IsOpenProperty, value);
+        }
+
+        private readonly static DependencyProperty IsOpenProperty =
+            DependencyProperty.Register(
+                nameof(IsOpen),
+                typeof(bool),
+                typeof(ColorPicker),
+                new PropertyMetadata());
+
         private float hue;
         private Color hueColor;
         private Point? hueCurrentPosition;
@@ -114,17 +131,16 @@ namespace ElectronicCad.Desktop.UI.Components
         /// </summary>
         public ColorPicker()
         {
-            SystemColorPalette = SystemColors;
+            InitializeComponent();
 
+            SystemColorPalette = SystemColors;
             hueColor = Colors.Red;
             Value = Colors.Gray;
-            
-            Loaded += HandleColorPickerLoad;
 
-            InitializeComponent();
+            InitializeSpectrums();
         }
 
-        private void HandleColorPickerLoad(object sender, RoutedEventArgs e)
+        private void InitializeSpectrums()
         {
             InitializeSpectrumCanvas();
             InitializeHueCanvas();
@@ -195,8 +211,8 @@ namespace ElectronicCad.Desktop.UI.Components
             {
                 var rectangle = new Rectangle();
                 rectangle.Fill = brush;
-                rectangle.Width = SpectrumCanvas.ActualWidth;
-                rectangle.Height = SpectrumCanvas.ActualHeight;
+                rectangle.Width = SpectrumCanvas.Width;
+                rectangle.Height = SpectrumCanvas.Height;
 
                 SpectrumCanvas.Children.Add(rectangle);
             }
@@ -247,7 +263,7 @@ namespace ElectronicCad.Desktop.UI.Components
             spectrumRectangle.RadiusX = 5;
             spectrumRectangle.RadiusY = 5;
             spectrumRectangle.Width = 10;
-            spectrumRectangle.Height = HueCanvas.ActualHeight;
+            spectrumRectangle.Height = HueCanvas.Height;
             spectrumRectangle.Fill = HueSpectrumBrush;
             HueCanvas.AlignHorizontalCenter(spectrumRectangle);
             HueCanvas.Children.Add(spectrumRectangle);

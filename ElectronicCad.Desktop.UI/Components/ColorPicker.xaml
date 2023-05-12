@@ -13,67 +13,110 @@
                 <ResourceDictionary Source="../Styles/Colors.xaml"/>
                 <ResourceDictionary Source="../Styles/Typography.xaml"/>
                 <ResourceDictionary Source="../Styles/TextBox.xaml"/>
+                <ResourceDictionary Source="../Styles/Icons.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Border 
-        Padding="15 15 15 15" 
-        Width="230" 
-        Background="{StaticResource ComponentBackgroundBrush}"
-        CornerRadius="5">
-        
-        <DockPanel>
-            <ItemsControl 
-                DockPanel.Dock="Top" 
-                HorizontalAlignment="Left"
-                ItemsSource="{Binding SystemColorPalette, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                Margin="0 0 0 10">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border>
-                            <Rectangle Width="20" Height="20" Margin="0 0 5 10">
+    <Grid >
+        <CheckBox x:Name="Preview" IsChecked="{Binding Path=IsOpen, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <CheckBox.Template>
+                <ControlTemplate TargetType="CheckBox">
+                    <Border 
+                        Padding="10 8"
+                        CornerRadius="5"
+                        Background="Transparent"
+                        BorderBrush="{StaticResource ComponentBackgroundBrush}" 
+                        BorderThickness="2">
+
+                        <DockPanel>
+                            <Rectangle Focusable="False" Width="20" Height="15" Margin="0 0 10 0">
                                 <Rectangle.Fill>
-                                    <SolidColorBrush Color="{Binding}"/>
+                                    <SolidColorBrush Color="{Binding Value, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
                                 </Rectangle.Fill>
                             </Rectangle>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
 
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-            
-            <DockPanel DockPanel.Dock="Top" LastChildFill="True">
-                <Border 
-                    DockPanel.Dock="Right"
-                    Width="50" 
-                    Height="150">
-                    <Canvas x:Name="HueCanvas"/>
-                </Border>
+                            <Path 
+                                Focusable="False"
+                                x:Name="Arrow" 
+                                Margin="20 0 0 0"
+                                DockPanel.Dock="Right"
+                                Data="{StaticResource ArrowDownIcon}" 
+                                HorizontalAlignment="Center" 
+                                SnapsToDevicePixels="false" 
+                                Stroke="{StaticResource SecondaryForegroundBrush}" 
+                                StrokeThickness="2" 
+                                VerticalAlignment="Center"/>
 
-                <Canvas 
-                    x:Name="SpectrumCanvas"
-                    Width="150"
-                    Height="150"/>
-            </DockPanel>
+                            <TextBlock Focusable="False" Style="{StaticResource PrimaryText}" Text="{Binding Value, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </DockPanel>
+                    </Border>
 
-            <DockPanel Margin="0 20 0 0">
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Data" TargetName="Arrow" Value="{StaticResource ArrowUpIcon}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </CheckBox.Template>
+        </CheckBox>
+
+        <Popup 
+            Placement="Bottom"
+            PlacementTarget="{Binding ElementName=Preview}"
+            AllowsTransparency="True"
+            StaysOpen="False"
+            IsOpen="{Binding IsOpen, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <Border 
+                Padding="15 15 15 15" 
+                Width="230" 
+                Background="{StaticResource ComponentBackgroundBrush}"
+                CornerRadius="5">
+
                 <DockPanel>
-                    <TextBlock 
-                        Style="{StaticResource PrimaryText}" 
-                        VerticalAlignment="Center"
-                        Text="HEX:"
-                        Margin="0 0 15 0"/> 
-                    <TextBox
-                        Background="{StaticResource SecondaryBackgroundBrush}"
-                        Text="{Binding Value, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                    <ItemsControl 
+                        DockPanel.Dock="Top" 
+                        HorizontalAlignment="Left"
+                        ItemsSource="{Binding SystemColorPalette, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        Margin="0 0 0 10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border>
+                                    <Rectangle Width="20" Height="20" Margin="0 0 5 10">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding}"/>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+
+                    <DockPanel DockPanel.Dock="Top" LastChildFill="True">
+                        <Canvas x:Name="HueCanvas" Width="50" Height="150" DockPanel.Dock="Right"/>
+                        <Canvas x:Name="SpectrumCanvas" Width="150" Height="150"/>
+                    </DockPanel>
+
+                    <DockPanel Margin="0 20 0 0">
+                        <DockPanel>
+                            <TextBlock 
+                                Style="{StaticResource PrimaryText}" 
+                                VerticalAlignment="Center"
+                                Text="HEX:"
+                                Margin="0 0 15 0"/>
+                            <TextBox
+                                Background="{StaticResource SecondaryBackgroundBrush}"
+                                Text="{Binding Value, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                        </DockPanel>
+                    </DockPanel>
                 </DockPanel>
-            </DockPanel>
-        </DockPanel>
-    </Border>
+            </Border>
+        </Popup>
+    </Grid>    
 </UserControl>
