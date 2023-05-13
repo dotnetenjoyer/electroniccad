@@ -1,4 +1,6 @@
 ﻿using ElectronicCad.MVVM.Properties.Configuration;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Profiles;
@@ -14,11 +16,7 @@ internal class EllipseObjectProfile : PropertyObjectProfile
     public EllipseObjectProfile()
     {
         CreateConfiguration<EllipsePropertyProxy>()
-            .HasPrimitive(source => source.X)
-            .HasPrimitive(source => source.Y)
-            .HasPrimitive(source => source.Width)
-            .HasPrimitive(source => source.Height)
-            .HasPrimitive(source => source.StrokeColor)
-            .HasPrimitive(source => source.FillColor);
+            .HasCustomSection<TransformationCustomSection>()
+            .HasCustomSection<ShapeCustomSection>();
     }
 }

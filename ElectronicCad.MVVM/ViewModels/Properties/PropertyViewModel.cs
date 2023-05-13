@@ -1,6 +1,7 @@
 ﻿using ElectronicCad.Infrastructure.Abstractions.Services;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.Properties;
+using ElectronicCad.MVVM.Properties.Implementation;
 using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties;
