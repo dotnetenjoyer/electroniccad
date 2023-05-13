@@ -24,7 +24,7 @@
 
                     <components:ColorPicker 
                         x:Name="StrokeColorPicker"
-                        Value="{Binding ShapeModel.StrokeColor, Converter={StaticResource DomainColorToWpfColorConverter}, Mode=TwoWay}"/>
+                        Value="{Binding ShapeModel.StrokeColor, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
                 </StackPanel>
 
                 <components:InputControl 
@@ -44,7 +44,7 @@
                     
                     <components:ColorPicker 
                         x:Name="FillColorPicker"
-                        Value="{Binding ShapeModel.FillColor, Converter={StaticResource DomainColorToWpfColorConverter}, Mode=TwoWay}"/>
+                        Value="{Binding ShapeModel.FillColor, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
                 </StackPanel>
             </Grid>
 

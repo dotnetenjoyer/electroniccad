@@ -84,7 +84,7 @@ namespace ElectronicCad.Desktop.UI.Components
                 nameof(Value),
                 typeof(Color),
                 typeof(ColorPicker),
-                new PropertyMetadata());
+                new FrameworkPropertyMetadata(Colors.White, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
         /// Palette of system color.
@@ -135,7 +135,6 @@ namespace ElectronicCad.Desktop.UI.Components
 
             SystemColorPalette = SystemColors;
             hueColor = Colors.Red;
-            Value = Colors.Gray;
 
             InitializeSpectrums();
         }
