@@ -6,7 +6,7 @@ namespace ElectronicCad.Diagramming.Modes;
 public enum DiagramMode
 {
     Selection,
-    NewLine,
+    LineCreationMode,
     Pen,
     PolygonCreationMode,
     EllipseCreation,

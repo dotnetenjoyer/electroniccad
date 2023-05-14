@@ -21,7 +21,7 @@ public class Line : GeometryObject
     /// <summary>
     /// Constructor.
     /// </summary>
-    public Line()
+    public Line(bool isTemporary) : base(isTemporary)
     {
         controlPoints = new Point[2];
     }
@@ -30,7 +30,7 @@ public class Line : GeometryObject
     /// Constructor.
     /// </summary>
     /// <param name="points"></param>
-    public Line(params Point[] points) : this()
+    public Line(Point[] points, bool isTemporary = false) : this(isTemporary)
     {
         for (int i = 0; i < controlPoints.Length; i++)
         {

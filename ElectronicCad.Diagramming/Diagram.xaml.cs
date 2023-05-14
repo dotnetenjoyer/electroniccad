@@ -183,8 +183,8 @@ namespace ElectronicCad.Diagramming
                     SetDiagramMode(new Modes.SelectionMode());
                     break;
 
-                case DiagramMode.NewLine:
-                    SetDiagramMode(new NewLineMode());
+                case DiagramMode.LineCreationMode:
+                    SetDiagramMode(new LineCreationMode());
                     break;
 
                 case DiagramMode.EllipseCreation:

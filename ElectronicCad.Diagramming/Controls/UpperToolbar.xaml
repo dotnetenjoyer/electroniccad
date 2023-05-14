@@ -42,8 +42,8 @@
 
             <Button
                 Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
-                CommandParameter="{x:Static modes:DiagramMode.NewLine}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.NewLine)', ElementName=Toolbar}">
+                CommandParameter="{x:Static modes:DiagramMode.LineCreationMode}"
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.LineCreationMode)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource LineIcon}"/>
             </Button>
 
