@@ -67,7 +67,7 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
             return;
         }
 
-        var boundingBox = SelectedItem.CalculateBoundingBox().ToSKRect();
+        var boundingBox = SelectedItem.BoundingBox.ToSKRect();
         selectionFrameArea.BoundingBox = boundingBox;
         topLefGizmo.SetCenterPoint(boundingBox.GetTopLeft());
         topRigthGizmo.SetCenterPoint(boundingBox.GetTopRight());

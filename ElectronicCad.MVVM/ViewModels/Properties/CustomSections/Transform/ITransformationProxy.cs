@@ -10,20 +10,20 @@ public interface ITransformationProxy : IProxy
     /// <summary>
     /// Center X coordinate.
     /// </summary>
-    float X { get; set; }
+    double CenterX { get; set; }
 
     /// <summary>
     /// Center Y coordinate.
     /// </summary>
-    float Y { get; set; }
+    double CenterY { get; set; }
 
     /// <summary>
     /// Width.
     /// </summary>
-    float Width { get; set; }
+    double Width { get; set; }
 
     /// <summary>
     /// Height.
     /// </summary>
-    float Height { get; set; }
+    double Height { get; set; }
 }

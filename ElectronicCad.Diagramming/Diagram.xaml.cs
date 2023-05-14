@@ -188,8 +188,8 @@ namespace ElectronicCad.Diagramming
                     SetDiagramMode(new NewLineMode());
                     break;
 
-                case DiagramMode.NewEllipse:
-                    SetDiagramMode(new NewEllipseMode());
+                case DiagramMode.EllipseCreation:
+                    SetDiagramMode(new EllipseCreationMode());
                     break;
 
                 case DiagramMode.NewPolygon:

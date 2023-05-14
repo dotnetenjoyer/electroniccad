@@ -16,42 +16,12 @@ public class NewPolygonMode : BaseDiagramMode
     /// <inheritdoc />
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        var position = Diagram.GetPosition(args);
-
-        if(temporaryPolygon == null)
-        {
-            startDrawingPosition = position;
-
-            var domainPoint = position.ToDomainPoint();
-            temporaryPolygon = new Polygon(domainPoint, domainPoint, domainPoint, domainPoint);
-            temporaryPolygon.IsTemporary = true;
-            
-            Diagram.DomainDiagram.AddGeometry(temporaryPolygon);
-        }
-        else
-        {
-            temporaryPolygon.IsTemporary = true;
-            temporaryPolygon = null;
-            startDrawingPosition = SKPoint.Empty;
-        }
     }
 
     /// <inheritdoc />
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
-        if(temporaryPolygon == null)
-        {
-            return;
-        }
-
-        var position = Diagram.GetPosition(args);
-        var delta = position - startDrawingPosition;
-
-        using var modificationScope = Diagram.DomainDiagram.StartModification();
-        temporaryPolygon.SetControlPoint(ContentGeometry.LeftTopPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y - delta.Y);
-        temporaryPolygon.SetControlPoint(ContentGeometry.RigthTopPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y - delta.Y);
-        temporaryPolygon.SetControlPoint(ContentGeometry.RigthBottomPointIndex, startDrawingPosition.X + delta.X, startDrawingPosition.Y + delta.Y);
-        temporaryPolygon.SetControlPoint(ContentGeometry.LeftBottomPointIndex, startDrawingPosition.X - delta.X, startDrawingPosition.Y + delta.Y);
+        
     }
 
     /// <inheritdoc />

@@ -1,5 +1,5 @@
-﻿using ElectronicCad.Domain.Geometry;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 
@@ -11,8 +11,8 @@ public class ShapeModel : ObservableObject
     /// <summary>
     /// Geometry object fill color.
     /// </summary>
-    public Color FillColor 
-    { 
+    public Color FillColor
+    {
         get => fillColor;
         set => SetProperty(ref fillColor, value);
     }
@@ -33,11 +33,11 @@ public class ShapeModel : ObservableObject
     /// <summary>
     /// Determines the geometry object stoke thickness.
     /// </summary>
-    public float StrokeWidth
+    public double StrokeWidth
     {
         get => strokeWidth;
         set => SetProperty(ref strokeWidth, value);
     }
 
-    private float strokeWidth;
+    private double strokeWidth;
 }

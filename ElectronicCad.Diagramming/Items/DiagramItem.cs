@@ -42,11 +42,6 @@ internal abstract class DiagramItem
     public int ZIndex { get; set; }
 
     /// <summary>
-    /// Diagram item fill paint.
-    /// </summary>
-    public SKPaint FillPaint { get; set; }
-
-    /// <summary>
     /// Diagram item stroke paint.
     /// </summary>
     public SKPaint StrokePaint { get; set; }

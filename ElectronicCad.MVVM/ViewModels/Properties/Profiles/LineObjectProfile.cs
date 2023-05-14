@@ -15,7 +15,7 @@ internal class LineObjectProfile : PropertyObjectProfile
     public LineObjectProfile()
     {
         CreateConfiguration<LinePropertyProxy>()
-            .HasPrimitive(source => source.X)
-            .HasPrimitive(source => source.Y);
+            .HasPrimitive(source => source.CenterX)
+            .HasPrimitive(source => source.CenterY);
     }
 }

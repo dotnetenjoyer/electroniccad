@@ -8,8 +8,10 @@ namespace ElectronicCad.Diagramming.Items;
 /// <summary>
 /// Ellipse diagram node.
 /// </summary>
-internal class EllipseDiagramItem : GeometryObjectDiagramItem
+internal class EllipseDiagramItem : ContentGeometryObjectDiagramItem
 {
+    public Ellipse Ellipse => (Ellipse)GeometryObject;
+
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -23,11 +25,7 @@ internal class EllipseDiagramItem : GeometryObjectDiagramItem
     {
         base.Draw(canvas);
 
-        var center = BoundingBox.GetCenter();
-        var xRadius = BoundingBox.Width / 2;
-        var yRadius = BoundingBox.Height / 2;
-
-        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, FillPaint);
-        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, StrokePaint);
+        canvas.DrawOval((float)Ellipse.BoundingBox.Center.X, (float)Ellipse.BoundingBox.Center.Y, (float)Ellipse.RadiusX, (float)Ellipse.RadiusY, FillPaint);
+        canvas.DrawOval((float)Ellipse.BoundingBox.Center.X, (float)Ellipse.BoundingBox.Center.Y, (float)Ellipse.RadiusX, (float)Ellipse.RadiusY, StrokePaint);
     }
 }

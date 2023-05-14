@@ -1,31 +1,36 @@
 ﻿namespace ElectronicCad.Domain.Geometry;
 
-public class Rectangle
+public struct Rectangle
 {
     /// <summary>
-    /// X value.
+    /// Start rectangle point.
     /// </summary>
-    public float X { get; set; }
+    public Point Start { get; init; }
 
     /// <summary>
-    /// Y value.
+    /// Center rectangle point.
     /// </summary>
-    public float Y { get; set; }
+    public Point Center { get; init; }
+
+    /// <summary>
+    /// End rectangle point.
+    /// </summary>
+    public Point End { get; init; }
 
     /// <summary>
     /// Rectangle width.
     /// </summary>
-    public float Width { get; set; }
+    public double Width { get; init; }
 
     /// <summary>
     /// Rectangle height.
     /// </summary>
-    public float Height { get; set; }
+    public double Height { get; init; }
 
     /// <summary>
     /// Empty rectangle instance.
     /// </summary>
-    public static Rectangle Empty => new Rectangle(0, 0, 0, 0);
+    public static Rectangle Empty => new Rectangle(new Point(0, 0), 0, 0);
 
     /// <summary>
     /// Constructor.
@@ -34,12 +39,13 @@ public class Rectangle
     /// <param name="y">Y value.</param>
     /// <param name="width">Rectangle width.</param>
     /// <param name="height">Rectangle height.</param>
-    public Rectangle(float x, float y, float width, float height)
+    public Rectangle(Point startPoint, double width, double height)
     {
-        X = x;
-        Y = y;
         Width = width;
         Height = height;
+        Start = startPoint;
+        End = new Point(Start.X + width, Start.Y + height);
+        Center = new Point(Start.X + width / 2, Start.Y + height / 2);
     }
 
     /// <summary>
@@ -49,7 +55,6 @@ public class Rectangle
     /// <returns>true if contains.</returns>
     public bool Contains(Point point)
     {
-        return point.X > X && point.Y > Y 
-            && point.X < X + Width && point.Y < Y + Height;
+        return point > Start && point < End;
     }
 }

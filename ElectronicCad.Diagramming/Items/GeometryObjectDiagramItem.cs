@@ -1,8 +1,7 @@
-﻿using ElectronicCad.Diagramming.Extensions;
-using ElectronicCad.Domain.Geometry;
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.Views.Desktop;
-using System;
+using ElectronicCad.Diagramming.Extensions;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -29,35 +28,18 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     /// <inheritdoc />
     public virtual void UpdateViewState()
     {
-        RecalculateBoundingBox();
-
-        FillPaint = new SKPaint
-        {
-            Color = GeometryObject.Fill.ToSKColor(),
-            Style = SKPaintStyle.Fill,
-        };
-
+        BoundingBox = GeometryObject.BoundingBox.ToSKRect();
         StrokePaint = new SKPaint
         {
-            Color = GeometryObject.Stroke.ToSKColor(),
+            Color = GeometryObject.StrokeColor.ToSKColor(),
             Style = SKPaintStyle.Stroke,
-            StrokeWidth = GeometryObject.StrokeWidth,
+            StrokeWidth = (float)GeometryObject.StrokeWidth,
         };
-    }
-
-    /// <summary>
-    /// Recalculate bounding box.
-    /// </summary>
-    protected void RecalculateBoundingBox()
-    {
-        var boundingBox = GeometryObject.CalculateBoundingBox();
-        BoundingBox = boundingBox.ToSKRect();
     }
 
     /// <inheritdoc />
     public override bool CheckHit(ref SKPoint position)
     {
-        var domainPoint = new Point(position.X, position.Y);
-        return GeometryObject.CheckHit(domainPoint);
+        return GeometryObject.CheckHit(position.ToDomainPoint());
     }
 }

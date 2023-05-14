@@ -56,8 +56,8 @@
 
             <Button
                 Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
-                CommandParameter="{x:Static modes:DiagramMode.NewEllipse}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.NewEllipse)', ElementName=Toolbar}">
+                CommandParameter="{x:Static modes:DiagramMode.EllipseCreation}"
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.EllipseCreation)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource ElipseIcon}"/>
             </Button>
 

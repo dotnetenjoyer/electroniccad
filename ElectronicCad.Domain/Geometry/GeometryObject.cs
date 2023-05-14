@@ -1,5 +1,6 @@
 using ElectronicCad.Domain.Common;
-using ElectronicCad.Domain.Utils;
+using ElectronicCad.Domain.Exceptions;
+using ElectronicCad.Domain.Geometry.Utils;
 using System.Numerics;
 
 namespace ElectronicCad.Domain.Geometry;
@@ -27,29 +28,59 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     protected Point[] controlPoints;
 
     /// <summary>
+    /// Geometry object bounding box.
+    /// </summary>
+    public Rectangle BoundingBox { get; private set; }
+
+    /// <summary>
     /// Related layer.
     /// </summary>
-    public Layer? Layer { get; set; }
-
-    /// <summary>
-    /// Indicates if geometry object is temporary.
-    /// </summary>
-    public bool IsTemporary { get; set; }
-
-    /// <summary>
-    /// Fill color.
-    /// </summary>
-    public Color Fill { get; set; } = Color.Transparent;
+    public Layer? Layer { get; internal set; }
 
     /// <summary>
     /// Stroke color.
     /// </summary>
-    public Color Stroke { get; set; } = Color.White;
+    public Color StrokeColor
+    {
+        get => strokeColor;
+        set
+        {
+            ValidateModification();
+            strokeColor = value;
+        }
+    }
+
+    private Color strokeColor = Color.White;
 
     /// <summary>
     /// Determines the geometry object stoke thickness.
     /// </summary>
-    public float StrokeWidth { get; set; } = 2;
+    public double StrokeWidth 
+    { 
+        get => strokeWidth;
+        set
+        {
+            ValidateModification();
+            strokeWidth = value;
+        }
+    }
+
+    private double strokeWidth = 2;
+
+    /// <summary>
+    /// Indicates if geometry object is temporary.
+    /// </summary>
+    public bool IsTemporary
+    {
+        get => isTemporary;
+        set
+        {
+            ValidateModification();
+            IsTemporary = value;
+        }
+    }
+
+    private bool isTemporary;
 
     #region Versioning
 
@@ -69,25 +100,35 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     }
 
     #endregion
+    
+    /// <summary>
+    /// Indicates if modification was started.
+    /// </summary>
+    public bool IsModificationStarted => isModificationStarted;
+
+    private bool isModificationStarted;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public GeometryObject()
+    public GeometryObject(bool isTemporary = false)
     {
         Id = Guid.NewGuid();
+        this.isTemporary = isTemporary;
     }
 
     /// <summary>
     /// Set control points without modification validation.
     /// </summary>
     /// <param name="points">Points to set.</param>
-    internal void SetControlPoints(Point[] points)
+    internal void SetControlPoints(params Point[] points)
     {
         for (int i = 0; i < controlPoints.Length; i++)
         {
             controlPoints[i] = points[i];
         }
+
+        RecalculateBoundingBox();
     }
 
     /// <summary>
@@ -105,7 +146,7 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
             SetControlPoint(i, newPoint.X, newPoint.Y, false);
         }
 
-        IncreaseVersion();
+        RecalculateBoundingBox();
     }
 
     /// <summary>
@@ -114,13 +155,13 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     /// <param name="index">Index of control point.</param>
     /// <param name="x">X value.</param>
     /// <param name="y">Y value.</param>
-    public void SetControlPoint(int index, float x, float y)
+    public void SetControlPoint(int index, double x, double y)
     {
         SetControlPoint(index, x, y, true);
-        IncreaseVersion();
+        RecalculateBoundingBox();
     }
 
-    private void SetControlPoint(int index, float x, float y, bool validateModification)
+    private void SetControlPoint(int index, double x, double y, bool validateModification)
     {
         if (validateModification)
         {
@@ -131,13 +172,23 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     }
 
     /// <summary>
-    /// Update geometry object bounding box.
+    /// Set center point and size of the geometry object.
     /// </summary>
-    /// <param name="centerX">Center X position.</param>
-    /// <param name="centerY">Center Y position.</param>
+    /// <param name="center">Center position.</param>
     /// <param name="width">Width.</param>
     /// <param name="height">Height.</param>
-    public abstract void UpdateBoundingBox(float centerX, float centerY, float width, float height);
+    public void SetCenterAndSize(Point center, double width, double height)
+    {
+        var translationToOrigin = Matrix3x2.CreateTranslation(-BoundingBox.Center.ToVector2());
+
+        var scaleVector = new Vector2((float)(width / BoundingBox.Width), (float)(height / BoundingBox.Height));
+        var scaleTransformation = Matrix3x2.CreateScale(scaleVector);
+
+        var translationToNewPosition = Matrix3x2.CreateTranslation(center.ToVector2());
+        
+        var transformation = translationToOrigin * scaleTransformation * translationToNewPosition;
+        Transform(transformation);
+    }
 
     /// <summary>
     /// Validates availability of modification.
@@ -146,10 +197,56 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     {
         if (Layer == null || Layer.Diagram == null || Layer.Diagram.ModificationScope == null)
         {
-            throw new Exception("Modification outisde scope are prohibited.");
+            throw new DomainException("Modification outisde scope are prohibited.");
+        }
+
+        if (!isModificationStarted)
+        {
+            throw new DomainException("Modification is not started.");
         }
 
         Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
+    }
+
+    /// <summary>
+    /// Starts diagram modification.
+    /// </summary>
+    /// <returns>Diagram modification scope.</returns>
+    public DiagramModificationScope StartDiagramModifcation()
+    {
+        if (Layer == null || Layer.Diagram == null)
+        {
+            throw new DomainException("The geometry object isn't related with a diagram.");
+        }
+
+        return Layer.Diagram.StartModification();
+    }
+
+    /// <summary>
+    /// Starts object modification.
+    /// </summary>
+    public void StartModification()
+    {
+        if (isModificationStarted)
+        {
+            throw new DomainException("Attempting to start a modification when it is already started.");
+        }
+
+        isModificationStarted = true;
+    }
+
+    /// <summary>
+    /// Completes object modification.
+    /// </summary>
+    public void CompleteModification()
+    {   
+        if (!isModificationStarted)
+        {
+            throw new DomainException("Attempting to complete a modification when it is not started.");
+        }
+
+        isModificationStarted = false;
+        IncreaseVersion();
     }
 
     /// <summary>
@@ -157,55 +254,20 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     /// </summary>
     /// <param name="point">Target point to hit.</param>
     /// <returns><c>true</c> if point hit geomtry.</returns>
-    public virtual bool CheckHit(Point point) => CheckHitToBoundingBox(point);
+    public virtual bool CheckHit(Point point) => CheckBoundingBoxHit(point);
 
     /// <summary>
     /// Check hit to geometry bounding box.
     /// </summary>
     /// <param name="point">Target point ot hit</param>
     /// <returns><c>true</c> if point hit bounding box.</returns>
-    public bool CheckHitToBoundingBox(Point point)
+    public bool CheckBoundingBoxHit(Point point)
     {
-        var boundingBox = CalculateBoundingBox();
-        return boundingBox.Contains(point);
+        return BoundingBox.Contains(point);
     }
 
-    /// <summary>
-    /// Calculates objects bounding box.
-    /// </summary>
-    public Rectangle CalculateBoundingBox()
+    private void RecalculateBoundingBox()
     {
-        return CalculateBoundingBox(controlPoints);
-    }
-
-    /// <summary>
-    /// Calculates bounding box base on set of points.
-    /// </summary>
-    /// <param name="points">Set of points.</param>
-    /// <returns>Bounding box.</returns>
-    private Rectangle CalculateBoundingBox(Point[] points)
-    {
-        if(points.Length == 0)
-        {
-            return Rectangle.Empty;
-        }
-
-        float 
-            maxX = points[0].X, 
-            minX = points[0].X, 
-            maxY = points[0].Y,
-            minY = points[0].Y;
-
-        foreach (var point in points)
-        {
-            maxX = Math.Max(maxX, point.X);
-            minX = Math.Min(minX, point.X);
-            maxY = Math.Max(maxY, point.Y);
-            minY = Math.Min(minY, point.Y);
-        }
-
-        var width = maxX - minX;
-        var height = maxY - minY;
-        return new Rectangle(minX, minY, width, height);
+        BoundingBox = PointsUtils.CalculateBoundingBox(controlPoints);
     }
 }

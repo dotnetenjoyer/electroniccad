@@ -7,7 +7,7 @@ namespace ElectronicCad.Diagramming.Items;
 /// <summary>
 /// Polygon diagram node.
 /// </summary>
-internal class PolygonDiagramItem : GeometryObjectDiagramItem
+internal class PolygonDiagramItem : ContentGeometryObjectDiagramItem
 {
     /// <summary>
     /// Constructor.

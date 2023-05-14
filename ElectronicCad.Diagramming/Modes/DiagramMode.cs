@@ -9,6 +9,6 @@ public enum DiagramMode
     NewLine,
     Pen,
     NewPolygon,
-    NewEllipse,
+    EllipseCreation,
     NewText,
 }
