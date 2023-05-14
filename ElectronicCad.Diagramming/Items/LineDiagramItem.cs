@@ -1,18 +1,13 @@
-using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Diagramming.Extensions;
-using System.Windows.Controls;
-using System.Drawing;
-using System;
 
 namespace ElectronicCad.Diagramming.Items;
 
 /// <summary>
 /// Line diagram item that bind with domain geometry object.
 /// </summary>
-internal class LineDiagramItem : GeometryObjectDiagramItem
+internal class LineDiagramItem : GeometryObjectDiagramItem<Line>
 {
     /// <summary>
     /// Constructor
@@ -22,12 +17,12 @@ internal class LineDiagramItem : GeometryObjectDiagramItem
     }
 
     /// <inheritdoc/>
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
-        base.Draw(canvas);
-        
-        var firstPoint = GeometryObject.ControlPoints[Line.FirstPointIndex].ToSKPoint();
-        var secondPoint = GeometryObject.ControlPoints[Line.SecondPointIndex].ToSKPoint();
-        canvas.DrawLine(firstPoint, secondPoint, StrokePaint);
+        base.Draw(context);
+
+        var firstPoint = CertainGeometryObject.ControlPoints[Line.FirstPointIndex].ToSKPoint();
+        var secondPoint = CertainGeometryObject.ControlPoints[Line.SecondPointIndex].ToSKPoint();
+        context.DrawLine(firstPoint, secondPoint, StrokePaint);
     }
 }

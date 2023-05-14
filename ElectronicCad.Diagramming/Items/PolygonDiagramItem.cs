@@ -1,5 +1,4 @@
 using SkiaSharp;
-using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Items;
@@ -7,7 +6,7 @@ namespace ElectronicCad.Diagramming.Items;
 /// <summary>
 /// Polygon diagram node.
 /// </summary>
-internal class PolygonDiagramItem : ContentGeometryObjectDiagramItem
+internal class PolygonDiagramItem : ContentGeometryObjectDiagramItem<Polygon>
 {
     /// <summary>
     /// Constructor.
@@ -18,11 +17,11 @@ internal class PolygonDiagramItem : ContentGeometryObjectDiagramItem
     }
 
     /// <inheritdoc/>
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext drawingContext)
     {
-        base.Draw(canvas);
+        base.Draw(drawingContext);
         
-        canvas.DrawRect(BoundingBox, FillPaint);
-        canvas.DrawRect(BoundingBox, StrokePaint);
+        drawingContext.DrawRect(BoundingBox, FillPaint);
+        drawingContext.DrawRect(BoundingBox, StrokePaint);
     }
 }

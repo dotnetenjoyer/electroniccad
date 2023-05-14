@@ -1,5 +1,5 @@
-using SkiaSharp;
 using System;
+using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -8,14 +8,6 @@ namespace ElectronicCad.Diagramming.Items;
 /// </summary>
 internal abstract class DiagramItem
 {
-    /// <summary>
-    /// Transparent skia paint.
-    /// </summary>
-    public readonly static SKPaint TransparentPaint = new SKPaint
-    {
-        Color = SKColors.Transparent
-    };
-
     /// <summary>
     /// Indicate whether item is auxiliary. 
     /// </summary>
@@ -47,15 +39,13 @@ internal abstract class DiagramItem
     public SKPaint StrokePaint { get; set; }
 
     /// <summary>
-    /// Draws itself on canvas.
+    /// Draws itself.
     /// </summary>
-    /// <param name="canvas">Skia canvas.</param>
-    public virtual void Draw(SKCanvas canvas)   
+    /// <param name="drawingcontext">Skia drawing context.</param>
+    public virtual void Draw(SkiaDrawingContext drawingContext)   
     {
-        // Debug rectangle.
-        //canvas.DrawRect(BoundingBox, Paints.DebugPaint);
     }
-    
+
     /// <summary>
     /// Check point hitting.
     /// </summary>

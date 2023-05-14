@@ -22,7 +22,6 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     public GeometryObjectDiagramItem(GeometryObject domainObject)
     {
         GeometryObject = domainObject;
-        UpdateViewState();
     }
 
     /// <inheritdoc />
@@ -41,5 +40,27 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     public override bool CheckHit(ref SKPoint position)
     {
         return GeometryObject.CheckHit(position.ToDomainPoint());
+    }
+}
+
+/// <summary>
+/// Generic geometry object diagram item.
+/// </summary>
+/// <typeparam name="TGeometryObject">Type of gemetry object.</typeparam>
+internal abstract class GeometryObjectDiagramItem<TGeometryObject> : GeometryObjectDiagramItem where TGeometryObject : GeometryObject
+{
+    /// <summary>
+    /// Certain geometry object.
+    /// </summary>
+    public TGeometryObject CertainGeometryObject { get; private set; }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="geometryObject">Geometry object.</param>
+    public GeometryObjectDiagramItem(TGeometryObject geometryObject) : base(geometryObject)
+    {
+        CertainGeometryObject = geometryObject;
+        UpdateViewState();
     }
 }

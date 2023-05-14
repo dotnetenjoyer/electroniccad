@@ -19,11 +19,10 @@ internal class TextDiagramItem : GeometryObjectDiagramItem
     }
 
     /// <inhertidoc />
-    public override void Draw(SKCanvas canvas)
-    {
-        base.Draw(canvas);
-
-        var leftCenter = BoundingBox.GetLeftCenter();
-        canvas.DrawText(text.Content, leftCenter.X, leftCenter.Y, font, Paints.ForegroundStroke);
-    }
+    //public override void Draw(SKCanvas canvas)
+    //{
+    //    base.Draw(canvas);
+    //    var leftCenter = BoundingBox.GetLeftCenter();
+    //    canvas.DrawText(text.Content, leftCenter.X, leftCenter.Y, font, Paints.ForegroundStroke);
+    //}
 }

@@ -11,7 +11,7 @@ public class Polygon : ContentGeometry
     /// <summary>
     /// Constructor.
     /// </summary>
-    public Polygon(Point center, double width, double height) : base(center, width, height)
+    public Polygon(Point center, double width, double height, bool isTemperary = false) : base(center, width, height, isTemperary)
     {
     }
 }

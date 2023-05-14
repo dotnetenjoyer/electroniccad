@@ -8,20 +8,18 @@ namespace ElectronicCad.Diagramming.Items;
 /// <summary>
 /// The base diagram item that represent item with a content.
 /// </summary>
-internal abstract class ContentGeometryObjectDiagramItem : GeometryObjectDiagramItem
+internal abstract class ContentGeometryObjectDiagramItem<TContentGeometry> : GeometryObjectDiagramItem<TContentGeometry> where TContentGeometry : ContentGeometry
 {
     /// <summary>
     /// Diagram item fill paint.
     /// </summary>
     public SKPaint FillPaint { get; set; }
 
-    private ContentGeometry ContentGeometry => (ContentGeometry)GeometryObject;
-
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="contentGeometry">Content geometry object.</param>
-    public ContentGeometryObjectDiagramItem(ContentGeometry contentGeometry) : base(contentGeometry)
+    public ContentGeometryObjectDiagramItem(TContentGeometry contentGeometry) : base(contentGeometry)
     {
     }
 
@@ -32,7 +30,7 @@ internal abstract class ContentGeometryObjectDiagramItem : GeometryObjectDiagram
 
         FillPaint = new SKPaint
         {
-            Color = ContentGeometry.FillColor.ToSKColor(),
+            Color = CertainGeometryObject.FillColor.ToSKColor(),
             Style = SKPaintStyle.Fill,
         };
     }

@@ -9,7 +9,7 @@ namespace ElectronicCad.Diagramming.Modes;
 /// </summary>
 internal class EllipseCreationMode : ShapeCreationMode<Ellipse>
 {
-    public const double InitialRadius = 10; 
+    public const double InitialRadius = 20; 
 
     /// <inheritdoc />
     protected override Ellipse CreateActualElement()

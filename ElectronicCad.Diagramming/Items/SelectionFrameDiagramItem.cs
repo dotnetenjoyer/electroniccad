@@ -60,12 +60,14 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     }
 
     /// <inheritdoc/>
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
-        if(SelectedItem == null)
+        if (SelectedItem == null)
         {
             return;
         }
+        
+        base.Draw(context);
 
         var boundingBox = SelectedItem.BoundingBox.ToSKRect();
         selectionFrameArea.BoundingBox = boundingBox;
@@ -73,8 +75,6 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
         topRigthGizmo.SetCenterPoint(boundingBox.GetTopRight());
         bottomLeftGizmo.SetCenterPoint(boundingBox.GetBottomLeft());
         bottomRigthGizmo.SetCenterPoint(boundingBox.GetBottomRight());
-
-        base.Draw(canvas);
     }
 }
 
@@ -93,9 +93,9 @@ internal class SelectionFrameArea : DiagramItem
         };
     }
 
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
-        canvas.DrawRect(BoundingBox, areaPaint);
+        context.DrawRect(BoundingBox, areaPaint);
     }
 }
 
@@ -129,8 +129,8 @@ internal class GizmoDiagramItem : DiagramItem
     }
 
     /// <inheritdoc />
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
-        canvas.DrawRect(BoundingBox.Left, BoundingBox.Top, BoundingBox.Width, BoundingBox.Height, paint);
+        context.DrawRect(BoundingBox, paint);
     }
 }
