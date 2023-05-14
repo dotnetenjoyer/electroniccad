@@ -174,6 +174,18 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
     /// <summary>
     /// Set center point and size of the geometry object.
     /// </summary>
+    /// <param name="centerX">Center coordinate X.</param>
+    /// <param name="centerY">Center coordinate Y.</param>
+    /// <param name="width">Width.</param>
+    /// <param name="height">Height.</param>
+    public void SetCenterAndSize(double centerX, double centerY, double width, double height)
+    {
+        SetCenterAndSize(new Point(centerX, centerY), width, height);
+    }
+
+    /// <summary>
+    /// Set center point and size of the geometry object.
+    /// </summary>
     /// <param name="center">Center position.</param>
     /// <param name="width">Width.</param>
     /// <param name="height">Height.</param>
@@ -266,7 +278,10 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
         return BoundingBox.Contains(point);
     }
 
-    private void RecalculateBoundingBox()
+    /// <summary>
+    /// Recalculate bounding box.
+    /// </summary>
+    protected void RecalculateBoundingBox()
     {
         BoundingBox = PointsUtils.CalculateBoundingBox(controlPoints);
     }

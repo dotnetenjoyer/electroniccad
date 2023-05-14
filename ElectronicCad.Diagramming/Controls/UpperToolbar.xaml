@@ -42,15 +42,15 @@
 
             <Button
                 Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
-                CommandParameter="{x:Static modes:DiagramMode.LineCreationMode}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.LineCreationMode)', ElementName=Toolbar}">
+                CommandParameter="{x:Static modes:DiagramMode.LineCreation}"
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.LineCreation)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource LineIcon}"/>
             </Button>
 
             <Button
                 Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
-                CommandParameter="{x:Static modes:DiagramMode.PolygonCreationMode}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.PolygonCreationMode)', ElementName=Toolbar}">
+                CommandParameter="{x:Static modes:DiagramMode.PolygonCreation}"
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.PolygonCreation)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource RectIcon}"/>
             </Button>
 
@@ -63,8 +63,8 @@
 
             <Button
                 Command="{Binding ChangeModeCommand, ElementName=Toolbar}"
-                CommandParameter="{x:Static modes:DiagramMode.NewText}"
-                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.NewText)', ElementName=Toolbar}">
+                CommandParameter="{x:Static modes:DiagramMode.TextCreation}"
+                control:UpperToolbarAssist.IsToolSelected="{c:Binding '(DiagramMode == modes:DiagramMode.TextCreation)', ElementName=Toolbar}">
                 <components:Icon Path="{StaticResource TextIcon}"/>
             </Button>
 

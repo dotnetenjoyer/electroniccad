@@ -53,9 +53,11 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     {
         if (SelectedItem != null && mouse.LeftButton == MouseButtonState.Pressed)
         {
-            using var scope = SelectedItem.Layer!.Diagram.StartModification();
+            using var scope = SelectedItem.StartDiagramModifcation();
+            SelectedItem.StartModification();
             var translateMatrix = Matrix3x2.CreateTranslation(mouse.Delta.ToVector2());
             SelectedItem.Transform(translateMatrix);
+            SelectedItem.CompleteModification();
         }
     }
 
@@ -66,8 +68,6 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
         {
             return;
         }
-        
-        base.Draw(context);
 
         var boundingBox = SelectedItem.BoundingBox.ToSKRect();
         selectionFrameArea.BoundingBox = boundingBox;
@@ -75,6 +75,8 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
         topRigthGizmo.SetCenterPoint(boundingBox.GetTopRight());
         bottomLeftGizmo.SetCenterPoint(boundingBox.GetBottomLeft());
         bottomRigthGizmo.SetCenterPoint(boundingBox.GetBottomRight());
+
+        base.Draw(context);
     }
 }
 

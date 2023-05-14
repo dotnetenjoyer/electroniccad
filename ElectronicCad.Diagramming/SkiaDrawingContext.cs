@@ -82,6 +82,21 @@ public class SkiaDrawingContext
         AfterDraw();
     }
 
+    /// <summary>
+    /// Draws a text on the canvas.
+    /// </summary>
+    /// <param name="text">Text.</param>
+    /// <param name="x">Coordinate X.</param>
+    /// <param name="y">Coordinate Y.</param>
+    /// <param name="font">Font.</param>
+    /// <param name="paint">Paint.</param>
+    public void DrawText(string text, double x, double y, SKFont font, SKPaint paint)
+    {
+        BeforeDraw();
+        canvas.DrawText(text, (float)x, (float)y, font, paint);
+        AfterDraw();
+    }
+
     private void BeforeDraw()
     {
         canvas.Translate((float)deltaX, (float)deltaY);

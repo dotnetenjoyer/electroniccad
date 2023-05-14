@@ -183,7 +183,7 @@ namespace ElectronicCad.Diagramming
                     SetDiagramMode(new Modes.SelectionMode());
                     break;
 
-                case DiagramMode.LineCreationMode:
+                case DiagramMode.LineCreation:
                     SetDiagramMode(new LineCreationMode());
                     break;
 
@@ -191,12 +191,12 @@ namespace ElectronicCad.Diagramming
                     SetDiagramMode(new EllipseCreationMode());
                     break;
 
-                case DiagramMode.PolygonCreationMode:
+                case DiagramMode.PolygonCreation:
                     SetDiagramMode(new PolygonCreationMode());
                     break;
 
-                case DiagramMode.NewText:
-                    SetDiagramMode(new NewTextMode());
+                case DiagramMode.TextCreation:
+                    SetDiagramMode(new Modes.TextCreationMode());
                     break;
             }
 

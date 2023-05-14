@@ -36,5 +36,7 @@ public class Line : GeometryObject
         {
             controlPoints[i] = points[i];
         }
+
+        RecalculateBoundingBox();
     }
 }

@@ -53,6 +53,6 @@ public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometry
     /// </summary>
     protected virtual void UpdateEntityInternal()
     {
-        //Source.SetCenterAndSize(CenterX, CenterY, Width, Height);
+        Source.SetCenterAndSize(CenterX, CenterY, Width, Height);
     }
 }
