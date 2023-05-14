@@ -3,6 +3,7 @@ using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Domain.Geometry;
 using System.Diagnostics;
+using System.Numerics;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -52,32 +53,30 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     {
         if (SelectedItem != null && mouse.LeftButton == MouseButtonState.Pressed)
         {
-            using var scope = SelectedItem.Layer.Diagram.StartModification();
-
-            for (int i = 0; i < SelectedItem.ControlPoints.Count; i++)
-            {
-                var controlPoint = SelectedItem.ControlPoints[i];
-                SelectedItem.UpdateControlPoint(i, controlPoint.X + mouse.Delta.X, controlPoint.Y + mouse.Delta.Y);
-            }
+            using var scope = SelectedItem.StartDiagramModifcation();
+            SelectedItem.StartModification();
+            var translateMatrix = Matrix3x2.CreateTranslation(mouse.Delta.ToVector2());
+            SelectedItem.Transform(translateMatrix);
+            SelectedItem.CompleteModification();
         }
     }
 
     /// <inheritdoc/>
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
-        if(SelectedItem == null)
+        if (SelectedItem == null)
         {
             return;
         }
 
-        var boundingBox = SelectedItem.CalculateBoundingBox().ToSKRect();
+        var boundingBox = SelectedItem.BoundingBox.ToSKRect();
         selectionFrameArea.BoundingBox = boundingBox;
         topLefGizmo.SetCenterPoint(boundingBox.GetTopLeft());
         topRigthGizmo.SetCenterPoint(boundingBox.GetTopRight());
         bottomLeftGizmo.SetCenterPoint(boundingBox.GetBottomLeft());
         bottomRigthGizmo.SetCenterPoint(boundingBox.GetBottomRight());
 
-        base.Draw(canvas);
+        base.Draw(context);
     }
 }
 
@@ -96,9 +95,9 @@ internal class SelectionFrameArea : DiagramItem
         };
     }
 
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
-        canvas.DrawRect(BoundingBox, areaPaint);
+        context.DrawRect(BoundingBox, areaPaint);
     }
 }
 
@@ -132,8 +131,8 @@ internal class GizmoDiagramItem : DiagramItem
     }
 
     /// <inheritdoc />
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
-        canvas.DrawRect(BoundingBox.Left, BoundingBox.Top, BoundingBox.Width, BoundingBox.Height, paint);
+        context.DrawRect(BoundingBox, paint);
     }
 }

@@ -13,7 +13,6 @@ using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Diagramming.Extensions;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
-using System.Reflection;
 
 namespace ElectronicCad.Diagramming
 {
@@ -184,20 +183,20 @@ namespace ElectronicCad.Diagramming
                     SetDiagramMode(new Modes.SelectionMode());
                     break;
 
-                case DiagramMode.NewLine:
-                    SetDiagramMode(new NewLineMode());
+                case DiagramMode.LineCreation:
+                    SetDiagramMode(new LineCreationMode());
                     break;
 
-                case DiagramMode.NewEllipse:
-                    SetDiagramMode(new NewEllipseMode());
+                case DiagramMode.EllipseCreation:
+                    SetDiagramMode(new EllipseCreationMode());
                     break;
 
-                case DiagramMode.NewPolygon:
-                    SetDiagramMode(new NewPolygonMode());
+                case DiagramMode.PolygonCreation:
+                    SetDiagramMode(new PolygonCreationMode());
                     break;
 
-                case DiagramMode.NewText:
-                    SetDiagramMode(new NewTextMode());
+                case DiagramMode.TextCreation:
+                    SetDiagramMode(new Modes.TextCreationMode());
                     break;
             }
 
@@ -208,7 +207,7 @@ namespace ElectronicCad.Diagramming
         {
             if(this.diagramMode != null)
             {
-                this.diagramMode.Finalize();
+                this.diagramMode.Finish();
             }
          
             this.diagramMode = diagramMode;
@@ -263,6 +262,18 @@ namespace ElectronicCad.Diagramming
                 typeof(Diagram), new PropertyMetadata());
 
         /// <summary>
+        /// Calculates canvas position.
+        /// </summary>
+        /// <param name="eventArgs">Mouse event args.</param>
+        /// <returns>Canvas mouse position.</returns>
+        internal SKPoint GetPosition(MouseEventArgs eventArgs)
+        {
+            var position = eventArgs.GetPosition(this).ToSKPoint();
+            position.Offset(-DeltaX, -DeltaY);
+            return position;
+        }
+
+        /// <summary>
         /// Focused diagram item.
         /// </summary>
         internal DiagramItem? FocusItem { get; private set; }
@@ -282,17 +293,17 @@ namespace ElectronicCad.Diagramming
         /// </summary>
         internal float DeltaY { get; private  set; }
 
+        /// <summary>
+        /// Called when redrawing the diagram.
+        /// </summary>
+        internal event EventHandler<SkiaDrawingContext> Redraws;
 
         /// <summary>
-        /// Calculates canvas position.
+        /// Initiates redrawing of diagram.
         /// </summary>
-        /// <param name="eventArgs">Mouse event args.</param>
-        /// <returns>Canvas mouse position.</returns>
-        internal SKPoint GetPosition(MouseEventArgs eventArgs)
+        public void Redraw()
         {
-            var position = eventArgs.GetPosition(this).ToSKPoint();
-            position.Offset(-DeltaX, -DeltaY);
-            return position;
+            SkiaCanvas.InvalidateVisual();
         }
 
         private void HandleDiagramMouseDown(object sender, MouseButtonEventArgs eventArgs)
@@ -378,11 +389,6 @@ namespace ElectronicCad.Diagramming
             return;
         }
 
-        public void Redraw()
-        {
-            SkiaCanvas.InvalidateVisual();
-        }
-
         private void SkElementOnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
         {
             var canvas = e.Surface.Canvas;
@@ -397,26 +403,29 @@ namespace ElectronicCad.Diagramming
             }
 
             canvas.Clear();
-            canvas.Translate((float)DeltaX, (float)DeltaY);
+            
+            var drawingContext = new SkiaDrawingContext(canvas);
+            drawingContext.Translate(DeltaX, DeltaY);
 
-            DrawWorkspaceArea(canvas);
+            DrawWorkspaceArea(drawingContext);
 
             var sortedDiagramItems = diagramItems
                 .Where(item => item.IsVisible)
-                .OrderBy(item => item.ZIndex)
                 .ToList();
 
             foreach (var item in sortedDiagramItems)
             {
-                item.Draw(canvas);
+                item.Draw(drawingContext);
             }
+
+            Redraws.Invoke(this, drawingContext);
         }
 
-        private void DrawWorkspaceArea(SKCanvas canvas)
+        private void DrawWorkspaceArea(SkiaDrawingContext drawingContext)
         {
             var workspaceArea = new SKRect(0, 0, DomainDiagram.Width, DomainDiagram.Height);
             var paint = new SKPaint { Color = Colors.SecondaryBackground };
-            canvas.DrawRect(workspaceArea, paint);
+            drawingContext.DrawRect(workspaceArea, paint);
         }
 
         #endregion

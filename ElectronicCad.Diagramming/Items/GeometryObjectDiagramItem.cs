@@ -1,8 +1,7 @@
-﻿using ElectronicCad.Diagramming.Extensions;
-using ElectronicCad.Domain.Geometry;
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.Views.Desktop;
-using System;
+using ElectronicCad.Diagramming.Extensions;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -23,82 +22,45 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     public GeometryObjectDiagramItem(GeometryObject domainObject)
     {
         GeometryObject = domainObject;
-        UpdateViewState();
     }
 
     /// <inheritdoc />
     public virtual void UpdateViewState()
     {
-        RecalculateBoundingBox();
-
-        FillPaint = CreateFillPaint();
-        StrokePaint = CreateStrokePaint();
-    }
-
-    /// <summary>
-    /// Recalculate bounding box.
-    /// </summary>
-    protected void RecalculateBoundingBox()
-    {
-        var boundingBox = GeometryObject.CalculateBoundingBox();
-        BoundingBox = boundingBox.ToSKRect();
+        BoundingBox = GeometryObject.BoundingBox.ToSKRect();
+        StrokePaint = new SKPaint
+        {
+            Color = GeometryObject.StrokeColor.ToSKColor(),
+            Style = SKPaintStyle.Stroke,
+            StrokeWidth = (float)GeometryObject.StrokeWidth,
+        };
     }
 
     /// <inheritdoc />
     public override bool CheckHit(ref SKPoint position)
     {
-        var domainPoint = new Point(position.X, position.Y);
-        return GeometryObject.CheckHit(domainPoint);
+        return GeometryObject.CheckHit(position.ToDomainPoint());
     }
+}
 
-    private SKPaint CreateFillPaint()
+/// <summary>
+/// Generic geometry object diagram item.
+/// </summary>
+/// <typeparam name="TGeometryObject">Type of gemetry object.</typeparam>
+internal abstract class GeometryObjectDiagramItem<TGeometryObject> : GeometryObjectDiagramItem where TGeometryObject : GeometryObject
+{
+    /// <summary>
+    /// Certain geometry object.
+    /// </summary>
+    public TGeometryObject CertainGeometryObject { get; private set; }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="geometryObject">Geometry object.</param>
+    public GeometryObjectDiagramItem(TGeometryObject geometryObject) : base(geometryObject)
     {
-        if (string.IsNullOrEmpty(GeometryObject.Fill))
-        {
-            return TransparentPaint;
-        }
-
-        var fill = ConvertToColor(GeometryObject.Fill);
-        var fillColor = new SKColor(fill.red, fill.green, fill.blue);
-      
-        var paint = new SKPaint
-        {
-            Color = fillColor,
-            Style = SKPaintStyle.StrokeAndFill,
-            StrokeWidth = 2,
-        };
-
-        return paint;
-    }
-
-    private SKPaint CreateStrokePaint()
-    {
-        if (string.IsNullOrEmpty(GeometryObject.Stroke))
-        {
-            return TransparentPaint;
-        }
-
-        var stroke = ConvertToColor(GeometryObject.Stroke);
-        var strokeColor = new SKColor(stroke.red, stroke.green, stroke.blue);
-
-        var paint = new SKPaint
-        {
-            Color = strokeColor,
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = 2,
-        };
-
-        return paint;
-    }
-
-    private (byte red, byte green, byte blue) ConvertToColor(string hexColor)
-    {
-        hexColor = hexColor.Replace("#", "");
-
-        var red = Convert.ToByte(hexColor.Substring(0, 2), 16);
-        var green = Convert.ToByte(hexColor.Substring(2, 2), 16);
-        var blue = Convert.ToByte(hexColor.Substring(4, 2), 16);
-
-        return (red, green, blue);
+        CertainGeometryObject = geometryObject;
+        UpdateViewState();
     }
 }

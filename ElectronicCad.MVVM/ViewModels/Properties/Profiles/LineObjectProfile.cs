@@ -1,4 +1,5 @@
 ﻿using ElectronicCad.MVVM.Properties.Configuration;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Profiles;
@@ -14,10 +15,6 @@ internal class LineObjectProfile : PropertyObjectProfile
     public LineObjectProfile()
     {
         CreateConfiguration<LinePropertyProxy>()
-            .HasPrimitive(source => source.X)
-            .HasPrimitive(source => source.Y)
-            .HasPrimitive(source => source.Width)
-            .HasPrimitive(source => source.Height)
-            .HasPrimitive(source => source.StrokeColor);
+            .HasCustomSection<TransformationCustomSection>();
     }
 }

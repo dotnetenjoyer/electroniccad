@@ -14,11 +14,11 @@ internal class GroupDiagramItem : DiagramItem
     protected readonly ICollection<DiagramItem> GroupedItems = new List<DiagramItem>();
 
     /// <inheritdoc />
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
         foreach (DiagramItem item in GroupedItems)
         {
-            item.Draw(canvas);
+            item.Draw(context);
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-    xmlns:converters="clr-namespace:ElectronicCad.Desktop.Styles.Converters">
+    xmlns:converters="clr-namespace:ElectronicCad.Desktop.UI.Converters">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml"/>
@@ -17,7 +17,7 @@
                 <ToolTip
                     Visibility="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}, Converter={StaticResource TooltipVisibilityConverter}}"
                     Content="{Binding Path=PlacementTarget.Text, RelativeSource={RelativeSource Self}}"
-                    />
+                />
             </Setter.Value>
         </Setter>
     </Style>

@@ -1,6 +1,3 @@
-using SkiaSharp;
-using ElectronicCad.Diagramming.Utils;
-using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Items;
@@ -8,26 +5,29 @@ namespace ElectronicCad.Diagramming.Items;
 /// <summary>
 /// Ellipse diagram node.
 /// </summary>
-internal class EllipseDiagramItem : GeometryObjectDiagramItem
+internal class EllipseDiagramItem : ContentGeometryObjectDiagramItem<Ellipse>
 {
+    /// <summary>
+    /// Related ellipse.
+    /// </summary>
+    internal Ellipse Ellipse => CertainGeometryObject;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     public EllipseDiagramItem(Ellipse ellipse) : base(ellipse)
     {
-
     }
 
     /// <inheritdoc/>
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext drawingContext)
     {
-        base.Draw(canvas);
+        base.Draw(drawingContext);
 
-        var center = BoundingBox.GetCenter();
-        var xRadius = BoundingBox.Width / 2;
-        var yRadius = BoundingBox.Height / 2;
+        drawingContext.DrawEllipse(Ellipse.BoundingBox.Center.X, Ellipse.BoundingBox.Center.Y, 
+            Ellipse.RadiusX, Ellipse.RadiusY, FillPaint);
 
-        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, FillPaint);
-        canvas.DrawOval(center.X, center.Y, xRadius, yRadius, StrokePaint);
+        drawingContext.DrawEllipse(Ellipse.BoundingBox.Center.X, Ellipse.BoundingBox.Center.Y,
+            Ellipse.RadiusX, Ellipse.RadiusY, StrokePaint);
     }
 }

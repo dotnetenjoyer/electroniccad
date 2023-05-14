@@ -16,7 +16,7 @@ public class Text : ContentGeometry
     /// <summary>
     /// Constructor.
     /// </summary>
-    public Text(params Point[] points) : base(points)
+    public Text(Point center, double width, double height) : base(center, width, height)
     {
     }
 }

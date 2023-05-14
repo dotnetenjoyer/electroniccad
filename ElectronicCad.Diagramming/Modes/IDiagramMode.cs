@@ -8,7 +8,7 @@ namespace ElectronicCad.Diagramming.Modes;
 public interface IDiagramMode
 {
     /// <summary>
-    /// Mode cursor.
+    /// Diagram mode cursor.
     /// </summary>
     Cursor Cursor { get; }
     
@@ -23,13 +23,13 @@ public interface IDiagramMode
     MouseButton SecondaryButton { get; }
 
     /// <summary>
-    /// Method that invokes to initialize mode.
+    /// The method to initialize diagram mode.
     /// </summary>
     /// <param name="diagram">Diagram control.</param>
     void Initialize(Diagram diagram);
     
     /// <summary>
-    ///M Method that invokes to finalize mode.
+    /// The method to finalize mode.
     /// </summary>
-    void Finalize();
+    void Finish();
 }

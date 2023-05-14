@@ -3,7 +3,7 @@ using ElectronicCad.MVVM.Properties.Configuration;
 using ElectronicCad.MVVM.Properties.Implementation.CustomSections;
 using System.Reflection;
 
-namespace ElectronicCad.MVVM.Properties;
+namespace ElectronicCad.MVVM.Properties.Implementation;
 
 /// <summary>
 /// Property object factory.
@@ -29,7 +29,7 @@ public class PropertyObjectFactory
         var objectConfigurations = new List<IPropertyObjectConfiguration>();
         foreach (var profile in profiles)
         {
-            var instance = Activator.CreateInstance(profile) 
+            var instance = Activator.CreateInstance(profile)
                 ?? throw new InvalidOperationException($"Cannot create property object profile - {profile.Name}");
             var profileInstance = (PropertyObjectProfile)instance;
             objectConfigurations.AddRange(profileInstance.PropertyObjectConfigurations);
@@ -55,13 +55,12 @@ public class PropertyObjectFactory
     public PropertyObject Create<TProxy>(TProxy proxy) where TProxy : IProxy
     {
         var configuration = GetConfiguration(proxy);
-
         var propertyObject = new PropertyObject()
         {
             CustomSections = CreateCustomSections(configuration, proxy),
             Groups = CreatePropertyGroups(configuration, proxy),
         };
-        
+
         return propertyObject;
     }
 
@@ -85,7 +84,7 @@ public class PropertyObjectFactory
         foreach (var sectionConfiguration in configuration.CustomSectionConfigurations)
         {
             var factory = customSectionFactoriesFactory.CreateFactory(sectionConfiguration.CustomSectionType);
-         
+
             if (factory.CanCreate(proxy))
             {
                 var section = factory.Create(proxy);
@@ -96,7 +95,7 @@ public class PropertyObjectFactory
         return sections;
     }
 
-    private IEnumerable<PropertyGroup> CreatePropertyGroups(IPropertyObjectConfiguration configuration, IProxy proxy) 
+    private IEnumerable<PropertyGroup> CreatePropertyGroups(IPropertyObjectConfiguration configuration, IProxy proxy)
     {
         var properties = new List<IProperty>();
         foreach (var propertyConfiguration in configuration.PropertyConfigurations)
@@ -108,10 +107,10 @@ public class PropertyObjectFactory
         var groups = properties
             .GroupBy(property => property.GroupName)
             .Select(properties => new PropertyGroup
-                {
-                    Name = properties.Key,
-                    Properties = properties
-                });
+            {
+                Name = properties.Key,
+                Properties = properties
+            });
 
         return groups;
     }

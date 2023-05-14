@@ -5,13 +5,13 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Polygone property proxy.
 /// </summary>
-public class PolygonPropertyProxy : GeometryObjectPropertyProxy<Polygon>
+public class PolygonPropertyProxy : ContentGeometryObjectProxy<Polygon>
 {
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="polygone">Polygone.</param>
-    public PolygonPropertyProxy(Polygon polygone) : base(polygone)
+    /// <param name="polygon">Polygon.</param>
+    public PolygonPropertyProxy(Polygon polygon) : base(polygon)
     {
     }
 }

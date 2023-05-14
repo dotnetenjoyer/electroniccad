@@ -3,7 +3,7 @@ using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.Infrastructure.Abstractions.Services;
 using ElectronicCad.Infrastructure.Implementations.Services;
 using ElectronicCad.Infrastructure.Implementations.Services.Projects;
-using ElectronicCad.MVVM.Properties;
+using ElectronicCad.MVVM.Properties.Implementation;
 using ElectronicCad.MVVM.Properties.Implementation.CustomSections;
 using Microsoft.Extensions.DependencyInjection;
 

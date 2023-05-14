@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ElectronicCad.Desktop.Styles.Components
+namespace ElectronicCad.Desktop.UI.Components
 {
     /// <summary>
     /// Interaction logic for TreeGrid.xaml

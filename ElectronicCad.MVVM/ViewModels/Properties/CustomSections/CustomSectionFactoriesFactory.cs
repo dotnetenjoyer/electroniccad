@@ -1,5 +1,5 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
-using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Colors;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,9 +26,9 @@ public class CustomSectionFactoriesFactory : ICustomSectionFactoriesFactory
             var factory = ActivatorUtilities.CreateInstance(serviceProvider, typeof(TransformationCustomSectionFactory));
             return (ICustomSectionFactory)factory;
         }
-        else if(customSectionType == typeof(ColorsCustomSection))
+        else if(customSectionType == typeof(ShapeCustomSection))
         {
-            var factory = ActivatorUtilities.CreateInstance(serviceProvider, typeof(ColorsCustomSectionFactory));
+            var factory = ActivatorUtilities.CreateInstance(serviceProvider, typeof(ShapeCustomSectionFactory));
             return (ICustomSectionFactory)factory;
         }
 

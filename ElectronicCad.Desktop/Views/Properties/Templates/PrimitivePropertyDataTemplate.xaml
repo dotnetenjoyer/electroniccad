@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary 
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:components="clr-namespace:ElectronicCad.Desktop.Styles.Components;assembly=ElectronicCad.Desktop.UI">
+    xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI">
 
     <DataTemplate x:Key="PrimitiveBooleanValueDataTemplate">
         <StackPanel>
@@ -18,7 +18,8 @@
     <DataTemplate x:Key="PrimitiveInputValueDataTemplate">
         <components:InputControl 
             Title="{Binding Name}"
-            Value="{Binding Value}"/>
+            Value="{Binding Value}"
+            StringFormat="{Binding Format}"/>
     </DataTemplate>
 
 </ResourceDictionary>

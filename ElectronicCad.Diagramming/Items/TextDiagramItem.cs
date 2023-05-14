@@ -1,29 +1,34 @@
 ﻿using SkiaSharp;
 using ElectronicCad.Diagramming.Items;
 using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
-using System.Drawing;
 
 namespace ElectronicCad.Diagramming;
 
-internal class TextDiagramItem : GeometryObjectDiagramItem
+/// <summary>
+/// The diagram item to draw text.
+/// </summary>
+internal class TextDiagramItem : GeometryObjectDiagramItem<Text>
 {
-    private readonly Text text;
-
-    private static readonly SKFont font = new SKFont(SKTypeface.Default, size: 16);
-
+    /// <summary>
+    /// Text geometry object..
+    /// </summary>
+    internal Text Text => CertainGeometryObject;
+    
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="text">Text.</param>
     public TextDiagramItem(Text text) : base(text)
     {
-        this.text = text;
     }
 
     /// <inhertidoc />
-    public override void Draw(SKCanvas canvas)
+    public override void Draw(SkiaDrawingContext context)
     {
-        base.Draw(canvas);
+        base.Draw(context);
 
-        var leftCenter = BoundingBox.GetLeftCenter();
-        canvas.DrawText(text.Content, leftCenter.X, leftCenter.Y, font, Paints.ForegroundStroke);
+        var font = new SKFont(SKTypeface.Default, size: 16);
+        context.DrawText(Text.Content, Text.BoundingBox.Center.X, Text.BoundingBox.Center.Y, font, Paints.ForegroundStroke);
     }
 }

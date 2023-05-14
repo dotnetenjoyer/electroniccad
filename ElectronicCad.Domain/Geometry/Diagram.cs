@@ -148,20 +148,20 @@ public class Diagram : IDisposable
         GeometryModified.Invoke(this, modifiedGeometryObjects);
     }
 
-    internal ModificationScope? ModificationScope { get; private set; }
+    internal DiagramModificationScope? ModificationScope { get; private set; }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    public ModificationScope StartModification()
+    public DiagramModificationScope StartModification()
     {
         if (ModificationScope != null)
         {
             return ModificationScope;
         }
 
-        ModificationScope = new ModificationScope(this);
+        ModificationScope = new DiagramModificationScope(this);
         return ModificationScope;
     }
 

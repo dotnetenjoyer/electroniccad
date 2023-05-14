@@ -1,7 +1,7 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
 using ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;
 
-namespace ElectronicCad.MVVM.Properties;
+namespace ElectronicCad.MVVM.Properties.Implementation;
 
 /// <summary>
 /// Factory to create proprty based on property configuration.
