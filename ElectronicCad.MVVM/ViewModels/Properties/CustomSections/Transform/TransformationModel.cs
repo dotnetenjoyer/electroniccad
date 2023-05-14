@@ -10,44 +10,44 @@ public class TransformationModel : EditableModel
     /// <summary>
     /// Position of center x.
     /// </summary>
-    public float X 
+    public double CenterX 
     { 
-        get => x;
-        set => SetProperty(ref x, value);
+        get => centerX;
+        set => SetProperty(ref centerX, value);
     }
 
-    private float x;
+    private double centerX;
 
     /// <summary>
     /// Position of center y.
     /// </summary>
-    public float Y 
+    public double CenterY 
     { 
-        get => y; 
-        set => SetProperty(ref y, value);
+        get => centerY; 
+        set => SetProperty(ref centerY, value);
     }
 
-    private float y;
+    private double centerY;
 
     /// <summary>
     /// Width.
     /// </summary>
-    public float Width 
+    public double Width 
     { 
         get => width; 
         set => SetProperty(ref width, value); 
     }
 
-    private float width;
+    private double width;
 
     /// <summary>
     /// Height.
     /// </summary>
-    public float Height 
+    public double Height 
     { 
         get => height;
         set => SetProperty(ref height, value);
     }
 
-    private float height;
+    private double height;
 }

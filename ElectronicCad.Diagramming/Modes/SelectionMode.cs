@@ -76,9 +76,9 @@ public class SelectionMode : BaseDiagramMode
     }
 
     /// <inheritdoc/>
-    public override void Finalize()
+    public override void Finish()
     {
-        base.Finalize();
+        base.Finish();
         
         selectionFrame.IsVisible = false;
         Diagram.Redraw();

@@ -7,8 +7,6 @@ namespace ElectronicCad.Diagramming.Modes;
 /// </summary>
 public abstract class BaseDiagramMode : IDiagramMode
 {
-    private Cursor _originalCursor;
-    
     /// <summary>
     /// Diagram control.
     /// </summary>
@@ -22,17 +20,24 @@ public abstract class BaseDiagramMode : IDiagramMode
 
     /// <inheritdoc/>
     public virtual MouseButton SecondaryButton => MouseButton.Right;
-    
+
+    private Cursor previousCursor;
+
     /// <inheritdoc/>
     public virtual void Initialize(Diagram diagram)
     {
         Diagram = diagram;
+
         Diagram.MouseDown += HandleDiagramMouseDown;
         Diagram.MouseUp += HandleDiagramMouseUp;
         Diagram.MouseMove += HandleDiagramMouseMove;
-        _originalCursor = Diagram.Cursor;
+        Diagram.Redraws += HandleDiagramRedraws;
+        
+        previousCursor = Diagram.Cursor;
         Diagram.Cursor = Cursor;
     }
+
+    #region EventHandlers
 
     private void HandleDiagramMouseDown(object sender, MouseButtonEventArgs eventArgs)
     {
@@ -62,9 +67,16 @@ public abstract class BaseDiagramMode : IDiagramMode
     {
         ProcessMouseMove(eventArgs);
     }
-    
+
+    private void HandleDiagramRedraws(object? sender, SkiaDrawingContext context)
+    {
+        DrawGizmos(context);
+    }
+
+    #endregion
+
     /// <summary>
-    /// Method that process primary button down.
+    /// The method to process primary button down.
     /// </summary>
     /// <param name="args">Mouse button event args.</param>
     protected virtual void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
@@ -72,7 +84,7 @@ public abstract class BaseDiagramMode : IDiagramMode
     }
 
     /// <summary>
-    /// Method that process primary button up.
+    /// The method to process primary button up.
     /// </summary>
     /// <param name="args">Mouse button event args.</param>
     protected virtual void ProcessPrimaryButtonUp(MouseButtonEventArgs args)
@@ -80,7 +92,7 @@ public abstract class BaseDiagramMode : IDiagramMode
     }
 
     /// <summary>
-    /// Method that process secondary button down.
+    /// The method to process secondary button down.
     /// </summary>
     /// <param name="args">Mouse button event args.</param>
     protected virtual void ProcessSecondaryButtonDown(MouseButtonEventArgs args)
@@ -89,14 +101,26 @@ public abstract class BaseDiagramMode : IDiagramMode
     }
     
     /// <summary>
-    /// Method that process secondary button up.
+    /// The method to process secondary button up.
     /// </summary>
     /// <param name="args">Mouse button event args.</param>
     protected virtual void ProcessSecondaryButtonUp(MouseButtonEventArgs args)
     {
     }
 
+    /// <summary>
+    /// The method to process mouse move.
+    /// </summary>
+    /// <param name="args">Mouse button event args.</param>
     protected virtual void ProcessMouseMove(MouseEventArgs args)
+    {
+    }
+
+    /// <summary>
+    /// Draws diagram mode gizmos.
+    /// </summary>
+    /// <param name="context"></param>
+    protected virtual void DrawGizmos(SkiaDrawingContext context)
     {
     }
     
@@ -108,13 +132,15 @@ public abstract class BaseDiagramMode : IDiagramMode
     }
 
     /// <inheritdoc/>
-    public virtual void Finalize()
+    public virtual void Finish()
     {
         Cancel();
 
         Diagram.MouseDown -= HandleDiagramMouseDown;
         Diagram.MouseUp -= HandleDiagramMouseUp;
         Diagram.MouseMove -= HandleDiagramMouseMove;
-        Diagram.Cursor = _originalCursor;
+        Diagram.Redraws -= HandleDiagramRedraws;
+
+        Diagram.Cursor = previousCursor;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using ElectronicCad.MVVM.Properties.Abstractions;
+using System.Runtime.CompilerServices;
 
 namespace ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;
 
@@ -58,29 +59,32 @@ public class PrimitiveProperty<TValue> : ObservableObject, IProperty
         this.sourceProperty = sourceProperty;
         Name = name;
 
-        //TODO: optimize initialization;
         UpdateFromSource();
+
+        sourceObject.Updated += HandleSourceChanges;
+    }
+
+    private void UpdateFromSource()
+    {
+        var proxyPropertyValue = sourceProperty.GetValue(sourceObject);
+        if (proxyPropertyValue is TValue value)
+        {
+            SetProperty(ref propertyValue, value, nameof(Value));
+        }
+    }
+
+    private void UpdateSource()
+    {
+        sourceObject.Updated -= HandleSourceChanges;
+        
+        sourceProperty.SetValue(sourceObject, Value);
+        sourceObject.UpdateEntity();
+ 
         sourceObject.Updated += HandleSourceChanges;
     }
 
     private void HandleSourceChanges(object? sender, EventArgs eventArgs)
     {
         UpdateFromSource();
-    }
-
-    private void UpdateFromSource()
-    {
-        var propertyValue = sourceProperty.GetValue(sourceObject);
-        
-        if (propertyValue is TValue value)
-        {
-            Value = value;
-        }
-    }
-
-    private void UpdateSource()
-    {
-        sourceProperty.SetValue(sourceObject, Value);
-        sourceObject.UpdateEntity();
     }
 }

@@ -21,5 +21,5 @@ public interface IShapeProxy : IProxy
     /// <summary>
     /// Determines the geometry object stoke width.
     /// </summary>
-    public float StrokeWidth { get; set; }
+    public double StrokeWidth { get; set; }
 }

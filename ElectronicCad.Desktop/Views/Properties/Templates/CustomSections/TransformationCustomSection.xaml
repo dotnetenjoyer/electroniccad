@@ -14,15 +14,15 @@
                 </Grid.ColumnDefinitions>
 
                 <components:InputControl
-                    Title="X"
-                    Value="{Binding TransformationModel.X}"
+                    Title="Center X"
+                    Value="{Binding TransformationModel.CenterX}"
                     StringFormat="{}{0:#,#.##}"
                 />
                 
                 <components:InputControl
-                    Title="Y"
+                    Title="Center Y"
                     Grid.Column="2"
-                    Value="{Binding TransformationModel.Y}"
+                    Value="{Binding TransformationModel.CenterY}"
                     StringFormat="{}{0:#,#.##}"
                 />
             </Grid>

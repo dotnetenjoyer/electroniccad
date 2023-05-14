@@ -1,8 +1,7 @@
-﻿using ElectronicCad.Diagramming.Extensions;
-using ElectronicCad.Domain.Geometry;
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.Views.Desktop;
-using System;
+using ElectronicCad.Diagramming.Extensions;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Items;
 
@@ -23,41 +22,45 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     public GeometryObjectDiagramItem(GeometryObject domainObject)
     {
         GeometryObject = domainObject;
-        UpdateViewState();
     }
 
     /// <inheritdoc />
     public virtual void UpdateViewState()
     {
-        RecalculateBoundingBox();
-
-        FillPaint = new SKPaint
-        {
-            Color = GeometryObject.Fill.ToSKColor(),
-            Style = SKPaintStyle.Fill,
-        };
-
+        BoundingBox = GeometryObject.BoundingBox.ToSKRect();
         StrokePaint = new SKPaint
         {
-            Color = GeometryObject.Stroke.ToSKColor(),
+            Color = GeometryObject.StrokeColor.ToSKColor(),
             Style = SKPaintStyle.Stroke,
-            StrokeWidth = GeometryObject.StrokeWidth,
+            StrokeWidth = (float)GeometryObject.StrokeWidth,
         };
-    }
-
-    /// <summary>
-    /// Recalculate bounding box.
-    /// </summary>
-    protected void RecalculateBoundingBox()
-    {
-        var boundingBox = GeometryObject.CalculateBoundingBox();
-        BoundingBox = boundingBox.ToSKRect();
     }
 
     /// <inheritdoc />
     public override bool CheckHit(ref SKPoint position)
     {
-        var domainPoint = new Point(position.X, position.Y);
-        return GeometryObject.CheckHit(domainPoint);
+        return GeometryObject.CheckHit(position.ToDomainPoint());
+    }
+}
+
+/// <summary>
+/// Generic geometry object diagram item.
+/// </summary>
+/// <typeparam name="TGeometryObject">Type of gemetry object.</typeparam>
+internal abstract class GeometryObjectDiagramItem<TGeometryObject> : GeometryObjectDiagramItem where TGeometryObject : GeometryObject
+{
+    /// <summary>
+    /// Certain geometry object.
+    /// </summary>
+    public TGeometryObject CertainGeometryObject { get; private set; }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="geometryObject">Geometry object.</param>
+    public GeometryObjectDiagramItem(TGeometryObject geometryObject) : base(geometryObject)
+    {
+        CertainGeometryObject = geometryObject;
+        UpdateViewState();
     }
 }

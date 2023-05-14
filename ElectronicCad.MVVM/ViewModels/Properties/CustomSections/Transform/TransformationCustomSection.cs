@@ -42,8 +42,8 @@ public class TransformationCustomSection : ICustomSection
     {
         TransformationModel.PropertyChanged -= HandleTransformationModelChanged;
 
-        TransformationModel.X = transformationProxy.X;
-        TransformationModel.Y = transformationProxy.Y;
+        TransformationModel.CenterX = transformationProxy.CenterX;
+        TransformationModel.CenterY = transformationProxy.CenterY;
         TransformationModel.Width = transformationProxy.Width;
         TransformationModel.Height = transformationProxy.Height;
 
@@ -52,8 +52,8 @@ public class TransformationCustomSection : ICustomSection
 
     private void UpdateProxy()
     {
-        transformationProxy.X = TransformationModel.X;
-        transformationProxy.Y = TransformationModel.Y;
+        transformationProxy.CenterX = TransformationModel.CenterX;
+        transformationProxy.CenterY = TransformationModel.CenterY;
         transformationProxy.Width = TransformationModel.Width;
         transformationProxy.Height = TransformationModel.Height;
 

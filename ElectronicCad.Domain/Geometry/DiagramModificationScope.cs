@@ -1,6 +1,9 @@
 ﻿namespace ElectronicCad.Domain.Geometry;
 
-public class ModificationScope : IDisposable
+/// <summary>
+/// Diagram modification scope
+/// </summary>
+public class DiagramModificationScope : IDisposable
 {
     /// <summary>
     /// The diagram that releated with scope
@@ -13,7 +16,7 @@ public class ModificationScope : IDisposable
     /// Constructor.
     /// </summary>
     /// <param name="diagram">Diagram.</param>
-    public ModificationScope(Diagram diagram)
+    public DiagramModificationScope(Diagram diagram)
     {
         Diagram = diagram;
     }
@@ -32,7 +35,19 @@ public class ModificationScope : IDisposable
     {
         if (modifiedGeometry.Any())
         {
+            CompleteObjectsModification();
             Diagram.HandleGeometryModification(modifiedGeometry);
+        }
+    }
+
+    private void CompleteObjectsModification()
+    {
+        foreach (GeometryObject geometryObject in modifiedGeometry)
+        {
+            if (geometryObject.IsModificationStarted)
+            {
+                geometryObject.CompleteModification();
+            }
         }
     }
 }

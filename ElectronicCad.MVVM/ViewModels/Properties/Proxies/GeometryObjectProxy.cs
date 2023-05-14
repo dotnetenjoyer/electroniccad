@@ -1,6 +1,5 @@
 ﻿using ElectronicCad.Domain.Geometry;
 using ElectronicCad.MVVM.Properties.Abstractions;
-using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
@@ -8,29 +7,20 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Geometry object property proxy.
 /// </summary>
-public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometryObject>, IPropertyModel, ITransformationProxy, IShapeProxy 
+public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometryObject>, IPropertyModel, ITransformationProxy 
     where TGeometryObject : GeometryObject
 {
     /// <inheritdoc />
-    public float X { get; set; }
+    public double CenterX { get; set; }
 
     /// <inheritdoc />
-    public float Y { get; set; }
+    public double CenterY { get; set; }
 
     /// <inheritdoc />
-    public float Width { get; set; }
+    public double Width { get; set; }
 
     /// <inheritdoc />
-    public float Height { get; set; }
-
-    /// <inheritdoc />
-    public Color FillColor { get; set; }
-    
-    /// <inheritdoc />
-    public Color StrokeColor { get; set; }
-    
-    /// <inheritdoc />
-    public float StrokeWidth { get; set; }
+    public double Height { get; set; }
 
     /// <summary>
     /// Constructor.
@@ -38,39 +28,31 @@ public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometry
     /// <param name="geometryObject">Geometry object.</param>
     public GeometryObjectProxy(TGeometryObject geometryObject) : base(geometryObject)
     {
-        geometryObject.VersionChanged += HandleVersionChanged;
     }
-
-    private void HandleVersionChanged(object? sender, EventArgs eventArgs)
-    {
-        UpdateFromEntity();
-    }
-
 
     /// <inheritdoc />
     public override void UpdateFromEntity()
     {
-        var boundingBox = Source.CalculateBoundingBox();
-
-        X = boundingBox.X + boundingBox.Width / 2; 
-        Y = boundingBox.Y + boundingBox.Height / 2;
-        Width = boundingBox.Width;
-        Height = boundingBox.Height;
-        FillColor = Source.Fill;
-        StrokeColor = Source.Stroke;
-        StrokeWidth = Source.StrokeWidth;
-
-        OnUpdateFromEntity();
+        CenterX = Source.BoundingBox.Center.X; 
+        CenterY = Source.BoundingBox.Center.Y;
+        Width = Source.BoundingBox.Width;
+        Height = Source.BoundingBox.Height;
     }
     
     /// <inheritdoc />
-    public override void UpdateEntity()
+    public sealed override void UpdateEntity()
     {
-        // TODO: Consider unsubscribing from version changes when updating an object.
-        using var scope = Source.Layer.Diagram.StartModification();
-        Source.Stroke = StrokeColor;
-        Source.Fill = FillColor;
-        Source.StrokeWidth = StrokeWidth;
-        Source.UpdateBoundingBox(X, Y, Width, Height);
+        using var scope = Source.StartDiagramModifcation();
+        Source.StartModification();
+        UpdateEntityInternal();
+        Source.CompleteModification();
+    }
+
+    /// <summary>
+    /// Updates the state of the source entity.
+    /// </summary>
+    protected virtual void UpdateEntityInternal()
+    {
+        Source.SetCenterAndSize(CenterX, CenterY, Width, Height);
     }
 }

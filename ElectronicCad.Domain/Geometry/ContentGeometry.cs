@@ -6,52 +6,63 @@
 public abstract class ContentGeometry : GeometryObject
 {
     /// <summary>
+    /// Index of center control point.
+    /// </summary>
+    public const int CenterPointIndex = 0;
+
+    /// <summary>
     /// Index of left top control point.
     /// </summary>
-    public const int LeftTopPointIndex = 0;
+    public const int LeftTopPointIndex = 1;
 
     /// <summary>
     /// Index of rigth top control point.
     /// </summary>
-    public const int RigthTopPointIndex = 1;
+    public const int RigthTopPointIndex = 2;
     
     /// <summary>
     /// Index of rigth bottom control point.
     /// </summary>
-    public const int RigthBottomPointIndex = 2;
+    public const int RigthBottomPointIndex = 3;
     
     /// <summary>
     /// Index of left bottom control point.
     /// </summary>
-    public const int LeftBottomPointIndex = 3;
+    public const int LeftBottomPointIndex = 4;
+
+    /// <summary>
+    /// Fill color.
+    /// </summary>
+    public Color FillColor
+    {
+        get => fillColor;
+        set
+        {
+            ValidateModification();
+            fillColor = value;
+        }
+    }
+
+    private Color fillColor = Color.Transparent;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public ContentGeometry()
+    /// <param name="center">Center point.</param>
+    /// <param name="width">Widht.</param>
+    /// <param name="height">Height.</param>
+    /// <param name="isTemporary">Is geometry object temporary.</param>
+    public ContentGeometry(Point center, double width, double height, bool isTemporary = false) : base(isTemporary)
     {
-        controlPoints = new Point[4];       
-    }
+        var widthHalf = width / 2;
+        var heightHalf = height / 2;
 
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="points">Initial control points.</param>
-    public ContentGeometry(Point[] points) : this()
-    {
-        SetControlPoints(points);
-    }
+        var topLeft = new Point(center.X - widthHalf, center.Y - heightHalf);
+        var topRight = new Point(center.X + widthHalf, center.Y - heightHalf);
+        var bottomLeft = new Point(center.X - widthHalf, center.Y + heightHalf);
+        var bottomRight = new Point(center.X + widthHalf, center.Y + heightHalf);
 
-    /// <inheritdoc />
-    public override void UpdateBoundingBox(float x, float y, float width, float height)
-    {
-        ValidateModification();
-
-        var halfWidth = width / 2;
-        var halfHeight = height / 2;
-        SetControlPoint(LeftTopPointIndex, x - halfWidth, y - halfHeight);
-        SetControlPoint(LeftBottomPointIndex, x - halfWidth, y + halfHeight);
-        SetControlPoint(RigthTopPointIndex, x + halfWidth, y - halfHeight);
-        SetControlPoint(RigthBottomPointIndex, x + halfWidth, y + halfHeight);
+        controlPoints = new Point[5];
+        SetControlPoints(center, topLeft, topRight, bottomLeft, bottomRight);
     }
 }

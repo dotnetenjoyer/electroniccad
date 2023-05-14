@@ -1,11 +1,11 @@
-﻿using ElectronicCad.Domain.Common;
+﻿using System.ComponentModel;
+using ElectronicCad.Domain.Common;
 using ElectronicCad.MVVM.Properties.Abstractions;
-using System.ComponentModel;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 /// <summary>
-/// Base proxy class.
+/// Base proxy implementation.
 /// </summary>
 /// <typeparam name="TSource">Type of source object.</typeparam>
 public abstract class BaseProxy<TSource> : IProxy where TSource : INotifyPropertyChanged
@@ -14,6 +14,9 @@ public abstract class BaseProxy<TSource> : IProxy where TSource : INotifyPropert
     /// Proxy source object.
     /// </summary>
     protected TSource Source { get; init; }
+
+    /// <inheritdoc />
+    public event EventHandler<EventArgs> Updated;
 
     /// <summary>
     /// Constructor.
@@ -24,40 +27,37 @@ public abstract class BaseProxy<TSource> : IProxy where TSource : INotifyPropert
         Source = source;
         UpdateFromEntity();
 
+        Source.PropertyChanged += HandleSourceChange;
+
         if (source is IVersionable objWithVersion)
         {
-            objWithVersion.VersionChanged += (sender, args) =>
-            {
-                UpdateFromEntity();
-            };
+            objWithVersion.VersionChanged += HandleSourceVersionChange;
         }
-
-        Source.PropertyChanged += HandleSourceChanged;
     }
-    
-    private void HandleSourceChanged(object? sender, PropertyChangedEventArgs e)
+
+    private void HandleSourceChange(object? sender, PropertyChangedEventArgs e)
     {
         UpdateFromEntity();
+        RaiseUpdatedEvent();
     }
 
-    /// <inheritdoc />
-    public event EventHandler<EventArgs> Updated;
+    private void HandleSourceVersionChange(object? sender, EventArgs eventArgs)
+    {
+        UpdateFromEntity();
+        RaiseUpdatedEvent();
+    }
 
     /// <summary>
-    /// Invokes update from entity event.
+    /// Raises proxy updated event.
     /// </summary>
-    protected void OnUpdateFromEntity()
+    protected void RaiseUpdatedEvent()
     {
         Updated?.Invoke(this, EventArgs.Empty);
     }
 
     /// <inheritdoc />
-    public virtual void UpdateFromEntity()
-    {
-    }
-    
+    public abstract void UpdateFromEntity();
+
     /// <inheritdoc />
-    public virtual void UpdateEntity()
-    {
-    }
+    public abstract void UpdateEntity();
 }

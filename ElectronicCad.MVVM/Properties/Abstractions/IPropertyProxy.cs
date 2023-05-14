@@ -7,17 +7,17 @@ namespace ElectronicCad.MVVM.Properties.Abstractions;
 public interface IProxy
 {
     /// <summary>
-    /// Raise when proxy object updates.
+    /// Raise when the proxy object is updated.
     /// </summary>
     event EventHandler<EventArgs> Updated;
 
     /// <summary>
-    /// Updates self from source entity.
+    /// Updates itself from its source entity.
     /// </summary>
     void UpdateFromEntity();
 
     /// <summary>
-    /// Updates source entity.
+    /// Updates the source entity.
     /// </summary>
     void UpdateEntity();
 }
