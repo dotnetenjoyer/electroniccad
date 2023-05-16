@@ -10,5 +10,5 @@ public interface IFolderPicker
     /// </summary>
     /// <param name="description">Folder picker dialog descirption.</param>
     /// <returns>Selected path.</returns>
-    string PickFolder(string description = null);
+    string PickFolder(string? description = null);
 }

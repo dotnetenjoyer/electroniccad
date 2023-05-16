@@ -63,17 +63,15 @@
             <ItemsControl ItemsSource="{Binding PropertyObject.Groups}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Expander IsExpanded="True" Header="{Binding Name}">
+                        <Expander IsExpanded="True" Header="{Binding Name}" Padding="10">
                             <ItemsControl ItemsSource="{Binding Properties}" Margin="0 12 0 0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Padding="10">
-                                            <ContentControl
-                                                Content="{Binding}"
-                                                Margin="0 0 0 20"
-                                                ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
-                                            />
-                                        </Border>
+                                        <ContentControl
+                                            Content="{Binding}"
+                                            Margin="0 0 0 20"
+                                            ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
+                                        />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

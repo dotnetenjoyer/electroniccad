@@ -20,6 +20,8 @@ internal static class InfrastructureModule
     public static void Register(IServiceCollection services)
     {
         services.AddTransient<IFolderPicker, FolderPicker>();
+        services.AddTransient<IFilePicker, FilePicker>();
+
         services.AddTransient<IProjectSaver, ProjectSaver>();
         services.AddSingleton<ICurrentProjectProvider, CurrentProjectProvider>();
         services.AddSingleton<ISelectionService, SelectionService>();   

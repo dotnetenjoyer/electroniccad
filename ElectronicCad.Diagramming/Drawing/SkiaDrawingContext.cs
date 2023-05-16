@@ -1,5 +1,7 @@
 ﻿using SkiaSharp;
+using System.IO;
 using System.Text;
+using System.Windows.Media.Imaging;
 using Topten.RichTextKit;
 
 /// <summary>
@@ -100,25 +102,25 @@ public class SkiaDrawingContext
     /// <summary>
     /// Draws a text on the canvas.
     /// </summary>
-    /// <param name="text">Text.</param>
-    /// <param name="x">Coordinate X.</param>
-    /// <param name="y">Coordinate Y.</param>
-    /// <param name="font">Font.</param>
-    /// <param name="paint">Paint.</param>
-    public void DrawText(string text, double x, double y, SKPaint paint)
-    {
-        BeforeDraw();
-        canvas.DrawText(text, (float)x, (float)y, paint);
-        AfterDraw();
-    }
-
+    /// <param name="richString">Rich string instance.</param>
+    /// <param name="x">X coordinate of start drawing point.</param>
+    /// <param name="y">Y coordinate of start drawing point.</param>
     public void DrawText(RichString richString, double x, double y)
     {
         BeforeDraw();
-
-        var textPaintOptions = new TextPaintOptions();
         richString.Paint(canvas, new SKPoint((float)x, (float)y));
-        //canvas.DrawText(text, (float)x, (float)y, paint);
+        AfterDraw();
+    }
+
+    /// <summary>
+    /// Draws a image on the canvas.
+    /// </summary>
+    /// <param name="image">Skia image.</param>
+    /// <param name="point">Start drawing position.</param>
+    public void DrawImage(SKImage image, SKPoint point)
+    {
+        BeforeDraw();
+        canvas.DrawImage(image, point);
         AfterDraw();
     }
 
