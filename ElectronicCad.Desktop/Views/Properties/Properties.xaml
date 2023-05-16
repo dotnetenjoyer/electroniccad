@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="./Templates/PrimitivePropertyDataTemplate.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/ShapeCustomSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/TransformationCustomSection.xaml"/>
+                <ResourceDictionary Source="./Templates/CustomSections/TypographyCustomSection.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <selectors:PrimitivePropertyDataTemplateSelector
@@ -27,12 +28,13 @@
                 x:Key="CustomSectionDataTemplateSelector"
                 TransformationSectionDataTemplate="{StaticResource TransformationCustomSection}"
                 ShapeSectionDataTemplate="{StaticResource ShapeCustomSection}"
+                TypographySectionDataTemplate="{StaticResource TypographyCustomSection}"
             />
 
         </ResourceDictionary>
     </UserControl.Resources>
     
-    <Border Padding="10">
+    <Border>
         <DockPanel LastChildFill="True">
 
             <!-- Custom sections. -->
@@ -42,11 +44,17 @@
                 Margin="0 0 0 20">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <ContentControl
-                            Content="{Binding}"
-                            Margin="0 0 0 15"
-                            ContentTemplateSelector="{StaticResource CustomSectionDataTemplateSelector }"
-                        />
+                        <StackPanel>
+                            <Border Padding="10">
+                                <ContentControl
+                                    Content="{Binding}"
+                                    Margin="0 0 0 15"
+                                    ContentTemplateSelector="{StaticResource CustomSectionDataTemplateSelector }"
+                                />
+                            </Border>
+
+                            <Separator/>
+                        </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -59,11 +67,13 @@
                             <ItemsControl ItemsSource="{Binding Properties}" Margin="0 12 0 0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <ContentControl
-                                            Content="{Binding}"
-                                            Margin="0 0 0 20"
-                                            ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
-                                        />
+                                        <Border Padding="10">
+                                            <ContentControl
+                                                Content="{Binding}"
+                                                Margin="0 0 0 20"
+                                                ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
+                                            />
+                                        </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

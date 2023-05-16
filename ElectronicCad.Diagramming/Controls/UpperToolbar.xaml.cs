@@ -1,4 +1,4 @@
-using ElectronicCad.Diagramming.Modes;
+using ElectronicCad.Diagramming.Drawing.Modes;
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Windows;

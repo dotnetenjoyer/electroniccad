@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using ElectronicCad.Diagramming.Modes;
+using ElectronicCad.Diagramming.Drawing.Modes;
 using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
 
 namespace ElectronicCad.Diagramming

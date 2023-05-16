@@ -8,7 +8,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// Base proxy implementation.
 /// </summary>
 /// <typeparam name="TSource">Type of source object.</typeparam>
-public abstract class BaseProxy<TSource> : IProxy where TSource : INotifyPropertyChanged
+public abstract class BaseProxy<TSource> : IProxy, IPropertyModel where TSource : INotifyPropertyChanged
 {
     /// <summary>
     /// Proxy source object.

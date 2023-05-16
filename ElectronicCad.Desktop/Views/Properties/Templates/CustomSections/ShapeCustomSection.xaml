@@ -29,7 +29,6 @@
 
                 <components:InputControl 
                     Title="Weight"
-                    Placeholder="Project Name"
                     Value="{Binding ShapeModel.StrokeWidth}"
                     Grid.Column="3"/>
             </Grid>

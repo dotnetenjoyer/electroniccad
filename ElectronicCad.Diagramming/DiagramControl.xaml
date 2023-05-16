@@ -15,9 +15,9 @@
         <controls:UpperToolbar
             x:Name="UpperToolbar"
             Grid.ZIndex="1"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Center"
-            Margin="0 30 0 0"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Right"
+            Margin="0 0 30 0"
             DiagramModeChanged="HandleToolbarModeChanged"/>
     </Grid>
 </UserControl>

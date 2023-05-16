@@ -1,0 +1,68 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:ElectronicCad.Desktop.Infrastructure.Converters"
+    xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI">
+
+    <converters:DomainColorToWpfColorConverter x:Key="DomainColorToWpfColorConverter"/>
+
+    <DataTemplate x:Key="TypographyCustomSection">
+        <StackPanel Orientation="Vertical">
+            <components:InputControl
+                Title="Text"
+                Value="{Binding Model.Text}"
+                Margin="0 0 0 15"
+            />
+
+            <StackPanel>
+                <Label 
+                    Margin="0 0 0 5"
+                    Foreground="White" 
+                    Target="{Binding ElementName=FontFamilySelector}" 
+                    Content="Font family"/>
+
+                <ComboBox 
+                        x:Name="FontFamilySelector" 
+                        SelectedValue="{Binding Model.FontFamily}" 
+                        ItemsSource="{Binding Model.FontFamilies}"/>
+            </StackPanel>
+            <Grid Margin="0 0 0 15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <Label 
+                        Margin="0 0 0 5"
+                        Foreground="White" 
+                        Target="{Binding ElementName=FontWeightsSelector}" 
+                        Content="Color"/>
+
+                    <ComboBox 
+                        x:Name="FontWeightsPicker" 
+                        SelectedValue="{Binding Model.FontWeight}" 
+                        ItemsSource="{Binding Model.FontWeights}"/>
+                </StackPanel>
+
+                <components:InputControl 
+                    Title="Size"
+                    Value="{Binding Model.FontSize}"
+                    Grid.Column="3"/>
+            </Grid>
+
+            <StackPanel>
+                <Label 
+                    Margin="0 0 0 5"
+                    Foreground="White" 
+                    Target="{Binding ElementName=ForegroundColorPicker}" 
+                    Content="Color"/>
+
+                <components:ColorPicker 
+                    x:Name="ForegroundColorPicker"
+                    Value="{Binding Model.ForegroundColor, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
+            </StackPanel>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>
