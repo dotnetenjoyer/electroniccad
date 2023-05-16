@@ -44,6 +44,19 @@ public class SkiaDrawingContext
     }
 
     /// <summary>
+    /// Draw a rounded rectangle on the canvas.
+    /// </summary>
+    /// <param name="rectangle">Rectangle.</param>
+    /// <param name="cornerRadius">Corner radius.</param>
+    /// <param name="paint">Paint.</param>
+    public void DrawRoundRect(SKRect rectangle, double cornerRadius, SKPaint paint)
+    {
+        BeforeDraw();
+        canvas.DrawRoundRect(rectangle, (float)cornerRadius, (float)cornerRadius, paint);
+        AfterDraw();
+    }
+
+    /// <summary>
     /// Draws a ellipse on the canvas.
     /// </summary>
     /// <param name="centerX">Center coordinate X.</param>

@@ -85,7 +85,7 @@ public class TypographyModel : ObservableObject
     /// </summary>
     public TypographyModel(IFontFamilyStorage fontFamilyStorage)
     {
-        FontWeight = Enum.GetValues<FontWeight>();
+        FontWeights = Enum.GetValues<FontWeight>();
         FontFamilies = fontFamilyStorage.GetFontFamilyNames();
     }
 }

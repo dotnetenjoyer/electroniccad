@@ -1,4 +1,3 @@
-using SkiaSharp;
 using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
@@ -21,7 +20,7 @@ internal class PolygonDiagramItem : ContentGeometryObjectDiagramItem<Polygon>
     {
         base.Draw(drawingContext);
 
-        drawingContext.DrawRect(BoundingBox, FillPaint);
-        drawingContext.DrawRect(BoundingBox, StrokePaint);
+        drawingContext.DrawRoundRect(BoundingBox, CertainGeometryObject.CornerRadius, FillPaint);
+        drawingContext.DrawRoundRect(BoundingBox, CertainGeometryObject.CornerRadius, StrokePaint);
     }
 }

@@ -15,8 +15,9 @@ internal class PolygoneObjectProfile : PropertyObjectProfile
     /// </summary>
     public PolygoneObjectProfile()
     {
-        CreateConfiguration<PolygonPropertyProxy>()
+        CreateConfiguration<PolygonPropertiesProxy>()
             .HasCustomSection<TransformationCustomSection>()
-            .HasCustomSection<ShapeCustomSection>();
+            .HasCustomSection<ShapeCustomSection>()
+            .HasPrimitive(source => source.CornerRadius);
     }
 }
