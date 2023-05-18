@@ -1,5 +1,6 @@
 ﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,6 +22,11 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
     /// </summary>
     public DataTemplate ShapeSectionDataTemplate { get; set; }
 
+    /// <summary>
+    /// Data template for shape custom section.
+    /// </summary>
+    public DataTemplate TypographySectionDataTemplate { get; set; }
+
     /// <inheritdoc />
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
     {
@@ -32,7 +38,13 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
         {
             return ShapeSectionDataTemplate;
         }
-
-        throw new NotSupportedException($"{item.GetType()} is not supported.");
+        else if (item is TypographyCustomSection)
+        {
+            return TypographySectionDataTemplate;
+        }
+        else
+        {
+            throw new NotSupportedException($"{item.GetType()} is not supported.");
+        }
     }
 }

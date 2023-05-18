@@ -1,5 +1,6 @@
 using ElectronicCad.Desktop.Infrastructure.Navigation;
 using ElectronicCad.Desktop.Views;
+using ElectronicCad.Diagramming;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
 using ElectronicCad.MVVM.Utils;
 using ElectronicCad.MVVM.ViewModels;
@@ -20,5 +21,6 @@ internal class DesktopModule
         
         MediatorModule.Register(services);
         InfrastructureModule.Register(services);
+        DiagrammingModule.Register(services);
     }
 }

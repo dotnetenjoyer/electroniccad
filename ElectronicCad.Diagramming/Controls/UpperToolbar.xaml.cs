@@ -1,4 +1,4 @@
-using ElectronicCad.Diagramming.Modes;
+using ElectronicCad.Diagramming.Drawing.Modes;
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Windows;
@@ -8,6 +8,11 @@ namespace ElectronicCad.Diagramming.Controls;
 
 internal partial class UpperToolbar : UserControl
 {
+    /// <summary>
+    /// Raised when diagram mode changed.
+    /// </summary>
+    public event EventHandler<DiagramMode>? DiagramModeChanged;
+
     /// <summary>
     /// Current diagram mode.
     /// </summary>
@@ -25,10 +30,8 @@ internal partial class UpperToolbar : UserControl
 
     private static void HandelDiagramModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
     {
-        if(obj is UpperToolbar toolbar)
-        {
-            toolbar.DiagramModeChanged?.Invoke(toolbar, (DiagramMode)eventArgs.NewValue);
-        }
+        var toolbar = obj as UpperToolbar;
+        toolbar!.DiagramModeChanged?.Invoke(toolbar, (DiagramMode)eventArgs.NewValue);
     }
 
     /// <summary>
@@ -47,9 +50,19 @@ internal partial class UpperToolbar : UserControl
             new PropertyMetadata());
 
     /// <summary>
-    /// Raised when diagram mode changed.
+    /// Command to add new image.
     /// </summary>
-    internal event EventHandler<DiagramMode>? DiagramModeChanged;
+    public RelayCommand AddNewImageCommand
+    {
+        get => (RelayCommand)GetValue(AddImageCommandProperty);
+        set => SetValue(AddImageCommandProperty, value);
+    }
+
+    private static readonly DependencyProperty AddImageCommandProperty = DependencyProperty
+        .Register(nameof(AddNewImageCommand),
+            typeof(RelayCommand),
+            typeof(UpperToolbar),
+            new PropertyMetadata());
 
     /// <summary>
     /// Constructor.

@@ -1,4 +1,6 @@
-﻿namespace ElectronicCad.Domain.Geometry;
+﻿using ElectronicCad.Domain.Geometry.Typography;
+
+namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
 /// Text geometry
@@ -11,12 +13,68 @@ public class Text : ContentGeometry
     /// <summary>
     /// Text content.
     /// </summary>
-    public string Content { get; private set; } = "Test";
+    public string? Content 
+    { 
+        get => content;
+        set
+        {
+            ValidateModification();
+            content = value;
+        }
+    }
+
+    private string? content = "Text";
+
+    /// <summary>
+    /// Font size.
+    /// </summary>
+    public double FontSize
+    {
+        get => fontSize;
+        set
+        {
+            ValidateModification();
+            fontSize = value;
+        }
+    }
+
+    private double fontSize = 12;
+
+    /// <summary>
+    /// Font weight.
+    /// </summary>
+    public FontWeight FontWeight
+    {
+        get => fontWeight;
+        set
+        {
+            ValidateModification();
+            fontWeight = value;
+        }
+    }
+
+    private FontWeight fontWeight = FontWeight.Regular;
+
+    /// <summary>
+    /// Font family.
+    /// </summary>
+    public string FontFamily 
+    {
+        get => fontFamily;
+        set
+        {
+            ValidateModification();
+            fontFamily = value;
+        }
+    }
+
+    private string fontFamily = "Times New Roman";
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public Text(Point center, double width, double height) : base(center, width, height)
     {
+        fillColor = Color.White;
     }
 }

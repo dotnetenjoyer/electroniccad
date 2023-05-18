@@ -9,14 +9,17 @@
 
     <ItemGroup>
       <PackageReference Include="CalcBinding" Version="2.5.2" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.0" />
       <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.3" />
+      <PackageReference Include="Topten.RichTextKit" Version="0.4.165" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ElectronicCad.Desktop.UI\ElectronicCad.Desktop.UI.csproj" />
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj" />
+      <ProjectReference Include="..\ElectronicCad.MVVM\ElectronicCad.MVVM.csproj" />
     </ItemGroup>
 
     <ItemGroup>

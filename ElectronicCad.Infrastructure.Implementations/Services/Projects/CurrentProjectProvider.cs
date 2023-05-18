@@ -1,20 +1,20 @@
 ﻿
 using ElectronicCad.Domain.Workspace;
-using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
+using ElectronicCad.Infrastructure.Abstractions.Services.Projects;
 
 namespace ElectronicCad.Infrastructure.Implementations.Services.Projects;
 
 /// <summary>
-/// Provides the current opened project.
+/// Implementation of <see cref="IOpenProjectProvider"/>.
 /// </summary>
-public class CurrentProjectProvider : ICurrentProjectProvider
+public class OpentProjectProvider : IOpenProjectProvider
 {
     private Project currentProject;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public CurrentProjectProvider()
+    public OpentProjectProvider()
     {
         currentProject = Project.Create(new Domain.Workspace.Commands.CreateProjectCommand
         {
@@ -22,7 +22,7 @@ public class CurrentProjectProvider : ICurrentProjectProvider
         });
     }
 
-    public Project GetCurrentProject()
+    public Project GetOpenProject()
     {
         return currentProject;
     }
