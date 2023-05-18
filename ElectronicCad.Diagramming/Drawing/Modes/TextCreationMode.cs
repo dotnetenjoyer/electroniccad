@@ -24,6 +24,6 @@ internal class TextCreationMode : BaseDiagramMode
     {
         var position = Diagram.GetPosition(args).ToDomainPoint();
         var text = new Text(position, InitialWidth, InitialHeight);
-        Diagram.DomainDiagram.AddGeometry(text);
+        Diagram.GeometryDiagram.AddGeometry(text);
     }
 }

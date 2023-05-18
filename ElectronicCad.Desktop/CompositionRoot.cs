@@ -43,8 +43,8 @@ internal class CompositionRoot
     /// <returns>Path to application data folder.</returns>
     public static string GetApplicationDataFolder()
     {
-        var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        return Path.Combine(folderPath, "ECAD");
+        var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        return Path.Combine(folderPath, "Nuldes");
     }
 
     /// <summary>

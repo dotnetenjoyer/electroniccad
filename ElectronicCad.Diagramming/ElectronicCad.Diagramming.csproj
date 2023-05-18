@@ -19,6 +19,7 @@
       <ProjectReference Include="..\ElectronicCad.Desktop.UI\ElectronicCad.Desktop.UI.csproj" />
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj" />
+      <ProjectReference Include="..\ElectronicCad.MVVM\ElectronicCad.MVVM.csproj" />
     </ItemGroup>
 
     <ItemGroup>

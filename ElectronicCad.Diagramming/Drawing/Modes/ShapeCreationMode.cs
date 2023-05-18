@@ -52,15 +52,15 @@ internal abstract class ShapeCreationMode<TShape> : BaseDiagramMode where TShape
         IsCreationStart = true;
 
         TemporaryElement = CreateTemporaryElement(centerPoint);
-        Diagram.DomainDiagram.AddGeometry(TemporaryElement);
+        Diagram.GeometryDiagram.AddGeometry(TemporaryElement);
     }
 
     private void CompleteCreation()
     {
         var actualElement = CreateActualElement();
 
-        Diagram.DomainDiagram.RemoveGeometry(TemporaryElement!);
-        Diagram.DomainDiagram.AddGeometry(actualElement);
+        Diagram.GeometryDiagram.RemoveGeometry(TemporaryElement!);
+        Diagram.GeometryDiagram.AddGeometry(actualElement);
 
         IsCreationStart = false;
         TemporaryElement = null;
@@ -71,7 +71,7 @@ internal abstract class ShapeCreationMode<TShape> : BaseDiagramMode where TShape
     {
         if (IsCreationStart)
         {
-            Diagram.DomainDiagram.RemoveGeometry(TemporaryElement!);
+            Diagram.GeometryDiagram.RemoveGeometry(TemporaryElement!);
             IsCreationStart = false;
         }
     }

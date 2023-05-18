@@ -12,7 +12,7 @@ using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Drawing;
 using ElectronicCad.Diagramming.Drawing.Items;
 using ElectronicCad.Diagramming.Drawing.Modes;
-using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
+using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
 
@@ -71,67 +71,69 @@ namespace ElectronicCad.Diagramming
             InitializeComponent();
             Colors.Initialize(this);
 
-            SkiaCanvas.PaintSurface += SkElementOnPaintSurface;
+            SkiaCanvas.PaintSurface += HandleCanvasPaint;
 
-            MouseMove += HandleDiagramMouseMove;
-            MouseUp += HandleDiagramMouseUp;
-            MouseDown += HandleDiagramMouseDown;
+            MouseMove += HandleMouseMove;
+            MouseUp += HandleMouseUp;
+            MouseDown += HandleMouseDown;
             
             SetDiagramMode(DiagramMode.Selection);
         }
 
-        #region DomainDiagram
+        #region GeometryDiagram
 
         /// <summary>
-        /// Related domain diagram.
+        /// Related geometry diagram.
         /// </summary>
-        public DomainDiagram DomainDiagram
+        public GeometryDiagram GeometryDiagram
         {
-            get => (DomainDiagram)GetValue(DomainDiagramProperty);
+            get => (GeometryDiagram)GetValue(DomainDiagramProperty);
             set => SetValue(DomainDiagramProperty, value);
         }
 
         private static readonly DependencyProperty DomainDiagramProperty = DependencyProperty
-            .Register(nameof(DomainDiagram),
-                typeof(DomainDiagram),
+            .Register(nameof(GeometryDiagram),
+                typeof(GeometryDiagram),
                 typeof(Diagram),
                 new PropertyMetadata(DomainDiagramChanged));
 
         private static void DomainDiagramChanged(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
         {
             var diagram = (Diagram)obj;
-            diagram.DeinitializeDomainDiagram();
-            diagram.InitializeDomainDiagram((DomainDiagram)eventArgs.NewValue);
+            diagram.InitializeGeometryDiagram((GeometryDiagram)eventArgs.NewValue);
         }
 
-        private void InitializeDomainDiagram(DomainDiagram domainDiagram)
+        private void InitializeGeometryDiagram(GeometryDiagram geometryDiagram)
         {
-            DeinitializeDomainDiagram();
+            DeinitializeGeometryDiagram();
 
-            DomainDiagram = domainDiagram;
-            DomainDiagram.GeometryAdded += HandleDiagramGeometryAdded;
-            DomainDiagram.GeometryModified += HandleGeometryModified;
-            DomainDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+            GeometryDiagram = geometryDiagram;
+            GeometryDiagram.GeometryAdded += HandleDiagramGeometryAdded;
+            GeometryDiagram.GeometryModified += HandleGeometryModified;
+            GeometryDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
 
-            CalculateDeltas();
+            CalculateInitialDeltas();
+            Redraw();
         }
        
-        private void DeinitializeDomainDiagram()
+        private void DeinitializeGeometryDiagram()
         {
-            if (DomainDiagram == null)
+            if (GeometryDiagram == null)
             {
                 return;
             }
 
-            DomainDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
-            DomainDiagram.GeometryModified -= HandleGeometryModified;
-            DomainDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
+            GeometryDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
+            GeometryDiagram.GeometryModified -= HandleGeometryModified;
+            GeometryDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
         }
 
-        private void CalculateDeltas()
+        private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
         {
-            DeltaX = ((float)SkiaCanvas.ActualWidth - DomainDiagram.Width) / 2;
-            DeltaY = ((float)SkiaCanvas.ActualHeight - DomainDiagram.Height) / 2;
+            var diagramItem = DiagramItemsFactory.Create(geometryObject);
+            diagramItems.Add(diagramItem);
+
+            Redraw();
         }
 
         private void HandleGeometryModified(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
@@ -149,12 +151,6 @@ namespace ElectronicCad.Diagramming
             Redraw();
         }
 
-        private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
-        {
-            var diagramItem = DiagramItemsFactory.Create(geometryObject);
-            diagramItems.Add(diagramItem);
-            Redraw();
-        }
 
         private void HandleDiagramGeometryRemoved(object? sender, GeometryObject geometryObject)
         {
@@ -162,11 +158,17 @@ namespace ElectronicCad.Diagramming
                 .OfType<GeometryObjectDiagramItem>()
                 .FirstOrDefault(item => item.GeometryObject == geometryObject);
 
-            if(diagramItem != null)
+            if (diagramItem != null)
             {
                 diagramItems.Remove(diagramItem);
                 Redraw();
             }
+        }
+ 
+        private void CalculateInitialDeltas()
+        {
+            DeltaX = ((float)SkiaCanvas.ActualWidth - GeometryDiagram.Width) / 2;
+            DeltaY = ((float)SkiaCanvas.ActualHeight - GeometryDiagram.Height) / 2;
         }
 
         #endregion
@@ -308,7 +310,7 @@ namespace ElectronicCad.Diagramming
             SkiaCanvas.InvalidateVisual();
         }
 
-        private void HandleDiagramMouseDown(object sender, MouseButtonEventArgs eventArgs)
+        private void HandleMouseDown(object sender, MouseButtonEventArgs eventArgs)
         {
             var mouse = new MouseParameters
             {
@@ -324,7 +326,7 @@ namespace ElectronicCad.Diagramming
             }
         }
 
-        private void HandleDiagramMouseUp(object sender, MouseButtonEventArgs eventArgs)
+        private void HandleMouseUp(object sender, MouseButtonEventArgs eventArgs)
         {
             var mouse = new MouseParameters
             {
@@ -341,7 +343,7 @@ namespace ElectronicCad.Diagramming
             InteractingItem = null;
         }
 
-        private void HandleDiagramMouseMove(object sender, MouseEventArgs eventArgs)
+        private void HandleMouseMove(object sender, MouseEventArgs eventArgs)
         {
             var previousPosition = Position;
             Position = GetPosition(eventArgs);
@@ -391,15 +393,14 @@ namespace ElectronicCad.Diagramming
             return;
         }
 
-        private void SkElementOnPaintSurface(object? sender, SKPaintSurfaceEventArgs e)
+        private void HandleCanvasPaint(object? sender, SKPaintSurfaceEventArgs eventArgs)
         {
-            var canvas = e.Surface.Canvas;
-            Draw(canvas);
+            Draw(eventArgs.Surface.Canvas);
         }
 
         private void Draw(SKCanvas canvas)
         {
-            if (DomainDiagram == null)
+            if (GeometryDiagram == null)
             {
                 return;
             }
@@ -425,7 +426,7 @@ namespace ElectronicCad.Diagramming
 
         private void DrawWorkspaceArea(SkiaDrawingContext drawingContext)
         {
-            var workspaceArea = new SKRect(0, 0, DomainDiagram.Width, DomainDiagram.Height);
+            var workspaceArea = new SKRect(0, 0, GeometryDiagram.Width, GeometryDiagram.Height);
             var paint = new SKPaint { Color = Colors.SecondaryBackground };
             drawingContext.DrawRect(workspaceArea, paint);
         }
@@ -435,13 +436,13 @@ namespace ElectronicCad.Diagramming
         /// <inheritdoc/>
         public void Dispose()
         {
-            SkiaCanvas.PaintSurface -= SkElementOnPaintSurface;
+            SkiaCanvas.PaintSurface -= HandleCanvasPaint;
 
-            MouseMove -= HandleDiagramMouseMove;
-            MouseUp -= HandleDiagramMouseUp;
-            MouseDown -= HandleDiagramMouseDown;
+            MouseMove -= HandleMouseMove;
+            MouseUp -= HandleMouseUp;
+            MouseDown -= HandleMouseDown;
 
-            DeinitializeDomainDiagram();
+            DeinitializeGeometryDiagram();
         }
     }
 }

@@ -33,7 +33,7 @@ public class LineCreationMode : BaseDiagramMode
 
         var points = new[] { position, position };
         temporaryLine = new Line(points, isTemporary: true);
-        Diagram.DomainDiagram.AddGeometry(temporaryLine);
+        Diagram.GeometryDiagram.AddGeometry(temporaryLine);
     }
 
     private void CompleteCreation(Point position)
@@ -41,8 +41,8 @@ public class LineCreationMode : BaseDiagramMode
         var points = new[] { temporaryLine!.ControlPoints[Line.FirstPointIndex], position };
         var line = new Line(points);
 
-        Diagram.DomainDiagram.RemoveGeometry(temporaryLine);
-        Diagram.DomainDiagram.AddGeometry(line);
+        Diagram.GeometryDiagram.RemoveGeometry(temporaryLine);
+        Diagram.GeometryDiagram.AddGeometry(line);
 
         isCreationStart = false;
         temporaryLine = null;
@@ -68,7 +68,7 @@ public class LineCreationMode : BaseDiagramMode
     {
         if (isCreationStart)
         {
-            Diagram.DomainDiagram.RemoveGeometry(temporaryLine!);
+            Diagram.GeometryDiagram.RemoveGeometry(temporaryLine!);
             isCreationStart = false;
             temporaryLine = null;
         }

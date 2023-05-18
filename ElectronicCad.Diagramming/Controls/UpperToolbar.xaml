@@ -68,6 +68,10 @@
                 <components:Icon Path="{StaticResource TextIcon}"/>
             </Button>
 
+            <Button Command="{Binding AddNewImageCommand, ElementName=Toolbar}">
+                <components:Icon Path="{StaticResource TextIcon}"/>
+            </Button>
+
             <Button>
                 <components:Icon Path="{StaticResource UndoIcon}"/>
             </Button>

@@ -1,7 +1,5 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using ElectronicCad.Diagramming.Drawing.Modes;
-using DomainDiagram = ElectronicCad.Domain.Geometry.Diagram;
 
 namespace ElectronicCad.Diagramming
 {
@@ -10,21 +8,6 @@ namespace ElectronicCad.Diagramming
     /// </summary>
     public partial class DiagramControl : UserControl
     {
-        /// <summary>
-        /// Related domain diagram..
-        /// </summary>
-        public DomainDiagram DomainDiagram 
-        { 
-            get => (DomainDiagram)GetValue(DomainDiagramProperty);
-            set => SetValue(DomainDiagramProperty, value);
-        }
-
-        private static readonly DependencyProperty DomainDiagramProperty = DependencyProperty
-            .Register(nameof(DomainDiagram),
-                typeof(DomainDiagram),
-                typeof(DiagramControl),
-                new PropertyMetadata());
-
         /// <summary>
         /// Constructor.
         /// </summary>

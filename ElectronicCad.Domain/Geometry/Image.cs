@@ -5,20 +5,23 @@
 /// </summary>
 public class Image : ContentGeometry
 {
+    /// <inheritdoc />
+    public override string Name { get; init; } = nameof(Image);
+
     /// <summary>
     /// Image to reference.
     /// </summary>
     public string Reference 
     { 
-        get => refernce;
+        get => reference;
         set 
         {
             ValidateModification();
-            refernce = value;
+            reference = value;
         } 
     }
 
-    private string refernce = "C:\\Users\\null\\Downloads\\test.jpg";
+    private string reference;
 
     /// <summary>
     /// Constructor.
@@ -26,8 +29,9 @@ public class Image : ContentGeometry
     /// <param name="center">Center position.</param>
     /// <param name="width">Width.</param>
     /// <param name="height">Height.</param>
-    /// <param name="isTemporary">Indicates whether image is temporary.</param>
-    public Image(Point center, double width, double height, bool isTemporary = false) : base(center, width, height, isTemporary)
+    /// <param name="reference">Reference to image.</param>
+    public Image(Point center, double width, double height, string reference) : base(center, width, height)
     {
+        this.reference = reference;
     }
 }

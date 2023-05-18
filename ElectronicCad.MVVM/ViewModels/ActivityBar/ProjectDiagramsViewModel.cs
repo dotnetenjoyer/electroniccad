@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.UseCases.DiagramsTrees.Dtos;
 using ElectronicCad.UseCases.DiagramsTrees.GetDiagramsTree;
 using ElectronicCad.Infrastructure.Abstractions.Services;
+using ElectronicCad.Infrastructure.Abstractions.Services.Projects;
 
 namespace ElectronicCad.MVVM.ViewModels.ActivityBar;
 
@@ -13,7 +13,7 @@ namespace ElectronicCad.MVVM.ViewModels.ActivityBar;
 /// </summary>
 public class ProjectDiagramsViewModel : ViewModel
 {
-    private readonly ICurrentProjectProvider projectProvider;
+    private readonly IOpenProjectProvider openProjectProvider;
     private readonly IMediator mediator;
     private readonly ISelectionService selectionService;
 
@@ -47,10 +47,10 @@ public class ProjectDiagramsViewModel : ViewModel
     /// <summary>
     /// Constructor.
     /// </summary>
-    public ProjectDiagramsViewModel(ICurrentProjectProvider projectProvider, IMediator mediator,
+    public ProjectDiagramsViewModel(IOpenProjectProvider openProjectProvider, IMediator mediator,
         ISelectionService selectionService)
     {
-        this.projectProvider = projectProvider;
+        this.openProjectProvider = openProjectProvider;
         this.mediator = mediator;
         this.selectionService = selectionService;
     }
@@ -58,7 +58,7 @@ public class ProjectDiagramsViewModel : ViewModel
     /// <inheritdoc />
     public override async Task LoadAsync()
     {
-        var currentProject = projectProvider.GetCurrentProject();
+        var currentProject = openProjectProvider.GetOpenProject();
 
         foreach (var projectDiagram in currentProject.Diagrams)
         {

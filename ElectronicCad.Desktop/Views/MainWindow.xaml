@@ -71,7 +71,7 @@
     
                     <Grid Grid.Column="1">
                         <diagramming:DiagramControl 
-                            DomainDiagram="{Binding Diagram}"
+                            DataContext="{Binding Diagram}"
                             Background="{StaticResource BackgroundBrush}"/>
                     </Grid>
 

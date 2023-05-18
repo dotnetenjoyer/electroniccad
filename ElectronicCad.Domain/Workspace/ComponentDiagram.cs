@@ -1,16 +1,16 @@
-namespace ElectronicCad.Domain.Workspace;
+﻿namespace ElectronicCad.Domain.Workspace;
 
 /// <summary>
-/// Project diagram.
+/// Component diagram.
 /// </summary>
-public class ProjectDiagram : Diagram
+public class ComponentDiagram : Diagram
 {
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="name">Diagram name.</param>
     /// <param name="geometryDiagram">Geometry diagram.</param>
-    public ProjectDiagram(string name, Geometry.Diagram geometryDiagram) : base(name, geometryDiagram)
+    public ComponentDiagram(string name, Geometry.Diagram geometryDiagram) : base(name, geometryDiagram)
     {
     }
 }

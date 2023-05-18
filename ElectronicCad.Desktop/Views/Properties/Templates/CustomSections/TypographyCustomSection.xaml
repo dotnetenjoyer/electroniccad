@@ -14,7 +14,7 @@
                 Margin="0 0 0 15"
             />
 
-            <StackPanel>
+            <StackPanel  Margin="0 0 0 15">
                 <Label 
                     Margin="0 0 0 5"
                     Foreground="White" 
@@ -26,6 +26,7 @@
                         SelectedValue="{Binding Model.FontFamily}" 
                         ItemsSource="{Binding Model.FontFamilies}"/>
             </StackPanel>
+            
             <Grid Margin="0 0 0 15">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
