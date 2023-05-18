@@ -43,7 +43,7 @@ public abstract class ContentGeometry : GeometryObject
         }
     }
 
-    private Color fillColor = Color.Transparent;
+    protected Color fillColor = Color.Transparent;
 
     /// <summary>
     /// Constructor.

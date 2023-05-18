@@ -1,5 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using ElectronicCad.MVVM.Properties.Abstractions;
+using System.ComponentModel;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 

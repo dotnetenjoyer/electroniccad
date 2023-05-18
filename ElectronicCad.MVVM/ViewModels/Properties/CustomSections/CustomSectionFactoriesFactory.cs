@@ -1,6 +1,7 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectronicCad.MVVM.Properties.Implementation.CustomSections;
@@ -21,17 +22,25 @@ public class CustomSectionFactoriesFactory : ICustomSectionFactoriesFactory
     /// <inheritdoc />
     public ICustomSectionFactory CreateFactory(Type customSectionType)
     {
+        ICustomSectionFactory factory;
+
         if (customSectionType == typeof(TransformationCustomSection))
         {
-            var factory = ActivatorUtilities.CreateInstance(serviceProvider, typeof(TransformationCustomSectionFactory));
-            return (ICustomSectionFactory)factory;
+            factory = (ICustomSectionFactory)ActivatorUtilities.CreateInstance(serviceProvider, typeof(TransformationCustomSectionFactory));
         }
-        else if(customSectionType == typeof(ShapeCustomSection))
+        else if (customSectionType == typeof(ShapeCustomSection))
         {
-            var factory = ActivatorUtilities.CreateInstance(serviceProvider, typeof(ShapeCustomSectionFactory));
-            return (ICustomSectionFactory)factory;
+            factory = (ICustomSectionFactory)ActivatorUtilities.CreateInstance(serviceProvider, typeof(ShapeCustomSectionFactory));
+        }
+        else if (customSectionType == typeof(TypographyCustomSection))
+        {
+            factory = (ICustomSectionFactory)ActivatorUtilities.CreateInstance(serviceProvider, typeof(TypographyCustomSectionFactory));
+        }
+        else
+        {
+            throw new NotSupportedException($"{customSectionType} is not supported.");
         }
 
-        throw new NotSupportedException($"{customSectionType} is not supported.");
+        return factory;
     }
 }

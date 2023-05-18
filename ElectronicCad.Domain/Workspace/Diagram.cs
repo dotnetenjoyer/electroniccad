@@ -25,20 +25,12 @@ public abstract class Diagram : DomainObservableObject
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="geometryDiagram"></param>
+    /// <param name="name">Diagram name.</param>
+    /// <param name="geometryDiagram">Geometry diagram.</param>
     public Diagram(string name, Geometry.Diagram geometryDiagram)
     {
         Id = Guid.NewGuid();
         Name = name;
         GeometryDiagram = geometryDiagram;
-    }
-}
-
-public class ComponentDiagram : Diagram
-{
-    public ComponentDiagram(string name, Geometry.Diagram geometryDiagram) : base(name, geometryDiagram)
-    {
-        
     }
 }

@@ -3,6 +3,7 @@ using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.Utils;
 using ElectronicCad.MVVM.ViewModels.ActivityBar;
+using ElectronicCad.MVVM.ViewModels.Diagrams;
 using ElectronicCad.MVVM.ViewModels.Properties;
 
 namespace ElectronicCad.MVVM.ViewModels;
@@ -12,21 +13,8 @@ namespace ElectronicCad.MVVM.ViewModels;
 /// </summary>
 public class MainViewModel : ViewModel
 {
-    private readonly ICurrentProjectProvider projectProvider;
     private readonly ViewModelFactory viewModelFactory;
 
-    /// <summary>
-    /// Domain diagram.
-    /// </summary>
-    public Diagram Diagram
-    {
-        get => diagram;
-        set => SetProperty(ref diagram, value);
-    }
-
-    private Diagram diagram;
-
-    /// <summary>
     /// Activity bar view model.
     /// </summary>
     public ActivityBarViewModel ActivityBar
@@ -36,6 +24,17 @@ public class MainViewModel : ViewModel
     }
 
     private ActivityBarViewModel activityBar;
+
+    /// <summary>
+    /// Diagram view model.
+    /// </summary>
+    public DiagramViewModel Diagram
+    {
+        get => diagramControl;
+        set => SetProperty(ref diagramControl, value);
+    }
+
+    private DiagramViewModel diagramControl;
 
     /// <summary>
     /// Property view model.
@@ -51,16 +50,13 @@ public class MainViewModel : ViewModel
     /// <summary>
     /// Constructor.
     /// </summary>
-    public MainViewModel(ICurrentProjectProvider projectProvider, ViewModelFactory viewModelFactory)
+    public MainViewModel(ViewModelFactory viewModelFactory)
     {
-        this.projectProvider = projectProvider;
         this.viewModelFactory = viewModelFactory;
-
-        var currentProject = projectProvider.GetCurrentProject(); 
-        Diagram = currentProject.Diagrams.First().GeometryDiagram;
 
         ActivityBar = viewModelFactory.Create<ActivityBarViewModel>();
         Property = viewModelFactory.Create<PropertyViewModel>();
+        Diagram = viewModelFactory.Create<DiagramViewModel>();
     }
 
     /// <inheritdoc />

@@ -8,7 +8,7 @@ namespace ElectronicCad.Infrastructure.Implementations.Services;
 public class FolderPicker : IFolderPicker
 {
     /// <inheritdoc/>
-    public string PickFolder(string description = null)
+    public string PickFolder(string? description = null)
     {
         var dialog = new FolderBrowserDialog();
         dialog.Description = description ?? "Select folder."; 

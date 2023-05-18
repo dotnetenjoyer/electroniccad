@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.UseCases.DiagramsTrees.Dtos;
 using ElectronicCad.Domain.Workspace;
+using ElectronicCad.Infrastructure.Abstractions.Services.Projects;
 
 namespace ElectronicCad.UseCases.DiagramsTrees.GetDiagramsTree;
 
@@ -10,12 +10,12 @@ namespace ElectronicCad.UseCases.DiagramsTrees.GetDiagramsTree;
 /// </summary>
 public class GetProjectDiagramTreesQueryHandler : IRequestHandler<GetProjectDiagramTreesQuery, DiagramTrees>
 {
-    private readonly ICurrentProjectProvider projectProvider;
+    private readonly IOpenProjectProvider projectProvider;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public GetProjectDiagramTreesQueryHandler(ICurrentProjectProvider projectProvider)
+    public GetProjectDiagramTreesQueryHandler(IOpenProjectProvider projectProvider)
     {
         this.projectProvider = projectProvider;
     }
@@ -23,7 +23,7 @@ public class GetProjectDiagramTreesQueryHandler : IRequestHandler<GetProjectDiag
     /// <inheritdoc />
     public async Task<DiagramTrees> Handle(GetProjectDiagramTreesQuery request, CancellationToken cancellationToken)
     {
-        var project = projectProvider.GetCurrentProject();
+        var project = projectProvider.GetOpenProject();
         var projectDiagrams = project.Diagrams.Where(d => d is ProjectDiagram);
 
         var diagramNodes = new List<DiagramTreeNode>();

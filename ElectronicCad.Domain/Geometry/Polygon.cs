@@ -9,6 +9,21 @@ public class Polygon : ContentGeometry
     public override string Name { get; init; } = nameof(Polygon);
 
     /// <summary>
+    /// Corner radius.
+    /// </summary>
+    public double CornerRadius
+    {
+        get => cornerRadius;
+        set
+        {
+            ValidateModification();
+            cornerRadius = value;
+        }
+    }
+
+    private double cornerRadius = 0;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     public Polygon(Point center, double width, double height, bool isTemperary = false) : base(center, width, height, isTemperary)

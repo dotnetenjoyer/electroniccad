@@ -1,5 +1,4 @@
 using ElectronicCad.Domain.Workspace.Commands;
-
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 
 namespace ElectronicCad.Domain.Workspace;
@@ -22,20 +21,20 @@ public class Project
     /// <summary>
     /// Project diagrams.
     /// </summary>
-    public IEnumerable<Diagram> Diagrams => _diagrams;
+    public IEnumerable<Diagram> Diagrams => diagrams;
 
-    private readonly List<Diagram> _diagrams;
+    private readonly List<Diagram> diagrams;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     internal Project()
     {
-        _diagrams = new List<Diagram>();
+        diagrams = new List<Diagram>();
 
         var geometryDiagram = new GeometryDiagram();
         var diagram = new ProjectDiagram("Diagram", geometryDiagram);
-        _diagrams.Add(diagram);
+        diagrams.Add(diagram);
     }
 
     /// <summary>
