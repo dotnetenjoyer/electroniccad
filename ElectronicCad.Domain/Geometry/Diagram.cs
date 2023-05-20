@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+using ElectronicCad.Domain.Geometry.LayoutGrids;
 
 namespace ElectronicCad.Domain.Geometry;
 
@@ -164,6 +164,29 @@ public class Diagram : IDisposable
         ModificationScope = new DiagramModificationScope(this);
         return ModificationScope;
     }
+
+    #endregion
+
+    #region LayoutGrid
+
+    /// <summary>
+    /// Diagram layout grids.
+    /// </summary>
+    public IEnumerable<LayoutGrid> LayoutGrids => layoutGrids;
+
+    private List<LayoutGrid> layoutGrids = new()
+    {
+        new ColumnLayoutGrid()
+        {
+            Count = 12,
+            Width = 50,
+        },
+        new RowLayoutGrid()
+        {
+            Count = 6,
+            Height = 50
+        }
+    };
 
     #endregion
 

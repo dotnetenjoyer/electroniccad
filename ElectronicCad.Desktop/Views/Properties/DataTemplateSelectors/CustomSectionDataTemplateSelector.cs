@@ -1,4 +1,5 @@
-﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
+﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
 using System;
@@ -13,34 +14,43 @@ namespace ElectronicCad.Desktop.Views.Properties.DataTemplateSelectors;
 internal class CustomSectionDataTemplateSelector : DataTemplateSelector
 {
     /// <summary>
-    /// Data template for transformation custom section.
+    /// Template for the transformation section.
     /// </summary>
-    public DataTemplate TransformationSectionDataTemplate { get; set; }
+    public DataTemplate TransformationSectionTemplate { get; set; }
 
     /// <summary>
-    /// Data template for shape custom section.
+    /// Template for the shape section.
     /// </summary>
-    public DataTemplate ShapeSectionDataTemplate { get; set; }
+    public DataTemplate ShapeSectionTemplate { get; set; }
 
     /// <summary>
-    /// Data template for shape custom section.
+    /// Template for the shape section.
     /// </summary>
-    public DataTemplate TypographySectionDataTemplate { get; set; }
+    public DataTemplate TypographySectionTemplate { get; set; }
+
+    /// <summary>
+    /// Template for the layout grid section.
+    /// </summary>
+    public DataTemplate LayoutGridSectionTemplate { get; set; }
 
     /// <inheritdoc />
     public override DataTemplate SelectTemplate(object item, DependencyObject container)
     {
         if (item is TransformationCustomSection)
         {
-            return TransformationSectionDataTemplate;
+            return TransformationSectionTemplate;
         }
         else if (item is ShapeCustomSection)
         {
-            return ShapeSectionDataTemplate;
+            return ShapeSectionTemplate;
         }
         else if (item is TypographyCustomSection)
         {
-            return TypographySectionDataTemplate;
+            return TypographySectionTemplate;
+        }
+        else if (item is LayoutGridCustomSection)
+        {
+            return LayoutGridSectionTemplate;
         }
         else
         {

@@ -19,8 +19,6 @@ internal class LineDiagramItem : GeometryObjectDiagramItem<Line>
     /// <inheritdoc/>
     public override void Draw(SkiaDrawingContext context)
     {
-        base.Draw(context);
-
         var firstPoint = CertainGeometryObject.ControlPoints[Line.FirstPointIndex].ToSKPoint();
         var secondPoint = CertainGeometryObject.ControlPoints[Line.SecondPointIndex].ToSKPoint();
         context.DrawLine(firstPoint, secondPoint, StrokePaint);

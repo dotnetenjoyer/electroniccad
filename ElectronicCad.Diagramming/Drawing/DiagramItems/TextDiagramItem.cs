@@ -25,8 +25,6 @@ internal class TextDiagramItem : GeometryObjectDiagramItem<Text>
     /// <inhertidoc />
     public override void Draw(SkiaDrawingContext context)
     {
-        base.Draw(context);
-
         var richString = new RichString()
             .Alignment(TextAlignment.Center)
             .FontFamily(Text.FontFamily)

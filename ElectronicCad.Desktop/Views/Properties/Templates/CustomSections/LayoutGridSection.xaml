@@ -1,0 +1,144 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:layoutGrid="clr-namespace:ElectronicCad.Domain.Geometry.LayoutGrids;assembly=ElectronicCad.Domain"
+    xmlns:converters="clr-namespace:ElectronicCad.Desktop.Infrastructure.Converters"
+    xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI">
+
+    <converters:DomainColorToWpfColorConverter x:Key="DomainColorToWpfColorConverter"/>
+
+    <DataTemplate DataType="{x:Type layoutGrid:ColumnLayoutGrid}">
+        <StackPanel Orientation="Horizontal">
+            <components:DropDown Placement="Left">
+                <components:DropDown.Content>
+                    <StackPanel>
+                        <Grid Margin="0 0 0 20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <components:InputControl Title="Count" Value="{Binding Count}"/>
+                            <components:InputControl Grid.Column="2" Title="Width" Value="{Binding Width}"/>
+                            <components:InputControl Grid.Column="4" Title="Offset" Value="{Binding Offset}"/>
+                        </Grid>
+
+                        <StackPanel>
+                            <Label Content="Color" Foreground="White"/>
+                            <components:ColorPicker Value="{Binding Color, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </components:DropDown.Content>
+
+                <components:DropDown.PreviewTemplate>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <components:Icon 
+                                Width="25" 
+                                Height="25" 
+                                Path="{StaticResource ColumnsIcon}"
+                                Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </components:DropDown.PreviewTemplate>
+            </components:DropDown>
+
+            <TextBlock Margin="10 0 0 0" VerticalAlignment="Center" Style="{StaticResource PrimaryText}">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} columns ({1}px)">
+                        <Binding Path="Count" />
+                        <Binding Path="Width" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type layoutGrid:RowLayoutGrid}">
+        <StackPanel Orientation="Horizontal">
+            <components:DropDown Placement="Left">
+                <components:DropDown.Content>
+                    <StackPanel>
+                        <Grid Margin="0 0 0 20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <components:InputControl Title="Count" Value="{Binding Count}"/>
+                            <components:InputControl Grid.Column="2" Title="Height" Value="{Binding Height}"/>
+                            <components:InputControl Grid.Column="4" Title="Offset" Value="{Binding Offset}"/>
+                        </Grid>
+
+                        <StackPanel>
+                            <Label Content="Color" Foreground="White"/>
+                            <components:ColorPicker Value="{Binding Color, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </components:DropDown.Content>
+                <components:DropDown.PreviewTemplate>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <components:Icon 
+                                Width="25" 
+                                Height="25" 
+                                Path="{StaticResource RowsIcon}"
+                                Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </components:DropDown.PreviewTemplate>
+            </components:DropDown>
+
+            <TextBlock Margin="10 0 0 0" VerticalAlignment="Center" Style="{StaticResource PrimaryText}">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} rows ({1}px)">
+                        <Binding Path="Count" />
+                        <Binding Path="Height" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="LayoutGridSectionTemplate">
+        <Expander Header="Layout grid" IsExpanded="True">
+            <StackPanel Margin="0 10 0 0">
+                <ItemsControl
+                    ItemsSource="{Binding Model.LayoutGrids}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="0 15">
+                                <DockPanel>
+                                    <DockPanel DockPanel.Dock="Right">
+                                        <Button Style="{StaticResource IconButton}" Margin="10 0">
+                                            <components:Icon Width="15" Path="{StaticResource EyeIcon}"/>
+                                        </Button>
+                                        <Button Style="{StaticResource IconButton}">
+                                            <components:Icon Width="15" Path="{StaticResource RemoveIcon}"/>
+                                        </Button>
+                                    </DockPanel>
+
+                                    <ContentControl Content="{Binding}" />
+                                </DockPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <DockPanel LastChildFill="True">
+                    <ComboBox DockPanel.Dock="Left" MaxWidth="10"></ComboBox>
+                    <Button Style="{StaticResource PrimaryButton}">
+                        Add new
+                    </Button>
+                </DockPanel>
+            </StackPanel>
+        </Expander>
+    </DataTemplate>
+    
+</ResourceDictionary>

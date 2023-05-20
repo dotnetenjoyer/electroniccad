@@ -15,6 +15,8 @@ using ElectronicCad.Diagramming.Drawing.Modes;
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
+using ElectronicCad.Domain.Geometry.LayoutGrids;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 
 namespace ElectronicCad.Diagramming
 {
@@ -411,6 +413,7 @@ namespace ElectronicCad.Diagramming
             drawingContext.Translate(DeltaX, DeltaY);
 
             DrawWorkspaceArea(drawingContext);
+            DrawLayoutGrids(drawingContext);
 
             var sortedDiagramItems = diagramItems
                 .Where(item => item.IsVisible)
@@ -429,6 +432,24 @@ namespace ElectronicCad.Diagramming
             var workspaceArea = new SKRect(0, 0, GeometryDiagram.Width, GeometryDiagram.Height);
             var paint = new SKPaint { Color = Colors.SecondaryBackground };
             drawingContext.DrawRect(workspaceArea, paint);
+        }
+
+        private void DrawLayoutGrids(SkiaDrawingContext drawingContext)
+        {
+            foreach(var layoutGrid in GeometryDiagram.LayoutGrids)
+            {
+                if (layoutGrid is ColumnLayoutGrid columnLayoutGrid)
+                {
+                    var layoutGridDiagramItem = new ColumnLayoutGridDiagramItem(this, columnLayoutGrid);
+                    layoutGridDiagramItem.Draw(drawingContext);
+                }
+
+                if (layoutGrid is RowLayoutGrid rowLayoutGrid)
+                {
+                    var layoutGridDiagramItem = new RowLayoutGridDiagramItem(this, rowLayoutGrid);
+                    layoutGridDiagramItem.Draw(drawingContext);
+                }
+            }
         }
 
         #endregion

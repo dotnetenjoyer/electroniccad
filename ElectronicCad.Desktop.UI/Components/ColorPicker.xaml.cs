@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Input;
-using ElectronicCad.Desktop.Styles.Utils;
+using ElectronicCad.Desktop.UI.Utils;
 using System;
 using System.Security.Permissions;
 
