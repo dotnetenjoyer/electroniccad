@@ -3,6 +3,9 @@ using ElectronicCad.Domain.Geometry.LayoutGrids;
 
 namespace ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 
+/// <summary>
+/// Represent the column layout grid visual presentation.
+/// </summary>
 internal class ColumnLayoutGridDiagramItem : LayoutGridDiagramItem<ColumnLayoutGrid>
 {
     /// <summary>

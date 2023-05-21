@@ -110,7 +110,7 @@ public class LayoutGridsModel : ObservableObject
         }
         else
         {
-            layoutGrid = null;
+            layoutGrid = CreateGridLayoutGrid();
         }
 
         return layoutGrid;
@@ -138,6 +138,15 @@ public class LayoutGridsModel : ObservableObject
         return rowLayoutGrid;
     }
 
+    private GridLayoutGridModel CreateGridLayoutGrid()
+    {
+        var gridLayout = new GridLayoutGridModel
+        {
+            Size = 20
+        };
+
+        return gridLayout;
+    }
     private void RemoveLayoutGrid(LayoutGridModel? layoutGrid)
     {
         if (layoutGrid != null)

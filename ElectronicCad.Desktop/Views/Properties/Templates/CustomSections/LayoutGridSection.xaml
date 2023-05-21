@@ -107,6 +107,42 @@
         </StackPanel>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type layoutGridModels:GridLayoutGridModel}">
+        <StackPanel Orientation="Horizontal">
+            <components:DropDown Placement="Left">
+                <components:DropDown.Content>
+                    <StackPanel Width="280">
+                        <components:InputControl Title="Size" Value="{Binding Size}"/>
+
+                        <StackPanel>
+                            <Label Content="Color" Foreground="White"/>
+                            <components:ColorPicker Value="{Binding Color, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </components:DropDown.Content>
+                <components:DropDown.PreviewTemplate>
+                    <ControlTemplate>
+                        <StackPanel>
+                            <components:Icon 
+                                Width="25" 
+                                Height="25" 
+                                Path="{StaticResource GridIcon}"
+                                Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </components:DropDown.PreviewTemplate>
+            </components:DropDown>
+
+            <TextBlock Margin="10 0 0 0" VerticalAlignment="Center" Style="{StaticResource PrimaryText}">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}Grid ({0}px)">
+                        <Binding Path="Size" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+
     <DataTemplate x:Key="LayoutGridSectionTemplate">
         <Expander Header="Layout grid" IsExpanded="True">
             <StackPanel Margin="0 10 0 0">

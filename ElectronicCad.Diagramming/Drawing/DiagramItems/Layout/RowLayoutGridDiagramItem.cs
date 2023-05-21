@@ -3,6 +3,9 @@ using ElectronicCad.Domain.Geometry.LayoutGrids;
 
 namespace ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 
+/// <summary>
+/// Represent the row layout grid visual presentation.
+/// </summary>
 internal class RowLayoutGridDiagramItem : LayoutGridDiagramItem<RowLayoutGrid>
 {
     /// <summary>
@@ -36,6 +39,7 @@ internal class RowLayoutGridDiagramItem : LayoutGridDiagramItem<RowLayoutGrid>
             drawingContext.DrawRect(rect, paint);
         }
     }
+
     private float CalculateGutterHeight()
     {
         var reservedHeight = layoutGrid.Offset + layoutGrid.Count * layoutGrid.Height;
@@ -44,3 +48,4 @@ internal class RowLayoutGridDiagramItem : LayoutGridDiagramItem<RowLayoutGrid>
         return (float)gutterHeight;
     }
 }
+

@@ -456,6 +456,12 @@ namespace ElectronicCad.Diagramming
                     var layoutGridDiagramItem = new RowLayoutGridDiagramItem(this, rowLayoutGrid);
                     layoutGridDiagramItem.Draw(drawingContext);
                 }
+
+                if (layoutGrid is GridLayoutGrid gridLayoutGrid)
+                {
+                    var gridLayoutGridDiagramItem = new GridLayoutGridDiagramItem(this, gridLayoutGrid);
+                    gridLayoutGridDiagramItem.Draw(drawingContext);
+                }
             }
         }
 

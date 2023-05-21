@@ -17,11 +17,16 @@ public class LayoutGridMappingProfile : Profile
         CreateMap<LayoutGrid, LayoutGridModel>()
             .Include<ColumnLayoutGrid, ColumnLayoutGridModel>()
             .Include<RowLayoutGrid, RowLayoutGridModel>()
+            .Include<GridLayoutGrid, GridLayoutGridModel>()
             .ReverseMap();
 
         CreateMap<ColumnLayoutGrid, ColumnLayoutGridModel>()
             .ReverseMap();
+
         CreateMap<RowLayoutGrid, RowLayoutGridModel>()
+            .ReverseMap();
+
+        CreateMap<GridLayoutGrid, GridLayoutGridModel>()
             .ReverseMap();
     }
 }
