@@ -8,7 +8,7 @@
 
     <Style x:Key="ButtonBase" TargetType="Button">
         <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
-        <Setter Property="MinHeight" Value="40"/>
+        <Setter Property="MinHeight" Value="30"/>
         <Setter Property="Width" Value="Auto"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>

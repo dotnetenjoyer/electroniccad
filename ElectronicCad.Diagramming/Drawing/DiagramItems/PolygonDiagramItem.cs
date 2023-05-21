@@ -18,8 +18,6 @@ internal class PolygonDiagramItem : ContentGeometryObjectDiagramItem<Polygon>
     /// <inheritdoc/>
     public override void Draw(SkiaDrawingContext drawingContext)
     {
-        base.Draw(drawingContext);
-
         drawingContext.DrawRoundRect(BoundingBox, CertainGeometryObject.CornerRadius, FillPaint);
         drawingContext.DrawRoundRect(BoundingBox, CertainGeometryObject.CornerRadius, StrokePaint);
     }

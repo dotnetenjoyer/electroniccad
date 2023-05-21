@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace ElectronicCad.Desktop.Styles.Utils;
+namespace ElectronicCad.Desktop.UI.Utils;
 
 /// <summary>
 /// Contains utils methods for colors.

@@ -33,7 +33,7 @@ internal class EllipseCreationMode : ShapeCreationMode<Ellipse>
             var position = Diagram.GetPosition(args).ToDomainPoint();
             var radius = (position - TemporaryElement!.BoundingBox.Center).CalculateLength();
 
-            using var modificationScope = Diagram.GeometryDiagram.StartModification();
+            using var modificationScope = Diagram.GeometryDiagram.StartModificationScope();
             TemporaryElement.StartModification();
             TemporaryElement.SetCenterAndRadius(TemporaryElement!.BoundingBox.Center, radius, radius);
             TemporaryElement.CompleteModification();

@@ -11,7 +11,7 @@ internal abstract class DiagramItem
     /// <summary>
     /// Indicate whether item is auxiliary. 
     /// </summary>
-    internal virtual bool IsAuxiliary => false;
+    public virtual bool IsAuxiliary => false;
 
     /// <summary>
     /// Indicates whether it is visible.
@@ -42,9 +42,7 @@ internal abstract class DiagramItem
     /// Draws itself.
     /// </summary>
     /// <param name="drawingcontext">Skia drawing context.</param>
-    public virtual void Draw(SkiaDrawingContext drawingContext)
-    {
-    }
+    public abstract void Draw(SkiaDrawingContext drawingContext);
 
     /// <summary>
     /// Check point hitting.
