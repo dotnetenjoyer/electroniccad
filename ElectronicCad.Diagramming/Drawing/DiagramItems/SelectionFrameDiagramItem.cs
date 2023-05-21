@@ -14,7 +14,7 @@ namespace ElectronicCad.Diagramming.Drawing.Items;
 internal class SelectionFrameDiagramItem : GroupDiagramItem
 {
     /// <inhertidoc/>
-    internal override bool IsAuxiliary => true;
+    public override bool IsAuxiliary => true;
 
     /// <summary>
     /// Selected geometry object.

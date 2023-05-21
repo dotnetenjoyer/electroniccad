@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 
-namespace ElectronicCad.Desktop.Styles.Utils;
+namespace ElectronicCad.Desktop.UI.Utils;
 
 /// <summary>
 /// Contains extension methods for framework elements.

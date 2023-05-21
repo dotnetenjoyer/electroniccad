@@ -1,4 +1,5 @@
 ﻿using ElectronicCad.MVVM.Properties.Abstractions;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
@@ -35,6 +36,10 @@ public class CustomSectionFactoriesFactory : ICustomSectionFactoriesFactory
         else if (customSectionType == typeof(TypographyCustomSection))
         {
             factory = (ICustomSectionFactory)ActivatorUtilities.CreateInstance(serviceProvider, typeof(TypographyCustomSectionFactory));
+        }
+        else if (customSectionType == typeof(LayoutGridCustomSection))
+        {
+            factory = (ICustomSectionFactory)ActivatorUtilities.CreateInstance(serviceProvider, typeof(LayoutGridCustomSectionFactory));
         }
         else
         {

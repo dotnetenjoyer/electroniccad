@@ -31,8 +31,6 @@ internal class ImageDiagramItem : ContentGeometryObjectDiagramItem<Image>
     /// <inheritdoc />
     public override async void Draw(SkiaDrawingContext context)
     {
-        base.Draw(context);
-
         context.DrawImage(skiaImage!, CertainGeometryObject.BoundingBox.Start.ToSKPoint());
     }
 }

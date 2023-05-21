@@ -11,6 +11,7 @@ public class TypographyCustomSection : BaseCustomSection<ITypographyProxy, Typog
     public TypographyCustomSection(ITypographyProxy typographyProxy, IServiceProvider serviceProvider) 
         : base(typographyProxy, serviceProvider)
     {
+        UpdateFromProxy();
     }
 
     /// <inheritdoc />

@@ -22,8 +22,6 @@ internal class EllipseDiagramItem : ContentGeometryObjectDiagramItem<Ellipse>
     /// <inheritdoc/>
     public override void Draw(SkiaDrawingContext drawingContext)
     {
-        base.Draw(drawingContext);
-
         drawingContext.DrawEllipse(Ellipse.BoundingBox.Center.X, Ellipse.BoundingBox.Center.Y,
             Ellipse.RadiusX, Ellipse.RadiusY, FillPaint);
 

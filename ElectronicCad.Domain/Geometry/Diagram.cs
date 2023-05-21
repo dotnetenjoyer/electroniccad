@@ -1,11 +1,12 @@
-using System.Linq.Expressions;
+using ElectronicCad.Domain.Common;
+using ElectronicCad.Domain.Geometry.LayoutGrids;
 
 namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
 /// Diagram.
 /// </summary>
-public class Diagram : IDisposable
+public class Diagram : VersionableBase, IDisposable
 {
     /// <summary>
     /// Diagram id.
@@ -154,7 +155,7 @@ public class Diagram : IDisposable
     /// 
     /// </summary>
     /// <returns></returns>
-    public DiagramModificationScope StartModification()
+    public DiagramModificationScope StartModificationScope()
     {
         if (ModificationScope != null)
         {
@@ -163,6 +164,71 @@ public class Diagram : IDisposable
 
         ModificationScope = new DiagramModificationScope(this);
         return ModificationScope;
+    }
+
+    #endregion
+
+    #region LayoutGrid
+
+    /// <summary>
+    /// Calls when layout grids changes.
+    /// </summary>
+    public event EventHandler LayoutGridsUpdated;
+
+    /// <summary>
+    /// Diagram layout grids.
+    /// </summary>
+    public IEnumerable<LayoutGrid> LayoutGrids => layoutGrids;
+
+    private List<LayoutGrid> layoutGrids = new();
+
+    /// <summary>
+    /// Add a new layout grid.
+    /// </summary>
+    /// <param name="layoutGrid">New layout grid.</param>
+    public void AddLayoutGrid(LayoutGrid layoutGrid)
+    {
+        ValidateModification();
+       
+        layoutGrids.Add(layoutGrid);
+        LayoutGridsUpdated?.Invoke(this, EventArgs.Empty);
+
+        IncrementVersion();
+    }
+
+    /// <summary>
+    /// Updates a layout grid.
+    /// </summary>
+    /// <param name="layoutGrid">Updated layout grid.</param>
+    public void UpdateLayoutGrid(LayoutGrid layoutGrid)
+    {
+        var index = layoutGrids.FindIndex(l => l.Id == layoutGrid.Id);
+        
+        if (index < 0)
+        {
+            return;
+        }
+
+        ValidateModification();
+
+        layoutGrids[index] = layoutGrid;
+        LayoutGridsUpdated?.Invoke(this, EventArgs.Empty);
+
+        IncrementVersion();
+    }
+
+    /// <summary>
+    /// Remove a layout grid.
+    /// </summary>
+    /// <param name="layoutGrid">Layout grid.</param>
+    public void RemoveLayoutGrid(LayoutGrid layoutGrid)
+    {
+        ValidateModification();
+        
+        layoutGrids.Remove(layoutGrid);
+        LayoutGridsUpdated?.Invoke(this, EventArgs.Empty);
+
+        IncrementVersion();
     }
 
     #endregion

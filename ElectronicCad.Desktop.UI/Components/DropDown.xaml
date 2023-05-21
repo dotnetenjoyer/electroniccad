@@ -1,0 +1,39 @@
+﻿<UserControl 
+    x:Class="ElectronicCad.Desktop.UI.Components.DropDown"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:local="clr-namespace:ElectronicCad.Desktop.UI.Components"
+    mc:Ignorable="d" >
+
+    <UserControl.Resources>
+        <ResourceDictionary Source="../Styles/Colors.xaml"/>
+    </UserControl.Resources>
+
+    <UserControl.Template>
+        <ControlTemplate TargetType="{x:Type local:DropDown}">
+            <Grid>
+                <CheckBox 
+                    Name="Preview" 
+                    IsChecked="{Binding Path=IsOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}"
+                    Template="{TemplateBinding PreviewTemplate}"/>
+
+                <Popup 
+                    PlacementTarget="{Binding ElementName=Preview}"
+                    Placement="{TemplateBinding Placement}"
+                    AllowsTransparency="True"
+                    StaysOpen="False"
+                    IsOpen="{Binding Path=IsOpen, RelativeSource={RelativeSource Mode=TemplatedParent}, Mode=TwoWay}">
+
+                    <Border 
+                        Padding="15 15 15 15" 
+                        Background="{StaticResource SecondaryBackgroundBrush}"
+                        CornerRadius="5">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                </Popup>
+            </Grid>
+        </ControlTemplate>
+    </UserControl.Template>
+</UserControl>

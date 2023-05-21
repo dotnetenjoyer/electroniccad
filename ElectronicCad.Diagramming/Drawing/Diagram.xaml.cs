@@ -15,6 +15,8 @@ using ElectronicCad.Diagramming.Drawing.Modes;
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
+using ElectronicCad.Domain.Geometry.LayoutGrids;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 
 namespace ElectronicCad.Diagramming
 {
@@ -111,6 +113,7 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryAdded += HandleDiagramGeometryAdded;
             GeometryDiagram.GeometryModified += HandleGeometryModified;
             GeometryDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+            GeometryDiagram.LayoutGridsUpdated += HandleLayoutGridsUpdate;
 
             CalculateInitialDeltas();
             Redraw();
@@ -126,6 +129,7 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
             GeometryDiagram.GeometryModified -= HandleGeometryModified;
             GeometryDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
+            GeometryDiagram.LayoutGridsUpdated -= HandleLayoutGridsUpdate;
         }
 
         private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
@@ -165,6 +169,11 @@ namespace ElectronicCad.Diagramming
             }
         }
  
+        private void HandleLayoutGridsUpdate(object? sender, EventArgs eventArgs)
+        {
+            Redraw();
+        }
+
         private void CalculateInitialDeltas()
         {
             DeltaX = ((float)SkiaCanvas.ActualWidth - GeometryDiagram.Width) / 2;
@@ -411,6 +420,7 @@ namespace ElectronicCad.Diagramming
             drawingContext.Translate(DeltaX, DeltaY);
 
             DrawWorkspaceArea(drawingContext);
+            DrawLayoutGrids(drawingContext);
 
             var sortedDiagramItems = diagramItems
                 .Where(item => item.IsVisible)
@@ -429,6 +439,30 @@ namespace ElectronicCad.Diagramming
             var workspaceArea = new SKRect(0, 0, GeometryDiagram.Width, GeometryDiagram.Height);
             var paint = new SKPaint { Color = Colors.SecondaryBackground };
             drawingContext.DrawRect(workspaceArea, paint);
+        }
+
+        private void DrawLayoutGrids(SkiaDrawingContext drawingContext)
+        {
+            foreach(var layoutGrid in GeometryDiagram.LayoutGrids)
+            {
+                if (layoutGrid is ColumnLayoutGrid columnLayoutGrid)
+                {
+                    var layoutGridDiagramItem = new ColumnLayoutGridDiagramItem(this, columnLayoutGrid);
+                    layoutGridDiagramItem.Draw(drawingContext);
+                }
+
+                if (layoutGrid is RowLayoutGrid rowLayoutGrid)
+                {
+                    var layoutGridDiagramItem = new RowLayoutGridDiagramItem(this, rowLayoutGrid);
+                    layoutGridDiagramItem.Draw(drawingContext);
+                }
+
+                if (layoutGrid is GridLayoutGrid gridLayoutGrid)
+                {
+                    var gridLayoutGridDiagramItem = new GridLayoutGridDiagramItem(this, gridLayoutGrid);
+                    gridLayoutGridDiagramItem.Draw(drawingContext);
+                }
+            }
         }
 
         #endregion

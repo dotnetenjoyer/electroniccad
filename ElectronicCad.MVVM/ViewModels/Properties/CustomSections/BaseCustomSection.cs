@@ -29,17 +29,19 @@ public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICus
 
     private TModel model;
 
+    private readonly IServiceProvider serviceProvider;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="proxy">Custom section proxy.</param>
     public BaseCustomSection(TProxy proxy, IServiceProvider serviceProvider)
     {
+        this.serviceProvider = serviceProvider;
+
         Proxy = proxy;
         Proxy.Updated += HandleProxyUpdated;
-
-        Model = (TModel)ActivatorUtilities.CreateInstance(serviceProvider, typeof(TModel));
-        UpdateFromProxy();
+        Model = CreateModel();
     }
 
     private void HandleProxyUpdated(object? sender, EventArgs e)
@@ -47,14 +49,26 @@ public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICus
         UpdateFromProxy();
     }
 
-    private void UpdateFromProxy()
+    /// <summary>
+    /// Creates custom section view model.
+    /// </summary>
+    /// <returns></returns>
+    protected virtual TModel CreateModel()
     {
-        Model.PropertyChanged -= HandleShapeModelPropertyChanges;
-        UpdateFromProxyInternal();
-        Model.PropertyChanged += HandleShapeModelPropertyChanges;
+        return (TModel)ActivatorUtilities.CreateInstance(serviceProvider, typeof(TModel));
     }
 
-    private void HandleShapeModelPropertyChanges(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    /// <summary>
+    /// Iniciate the custom section state update from a proxy.
+    /// </summary>
+    protected void UpdateFromProxy()
+    {
+        Model.PropertyChanged -= HandleModelPropertyChanges;
+        UpdateFromProxyInternal();
+        Model.PropertyChanged += HandleModelPropertyChanges;
+    }
+
+    private void HandleModelPropertyChanges(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         UpdateProxy();
     }
