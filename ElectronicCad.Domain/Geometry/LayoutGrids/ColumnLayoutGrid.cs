@@ -9,15 +9,15 @@ public class ColumnLayoutGrid : LayoutGrid
     /// <summary>
     /// Number of columns.
     /// </summary>
-    public int Count { get; set; }
+    public int Count { get; init; }
 
     /// <summary>
     /// Width of the column.
     /// </summary>
-    public double Width { get; set; }
+    public double Width { get; init; }
 
     /// <summary>
     /// Offset on the left.
     /// </summary>
-    public double Offset { get; set; }
+    public double Offset { get; init; }
 }

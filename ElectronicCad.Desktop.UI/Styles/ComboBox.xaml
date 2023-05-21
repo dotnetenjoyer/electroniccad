@@ -40,7 +40,7 @@
 
     <Style TargetType="ComboBox">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="MinWidth" Value="150"/>
+        <Setter Property="MinWidth" Value="100"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
         <Setter Property="Template">

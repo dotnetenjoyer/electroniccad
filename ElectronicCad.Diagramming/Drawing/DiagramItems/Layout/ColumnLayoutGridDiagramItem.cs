@@ -18,6 +18,11 @@ internal class ColumnLayoutGridDiagramItem : LayoutGridDiagramItem<ColumnLayoutG
     /// <inheritdoc />
     public override void Draw(SkiaDrawingContext drawingContext)
     {
+        if (!layoutGrid.IsVisible)
+        {
+            return;
+        }
+
         using var paint = CreatePaint();
         var gutterWidth = CalculateGutterWidth();
 

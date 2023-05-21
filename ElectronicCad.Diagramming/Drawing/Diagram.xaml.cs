@@ -113,6 +113,7 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryAdded += HandleDiagramGeometryAdded;
             GeometryDiagram.GeometryModified += HandleGeometryModified;
             GeometryDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+            GeometryDiagram.LayoutGridsUpdated += HandleLayoutGridsUpdate;
 
             CalculateInitialDeltas();
             Redraw();
@@ -128,6 +129,7 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
             GeometryDiagram.GeometryModified -= HandleGeometryModified;
             GeometryDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
+            GeometryDiagram.LayoutGridsUpdated -= HandleLayoutGridsUpdate;
         }
 
         private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
@@ -167,6 +169,11 @@ namespace ElectronicCad.Diagramming
             }
         }
  
+        private void HandleLayoutGridsUpdate(object? sender, EventArgs eventArgs)
+        {
+            Redraw();
+        }
+
         private void CalculateInitialDeltas()
         {
             DeltaX = ((float)SkiaCanvas.ActualWidth - GeometryDiagram.Width) / 2;

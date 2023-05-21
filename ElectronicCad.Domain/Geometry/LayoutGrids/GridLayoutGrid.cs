@@ -9,5 +9,5 @@ public class GridLayoutGrid : LayoutGrid
     /// <summary>
     /// Size of the grid chunk.
     /// </summary>
-    public double Size { get; set; }
+    public double Size { get; init; }
 }

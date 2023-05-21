@@ -18,6 +18,11 @@ internal class RowLayoutGridDiagramItem : LayoutGridDiagramItem<RowLayoutGrid>
     /// <inheritdoc />
     public override void Draw(SkiaDrawingContext drawingContext)
     {
+        if (!layoutGrid.IsVisible)
+        {
+            return;
+        }
+
         using var paint = CreatePaint();
         var gutterHeight = CalculateGutterHeight();
 

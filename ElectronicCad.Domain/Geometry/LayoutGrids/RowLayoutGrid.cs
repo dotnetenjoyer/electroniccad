@@ -9,15 +9,15 @@ public class RowLayoutGrid : LayoutGrid
     /// <summary>
     /// Number of rows.
     /// </summary>
-    public int Count { get; set; }
+    public int Count { get; init; }
 
     /// <summary>
     /// Height of the row.
     /// </summary>
-    public double Height { get; set; }
+    public double Height { get; init; }
 
     /// <summary>
     /// Offset on the top.
     /// </summary>
-    public double Offset { get; set; }
+    public double Offset { get; init; }
 }

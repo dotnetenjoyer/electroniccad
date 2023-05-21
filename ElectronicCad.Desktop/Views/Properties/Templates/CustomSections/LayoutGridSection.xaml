@@ -2,16 +2,17 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:layoutGrid="clr-namespace:ElectronicCad.Domain.Geometry.LayoutGrids;assembly=ElectronicCad.Domain"
+    xmlns:layoutGridModels="clr-namespace:ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid.Models;assembly=ElectronicCad.MVVM" 
     xmlns:converters="clr-namespace:ElectronicCad.Desktop.Infrastructure.Converters"
     xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI">
 
     <converters:DomainColorToWpfColorConverter x:Key="DomainColorToWpfColorConverter"/>
 
-    <DataTemplate DataType="{x:Type layoutGrid:ColumnLayoutGrid}">
+    <DataTemplate DataType="{x:Type layoutGridModels:ColumnLayoutGridModel}">
         <StackPanel Orientation="Horizontal">
             <components:DropDown Placement="Left">
                 <components:DropDown.Content>
-                    <StackPanel>
+                    <StackPanel Width="280">
                         <Grid Margin="0 0 0 20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -57,11 +58,11 @@
         </StackPanel>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type layoutGrid:RowLayoutGrid}">
+    <DataTemplate DataType="{x:Type layoutGridModels:RowLayoutGridModel}">
         <StackPanel Orientation="Horizontal">
             <components:DropDown Placement="Left">
                 <components:DropDown.Content>
-                    <StackPanel>
+                    <StackPanel Width="280">
                         <Grid Margin="0 0 0 20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -116,10 +117,17 @@
                             <Border Padding="0 15">
                                 <DockPanel>
                                     <DockPanel DockPanel.Dock="Right">
-                                        <Button Style="{StaticResource IconButton}" Margin="10 0">
-                                            <components:Icon Width="15" Path="{StaticResource EyeIcon}"/>
-                                        </Button>
-                                        <Button Style="{StaticResource IconButton}">
+                                        <components:IconCheckBox 
+                                            IsChecked="{Binding IsVisible, Mode=TwoWay}"
+                                            EnableIconPath="{StaticResource EyeIcon}"
+                                            DisableIconPath="{StaticResource EyeClosedIcon}"
+                                            Margin="10 0"
+                                            Width="18"/>
+
+                                        <Button 
+                                            Style="{StaticResource IconButton}"
+                                            Command="{Binding DataContext.Model.RemoveLayoutGridCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}">
                                             <components:Icon Width="15" Path="{StaticResource RemoveIcon}"/>
                                         </Button>
                                     </DockPanel>
@@ -131,12 +139,26 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <DockPanel LastChildFill="True">
-                    <ComboBox DockPanel.Dock="Left" MaxWidth="10"></ComboBox>
-                    <Button Style="{StaticResource PrimaryButton}">
-                        Add new
+                <Grid Margin="0 15 0 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <ComboBox 
+                        Grid.Column="0" 
+                        ItemsSource="{Binding Model.LayoutGridTypes}" 
+                        SelectedItem="{Binding Model.SelectedLayoutGridType}"/>
+
+                    <Button 
+                        Grid.Column="2"
+                        HorizontalAlignment="Stretch"
+                        Style="{StaticResource PrimaryButton}" 
+                        Command="{Binding Model.AddLayoutGridCommand}">
+                        <TextBlock Text="Add layout grid" HorizontalAlignment="Center"/>
                     </Button>
-                </DockPanel>
+                </Grid>
             </StackPanel>
         </Expander>
     </DataTemplate>

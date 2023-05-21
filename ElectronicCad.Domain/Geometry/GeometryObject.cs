@@ -1,11 +1,10 @@
-using ElectronicCad.Domain.Common;
 using ElectronicCad.Domain.Exceptions;
 using ElectronicCad.Domain.Geometry.Utils;
 using System.Numerics;
 
 namespace ElectronicCad.Domain.Geometry;
 
-public abstract class GeometryObject : DomainObservableObject, IVersionable
+public abstract class GeometryObject : VersionableBase
 {
     /// <summary>
     /// Geometry object id.
@@ -82,32 +81,6 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
 
     private bool isTemporary;
 
-    #region Versioning
-
-    /// <inheritdoc />
-    public int Version { get; private set; }
-
-    /// <inheritdoc />
-    public event EventHandler? VersionChanged;
-
-    /// <summary>
-    /// Increases the version of the geometry object and invokes the <see cref="VersionChanged">.
-    /// </summary>
-    public void IncreaseVersion()
-    {
-        Version++;
-        VersionChanged?.Invoke(this, EventArgs.Empty);
-    }
-
-    #endregion
-    
-    /// <summary>
-    /// Indicates if modification was started.
-    /// </summary>
-    public bool IsModificationStarted => isModificationStarted;
-
-    private bool isModificationStarted;
-
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -116,6 +89,40 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
         Id = Guid.NewGuid();
         this.isTemporary = isTemporary;
     }
+
+    #region Versioning
+
+    /// <inhertidoc />
+    protected override void ValidateModification()
+    {
+        if (Layer == null || Layer.Diagram == null || Layer.Diagram.ModificationScope == null)
+        {
+            throw new DomainException("Modification outisde scope are prohibited.");
+        }
+
+        if (!IsModificationStarted)
+        {
+            throw new DomainException("Modification is not started.");
+        }
+
+        Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
+    }
+
+    /// <summary>
+    /// Starts diagram modification.
+    /// </summary>
+    /// <returns>Diagram modification scope.</returns>
+    public DiagramModificationScope StartDiagramModifcation()
+    {
+        if (Layer == null || Layer.Diagram == null)
+        {
+            throw new DomainException("The geometry object isn't related with a diagram.");
+        }
+
+        return Layer.Diagram.StartModificationScope();
+    }
+
+    #endregion
 
     /// <summary>
     /// Set control points without modification validation.
@@ -200,65 +207,6 @@ public abstract class GeometryObject : DomainObservableObject, IVersionable
         
         var transformation = translationToOrigin * scaleTransformation * translationToNewPosition;
         Transform(transformation);
-    }
-
-    /// <summary>
-    /// Validates availability of modification.
-    /// </summary>
-    protected void ValidateModification()
-    {
-        if (Layer == null || Layer.Diagram == null || Layer.Diagram.ModificationScope == null)
-        {
-            throw new DomainException("Modification outisde scope are prohibited.");
-        }
-
-        if (!isModificationStarted)
-        {
-            throw new DomainException("Modification is not started.");
-        }
-
-        Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
-    }
-
-    /// <summary>
-    /// Starts diagram modification.
-    /// </summary>
-    /// <returns>Diagram modification scope.</returns>
-    public DiagramModificationScope StartDiagramModifcation()
-    {
-        if (Layer == null || Layer.Diagram == null)
-        {
-            throw new DomainException("The geometry object isn't related with a diagram.");
-        }
-
-        return Layer.Diagram.StartModification();
-    }
-
-    /// <summary>
-    /// Starts object modification.
-    /// </summary>
-    public void StartModification()
-    {
-        if (isModificationStarted)
-        {
-            throw new DomainException("Attempting to start a modification when it is already started.");
-        }
-
-        isModificationStarted = true;
-    }
-
-    /// <summary>
-    /// Completes object modification.
-    /// </summary>
-    public void CompleteModification()
-    {   
-        if (!isModificationStarted)
-        {
-            throw new DomainException("Attempting to complete a modification when it is not started.");
-        }
-
-        isModificationStarted = false;
-        IncreaseVersion();
     }
 
     /// <summary>

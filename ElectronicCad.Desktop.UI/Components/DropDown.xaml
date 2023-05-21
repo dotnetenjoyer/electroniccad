@@ -28,7 +28,6 @@
 
                     <Border 
                         Padding="15 15 15 15" 
-                        Width="230" 
                         Background="{StaticResource SecondaryBackgroundBrush}"
                         CornerRadius="5">
                         <ContentPresenter Content="{TemplateBinding Content}"/>
