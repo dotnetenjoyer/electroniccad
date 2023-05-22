@@ -82,11 +82,17 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border>
-                                    <Rectangle Width="20" Height="20" Margin="0 0 5 10">
-                                        <Rectangle.Fill>
-                                            <SolidColorBrush Color="{Binding}"/>
-                                        </Rectangle.Fill>
-                                    </Rectangle>
+                                    <Button
+                                        Margin="0 0 0 10"
+                                        Style="{StaticResource IconButton}"
+                                        Command="{Binding SelectColorCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}">
+                                        <Rectangle Width="20" Height="20" >
+                                            <Rectangle.Fill>
+                                                <SolidColorBrush Color="{Binding}"/>
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                    </Button>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

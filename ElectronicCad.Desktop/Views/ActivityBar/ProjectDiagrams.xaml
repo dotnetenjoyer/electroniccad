@@ -22,6 +22,7 @@
             RectangleIconPath="{StaticResource RectIcon}"
             PenIconPath="{StaticResource PenIcon}"
             TextIconPath="{StaticResource TextIcon}"
+            ImageIconPath="{StaticResource ImageIcon}"
         />
 
         <HierarchicalDataTemplate DataType="{x:Type diagramTrees:DiagramTreeNode}" ItemsSource="{Binding Nodes}">
