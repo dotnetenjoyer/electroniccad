@@ -214,7 +214,10 @@ public abstract class GeometryObject : VersionableBase
     /// </summary>
     /// <param name="point">Target point to hit.</param>
     /// <returns><c>true</c> if point hit geomtry.</returns>
-    public virtual bool CheckHit(Point point) => CheckBoundingBoxHit(point);
+    public virtual bool CheckHit(Point point)
+    {
+        return CheckBoundingBoxHit(point);
+    }
 
     /// <summary>
     /// Check hit to geometry bounding box.

@@ -11,6 +11,9 @@
     Background="{StaticResource SecondaryBackgroundBrush}">
 
     <Grid>
-        <local:ProjectDiagrams DataContext="{Binding ProjectDiagrams}"/>
+        <TabControl Style="{StaticResource TabControl}">
+            <local:ProjectDiagrams DataContext="{Binding ProjectDiagrams}"/>
+            <local:Components />
+        </TabControl>
     </Grid>
 </UserControl>

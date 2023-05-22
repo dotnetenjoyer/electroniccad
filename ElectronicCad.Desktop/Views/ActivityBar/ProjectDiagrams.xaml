@@ -1,4 +1,4 @@
-﻿<UserControl 
+﻿<TabItem 
     x:Class="ElectronicCad.Desktop.Views.ActivityBar.ProjectDiagrams"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,9 +10,10 @@
     xmlns:behaviours="clr-namespace:ElectronicCad.Desktop.Infrastructure.Behaviors"
     xmlns:microsoftBehaviours="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels.ActivityBar;assembly=ElectronicCad.MVVM"
+    Style="{StaticResource TabItem}"
     d:DataContext="{d:DesignInstance Type=viewModels:ProjectDiagramsViewModel}">
 
-    <UserControl.Resources>
+    <TabItem.Resources>
 
         <converters:DomainObjectIconConverter 
             x:Key="IconConverter"
@@ -37,7 +38,11 @@
                 </StackPanel>
             </Border>
         </HierarchicalDataTemplate>
-    </UserControl.Resources>
+    </TabItem.Resources>
+
+    <TabItem.Header>
+        <TextBlock Text="Diagrams"/>
+    </TabItem.Header>
 
     <DockPanel>
         <TreeView ItemsSource="{Binding DiagramTrees.Diagrams}">
@@ -46,4 +51,4 @@
             </microsoftBehaviours:Interaction.Behaviors>
         </TreeView>
     </DockPanel>
-</UserControl>
+</TabItem>

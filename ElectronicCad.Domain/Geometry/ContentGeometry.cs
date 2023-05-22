@@ -31,6 +31,31 @@ public abstract class ContentGeometry : GeometryObject
     public const int LeftBottomPointIndex = 4;
 
     /// <summary>
+    /// Center point of content geometry.
+    /// </summary>
+    public Point CenterPoint => ControlPoints[CenterPointIndex];
+
+    /// <summary>
+    /// Left top point of content geometry;
+    /// </summary>
+    public Point LeftTopPoint => ControlPoints[LeftTopPointIndex];
+
+    /// <summary>
+    /// Rigth top point of content geometry;
+    /// </summary>
+    public Point RightTopPoint => ControlPoints[RigthTopPointIndex];
+
+    /// <summary>
+    /// Left bottom point of content geometry;
+    /// </summary>
+    public Point LeftBottomPoint => ControlPoints[LeftBottomPointIndex];
+
+    /// <summary>
+    /// Rigth bottom point of content geometry;
+    /// </summary>
+    public Point RightBottomPoint => ControlPoints[RigthBottomPointIndex];
+
+    /// <summary>
     /// Fill color.
     /// </summary>
     public Color FillColor

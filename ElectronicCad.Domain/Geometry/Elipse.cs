@@ -17,6 +17,7 @@ public class Ellipse : ContentGeometry
     /// The y radius of the ellipse.
     /// </summary>
     public double RadiusY => BoundingBox.Height / 2;
+
     /// <summary>
     /// Constructor.
     /// </summary>
@@ -37,5 +38,13 @@ public class Ellipse : ContentGeometry
         var width = radiusX * 2;
         var height = radiusY * 2;
         SetCenterAndSize(centerPoint, width, height);
+    }
+
+    /// <inheritdoc />
+    public override bool CheckHit(Point point)
+    {
+        var delta = CenterPoint - point;
+        return 1 >= Math.Pow(delta.X, 2) / Math.Pow(RadiusX, 2) 
+            + Math.Pow(delta.Y, 2) / Math.Pow(RadiusY, 2);
     }
 }
