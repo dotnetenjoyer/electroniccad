@@ -8,7 +8,7 @@ public abstract class LayoutGrid
     /// <summary>
     /// Default layout grid color.
     /// </summary>
-    public static Color DefaultColor = new Color(255, 0, 0, 25);
+    public static Color DefaultColor = new Color(12, 140, 233, 25);
 
     /// <summary>
     /// Id of the layout grid.

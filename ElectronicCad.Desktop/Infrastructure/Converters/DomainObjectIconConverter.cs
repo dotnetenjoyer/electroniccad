@@ -42,6 +42,11 @@ public class DomainObjectIconConverter : IValueConverter
     /// </summary>
     public string TextIconPath { get; init; }
 
+    /// <summary>
+    /// Image icon path.
+    /// </summary>
+    public string ImageIconPath { get; init; }
+
     /// <inheritdoc />
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -57,6 +62,7 @@ public class DomainObjectIconConverter : IValueConverter
             Ellipse => EllipseIconPath,
             Polygon => RectangleIconPath,
             Text => TextIconPath,
+            Image => ImageIconPath,
             _ => string.Empty
 
         };

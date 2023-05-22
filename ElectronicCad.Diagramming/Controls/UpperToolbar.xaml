@@ -69,7 +69,7 @@
             </Button>
 
             <Button Command="{Binding AddNewImageCommand, ElementName=Toolbar}">
-                <components:Icon Path="{StaticResource TextIcon}"/>
+                <components:Icon Path="{StaticResource ImageIcon}"/>
             </Button>
 
             <Button>

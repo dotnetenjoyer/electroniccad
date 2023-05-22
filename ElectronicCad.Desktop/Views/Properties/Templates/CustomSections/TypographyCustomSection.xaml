@@ -7,63 +7,65 @@
     <converters:DomainColorToWpfColorConverter x:Key="DomainColorToWpfColorConverter"/>
 
     <DataTemplate x:Key="TypographyCustomSection">
-        <StackPanel Orientation="Vertical">
-            <components:InputControl
-                Title="Text"
-                Value="{Binding Model.Text}"
-                Margin="0 0 0 15"
-            />
+        <Expander Header="Typography" IsExpanded="True">
+            <StackPanel Orientation="Vertical">
+                <components:InputControl
+                    Title="Text"
+                    Value="{Binding Model.Text}"
+                    Margin="0 15"
+                />
 
-            <StackPanel  Margin="0 0 0 15">
-                <Label 
+                <StackPanel  Margin="0 0 0 15">
+                    <Label 
                     Margin="0 0 0 5"
                     Foreground="White" 
                     Target="{Binding ElementName=FontFamilySelector}" 
                     Content="Font family"/>
 
-                <ComboBox 
+                    <ComboBox 
                         x:Name="FontFamilySelector" 
                         SelectedValue="{Binding Model.FontFamily}" 
                         ItemsSource="{Binding Model.FontFamilies}"/>
-            </StackPanel>
-            
-            <Grid Margin="0 0 0 15">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
+                </StackPanel>
 
-                <StackPanel>
-                    <Label 
+                <Grid Margin="0 0 0 15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <Label 
                         Margin="0 0 0 5"
                         Foreground="White" 
                         Target="{Binding ElementName=FontWeightsSelector}" 
                         Content="Color"/>
 
-                    <ComboBox 
+                        <ComboBox 
                         x:Name="FontWeightsPicker" 
                         SelectedValue="{Binding Model.FontWeight}" 
                         ItemsSource="{Binding Model.FontWeights}"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <components:InputControl 
+                    <components:InputControl 
                     Title="Size"
                     Value="{Binding Model.FontSize}"
                     Grid.Column="3"/>
-            </Grid>
+                </Grid>
 
-            <StackPanel>
-                <Label 
+                <StackPanel>
+                    <Label 
                     Margin="0 0 0 5"
                     Foreground="White" 
                     Target="{Binding ElementName=ForegroundColorPicker}" 
                     Content="Color"/>
 
-                <components:ColorPicker 
+                    <components:ColorPicker 
                     x:Name="ForegroundColorPicker"
                     Value="{Binding Model.ForegroundColor, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
+        </Expander>
     </DataTemplate>
 </ResourceDictionary>

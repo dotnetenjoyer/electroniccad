@@ -1,11 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Input;
 using ElectronicCad.Desktop.UI.Utils;
-using System;
-using System.Security.Permissions;
+using Microsoft.Toolkit.Mvvm.Input;
 
 namespace ElectronicCad.Desktop.UI.Components
 {
@@ -26,13 +26,13 @@ namespace ElectronicCad.Desktop.UI.Components
         static ColorPicker()
         {
             var hueSpectrumBrush = new LinearGradientBrush();
-            hueSpectrumBrush.GradientStops.Add(new GradientStop(ColorUtils.FromHSL(0, 1, .5f), 0.00));
-            hueSpectrumBrush.GradientStops.Add(new GradientStop(ColorUtils.FromHSL(298.8f, 1, .5f), 0.17));
-            hueSpectrumBrush.GradientStops.Add(new GradientStop(ColorUtils.FromHSL(241.2f, 1, .5f), 0.33));
-            hueSpectrumBrush.GradientStops.Add(new GradientStop(ColorUtils.FromHSL(180f, 1, .5f), 0.5));
-            hueSpectrumBrush.GradientStops.Add(new GradientStop(ColorUtils.FromHSL(118.8f, 1, .5f), 0.67));
-            hueSpectrumBrush.GradientStops.Add(new GradientStop(ColorUtils.FromHSL(61.2f, 1, .5f), 0.83));
-            hueSpectrumBrush.GradientStops.Add(new GradientStop(ColorUtils.FromHSL(360, 1, .5f), 1));
+            hueSpectrumBrush.GradientStops.Add(new GradientStop(new HSLColor(0, 1, .5f).ToColor(), 0.00));
+            hueSpectrumBrush.GradientStops.Add(new GradientStop(new HSLColor(298.8f, 1, .5f).ToColor(), 0.17));
+            hueSpectrumBrush.GradientStops.Add(new GradientStop(new HSLColor(241.2f, 1, .5f).ToColor(), 0.33));
+            hueSpectrumBrush.GradientStops.Add(new GradientStop(new HSLColor(180f, 1, .5f).ToColor(), 0.5));
+            hueSpectrumBrush.GradientStops.Add(new GradientStop(new HSLColor(118.8f, 1, .5f).ToColor(), 0.67));
+            hueSpectrumBrush.GradientStops.Add(new GradientStop(new HSLColor(61.2f, 1, .5f).ToColor(), 0.83));
+            hueSpectrumBrush.GradientStops.Add(new GradientStop(new HSLColor(360, 1, .5f).ToColor(), 1));
             HueSpectrumBrush = hueSpectrumBrush;
 
             var whiteGradient = new LinearGradientBrush();
@@ -69,62 +69,96 @@ namespace ElectronicCad.Desktop.UI.Components
                 Color.FromRgb(200, 198, 167),
             };
         }
-
-        /// <summary>
-        /// Selected color
-        /// </summary>
+    
+        /// <inheritdoc cref="ValueProperty"/>
         public Color Value 
         {
             get => (Color) GetValue(ValueProperty); 
             set => SetValue(ValueProperty, value); 
         }
 
-        private readonly static DependencyProperty ValueProperty = 
+        /// <summary>
+        /// Selected color
+        /// </summary>
+        public readonly static DependencyProperty ValueProperty = 
             DependencyProperty.Register(
                 nameof(Value),
                 typeof(Color),
                 typeof(ColorPicker),
-                new FrameworkPropertyMetadata(Colors.White, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                new FrameworkPropertyMetadata(Color.FromRgb(78, 27, 255), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HandleColorUpdate));
 
-        /// <summary>
-        /// Palette of system color.
-        /// </summary>
+        private static void HandleColorUpdate(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            var colorPicker = (ColorPicker)obj;
+            if (!colorPicker.IsColorSelectionStarted)
+            {
+                colorPicker.UpdateCursorsStates();
+            }
+        }
+
+        /// <inheritdoc cref="SystemColorPaletteProperty"/>
         public Color[] SystemColorPalette
         {
             get => (Color[])GetValue(SystemColorPaletteProperty);
             private set => SetValue(SystemColorPaletteProperty, value);
         }
 
-        private readonly static DependencyProperty SystemColorPaletteProperty =
+        /// <summary>
+        /// Palette of system color.
+        /// </summary>
+        public readonly static DependencyProperty SystemColorPaletteProperty =
             DependencyProperty.Register(
                 nameof(SystemColorPalette),
                 typeof(Color[]),
                 typeof(ColorPicker),
                 new PropertyMetadata());
 
-        /// <summary>
-        /// Indicates whether the color picker is open.
-        /// </summary>
+        /// <inheritdoc cref="IsOpenProperty"/>
         public bool IsOpen
         {
             get => (bool)GetValue(IsOpenProperty);
             set => SetValue(IsOpenProperty, value);
         }
 
-        private readonly static DependencyProperty IsOpenProperty =
+        /// <summary>
+        /// Indicates whether the color picker is open.
+        /// </summary>
+        public readonly static DependencyProperty IsOpenProperty =
             DependencyProperty.Register(
                 nameof(IsOpen),
                 typeof(bool),
                 typeof(ColorPicker),
                 new PropertyMetadata());
 
+        /// <inhertidoc cref="SelectColorCommandProperty/>
+        public RelayCommand<Color> SelectColorCommand 
+        { 
+            get => (RelayCommand<Color>)GetValue(SelectColorCommandProperty); 
+            set => SetValue(SelectColorCommandProperty, value); 
+        }
+
+        /// <summary>
+        /// Command to select color from palette.
+        /// </summary>
+        public readonly static DependencyProperty SelectColorCommandProperty =
+            DependencyProperty.Register(
+                nameof(SelectColorCommand),
+                typeof(RelayCommand<Color>),
+                typeof(ColorPicker),
+                new PropertyMetadata());
+
+        /// <summary>
+        /// Indicates whether the user selects a color with the canvases.
+        /// </summary>
+        public bool IsColorSelectionStarted { get; private set; }
+
         private float hue;
         private Color hueColor;
-        private Point? hueCurrentPosition;
+        private Point? huePosition;
         private Ellipse hueCursor;
 
+        private Point? spectrumPosition;
         private Ellipse spectrumCursor;
-        private Point? spectrumCurrentPosition;
 
         /// <summary>
         /// Constructor.
@@ -132,17 +166,39 @@ namespace ElectronicCad.Desktop.UI.Components
         public ColorPicker()
         {
             InitializeComponent();
-
+            
             SystemColorPalette = SystemColors;
-            hueColor = Colors.Red;
+            SelectColorCommand = new RelayCommand<Color>(SelectColor);
 
             InitializeSpectrums();
         }
 
+        private void SelectColor(Color color)
+        {
+            Value = color;
+        }
+
         private void InitializeSpectrums()
         {
-            InitializeSpectrumCanvas();
             InitializeHueCanvas();
+            InitializeSpectrumCanvas();
+        }
+
+        private void UpdateCursorsStates()
+        {
+            var hsl = HSLColor.FromRgbColor(Value);
+            hueColor = new HSLColor(hsl.Hue, 1, .5f).ToColor();
+            
+            var hueYPosition = HueCanvas.Height - (hsl.Hue / 360) * HueCanvas.Height;
+            huePosition = new Point(0, hueYPosition);
+
+            var hsv = HSVColor.FromColor(Value);
+            var spectrumXPosition = SpectrumCanvas.Width * hsl.Saturation;
+            var spectrumYPosition = SpectrumCanvas.Height * (1 - hsv.Value);
+            spectrumPosition = new Point(spectrumXPosition, spectrumYPosition);
+
+            RedrawHueCanvas();
+            RedrawSpectrumCanvas();
         }
 
         private void InitializeSpectrumCanvas()
@@ -160,30 +216,50 @@ namespace ElectronicCad.Desktop.UI.Components
             spectrumCursor.Fill = new SolidColorBrush(Value);
             spectrumCursor.MouseUp += EndColorSelection;
 
-            UpdateSpectrumCanvas();
-            UpdateSpectrumCanvas();
+            RedrawSpectrumCanvas();
         }
 
         private void StartColorSelection(object sender, MouseButtonEventArgs mouseEventArgs)
         {
             SpectrumCanvas.MouseMove += HandleSpectrumCanvasMouseMove;
+            IsColorSelectionStarted = true;
         }
 
         private void EndColorSelection(object sender, MouseEventArgs e)
         {
             SpectrumCanvas.MouseMove -= HandleSpectrumCanvasMouseMove;
+            IsColorSelectionStarted = false;
         }
 
         private void HandleSpectrumCanvasMouseMove(object sender, MouseEventArgs mouseEventArgs)
         {
             var position = SpectrumCanvas.GetPosition(mouseEventArgs);
-            spectrumCurrentPosition = position;
+            spectrumPosition = position;
 
             SelectSpectrumColor();
-            UpdateSpectrumCanvas();
+            RedrawSpectrumCanvas();
         }
 
-        private void UpdateSpectrumCanvas()
+        private void SelectSpectrumColor()
+        {
+            if (spectrumPosition == null)
+            {
+                return;
+            }
+
+            var xRatio = spectrumPosition.Value.X / SpectrumCanvas.ActualWidth;
+            var yRatio = spectrumPosition.Value.Y / SpectrumCanvas.ActualHeight;
+
+            var hsvValue = 1 - yRatio;
+            var hsvSaturation = xRatio;
+
+            var lightness = (hsvValue / 2) * (2 - hsvSaturation);
+            var saturation = (hsvValue * hsvSaturation) / (1 - Math.Abs(2 * lightness - 1));
+
+            Value = new HSLColor(hue, (float)saturation, (float)lightness).ToColor();
+        }
+
+        private void RedrawSpectrumCanvas()
         {
             SpectrumCanvas.Children.Clear();
 
@@ -195,10 +271,10 @@ namespace ElectronicCad.Desktop.UI.Components
 
             spectrumCursor.Fill = new SolidColorBrush(Value);
 
-            if (spectrumCurrentPosition != null)
+            if (spectrumPosition != null)
             {
-                var leftOffset = spectrumCurrentPosition.Value.X - spectrumCursor.Width / 2;
-                var topOffset = spectrumCurrentPosition.Value.Y - spectrumCursor.Height / 2;
+                var leftOffset = spectrumPosition.Value.X - spectrumCursor.Width / 2;
+                var topOffset = spectrumPosition.Value.Y - spectrumCursor.Height / 2;
 
                 Canvas.SetLeft(spectrumCursor, leftOffset);
                 Canvas.SetTop(spectrumCursor, topOffset);
@@ -217,25 +293,6 @@ namespace ElectronicCad.Desktop.UI.Components
             }
         }
 
-        private void SelectSpectrumColor()
-        {
-            if (spectrumCurrentPosition == null)
-            {
-                return;
-            }
-
-            var xRatio = spectrumCurrentPosition.Value.X / SpectrumCanvas.ActualWidth;
-            var yRatio = spectrumCurrentPosition.Value.Y / SpectrumCanvas.ActualHeight;
-
-            var hsvValue = 1 - yRatio;
-            var hsvSaturation = xRatio;
-
-            var lightness = (hsvValue / 2) * (2 - hsvSaturation);
-            var saturation = (hsvValue * hsvSaturation) / (1 - Math.Abs(2 * lightness - 1));
-
-            Value = ColorUtils.FromHSL(hue, (float)saturation, (float)lightness);
-        }
-
         private void InitializeHueCanvas()
         {
             HueCanvas.MouseDown += StartHueColorSelection;
@@ -251,10 +308,49 @@ namespace ElectronicCad.Desktop.UI.Components
             hueCursor.MouseUp += EndHueColorSelection;
             HueCanvas.AlignHorizontalCenter(hueCursor);
 
-            UpdateHueCanvas();
+            RedrawHueCanvas();
         }
 
-        private void UpdateHueCanvas()
+        private void StartHueColorSelection(object sender, MouseButtonEventArgs mouseEventArgs)
+        {
+            HueCanvas.MouseMove += HandleHueCanvasMouseMove;
+            IsColorSelectionStarted = true;
+
+            var position = HueCanvas.GetPosition(mouseEventArgs);
+            huePosition = position; 
+            SelectHueColor();
+        }
+
+        private void EndHueColorSelection(object sender, MouseEventArgs args)
+        {
+            IsColorSelectionStarted = false;
+            HueCanvas.MouseMove -= HandleHueCanvasMouseMove;
+        }
+
+        private void HandleHueCanvasMouseMove(object sender, MouseEventArgs args)
+        {
+            var position = HueCanvas.GetPosition(args);
+            huePosition = position;
+            SelectHueColor();
+        }
+
+        private void SelectHueColor()
+        {
+            if (huePosition == null)
+            {
+                return;
+            }
+
+            var yRatio = (float)(huePosition.Value.Y / HueCanvas.ActualHeight);
+            hue = 360 - 360 * yRatio;
+            hueColor = new HSLColor(hue, 1, .5f).ToColor();
+
+            SelectSpectrumColor();
+            RedrawSpectrumCanvas();
+            RedrawHueCanvas();
+        }
+        
+        private void RedrawHueCanvas()
         {
             HueCanvas.Children.Clear();
 
@@ -266,54 +362,16 @@ namespace ElectronicCad.Desktop.UI.Components
             spectrumRectangle.Fill = HueSpectrumBrush;
             HueCanvas.AlignHorizontalCenter(spectrumRectangle);
             HueCanvas.Children.Add(spectrumRectangle);
-           
+
             hueCursor.Fill = new SolidColorBrush(hueColor);
 
-            if (hueCurrentPosition != null)
+            if (huePosition != null)
             {
-                var topOffset = hueCurrentPosition.Value.Y - hueCursor.Height / 2;
+                var topOffset = huePosition.Value.Y - hueCursor.Height / 2;
                 Canvas.SetTop(hueCursor, topOffset);
             }
-            
+
             HueCanvas.Children.Add(hueCursor);
-        }
-
-        private void StartHueColorSelection(object sender, MouseButtonEventArgs mouseEventArgs)
-        {
-            HueCanvas.MouseMove += HandleHueCanvasMouseMove;
-            mouseEventArgs.Handled = true;
-
-            var position = HueCanvas.GetPosition(mouseEventArgs);
-            hueCurrentPosition = position; 
-            SelectHueColor();
-        }
-
-        private void EndHueColorSelection(object sender, MouseEventArgs args)
-        {
-            HueCanvas.MouseMove -= HandleHueCanvasMouseMove;
-        }
-
-        private void HandleHueCanvasMouseMove(object sender, MouseEventArgs args)
-        {
-            var position = HueCanvas.GetPosition(args);
-            hueCurrentPosition = position;
-            SelectHueColor();
-        }
-
-        private void SelectHueColor()
-        {
-            if (hueCurrentPosition == null)
-            {
-                return;
-            }
-
-            var yRatio = (float)(hueCurrentPosition.Value.Y / HueCanvas.ActualHeight);
-            hue = 360 - 360 * yRatio;
-            hueColor = ColorUtils.FromHSL(hue, 1, .5f);
-
-            SelectSpectrumColor();
-            UpdateSpectrumCanvas();
-            UpdateHueCanvas();
         }
     }
 }
