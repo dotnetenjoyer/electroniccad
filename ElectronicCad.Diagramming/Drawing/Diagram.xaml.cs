@@ -420,7 +420,6 @@ namespace ElectronicCad.Diagramming
             drawingContext.Translate(DeltaX, DeltaY);
 
             DrawWorkspaceArea(drawingContext);
-            DrawLayoutGrids(drawingContext);
 
             var sortedDiagramItems = diagramItems
                 .Where(item => item.IsVisible)
@@ -430,6 +429,8 @@ namespace ElectronicCad.Diagramming
             {
                 item.Draw(drawingContext);
             }
+
+            DrawLayoutGrids(drawingContext);
 
             Redraws.Invoke(this, drawingContext);
         }

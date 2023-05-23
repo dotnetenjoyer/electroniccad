@@ -50,6 +50,14 @@ public class Line : GeometryObject
         RecalculateBoundingBox();
     }
 
+    /// <summary>
+    /// Clonning constructor.
+    /// </summary>
+    /// <param name="cloneFrom">Clone from.</param>
+    public Line(Line cloneFrom) : base(cloneFrom)
+    {
+    }
+
     /// <inheritdoc />
     public override bool CheckHit(Point point)  
     {

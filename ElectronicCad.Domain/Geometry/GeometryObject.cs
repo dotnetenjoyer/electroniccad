@@ -1,15 +1,20 @@
 using ElectronicCad.Domain.Exceptions;
 using ElectronicCad.Domain.Geometry.Utils;
 using System.Numerics;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace ElectronicCad.Domain.Geometry;
 
+/// <summary>
+/// The class represents a simple geometry objects that can be drawn from lines.
+/// </summary>
 public abstract class GeometryObject : VersionableBase
 {
     /// <summary>
     /// Geometry object id.
     /// </summary>
-    public Guid Id { get; init; }
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Name.
@@ -35,6 +40,11 @@ public abstract class GeometryObject : VersionableBase
     /// Related layer.
     /// </summary>
     public Layer? Layer { get; internal set; }
+
+    /// <summary>
+    /// Indicates whether the geometry object is related with the diagram.
+    /// </summary>
+    public bool IsRelatedWithDiagram => Layer != null && Layer.Diagram != null;
 
     /// <summary>
     /// Stroke color.
@@ -86,8 +96,25 @@ public abstract class GeometryObject : VersionableBase
     /// </summary>
     public GeometryObject(bool isTemporary = false)
     {
-        Id = Guid.NewGuid();
         this.isTemporary = isTemporary;
+    }
+
+    /// <summary>
+    /// Clone constructor.
+    /// </summary>
+    /// <param name="cloneFrom">Clone from.</param>
+    public GeometryObject(GeometryObject cloneFrom)
+    {
+        Name = cloneFrom.Name;
+        strokeWidth = cloneFrom.StrokeWidth;
+        strokeColor = new Color(cloneFrom.StrokeColor);
+        isTemporary = cloneFrom.IsTemporary;
+        
+        controlPoints = cloneFrom.ControlPoints
+            .Select(p => new Point(p.X, p.Y))
+            .ToArray();
+
+        RecalculateBoundingBox();
     }
 
     #region Versioning

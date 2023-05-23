@@ -34,4 +34,13 @@ public class Image : ContentGeometry
     {
         this.reference = reference;
     }
+
+    /// <summary>
+    /// Cloning constructor.
+    /// </summary>
+    /// <param name="cloneFrom">Clone from.</param>
+    public Image(Image cloneFrom) : base(cloneFrom)
+    {
+        reference = cloneFrom.Reference;
+    }
 }

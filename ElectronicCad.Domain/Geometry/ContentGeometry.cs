@@ -90,4 +90,13 @@ public abstract class ContentGeometry : GeometryObject
         controlPoints = new Point[5];
         SetControlPoints(center, topLeft, topRight, bottomLeft, bottomRight);
     }
+
+    /// <summary>
+    /// Cloning constructor. 
+    /// </summary>
+    /// <param name="cloneFrom">Clone from.</param>
+    public ContentGeometry(ContentGeometry cloneFrom) : base(cloneFrom)
+    {
+        fillColor = new Color(cloneFrom.FillColor);
+    }
 }

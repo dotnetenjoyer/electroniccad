@@ -14,6 +14,7 @@
         <ResourceDictionary Source="Styles/Expander.xaml"/>
         <ResourceDictionary Source="Styles/Separator.xaml"/>
         <ResourceDictionary Source="Styles/ComboBox.xaml"/>
+        <ResourceDictionary Source="Styles/ContextMenu.xaml"/>
         <ResourceDictionary Source="Components/Icon.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 

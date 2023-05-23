@@ -28,6 +28,14 @@ public class Ellipse : ContentGeometry
     }
 
     /// <summary>
+    /// Cloning construtor.
+    /// </summary>
+    /// <param name="cloneFrom">Clone from.</param>
+    public Ellipse(Ellipse cloneFrom) : base(cloneFrom)
+    {
+    }
+
+    /// <summary>
     /// Set center point and radiuses of the ellipse.
     /// </summary>
     /// <param name="centerPoint">Center point.</param>
