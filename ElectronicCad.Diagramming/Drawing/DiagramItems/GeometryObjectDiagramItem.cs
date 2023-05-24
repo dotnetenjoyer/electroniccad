@@ -28,6 +28,12 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     public virtual void UpdateViewState()
     {
         BoundingBox = GeometryObject.BoundingBox.ToSKRect();
+
+        if (StrokePaint != null)
+        {
+            StrokePaint.Dispose();
+        }
+
         StrokePaint = new SKPaint
         {
             Color = GeometryObject.StrokeColor.ToSKColor(),
@@ -37,7 +43,7 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     }
 
     /// <inheritdoc />
-    public override bool CheckHit(ref SKPoint position)
+    public override bool CheckShapeHit(ref SKPoint position)
     {
         return GeometryObject.CheckHit(position.ToDomainPoint());
     }

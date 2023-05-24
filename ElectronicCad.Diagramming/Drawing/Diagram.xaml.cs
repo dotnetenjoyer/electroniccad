@@ -18,6 +18,7 @@ using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
 using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 using System.Windows.Media;
+using System.Diagnostics.Tracing;
 
 namespace ElectronicCad.Diagramming
 {
@@ -230,21 +231,50 @@ namespace ElectronicCad.Diagramming
 
         #endregion
 
-        ///// <summary>
-        ///// All diagram items
-        ///// </summary>
-        //public IEnumerable<DiagramItem> DiagramItems => Layers.SelectMany(_ => _.DiagramItems);
-
-        ///// <summary>
-        ///// Add diagram item to active layer.
-        ///// </summary>
-        ///// <param name="item">Diagram item to add.</param>
-        //public void AddItem(DiagramItem item)
-        //{
-        //    ActiveLayer.AddItem(item);
-        //}
-
         #region Drawing
+
+        /// <inheritdoc cref="PositionProperty"/>
+        internal SKPoint Position
+        {
+            get => (SKPoint)GetValue(PositionProperty);
+            set => SetValue(PositionProperty, value);
+        }
+
+        /// <summary>
+        /// Current diagram mouse position.
+        /// </summary>
+        public static readonly DependencyProperty PositionProperty =
+            DependencyProperty.Register(nameof(Position), typeof(SKPoint),
+                typeof(Diagram), new PropertyMetadata());
+
+        /// <summary>
+        /// Diagram delta x.
+        /// </summary>
+        internal float OffsetX { get; private set; }
+
+        /// <summary>
+        /// Diagram delta y.
+        /// </summary>
+        internal float OffsetY { get; private set; }
+
+        /// <summary>
+        /// Diagram scale.
+        /// </summary>
+        internal double Scale { get; private set; } = 1;
+
+        /// <summary>
+        /// Calculates diagram position.
+        /// </summary>
+        /// <param name="eventArgs">Mouse event args.</param>
+        /// <param name="eventArgs">Mouse event args.</param>
+        /// <returns>Diagram mouse position.</returns>
+        internal SKPoint CalculateDiagramPosition(MouseEventArgs eventArgs)
+        {
+            var position = eventArgs.GetPosition(this).ToSKPoint();
+            position = position.Scale((float)Scale);
+            position.Offset(-OffsetX, -OffsetY);
+            return position;
+        }
 
         /// <summary>
         /// Collection of all diagram item on the diagram.
@@ -263,33 +293,6 @@ namespace ElectronicCad.Diagramming
         }
 
         /// <summary>
-        /// Current canvas mouse position.
-        /// </summary>
-        internal SKPoint Position
-        {
-            get => (SKPoint)GetValue(PositionProperty);
-            set => SetValue(PositionProperty, value);
-        }
-
-        private static readonly DependencyProperty PositionProperty =
-            DependencyProperty.Register(nameof(Position), typeof(SKPoint),
-                typeof(Diagram), new PropertyMetadata());
-
-        /// <summary>
-        /// Calculates diagram position.
-        /// </summary>
-        /// <param name="eventArgs">Mouse event args.</param>
-        /// <param name="eventArgs">Mouse event args.</param>
-        /// <returns>Diagram mouse position.</returns>
-        internal SKPoint CalculateDiagramPosition(MouseEventArgs eventArgs)
-        {
-            var position = eventArgs.GetPosition(this).ToSKPoint();
-            position = position.Scale((float)Scale);
-            position.Offset(-OffsetX, -OffsetY);
-            return position;
-        }
-
-        /// <summary>
         /// Focused diagram item.
         /// </summary>
         internal DiagramItem? FocusItem { get; private set; }
@@ -298,21 +301,6 @@ namespace ElectronicCad.Diagramming
         /// Diagram item that is now being interacted.
         /// </summary>
         internal DiagramItem? InteractingItem { get; private set; }
-
-        /// <summary>
-        /// Diagram delta x.
-        /// </summary>
-        internal float OffsetX { get; private set; }
-
-        /// <summary>
-        /// Diagram delta y.
-        /// </summary>
-        internal float OffsetY { get; private  set; }
-
-        /// <summary>
-        /// Diagram scale.
-        /// </summary>
-        internal double Scale { get; private set; } = 1;
 
         /// <summary>
         /// Called when redrawing the diagram.
@@ -327,87 +315,83 @@ namespace ElectronicCad.Diagramming
             SkiaCanvas.InvalidateVisual();
         }
 
-        private void HandleMouseDown(object sender, MouseButtonEventArgs eventArgs)
+        private void HandleMouseDown(object sender, MouseButtonEventArgs mouseEventArgs)
         {
-            var mouse = new MouseParameters
-            {
-                LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                RightButton = (MouseButtonState)eventArgs.RightButton,
-                Position = Position
-            };
-
             if (FocusItem != null)
             {
+                var mouseParameters = CreateMouseParameters(mouseEventArgs);
                 InteractingItem = FocusItem;
-                FocusItem.CheckMouseDown(mouse);
+                FocusItem.HandleDiagramMouseDown(mouseParameters);
             }
         }
 
-        private void HandleMouseUp(object sender, MouseButtonEventArgs eventArgs)
+        private void HandleMouseUp(object sender, MouseButtonEventArgs mouseEventArgs)
         {
-            var mouse = new MouseParameters
+            if (InteractingItem != null)
             {
-                LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                RightButton = (MouseButtonState)eventArgs.RightButton,
+                var mouseParameters = CreateMouseParameters(mouseEventArgs);
+                InteractingItem.HandleDiagramMouseUp(mouseParameters);
+                InteractingItem = null;
+            }
+        }
+
+        private MouseParameters CreateMouseParameters(MouseButtonEventArgs mouseEventArgs)
+        {
+            var mouseParameters = new MouseParameters
+            {
+                LeftButton = (MouseButtonState)mouseEventArgs.LeftButton,
+                RightButton = (MouseButtonState)mouseEventArgs.RightButton,
                 Position = Position
             };
 
-            if (FocusItem != null)
-            {
-                FocusItem.CheckMouseUp(mouse);
-            }
-
-            InteractingItem = null;
+            return mouseParameters;
         }
 
-        private void HandleMouseMove(object sender, MouseEventArgs eventArgs)
+        private void HandleMouseMove(object sender, MouseEventArgs mouseEventArgs)
+        {
+            var moseMovingParameters = CreateMovingMouseParameters(mouseEventArgs);
+            if (moseMovingParameters.MiddleButton == MouseButtonState.Pressed)
+            {
+                OffsetX += moseMovingParameters.Delta.X;
+                OffsetY += moseMovingParameters.Delta.Y;
+                
+                Position = CalculateDiagramPosition(mouseEventArgs);
+                
+                Redraw();
+            }
+            else if (InteractingItem != null)
+            {
+                InteractingItem.RaiseMouseMove(moseMovingParameters);
+            }
+            else
+            {
+                UpdateFocuItem(moseMovingParameters);
+            }
+        }
+
+        private MovingMouseParameters CreateMovingMouseParameters(MouseEventArgs mouseEventArgs)
         {
             var previousPosition = Position;
-            Position = CalculateDiagramPosition(eventArgs);
+            Position = CalculateDiagramPosition(mouseEventArgs);
 
             var mouse = new MovingMouseParameters
             {
-                LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                RightButton = (MouseButtonState)eventArgs.RightButton,
+                LeftButton = (MouseButtonState)mouseEventArgs.LeftButton,
+                RightButton = (MouseButtonState)mouseEventArgs.RightButton,
+                MiddleButton = (MouseButtonState)mouseEventArgs.MiddleButton,
                 Position = Position,
                 Delta = Position - previousPosition
             };
 
-            if(InteractingItem != null)
-            {
-                InteractingItem.RaiseMouseMove(mouse);
-            }
-            else if(FocusItem == null && currentMode == DiagramMode.Selection && mouse.LeftButton == MouseButtonState.Pressed)
-            {
-                OffsetX += mouse.Delta.X;
-                OffsetY += mouse.Delta.Y;
-                Position = CalculateDiagramPosition(eventArgs);
-
-                Redraw();
-            }
-            else
-            {
-                UpdateFocuItem(mouse);
-            }
+            return mouse;
         }
 
         private void HandleMouseWheel(object sender, MouseWheelEventArgs eventArgs)
         {
             var sensivity = 0.001;
-
+            
             Scale += eventArgs.Delta * sensivity;
             Redraw();
-
-            //var element = (UIElement)sender;
-            //var position = eventArgs.GetPosition(element);
-            //var transform = (MatrixTransform)element.RenderTransform;
-            //var matrix = transform.Matrix;
-
-            //matrix.ScaleAtPrepend(scale, scale, position.X, position.Y);
-            //transform.Matrix = matrix;
-
-            //Scale += scale;
-            //Redraw();
         }
 
         private void UpdateFocuItem(MovingMouseParameters mouse)
@@ -418,7 +402,7 @@ namespace ElectronicCad.Diagramming
             
             foreach (var item in interactableItems)
             {
-                if (item.CheckMouseMove(mouse))
+                if (item.HandleDiagramMouseMove(mouse))
                 {
                     FocusItem = item;
                     return;

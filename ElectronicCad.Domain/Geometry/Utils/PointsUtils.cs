@@ -23,18 +23,19 @@ public static class PointsUtils
     /// </summary>
     /// <param name="points">Set of points.</param>
     /// <returns>Bounding box.</returns>
-    public static Rectangle CalculateBoundingBox(Point[] points)
+    public static Rectangle CalculateBoundingBox(IEnumerable<Point> points)
     {
-        if (points.Length == 0)
+        if (points.Count() == 0)
         {
             return Rectangle.Empty;
         }
 
+        var firstPoint = points.First();
         double
-            maxX = points[0].X,
-            minX = points[0].X,
-            maxY = points[0].Y,
-            minY = points[0].Y;
+            maxX = firstPoint.X,
+            minX = firstPoint.X,
+            maxY = firstPoint.Y,
+            minY = firstPoint.Y;
 
         foreach (var point in points)
         {

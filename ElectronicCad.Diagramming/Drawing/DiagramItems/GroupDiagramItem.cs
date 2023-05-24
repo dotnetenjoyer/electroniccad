@@ -23,11 +23,11 @@ internal class GroupDiagramItem : DiagramItem
     }
 
     /// <inheritdoc />
-    public override bool CheckHit(ref SKPoint point)
+    public override bool CheckShapeHit(ref SKPoint point)
     {
         foreach (var item in GroupedItems)
         {
-            if (item.CheckHit(ref point))
+            if (item.CheckShapeHit(ref point))
             {
                 return true;
             }
@@ -37,11 +37,11 @@ internal class GroupDiagramItem : DiagramItem
     }
 
     /// <inheritdoc />
-    public override bool CheckMouseDown(MouseParameters mouse)
+    public override bool HandleDiagramMouseDown(MouseParameters mouse)
     {
         foreach (var item in GroupedItems)
         {
-            if (item.CheckMouseDown(mouse))
+            if (item.HandleDiagramMouseDown(mouse))
             {
                 return true;
             }
@@ -51,11 +51,11 @@ internal class GroupDiagramItem : DiagramItem
     }
 
     /// <inheritdoc />
-    public override bool CheckMouseUp(MouseParameters mouse)
+    public override bool HandleDiagramMouseUp(MouseParameters mouse)
     {
         foreach (var item in GroupedItems)
         {
-            if (item.CheckMouseUp(mouse))
+            if (item.HandleDiagramMouseUp(mouse))
             {
                 return true;
             }
@@ -65,11 +65,11 @@ internal class GroupDiagramItem : DiagramItem
     }
 
     /// <inheritdoc />
-    public override bool CheckMouseMove(MovingMouseParameters mouse)
+    public override bool HandleDiagramMouseMove(MovingMouseParameters mouse)
     {
         foreach (var item in GroupedItems)
         {
-            if (item.CheckMouseMove(mouse))
+            if (item.HandleDiagramMouseMove(mouse))
             {
                 return true;
             }

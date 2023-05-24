@@ -172,15 +172,22 @@ public abstract class GeometryObject : VersionableBase
     public void Transform(Matrix3x2 transformation)
     {
         ValidateModification();
+        TransformInternal(transformation);
+        RecalculateBoundingBox();
+    }
 
+    /// <summary>
+    /// Contains logic to transform geometry object, can be overrided.
+    /// </summary>
+    /// <param name="transformation">Transformations.</param>
+    protected virtual void TransformInternal(Matrix3x2 transformation)
+    {
         for (int i = 0; i < ControlPoints.Count; i++)
         {
             var point = ControlPoints[i].ToVector2();
             var newPoint = Vector2.Transform(point, transformation);
             SetControlPoint(i, newPoint.X, newPoint.Y, false);
         }
-
-        RecalculateBoundingBox();
     }
 
     /// <summary>
@@ -257,10 +264,19 @@ public abstract class GeometryObject : VersionableBase
     }
 
     /// <summary>
-    /// Recalculate bounding box.
+    /// Recalculates bounding box.
     /// </summary>
     protected void RecalculateBoundingBox()
     {
-        BoundingBox = PointsUtils.CalculateBoundingBox(controlPoints);
+        BoundingBox = CalculateBoundingBoxInternal();
+    }
+
+    /// <summary>
+    /// Calculates bounding box.
+    /// </summary>
+    /// <returns>Bounding box.</returns>
+    protected virtual Rectangle CalculateBoundingBoxInternal()
+    {
+        return PointsUtils.CalculateBoundingBox(controlPoints);
     }
 }
