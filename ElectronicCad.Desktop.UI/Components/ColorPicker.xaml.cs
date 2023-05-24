@@ -187,6 +187,7 @@ namespace ElectronicCad.Desktop.UI.Components
         private void UpdateCursorsStates()
         {
             var hsl = HSLColor.FromRgbColor(Value);
+            hue = hsl.Hue;
             hueColor = new HSLColor(hsl.Hue, 1, .5f).ToColor();
             
             var hueYPosition = HueCanvas.Height - (hsl.Hue / 360) * HueCanvas.Height;

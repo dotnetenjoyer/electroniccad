@@ -14,27 +14,22 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabControl}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        
+                    <DockPanel LastChildFill="True">
                         <TabPanel
-                             Grid.Row="0"
+                             DockPanel.Dock="Top"
+                             x:Name="TabPanel" 
                              Panel.ZIndex="1"
                              Margin="20 0 0 -2"
                              IsItemsHost="True"
                              Background="Transparent" />
                         
                         <Border
-                            Grid.Row="1"
                             Background="{StaticResource ComponentBackgroundBrush}"                            
                             BorderThickness="0 1 0 1"
                             BorderBrush="{StaticResource BackgroundBrush}">
                             <ContentPresenter ContentSource="SelectedContent" />
                         </Border>
-                    </Grid>
+                    </DockPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
