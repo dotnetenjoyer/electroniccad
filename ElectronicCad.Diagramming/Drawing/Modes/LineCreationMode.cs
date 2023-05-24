@@ -15,7 +15,7 @@ public class LineCreationMode : BaseDiagramMode
     /// <inheritdoc />
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        var position = Diagram.GetPosition(args).ToDomainPoint();
+        var position = Diagram.CalculateDiagramPosition(args).ToDomainPoint();
 
         if (!isCreationStart)
         {
@@ -54,7 +54,7 @@ public class LineCreationMode : BaseDiagramMode
     {
         if (isCreationStart && temporaryLine != null)
         {
-            var position = Diagram.GetPosition(args).ToDomainPoint();
+            var position = Diagram.CalculateDiagramPosition(args).ToDomainPoint();
 
             using var scope = temporaryLine.StartDiagramModifcation();
             temporaryLine.StartModification();

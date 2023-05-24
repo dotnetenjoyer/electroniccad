@@ -17,6 +17,7 @@ using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
 using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
+using System.Windows.Media;
 
 namespace ElectronicCad.Diagramming
 {
@@ -78,6 +79,7 @@ namespace ElectronicCad.Diagramming
             MouseMove += HandleMouseMove;
             MouseUp += HandleMouseUp;
             MouseDown += HandleMouseDown;
+            MouseWheel += HandleMouseWheel;
             
             SetDiagramMode(DiagramMode.Selection);
         }
@@ -100,7 +102,7 @@ namespace ElectronicCad.Diagramming
                 new PropertyMetadata(DomainDiagramChanged));
 
         private static void DomainDiagramChanged(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
-        {
+        {   
             var diagram = (Diagram)obj;
             diagram.InitializeGeometryDiagram((GeometryDiagram)eventArgs.NewValue);
         }
@@ -115,7 +117,7 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
             GeometryDiagram.LayoutGridsUpdated += HandleLayoutGridsUpdate;
 
-            CalculateInitialDeltas();
+            CalculateInitialOffsets();
             Redraw();
         }
        
@@ -155,7 +157,6 @@ namespace ElectronicCad.Diagramming
             Redraw();
         }
 
-
         private void HandleDiagramGeometryRemoved(object? sender, GeometryObject geometryObject)
         {
             var diagramItem = diagramItems
@@ -174,10 +175,10 @@ namespace ElectronicCad.Diagramming
             Redraw();
         }
 
-        private void CalculateInitialDeltas()
+        private void CalculateInitialOffsets()
         {
-            DeltaX = ((float)SkiaCanvas.ActualWidth - GeometryDiagram.Width) / 2;
-            DeltaY = ((float)SkiaCanvas.ActualHeight - GeometryDiagram.Height) / 2;
+            OffsetX = ((float)SkiaCanvas.ActualWidth - GeometryDiagram.Width) / 2;
+            OffsetY = ((float)SkiaCanvas.ActualHeight - GeometryDiagram.Height) / 2;
         }
 
         #endregion
@@ -275,14 +276,16 @@ namespace ElectronicCad.Diagramming
                 typeof(Diagram), new PropertyMetadata());
 
         /// <summary>
-        /// Calculates canvas position.
+        /// Calculates diagram position.
         /// </summary>
         /// <param name="eventArgs">Mouse event args.</param>
-        /// <returns>Canvas mouse position.</returns>
-        internal SKPoint GetPosition(MouseEventArgs eventArgs)
+        /// <param name="eventArgs">Mouse event args.</param>
+        /// <returns>Diagram mouse position.</returns>
+        internal SKPoint CalculateDiagramPosition(MouseEventArgs eventArgs)
         {
             var position = eventArgs.GetPosition(this).ToSKPoint();
-            position.Offset(-DeltaX, -DeltaY);
+            position = position.Scale((float)Scale);
+            position.Offset(-OffsetX, -OffsetY);
             return position;
         }
 
@@ -299,12 +302,17 @@ namespace ElectronicCad.Diagramming
         /// <summary>
         /// Diagram delta x.
         /// </summary>
-        internal float DeltaX { get; private set; }
+        internal float OffsetX { get; private set; }
 
         /// <summary>
-        /// 
+        /// Diagram delta y.
         /// </summary>
-        internal float DeltaY { get; private  set; }
+        internal float OffsetY { get; private  set; }
+
+        /// <summary>
+        /// Diagram scale.
+        /// </summary>
+        internal double Scale { get; private set; } = 1;
 
         /// <summary>
         /// Called when redrawing the diagram.
@@ -355,7 +363,7 @@ namespace ElectronicCad.Diagramming
         private void HandleMouseMove(object sender, MouseEventArgs eventArgs)
         {
             var previousPosition = Position;
-            Position = GetPosition(eventArgs);
+            Position = CalculateDiagramPosition(eventArgs);
 
             var mouse = new MovingMouseParameters
             {
@@ -371,9 +379,9 @@ namespace ElectronicCad.Diagramming
             }
             else if(FocusItem == null && currentMode == DiagramMode.Selection && mouse.LeftButton == MouseButtonState.Pressed)
             {
-                DeltaX += mouse.Delta.X;
-                DeltaY += mouse.Delta.Y;
-                Position = GetPosition(eventArgs);
+                OffsetX += mouse.Delta.X;
+                OffsetY += mouse.Delta.Y;
+                Position = CalculateDiagramPosition(eventArgs);
 
                 Redraw();
             }
@@ -381,6 +389,25 @@ namespace ElectronicCad.Diagramming
             {
                 UpdateFocuItem(mouse);
             }
+        }
+
+        private void HandleMouseWheel(object sender, MouseWheelEventArgs eventArgs)
+        {
+            var sensivity = 0.001;
+
+            Scale += eventArgs.Delta * sensivity;
+            Redraw();
+
+            //var element = (UIElement)sender;
+            //var position = eventArgs.GetPosition(element);
+            //var transform = (MatrixTransform)element.RenderTransform;
+            //var matrix = transform.Matrix;
+
+            //matrix.ScaleAtPrepend(scale, scale, position.X, position.Y);
+            //transform.Matrix = matrix;
+
+            //Scale += scale;
+            //Redraw();
         }
 
         private void UpdateFocuItem(MovingMouseParameters mouse)
@@ -417,7 +444,8 @@ namespace ElectronicCad.Diagramming
             canvas.Clear();
             
             var drawingContext = new SkiaDrawingContext(canvas);
-            drawingContext.Translate(DeltaX, DeltaY);
+            drawingContext.Scale(Scale);
+            drawingContext.Translate(OffsetX, OffsetY);
 
             DrawWorkspaceArea(drawingContext);
 

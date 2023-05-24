@@ -32,7 +32,7 @@ internal class PolygonCreationMode : ShapeCreationMode<Polygon>
     {
         if (IsCreationStart && TemporaryElement != null)
         {
-            var position = Diagram.GetPosition(args).ToDomainPoint();
+            var position = Diagram.CalculateDiagramPosition(args).ToDomainPoint();
             var deltaLength = (position - TemporaryElement.BoundingBox.Center).CalculateLength();
 
             // square inscribed in a circle.

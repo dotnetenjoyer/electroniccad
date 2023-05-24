@@ -58,4 +58,15 @@ internal static class GeometryExtensions
     {
         return new SKColor(color.Red, color.Green, color.Blue, color.Alpha);
     }
+
+    /// <summary>
+    /// Scale the specified skia point.
+    /// </summary>
+    /// <param name="point">Skia point.</param>
+    /// <param name="scale">Scale.</param>
+    /// <returns>Scaled point.</returns>
+    public static SKPoint Scale(this SKPoint point, float scale)
+    {
+        return new SKPoint(point.X / scale, point.Y / scale);
+    }
 }

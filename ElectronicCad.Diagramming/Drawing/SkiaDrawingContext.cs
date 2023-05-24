@@ -11,7 +11,7 @@ public class SkiaDrawingContext
 {
     private readonly SKCanvas canvas;
 
-    private double deltaX, deltaY;
+    private double offsetX, offsetY, scale;
 
     /// <summary>
     /// Constructor.
@@ -25,12 +25,21 @@ public class SkiaDrawingContext
     /// <summary>
     /// Pre-concatenates the current matrix with the specified translation.
     /// </summary>
-    /// <param name="deltaX">The distance to translate in the x-direction</param>
-    /// <param name="deltaY">The distance to translate in the y-direction.</param>
-    public void Translate(double deltaX, double deltaY)
+    /// <param name="offsetX">The distance to translate in the x-direction</param>
+    /// <param name="offsetY">The distance to translate in the y-direction.</param>
+    public void Translate(double offsetX, double offsetY)
     {
-        this.deltaX += deltaX;
-        this.deltaY += deltaY;
+        this.offsetX += offsetX;
+        this.offsetY += offsetY;
+    }
+
+    /// <summary>
+    /// Scales geometry.
+    /// </summary>
+    /// <param name="scale">Scale value.</param>
+    public void Scale(double scale)
+    {
+        this.scale += scale;
     }
 
     /// <summary>
@@ -126,11 +135,13 @@ public class SkiaDrawingContext
 
     private void BeforeDraw()
     {
-        canvas.Translate((float)deltaX, (float)deltaY);
+        canvas.Scale((float)scale);
+        canvas.Translate((float)offsetX, (float)offsetY);
     }
 
     private void AfterDraw()
     {
-        canvas.Translate(-(float)deltaX, -(float)deltaY);
+        canvas.Translate(-(float)offsetX, -(float)offsetY);
+        canvas.Scale(1 / (float)scale);
     }
 }

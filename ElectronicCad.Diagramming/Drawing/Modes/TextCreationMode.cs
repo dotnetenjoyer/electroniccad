@@ -22,7 +22,7 @@ internal class TextCreationMode : BaseDiagramMode
     /// <inheritdoc />
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        var position = Diagram.GetPosition(args).ToDomainPoint();
+        var position = Diagram.CalculateDiagramPosition(args).ToDomainPoint();
         var text = new Text(position, InitialWidth, InitialHeight);
         Diagram.GeometryDiagram.AddGeometry(text);
     }
