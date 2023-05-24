@@ -19,6 +19,16 @@ public class Line : GeometryObject
     public override string Name { get; init; } = nameof(Line);
 
     /// <summary>
+    /// First point of the line.
+    /// </summary>
+    public Point FirstPoint => ControlPoints[FirstPointIndex];
+
+    /// <summary>
+    /// Second point of the line.
+    /// </summary>
+    public Point SecondPoint => ControlPoints[SecondPointIndex];
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     public Line(bool isTemporary) : base(isTemporary)
@@ -38,5 +48,25 @@ public class Line : GeometryObject
         }
 
         RecalculateBoundingBox();
+    }
+
+    /// <summary>
+    /// Clonning constructor.
+    /// </summary>
+    /// <param name="cloneFrom">Clone from.</param>
+    public Line(Line cloneFrom) : base(cloneFrom)
+    {
+    }
+
+    /// <inheritdoc />
+    public override bool CheckHit(Point point)  
+    {
+        var result = (point.X - FirstPoint.X) / (SecondPoint.X - FirstPoint.X) 
+            - (point.Y - FirstPoint.Y) / (SecondPoint.Y - FirstPoint.Y);
+
+        var threshold = 0.01d;
+        var lineContainsPoint = Math.Abs(result) <= threshold;
+
+        return lineContainsPoint && BoundingBox.Contains(point);
     }
 }

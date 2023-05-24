@@ -92,6 +92,34 @@ public class Diagram : VersionableBase, IDisposable
     }
 
     /// <summary>
+    /// Clone specified geometry object.
+    /// </summary>
+    /// <param name="geometry">Geometry object.</param>
+    public void CloneGeometry(GeometryObject geometryObject)
+    {
+        var geometryObjectType = geometryObject.GetType();
+        var cloneConstructor = geometryObjectType.GetConstructors()
+            .FirstOrDefault(constructor =>
+            {
+                var parameters = constructor.GetParameters();
+
+                if (parameters.Count() != 1)
+                {
+                    return false;
+                }
+
+                var firstParameter = parameters.First();
+                return firstParameter.ParameterType == geometryObjectType && parameters.Count() == 1;
+            });
+
+        if (cloneConstructor != null && geometryObject.Layer != null)
+        {
+            var clone = (GeometryObject)cloneConstructor.Invoke(new object[] { geometryObject });
+            AddGeometry(clone);
+        }
+    }
+
+    /// <summary>
     /// Removes geometry object from diagram.
     /// </summary>
     /// <param name="geometry">Geometry object that will be deleted.</param>
@@ -231,6 +259,15 @@ public class Diagram : VersionableBase, IDisposable
         IncrementVersion();
     }
 
+    #endregion
+
+    #region Group
+    
+    public void GroupGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
+    {
+
+    }
+    
     #endregion
 
     #region Dispose

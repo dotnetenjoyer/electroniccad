@@ -49,4 +49,16 @@ public struct Color
         Blue = blue;
         Alpha = alpha;
     }
+
+    /// <summary>
+    /// Clone constructor.
+    /// </summary>
+    /// <param name="cloneFrom">Clone from.</param>
+    public Color(Color cloneFrom)
+    {
+        Red = cloneFrom.Red;
+        Blue = cloneFrom.Blue;
+        Green = cloneFrom.Green;
+        Alpha = cloneFrom.Alpha;
+    }
 }

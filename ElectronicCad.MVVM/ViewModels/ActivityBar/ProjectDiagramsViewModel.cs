@@ -1,10 +1,12 @@
-﻿using MediatR;
+﻿using Microsoft.Toolkit.Mvvm.Input;
+using MediatR;
 using ElectronicCad.Domain.Geometry;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.UseCases.DiagramsTrees.Dtos;
 using ElectronicCad.UseCases.DiagramsTrees.GetDiagramsTree;
 using ElectronicCad.Infrastructure.Abstractions.Services;
 using ElectronicCad.Infrastructure.Abstractions.Services.Projects;
+using ElectronicCad.MVVM.ViewModels.Common;
 
 namespace ElectronicCad.MVVM.ViewModels.ActivityBar;
 
@@ -16,6 +18,7 @@ public class ProjectDiagramsViewModel : ViewModel
     private readonly IOpenProjectProvider openProjectProvider;
     private readonly IMediator mediator;
     private readonly ISelectionService selectionService;
+    private readonly DiagramsContextMenuFactory contextMenuFactory;
 
     /// <summary>
     /// Project diagram trees.
@@ -45,14 +48,42 @@ public class ProjectDiagramsViewModel : ViewModel
     private DiagramTreeNode selectedNode;
 
     /// <summary>
+    /// Command to open context menu.
+    /// </summary>
+    public RelayCommand ContextMenuOpeningCommand { get; }
+
+    /// <summary>
+    /// Collection of context menu commands.
+    /// </summary>
+    public IEnumerable<ContextMenuCommand> ContextMenuCommands 
+    { 
+        get => contextMenuCommands; 
+        set => SetProperty(ref contextMenuCommands, value); 
+    }
+
+    private IEnumerable<ContextMenuCommand> contextMenuCommands = Array.Empty<ContextMenuCommand>();
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     public ProjectDiagramsViewModel(IOpenProjectProvider openProjectProvider, IMediator mediator,
-        ISelectionService selectionService)
+        ISelectionService selectionService, DiagramsContextMenuFactory contextMenuFactory)
     {
         this.openProjectProvider = openProjectProvider;
         this.mediator = mediator;
         this.selectionService = selectionService;
+        this.contextMenuFactory = contextMenuFactory;
+
+        ContextMenuOpeningCommand = new RelayCommand(HandleContextMenuOpening);
+    }
+    
+    private void HandleContextMenuOpening()
+    {
+        if (SelectedNode != null)
+        {
+            var contextMenuCommands = contextMenuFactory.CreateContextMenu(new object[] { SelectedNode.DomainObject });
+            ContextMenuCommands = contextMenuCommands;
+        }
     }
 
     /// <inheritdoc />

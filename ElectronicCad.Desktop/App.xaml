@@ -1,12 +1,24 @@
-﻿<Application x:Class="ElectronicCad.Desktop.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<Application 
+    x:Class="ElectronicCad.Desktop.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:commonViewModels="clr-namespace:ElectronicCad.MVVM.ViewModels.Common;assembly=ElectronicCad.MVVM">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/ElectronicCad.Desktop.UI;component/Styles.xaml"/>
                 <ResourceDictionary Source="/Views/Common/Dialogs/Dialogs.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type commonViewModels:ContextMenuCommand}">
+                <MenuItem Command="{Binding}">
+                    <MenuItem.Header>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource PrimaryText}" Text="{Binding Name}"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

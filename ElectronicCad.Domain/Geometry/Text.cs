@@ -77,4 +77,16 @@ public class Text : ContentGeometry
     {
         fillColor = Color.White;
     }
+
+    /// <summary>
+    /// Cloning constructor.
+    /// </summary>
+    /// <param name="cloneFrom">Clone from.</param>
+    public Text(Text cloneFrom) : base(cloneFrom)
+    {
+        content = cloneFrom.Content;
+        fontSize = cloneFrom.fontSize;
+        fontWeight = cloneFrom.FontWeight;
+        fontFamily = cloneFrom.FontFamily;
+    }
 }
