@@ -8,22 +8,21 @@ using SkiaSharp;
 using SkiaSharp.Views.WPF;
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Drawing;
 using ElectronicCad.Diagramming.Drawing.Items;
 using ElectronicCad.Diagramming.Drawing.Modes;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
-using ElectronicCad.Domain.Geometry.LayoutGrids;
-using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
-using System.Windows.Media;
-using System.Diagnostics.Tracing;
+
 
 namespace ElectronicCad.Diagramming
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for Diagram.xaml
     /// </summary>
     public partial class Diagram : UserControl, IDisposable
     {
@@ -81,7 +80,7 @@ namespace ElectronicCad.Diagramming
             MouseUp += HandleMouseUp;
             MouseDown += HandleMouseDown;
             MouseWheel += HandleMouseWheel;
-            
+
             SetDiagramMode(DiagramMode.Selection);
         }
 
@@ -103,7 +102,7 @@ namespace ElectronicCad.Diagramming
                 new PropertyMetadata(DomainDiagramChanged));
 
         private static void DomainDiagramChanged(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
-        {   
+        {
             var diagram = (Diagram)obj;
             diagram.InitializeGeometryDiagram((GeometryDiagram)eventArgs.NewValue);
         }
@@ -121,7 +120,7 @@ namespace ElectronicCad.Diagramming
             CalculateInitialOffsets();
             Redraw();
         }
-       
+
         private void DeinitializeGeometryDiagram()
         {
             if (GeometryDiagram == null)
@@ -138,11 +137,25 @@ namespace ElectronicCad.Diagramming
         private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
         {
             var diagramItem = DiagramItemsFactory.Create(geometryObject);
-            diagramItems.Add(diagramItem);
-
+            diagramItem.ZIndex = GetNextZIndex();
+            AddDiagramItem(diagramItem);
             Redraw();
         }
 
+        private int GetNextZIndex()
+        {
+            var userDiagramItems = diagramItems
+                .Where(x => !x.IsAuxiliary)
+                .ToList();
+
+            var maxZIndex = userDiagramItems.Any() 
+                ? userDiagramItems.Max(x => x.ZIndex) 
+                : 0;
+
+
+            return maxZIndex + 1;
+        }
+        
         private void HandleGeometryModified(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
         {
             var modifiedItems = diagramItems
@@ -154,7 +167,7 @@ namespace ElectronicCad.Diagramming
             {
                 item.UpdateViewState();
             }
-            
+
             Redraw();
         }
 
@@ -170,7 +183,7 @@ namespace ElectronicCad.Diagramming
                 Redraw();
             }
         }
- 
+
         private void HandleLayoutGridsUpdate(object? sender, EventArgs eventArgs)
         {
             Redraw();
@@ -187,7 +200,7 @@ namespace ElectronicCad.Diagramming
         #region Diagram mode
 
         private DiagramMode currentMode;
-        
+
         private IDiagramMode diagramMode;
 
         public void SetDiagramMode(DiagramMode diagramMode)
@@ -220,11 +233,11 @@ namespace ElectronicCad.Diagramming
 
         private void SetDiagramMode(IDiagramMode diagramMode)
         {
-            if(this.diagramMode != null)
+            if (this.diagramMode != null)
             {
                 this.diagramMode.Finish();
             }
-         
+
             this.diagramMode = diagramMode;
             diagramMode.Initialize(this);
         }
@@ -277,7 +290,7 @@ namespace ElectronicCad.Diagramming
         }
 
         /// <summary>
-        /// Collection of all diagram item on the diagram.
+        /// Collection of all diagram item on the diagram sorted by z index.
         /// </summary>
         internal IEnumerable<DiagramItem> DiagramItems => diagramItems;
 
@@ -286,9 +299,8 @@ namespace ElectronicCad.Diagramming
         internal void AddDiagramItem(DiagramItem diagramItem)
         {
             diagramItems.Add(diagramItem);
-
             diagramItems = diagramItems
-                .OrderByDescending(item => item.ZIndex)
+                .OrderBy(item => item.ZIndex)
                 .ToList();
         }
 
@@ -301,6 +313,40 @@ namespace ElectronicCad.Diagramming
         /// Diagram item that is now being interacted.
         /// </summary>
         internal DiagramItem? InteractingItem { get; private set; }
+
+        /// <summary>
+        /// Collection of selected geometry objects.
+        /// </summary>
+        public readonly static DependencyProperty SelectedItemsProperty =
+            DependencyProperty.Register(
+                nameof(SelectedItems),
+                typeof(IEnumerable<GeometryObject>),
+                typeof(Diagram),
+                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        /// <inheritdoc cref="SelectedItemsProperty" />
+        public IEnumerable<GeometryObject> SelectedItems
+        {
+            get => (IEnumerable<GeometryObject>)GetValue(SelectedItemsProperty);
+            set => SetValue(SelectedItemsProperty, value);
+        }
+
+        /// <summary>
+        /// The event to notify aboutn selected items changes.
+        /// </summary>
+        public readonly static RoutedEvent SelectedItemsChangedEvent =
+            EventManager.RegisterRoutedEvent(
+                nameof(SelectedItemsChanged),
+                RoutingStrategy.Bubble,
+                typeof(EventHandler),
+                typeof(Diagram));
+
+        /// <inheritdoc cref="SelectedItemsChangedEvent"/>
+        public event EventHandler SelectedItemsChanged
+        {
+            add => AddHandler(SelectedItemsChangedEvent, value);
+            remove => RemoveHandler(SelectedItemsChangedEvent, value);
+        }
 
         /// <summary>
         /// Called when redrawing the diagram.
@@ -320,8 +366,17 @@ namespace ElectronicCad.Diagramming
             if (FocusItem != null)
             {
                 var mouseParameters = CreateMouseParameters(mouseEventArgs);
-                InteractingItem = FocusItem;
                 FocusItem.HandleDiagramMouseDown(mouseParameters);
+                
+                InteractingItem = FocusItem;
+                if (FocusItem is GeometryObjectDiagramItem geometryObjectDiagramItem)
+                {
+                    var selectedGeometryObjects = new[] { geometryObjectDiagramItem.GeometryObject };
+                    SelectedItems = selectedGeometryObjects;
+
+                    var eventArgs = new RoutedEventArgs(SelectedItemsChangedEvent, this); 
+                    RaiseEvent(eventArgs);
+                }
             }
         }
 
@@ -349,11 +404,11 @@ namespace ElectronicCad.Diagramming
 
         private void HandleMouseMove(object sender, MouseEventArgs mouseEventArgs)
         {
-            var moseMovingParameters = CreateMovingMouseParameters(mouseEventArgs);
-            if (moseMovingParameters.MiddleButton == MouseButtonState.Pressed)
+            var mouseParameters = CreateMovingMouseParameters(mouseEventArgs);
+            if (mouseParameters.MiddleButton == MouseButtonState.Pressed)
             {
-                OffsetX += moseMovingParameters.Delta.X;
-                OffsetY += moseMovingParameters.Delta.Y;
+                OffsetX += mouseParameters.Delta.X;
+                OffsetY += mouseParameters.Delta.Y;
                 
                 Position = CalculateDiagramPosition(mouseEventArgs);
                 
@@ -361,11 +416,11 @@ namespace ElectronicCad.Diagramming
             }
             else if (InteractingItem != null)
             {
-                InteractingItem.RaiseMouseMove(moseMovingParameters);
+                InteractingItem.RaiseMouseMove(mouseParameters);
             }
             else
             {
-                UpdateFocuItem(moseMovingParameters);
+                UpdateFocuItem(mouseParameters);
             }
         }
 
@@ -398,7 +453,8 @@ namespace ElectronicCad.Diagramming
         {
             var interactableItems = DiagramItems
                 .Where(item => item.IsVisible)
-                .OrderByDescending(item => item.ZIndex);
+                .Reverse()
+                .ToList();
             
             foreach (var item in interactableItems)
             {
@@ -433,11 +489,11 @@ namespace ElectronicCad.Diagramming
 
             DrawWorkspaceArea(drawingContext);
 
-            var sortedDiagramItems = diagramItems
+            var visibleItems = diagramItems
                 .Where(item => item.IsVisible)
                 .ToList();
 
-            foreach (var item in sortedDiagramItems)
+            foreach (var item in visibleItems)
             {
                 item.Draw(drawingContext);
             }
@@ -488,6 +544,11 @@ namespace ElectronicCad.Diagramming
             MouseMove -= HandleMouseMove;
             MouseUp -= HandleMouseUp;
             MouseDown -= HandleMouseDown;
+
+            foreach (var diagramItem in DiagramItems)
+            {
+                diagramItem.Dispose();
+            }
 
             DeinitializeGeometryDiagram();
         }
