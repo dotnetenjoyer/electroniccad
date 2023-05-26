@@ -8,9 +8,9 @@ namespace ElectronicCad.MVVM.Properties.Implementation.CustomSections;
 public interface ICustomSectionFactoriesFactory
 {
     /// <summary>
-    /// Creates custom section factory.
+    /// Creates a custom section factory to a specified section.
     /// </summary>
-    /// <param name="customSectionType">Type of custom sections.</param>
+    /// <param name="customSectionType">Type of custom section. </param>
     /// <returns>Custom section factory.</returns>
     public ICustomSectionFactory CreateFactory(Type customSectionType);
 }

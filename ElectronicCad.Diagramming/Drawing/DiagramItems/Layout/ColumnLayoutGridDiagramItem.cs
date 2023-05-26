@@ -34,8 +34,8 @@ internal class ColumnLayoutGridDiagramItem : LayoutGridDiagramItem<ColumnLayoutG
             var left = layoutGrid.Offset + (layoutGrid.Width + gutterWidth) * i;
             var rigth = left + layoutGrid.Width;
             var top = 0;
-            var bottom = diagram.GeometryDiagram.Height;
-            var rect = new SKRect((float)left, top, (float)rigth, bottom);
+            var bottom = diagram.GeometryDiagram.Size.Height;
+            var rect = new SKRect((float)left, top, (float)rigth, (float)bottom);
             drawingContext.DrawRect(rect, paint);
         }
     }
@@ -43,7 +43,7 @@ internal class ColumnLayoutGridDiagramItem : LayoutGridDiagramItem<ColumnLayoutG
     private float CalculateGutterWidth()
     {
         var reservedWidth = layoutGrid.Offset + layoutGrid.Count * layoutGrid.Width;
-        var remainingWidth = diagram.GeometryDiagram.Width - reservedWidth;
+        var remainingWidth = diagram.GeometryDiagram.Size.Width - reservedWidth;
         var gutterWidth = remainingWidth / layoutGrid.Count;
         return (float)gutterWidth;
     }

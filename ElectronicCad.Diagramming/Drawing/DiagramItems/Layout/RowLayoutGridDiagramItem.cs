@@ -32,10 +32,10 @@ internal class RowLayoutGridDiagramItem : LayoutGridDiagramItem<RowLayoutGrid>
         for (int i = 0; i < layoutGrid.Count; i++)
         {
             var left = 0;
-            var rigth = diagram.GeometryDiagram.Width;
+            var rigth = diagram.GeometryDiagram.Size.Width;
             var top = layoutGrid.Offset + (layoutGrid.Height + gutterHeight) * i;
             var bottom = top + layoutGrid.Height;
-            var rect = new SKRect(left, (float)top, rigth, (float)bottom);
+            var rect = new SKRect(left, (float)top, (float)rigth, (float)bottom);
             drawingContext.DrawRect(rect, paint);
         }
     }
@@ -43,7 +43,7 @@ internal class RowLayoutGridDiagramItem : LayoutGridDiagramItem<RowLayoutGrid>
     private float CalculateGutterHeight()
     {
         var reservedHeight = layoutGrid.Offset + layoutGrid.Count * layoutGrid.Height;
-        var remainingHeight = diagram.GeometryDiagram.Height - reservedHeight;
+        var remainingHeight = diagram.GeometryDiagram.Size.Height - reservedHeight;
         var gutterHeight = remainingHeight / layoutGrid.Count;
         return (float)gutterHeight;
     }

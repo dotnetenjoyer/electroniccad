@@ -21,6 +21,7 @@ public static class ProxyFactory
             Ellipse ellipse => new EllipsePropertyProxy(ellipse),
             Text text => new TextPropertiesProxy(text),
             ProjectDiagram diagram => new ProjectDiagramPropertiesProxy(diagram),
+            Image image => new ImagePropertiesProxy(image),
             _ => throw new InvalidOperationException()
         };
 }

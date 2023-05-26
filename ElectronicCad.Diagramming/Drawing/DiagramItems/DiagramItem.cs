@@ -6,7 +6,7 @@ namespace ElectronicCad.Diagramming.Drawing.Items;
 /// <summary>
 /// The class that represent diagram item with visual presentation.
 /// </summary>
-internal abstract class DiagramItem
+internal abstract class DiagramItem : IDisposable
 {
     /// <summary>
     /// Indicate whether item is auxiliary. 
@@ -34,9 +34,9 @@ internal abstract class DiagramItem
     public int ZIndex { get; set; }
 
     /// <summary>
-    /// Diagram item stroke paint.
+    /// Stroke geometry paint.
     /// </summary>
-    public SKPaint StrokePaint { get; set; }
+    public SKPaint StrokePaint { get; protected set; }
 
     /// <summary>
     /// Draws itself.
@@ -45,42 +45,58 @@ internal abstract class DiagramItem
     public abstract void Draw(SkiaDrawingContext drawingContext);
 
     /// <summary>
-    /// Check point hitting.
+    /// Check point hitting to the geometry shape.
     /// </summary>
-    /// <param name="position">Point position.</param>
-    /// <returns>Whether hit or not.</returns>
-    public virtual bool CheckHit(ref SKPoint point)
+    /// <param name="position">Hit point.</param>
+    /// <returns>True if hits to the geometry shape.</returns>
+    public virtual bool CheckShapeHit(ref SKPoint point)
+    {
+        return CheckBoundingBoxHit(ref point);
+    }
+
+    /// <summary>
+    /// Check point hitting to the bounding box.
+    /// </summary>
+    /// <param name="position">Hit point.</param>
+    /// <returns>True if hit to the bounding box.</returns>
+    public virtual bool CheckBoundingBoxHit(ref SKPoint point)
     {
         return BoundingBox.Contains(point);
     }
 
+    #region Mouse events 
+
     /// <summary>
     /// Raises when clicked mouse button up on diagram item.
     /// </summary>
-    public event EventHandler<MouseParameters> MouseUp;
+    public event EventHandler<MouseParameters>? MouseUp;
 
     /// <summary>
     /// Raises when click on diagram item.
     /// </summary>
-    public event EventHandler<MouseParameters> MouseDown;
+    public event EventHandler<MouseParameters>? MouseDown;
 
     /// <summary>
     /// Raises when mouse move on diagram item.
     /// </summary>
-    public event EventHandler<MovingMouseParameters> MouseMove;
+    public event EventHandler<MovingMouseParameters>? MouseMove;
 
     /// <summary>
-    /// Checks if mouse ups on the diagram item.
-    /// If so, invokes the apropriate event.
+    /// Handle the diagram mouse ups, if ups on the current item, invokes the apropriate event.
     /// </summary>
-    /// <param name="mouse">Mouse parameters.</param>
-    /// <returns>True if ups on the diagram item.</returns>
-    public virtual bool CheckMouseUp(MouseParameters mouse)
+    /// <param name="mouseParameters">Mouse parameters.</param>
+    /// <returns>True if ups on the current item.</returns>
+    public virtual bool HandleDiagramMouseUp(MouseParameters mouseParameters)
     {
-        var position = mouse.Position;
-        if (CheckHit(ref position))
+        var position = mouseParameters.Position;
+        
+        if (!CheckBoundingBoxHit(ref position))
         {
-            MouseUp?.Invoke(this, mouse);
+            return false;
+        }
+        else if (CheckShapeHit(ref position))
+        {
+            MouseUp?.Invoke(this, mouseParameters);
             return true;
         }
 
@@ -88,17 +104,21 @@ internal abstract class DiagramItem
     }
 
     /// <summary>
-    /// Checks if mouse downs on the diagram item.
-    /// If so, invokes the apropriate event.
+    /// Handle the diagram mouse downs, if downs on the current item, invokes the apropriate event.
     /// </summary>
-    /// <param name="mouse">Mouse parameters.</param>
+    /// <param name="mouseParameters">Mouse parameters.</param>
     /// <returns>True if downs on the diagram item.</returns>
-    public virtual bool CheckMouseDown(MouseParameters mouse)
+    public virtual bool HandleDiagramMouseDown(MouseParameters mouseParameters)
     {
-        var position = mouse.Position;
-        if (CheckHit(ref position))
+        var position = mouseParameters.Position;
+
+        if (!CheckBoundingBoxHit(ref position))
         {
-            MouseDown?.Invoke(this, mouse);
+            return false;
+        }
+        else if (CheckShapeHit(ref position))
+        {
+            MouseDown?.Invoke(this, mouseParameters);
             return true;
         }
 
@@ -106,15 +126,19 @@ internal abstract class DiagramItem
     }
 
     /// <summary>
-    /// Checks if mouse moves on the diagram item.
-    /// If so, invokes the apropriate event.
+    /// Handle the diagram mouse moves, if moves on the current item, invokes the apropriate event.
     /// </summary>
     /// <param name="mouse">Mouse parameters.</param>
     /// <returns>True if moves on the diagram item.</returns>
-    public virtual bool CheckMouseMove(MovingMouseParameters mouse)
+    public virtual bool HandleDiagramMouseMove(MovingMouseParameters mouse)
     {
         var position = mouse.Position;
-        if (CheckHit(ref position))
+
+        if (!CheckBoundingBoxHit(ref position))
+        {
+            return false;
+        }
+        else if (CheckShapeHit(ref position))
         {
             MouseMove?.Invoke(this, mouse);
             return true;
@@ -132,5 +156,24 @@ internal abstract class DiagramItem
     public void RaiseMouseMove(MovingMouseParameters mouse)
     {
         MouseMove?.Invoke(this, mouse);
+    }
+
+    #endregion
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        DisposeManagedResources();
+    }
+    
+    /// <summary>
+    /// Disposes managed resources.
+    /// </summary>
+    protected virtual void DisposeManagedResources()
+    {
+        if (StrokePaint != null)
+        {
+            StrokePaint.Dispose();
+        }
     }
 }

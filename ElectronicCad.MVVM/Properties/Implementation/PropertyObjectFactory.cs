@@ -83,8 +83,9 @@ public class PropertyObjectFactory
 
         foreach (var sectionConfiguration in configuration.CustomSectionConfigurations)
         {
-            var factory = customSectionFactoriesFactory.CreateFactory(sectionConfiguration.CustomSectionType);
-
+            var factory = customSectionFactoriesFactory
+                .CreateFactory(sectionConfiguration.CustomSectionType);
+            
             if (factory.CanCreate(proxy))
             {
                 var section = factory.Create(proxy);

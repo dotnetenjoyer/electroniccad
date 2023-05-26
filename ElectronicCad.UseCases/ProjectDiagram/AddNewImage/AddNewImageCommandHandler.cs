@@ -35,7 +35,7 @@ public class AddNewImageCommandHandler : IRequestHandler<AddNewImageCommand>
 
         var imagePath = PickImage();
         var imageSize = GetImageSize(imagePath);
-        var imageCenterPoint = new Point(diagram.Width / 2, diagram.Height / 2);
+        var imageCenterPoint = new Point(diagram.Size.Width / 2, diagram.Size.Height / 2);
         var image = new Image(imageCenterPoint, imageSize.Width, imageSize.Height, imagePath);
         diagram.AddGeometry(image);
 

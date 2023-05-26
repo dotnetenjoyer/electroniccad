@@ -22,6 +22,11 @@ internal class MouseParameters
     /// Rigth button state.
     /// </summary>
     public MouseButtonState RightButton { get; init; }
+
+    /// <summary>
+    /// Middle button state.
+    /// </summary>
+    public MouseButtonState MiddleButton { get; init; }
 }
 
 /// <summary>

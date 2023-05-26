@@ -1,7 +1,7 @@
 ﻿namespace ElectronicCad.MVVM.Properties.Abstractions;
 
 /// <summary>
-/// Abstraction of custom section factory.
+/// Factory to create custom section. 
 /// </summary>
 public interface ICustomSectionFactory
 {

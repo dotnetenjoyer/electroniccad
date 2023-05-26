@@ -7,12 +7,24 @@
     xmlns:local="clr-namespace:ElectronicCad.Diagramming"
     xmlns:controls="clr-namespace:ElectronicCad.Diagramming.Controls"
     xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels.Diagrams;assembly=ElectronicCad.MVVM"
+    xmlns:interaction="http://schemas.microsoft.com/xaml/behaviors"
     d:DataContext="{d:DesignInstance Type=viewModels:DiagramViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d">
     <Grid>
         <local:Diagram 
             x:Name="Diagram" 
-            GeometryDiagram="{Binding Diagram.GeometryDiagram}"/>
+            SelectedItems="{Binding SelectedGeometry}"
+            GeometryDiagram="{Binding Diagram.GeometryDiagram}">
+
+            <interaction:Interaction.Triggers>
+                <interaction:EventTrigger 
+                    SourceName="Diagram"
+                    SourceObject="{Binding ElementName=Diagram}" 
+                    EventName="SelectedItemsChanged">
+                    <interaction:InvokeCommandAction Command="{Binding HandleGeometrySelectionCommand}"/>
+                </interaction:EventTrigger>
+            </interaction:Interaction.Triggers>
+        </local:Diagram>
 
         <controls:UpperToolbar
             x:Name="UpperToolbar"

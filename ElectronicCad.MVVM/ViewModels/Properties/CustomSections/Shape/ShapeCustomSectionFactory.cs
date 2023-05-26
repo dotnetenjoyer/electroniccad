@@ -1,32 +1,15 @@
-﻿using ElectronicCad.MVVM.Properties.Abstractions;
-
-namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
+﻿namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 
 /// <summary>
-/// Creates shape custom sections.
+/// Factory to shape custom section.
 /// </summary>
-public class ShapeCustomSectionFactory : ICustomSectionFactory
+public class ShapeCustomSectionFactory : BaseCustomSectionFactory<ShapeCustomSection , IShapeProxy>
 {
-    /// <inheritdoc />
-    public bool CanCreate(IProxy proxy)
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public ShapeCustomSectionFactory(IServiceProvider serviceProvider) : base(serviceProvider)
     {
-        if (proxy is IShapeProxy)
-        {
-            return true;
-        }
-
-        return false;
-
-    }
-
-    /// <inheritdoc />
-    public ICustomSection Create(IProxy proxy)
-    {
-        if (!CanCreate(proxy))
-        {
-            throw new InvalidOperationException($"Cannot create {nameof(ShapeCustomSection)}.");
-        }
-
-        return new ShapeCustomSection(proxy as IShapeProxy);
+        
     }
 }

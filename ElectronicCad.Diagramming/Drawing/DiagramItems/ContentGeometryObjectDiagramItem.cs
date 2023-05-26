@@ -11,9 +11,9 @@ namespace ElectronicCad.Diagramming.Drawing.Items;
 internal abstract class ContentGeometryObjectDiagramItem<TContentGeometry> : GeometryObjectDiagramItem<TContentGeometry> where TContentGeometry : ContentGeometry
 {
     /// <summary>
-    /// Diagram item fill paint.
+    /// Fill geometry paint.
     /// </summary>
-    public SKPaint FillPaint { get; set; }
+    public SKPaint FillPaint { get; private set; }
 
     /// <summary>
     /// Constructor.
@@ -28,10 +28,27 @@ internal abstract class ContentGeometryObjectDiagramItem<TContentGeometry> : Geo
     {
         base.UpdateViewState();
 
+        if (FillPaint != null)
+        {
+            FillPaint.Dispose();
+        }
+
         FillPaint = new SKPaint
         {
             Color = CertainGeometryObject.FillColor.ToSKColor(),
             Style = SKPaintStyle.Fill,
         };
+    }
+
+
+    /// <inheritdoc />
+    protected override void DisposeManagedResources()
+    {
+        base.DisposeManagedResources();
+
+        if (FillPaint != null)
+        {
+            FillPaint.Dispose();
+        }
     }
 }

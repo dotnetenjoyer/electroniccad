@@ -23,7 +23,7 @@ internal abstract class ShapeCreationMode<TShape> : BaseDiagramMode where TShape
     /// <inheritdoc />
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        var position = Diagram.GetPosition(args).ToDomainPoint();
+        var position = Diagram.CalculateDiagramPosition(args).ToDomainPoint();
 
         if (!IsCreationStart)
         {

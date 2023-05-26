@@ -11,6 +11,7 @@
       <PackageReference Include="CalcBinding" Version="2.5.2" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.0" />
+      <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
       <PackageReference Include="SkiaSharp.Views.WPF" Version="2.88.3" />
       <PackageReference Include="Topten.RichTextKit" Version="0.4.165" />
     </ItemGroup>

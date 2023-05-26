@@ -50,5 +50,7 @@ internal static class InfrastructureModule
             var applicationDataFolder = CompositionRoot.GetApplicationDataFolder();
             return new ApplicationLocalStorage(applicationDataFolder);
         });
+
+        services.AddSingleton<ISizePrototypesStorage, SizePrototypeStorage>();
     }
 }

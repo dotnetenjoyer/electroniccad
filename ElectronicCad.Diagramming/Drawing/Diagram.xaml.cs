@@ -8,20 +8,21 @@ using SkiaSharp;
 using SkiaSharp.Views.WPF;
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Drawing;
 using ElectronicCad.Diagramming.Drawing.Items;
 using ElectronicCad.Diagramming.Drawing.Modes;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
-using ElectronicCad.Domain.Geometry.LayoutGrids;
-using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
+
 
 namespace ElectronicCad.Diagramming
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for Diagram.xaml
     /// </summary>
     public partial class Diagram : UserControl, IDisposable
     {
@@ -78,7 +79,8 @@ namespace ElectronicCad.Diagramming
             MouseMove += HandleMouseMove;
             MouseUp += HandleMouseUp;
             MouseDown += HandleMouseDown;
-            
+            MouseWheel += HandleMouseWheel;
+
             SetDiagramMode(DiagramMode.Selection);
         }
 
@@ -113,12 +115,12 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryAdded += HandleDiagramGeometryAdded;
             GeometryDiagram.GeometryModified += HandleGeometryModified;
             GeometryDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
-            GeometryDiagram.LayoutGridsUpdated += HandleLayoutGridsUpdate;
+            GeometryDiagram.VersionChanged += HandleVersionChange;
 
-            CalculateInitialDeltas();
+            CalculateInitialOffsets();
             Redraw();
         }
-       
+
         private void DeinitializeGeometryDiagram()
         {
             if (GeometryDiagram == null)
@@ -129,17 +131,31 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
             GeometryDiagram.GeometryModified -= HandleGeometryModified;
             GeometryDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
-            GeometryDiagram.LayoutGridsUpdated -= HandleLayoutGridsUpdate;
+            GeometryDiagram.VersionChanged -= HandleVersionChange;
         }
 
         private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
         {
             var diagramItem = DiagramItemsFactory.Create(geometryObject);
-            diagramItems.Add(diagramItem);
-
+            diagramItem.ZIndex = GetNextZIndex();
+            AddDiagramItem(diagramItem);
             Redraw();
         }
 
+        private int GetNextZIndex()
+        {
+            var userDiagramItems = diagramItems
+                .Where(x => !x.IsAuxiliary)
+                .ToList();
+
+            var maxZIndex = userDiagramItems.Any() 
+                ? userDiagramItems.Max(x => x.ZIndex) 
+                : 0;
+
+
+            return maxZIndex + 1;
+        }
+        
         private void HandleGeometryModified(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
         {
             var modifiedItems = diagramItems
@@ -151,10 +167,9 @@ namespace ElectronicCad.Diagramming
             {
                 item.UpdateViewState();
             }
-            
+
             Redraw();
         }
-
 
         private void HandleDiagramGeometryRemoved(object? sender, GeometryObject geometryObject)
         {
@@ -168,16 +183,16 @@ namespace ElectronicCad.Diagramming
                 Redraw();
             }
         }
- 
-        private void HandleLayoutGridsUpdate(object? sender, EventArgs eventArgs)
+
+        private void HandleVersionChange(object? sender, EventArgs eventArgs)
         {
             Redraw();
         }
 
-        private void CalculateInitialDeltas()
+        private void CalculateInitialOffsets()
         {
-            DeltaX = ((float)SkiaCanvas.ActualWidth - GeometryDiagram.Width) / 2;
-            DeltaY = ((float)SkiaCanvas.ActualHeight - GeometryDiagram.Height) / 2;
+            OffsetX = (float)(SkiaCanvas.ActualWidth - GeometryDiagram.Size.Width) / 2;
+            OffsetY = (float)(SkiaCanvas.ActualHeight - GeometryDiagram.Size.Height) / 2;
         }
 
         #endregion
@@ -185,7 +200,7 @@ namespace ElectronicCad.Diagramming
         #region Diagram mode
 
         private DiagramMode currentMode;
-        
+
         private IDiagramMode diagramMode;
 
         public void SetDiagramMode(DiagramMode diagramMode)
@@ -218,35 +233,64 @@ namespace ElectronicCad.Diagramming
 
         private void SetDiagramMode(IDiagramMode diagramMode)
         {
-            if(this.diagramMode != null)
+            if (this.diagramMode != null)
             {
                 this.diagramMode.Finish();
             }
-         
+
             this.diagramMode = diagramMode;
             diagramMode.Initialize(this);
         }
 
         #endregion
 
-        ///// <summary>
-        ///// All diagram items
-        ///// </summary>
-        //public IEnumerable<DiagramItem> DiagramItems => Layers.SelectMany(_ => _.DiagramItems);
-
-        ///// <summary>
-        ///// Add diagram item to active layer.
-        ///// </summary>
-        ///// <param name="item">Diagram item to add.</param>
-        //public void AddItem(DiagramItem item)
-        //{
-        //    ActiveLayer.AddItem(item);
-        //}
-
         #region Drawing
 
+        /// <inheritdoc cref="PositionProperty"/>
+        internal SKPoint Position
+        {
+            get => (SKPoint)GetValue(PositionProperty);
+            set => SetValue(PositionProperty, value);
+        }
+
         /// <summary>
-        /// Collection of all diagram item on the diagram.
+        /// Current diagram mouse position.
+        /// </summary>
+        public static readonly DependencyProperty PositionProperty =
+            DependencyProperty.Register(nameof(Position), typeof(SKPoint),
+                typeof(Diagram), new PropertyMetadata());
+
+        /// <summary>
+        /// Diagram delta x.
+        /// </summary>
+        internal float OffsetX { get; private set; }
+
+        /// <summary>
+        /// Diagram delta y.
+        /// </summary>
+        internal float OffsetY { get; private set; }
+
+        /// <summary>
+        /// Diagram scale.
+        /// </summary>
+        internal double Scale { get; private set; } = 1;
+
+        /// <summary>
+        /// Calculates diagram position.
+        /// </summary>
+        /// <param name="eventArgs">Mouse event args.</param>
+        /// <param name="eventArgs">Mouse event args.</param>
+        /// <returns>Diagram mouse position.</returns>
+        internal SKPoint CalculateDiagramPosition(MouseEventArgs eventArgs)
+        {
+            var position = eventArgs.GetPosition(this).ToSKPoint();
+            position = position.Scale((float)Scale);
+            position.Offset(-OffsetX, -OffsetY);
+            return position;
+        }
+
+        /// <summary>
+        /// Collection of all diagram item on the diagram sorted by z index.
         /// </summary>
         internal IEnumerable<DiagramItem> DiagramItems => diagramItems;
 
@@ -255,35 +299,9 @@ namespace ElectronicCad.Diagramming
         internal void AddDiagramItem(DiagramItem diagramItem)
         {
             diagramItems.Add(diagramItem);
-
             diagramItems = diagramItems
-                .OrderByDescending(item => item.ZIndex)
+                .OrderBy(item => item.ZIndex)
                 .ToList();
-        }
-
-        /// <summary>
-        /// Current canvas mouse position.
-        /// </summary>
-        internal SKPoint Position
-        {
-            get => (SKPoint)GetValue(PositionProperty);
-            set => SetValue(PositionProperty, value);
-        }
-
-        private static readonly DependencyProperty PositionProperty =
-            DependencyProperty.Register(nameof(Position), typeof(SKPoint),
-                typeof(Diagram), new PropertyMetadata());
-
-        /// <summary>
-        /// Calculates canvas position.
-        /// </summary>
-        /// <param name="eventArgs">Mouse event args.</param>
-        /// <returns>Canvas mouse position.</returns>
-        internal SKPoint GetPosition(MouseEventArgs eventArgs)
-        {
-            var position = eventArgs.GetPosition(this).ToSKPoint();
-            position.Offset(-DeltaX, -DeltaY);
-            return position;
         }
 
         /// <summary>
@@ -297,14 +315,38 @@ namespace ElectronicCad.Diagramming
         internal DiagramItem? InteractingItem { get; private set; }
 
         /// <summary>
-        /// Diagram delta x.
+        /// Collection of selected geometry objects.
         /// </summary>
-        internal float DeltaX { get; private set; }
+        public readonly static DependencyProperty SelectedItemsProperty =
+            DependencyProperty.Register(
+                nameof(SelectedItems),
+                typeof(IEnumerable<GeometryObject>),
+                typeof(Diagram),
+                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+
+        /// <inheritdoc cref="SelectedItemsProperty" />
+        public IEnumerable<GeometryObject> SelectedItems
+        {
+            get => (IEnumerable<GeometryObject>)GetValue(SelectedItemsProperty);
+            set => SetValue(SelectedItemsProperty, value);
+        }
 
         /// <summary>
-        /// 
+        /// The event to notify aboutn selected items changes.
         /// </summary>
-        internal float DeltaY { get; private  set; }
+        public readonly static RoutedEvent SelectedItemsChangedEvent =
+            EventManager.RegisterRoutedEvent(
+                nameof(SelectedItemsChanged),
+                RoutingStrategy.Bubble,
+                typeof(EventHandler),
+                typeof(Diagram));
+
+        /// <inheritdoc cref="SelectedItemsChangedEvent"/>
+        public event EventHandler SelectedItemsChanged
+        {
+            add => AddHandler(SelectedItemsChangedEvent, value);
+            remove => RemoveHandler(SelectedItemsChangedEvent, value);
+        }
 
         /// <summary>
         /// Called when redrawing the diagram.
@@ -319,79 +361,104 @@ namespace ElectronicCad.Diagramming
             SkiaCanvas.InvalidateVisual();
         }
 
-        private void HandleMouseDown(object sender, MouseButtonEventArgs eventArgs)
+        private void HandleMouseDown(object sender, MouseButtonEventArgs mouseEventArgs)
         {
-            var mouse = new MouseParameters
-            {
-                LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                RightButton = (MouseButtonState)eventArgs.RightButton,
-                Position = Position
-            };
-
             if (FocusItem != null)
             {
+                var mouseParameters = CreateMouseParameters(mouseEventArgs);
+                FocusItem.HandleDiagramMouseDown(mouseParameters);
+                
                 InteractingItem = FocusItem;
-                FocusItem.CheckMouseDown(mouse);
+                if (FocusItem is GeometryObjectDiagramItem geometryObjectDiagramItem)
+                {
+                    var selectedGeometryObjects = new[] { geometryObjectDiagramItem.GeometryObject };
+                    SelectedItems = selectedGeometryObjects;
+
+                    var eventArgs = new RoutedEventArgs(SelectedItemsChangedEvent, this); 
+                    RaiseEvent(eventArgs);
+                }
             }
         }
 
-        private void HandleMouseUp(object sender, MouseButtonEventArgs eventArgs)
+        private void HandleMouseUp(object sender, MouseButtonEventArgs mouseEventArgs)
         {
-            var mouse = new MouseParameters
+            if (InteractingItem != null)
             {
-                LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                RightButton = (MouseButtonState)eventArgs.RightButton,
+                var mouseParameters = CreateMouseParameters(mouseEventArgs);
+                InteractingItem.HandleDiagramMouseUp(mouseParameters);
+                InteractingItem = null;
+            }
+        }
+
+        private MouseParameters CreateMouseParameters(MouseButtonEventArgs mouseEventArgs)
+        {
+            var mouseParameters = new MouseParameters
+            {
+                LeftButton = (MouseButtonState)mouseEventArgs.LeftButton,
+                RightButton = (MouseButtonState)mouseEventArgs.RightButton,
                 Position = Position
             };
 
-            if (FocusItem != null)
-            {
-                FocusItem.CheckMouseUp(mouse);
-            }
-
-            InteractingItem = null;
+            return mouseParameters;
         }
 
-        private void HandleMouseMove(object sender, MouseEventArgs eventArgs)
+        private void HandleMouseMove(object sender, MouseEventArgs mouseEventArgs)
+        {
+            var mouseParameters = CreateMovingMouseParameters(mouseEventArgs);
+            if (mouseParameters.MiddleButton == MouseButtonState.Pressed)
+            {
+                OffsetX += mouseParameters.Delta.X;
+                OffsetY += mouseParameters.Delta.Y;
+                
+                Position = CalculateDiagramPosition(mouseEventArgs);
+                
+                Redraw();
+            }
+            else if (InteractingItem != null)
+            {
+                InteractingItem.RaiseMouseMove(mouseParameters);
+            }
+            else
+            {
+                UpdateFocuItem(mouseParameters);
+            }
+        }
+
+        private MovingMouseParameters CreateMovingMouseParameters(MouseEventArgs mouseEventArgs)
         {
             var previousPosition = Position;
-            Position = GetPosition(eventArgs);
+            Position = CalculateDiagramPosition(mouseEventArgs);
 
             var mouse = new MovingMouseParameters
             {
-                LeftButton = (MouseButtonState)eventArgs.LeftButton,
-                RightButton = (MouseButtonState)eventArgs.RightButton,
+                LeftButton = (MouseButtonState)mouseEventArgs.LeftButton,
+                RightButton = (MouseButtonState)mouseEventArgs.RightButton,
+                MiddleButton = (MouseButtonState)mouseEventArgs.MiddleButton,
                 Position = Position,
                 Delta = Position - previousPosition
             };
 
-            if(InteractingItem != null)
-            {
-                InteractingItem.RaiseMouseMove(mouse);
-            }
-            else if(FocusItem == null && currentMode == DiagramMode.Selection && mouse.LeftButton == MouseButtonState.Pressed)
-            {
-                DeltaX += mouse.Delta.X;
-                DeltaY += mouse.Delta.Y;
-                Position = GetPosition(eventArgs);
+            return mouse;
+        }
 
-                Redraw();
-            }
-            else
-            {
-                UpdateFocuItem(mouse);
-            }
+        private void HandleMouseWheel(object sender, MouseWheelEventArgs eventArgs)
+        {
+            var sensivity = 0.001;
+            
+            Scale += eventArgs.Delta * sensivity;
+            Redraw();
         }
 
         private void UpdateFocuItem(MovingMouseParameters mouse)
         {
             var interactableItems = DiagramItems
                 .Where(item => item.IsVisible)
-                .OrderByDescending(item => item.ZIndex);
+                .Reverse()
+                .ToList();
             
             foreach (var item in interactableItems)
             {
-                if (item.CheckMouseMove(mouse))
+                if (item.HandleDiagramMouseMove(mouse))
                 {
                     FocusItem = item;
                     return;
@@ -417,15 +484,16 @@ namespace ElectronicCad.Diagramming
             canvas.Clear();
             
             var drawingContext = new SkiaDrawingContext(canvas);
-            drawingContext.Translate(DeltaX, DeltaY);
+            drawingContext.Scale(Scale);
+            drawingContext.Translate(OffsetX, OffsetY);
 
             DrawWorkspaceArea(drawingContext);
 
-            var sortedDiagramItems = diagramItems
+            var visibleItems = diagramItems
                 .Where(item => item.IsVisible)
                 .ToList();
 
-            foreach (var item in sortedDiagramItems)
+            foreach (var item in visibleItems)
             {
                 item.Draw(drawingContext);
             }
@@ -437,7 +505,7 @@ namespace ElectronicCad.Diagramming
 
         private void DrawWorkspaceArea(SkiaDrawingContext drawingContext)
         {
-            var workspaceArea = new SKRect(0, 0, GeometryDiagram.Width, GeometryDiagram.Height);
+            var workspaceArea = new SKRect(0, 0, (float)GeometryDiagram.Size.Width, (float)GeometryDiagram.Size.Height);
             var paint = new SKPaint { Color = Colors.SecondaryBackground };
             drawingContext.DrawRect(workspaceArea, paint);
         }
@@ -476,6 +544,11 @@ namespace ElectronicCad.Diagramming
             MouseMove -= HandleMouseMove;
             MouseUp -= HandleMouseUp;
             MouseDown -= HandleMouseDown;
+
+            foreach (var diagramItem in DiagramItems)
+            {
+                diagramItem.Dispose();
+            }
 
             DeinitializeGeometryDiagram();
         }
