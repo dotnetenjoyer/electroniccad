@@ -1,16 +1,21 @@
-﻿using ElectronicCad.Domain.Geometry.LayoutGrids;
-using ElectronicCad.Domain.Workspace;
+﻿using ElectronicCad.Domain.Workspace;
+using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 /// <summary>
 /// Contains proxy project diagram properties.
 /// </summary>
-public class ProjectDiagramPropertiesProxy : BaseProxy<ProjectDiagram>, ILayoutGridProxy
+public class ProjectDiagramPropertiesProxy : BaseProxy<ProjectDiagram>, ILayoutGridProxy, ISizeProxy
 {
     /// <inhertidoc />
     public IEnumerable<LayoutGrid> LayoutGrids { get; set; }
+
+    /// <inhertidoc />
+    public Size Size { get; set; }
 
     /// <summary>
     /// Constructor.
@@ -47,11 +52,16 @@ public class ProjectDiagramPropertiesProxy : BaseProxy<ProjectDiagram>, ILayoutG
     /// <inheritdoc />
     public override void UpdateEntity()
     {
+        using var scope = Source.GeometryDiagram.StartModificationScope();
+        Source.GeometryDiagram.StartModification();
+        Source.GeometryDiagram.Size = Size;
+        Source.GeometryDiagram.CompleteModification();
     }
 
     /// <inheritdoc />
     public override void UpdateFromEntity()
     {
         LayoutGrids = Source.GeometryDiagram.LayoutGrids;
+        Size = Source.GeometryDiagram.Size;
     }
 }

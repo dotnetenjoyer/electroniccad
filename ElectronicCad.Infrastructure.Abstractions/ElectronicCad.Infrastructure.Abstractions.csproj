@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Storages\" />
+    <Compile Remove="Storages\**" />
+    <EmbeddedResource Remove="Storages\**" />
+    <None Remove="Storages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Projects\Diagrams\" />
   </ItemGroup>
 
   <ItemGroup>

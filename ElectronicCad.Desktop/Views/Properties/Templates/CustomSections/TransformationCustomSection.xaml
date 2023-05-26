@@ -14,17 +14,17 @@
                     </Grid.ColumnDefinitions>
 
                     <components:InputControl
-                    Title="Center X"
-                    Value="{Binding TransformationModel.CenterX}"
-                    StringFormat="{}{0:#,#.##}"
-                />
+                        Title="Center X"
+                        Value="{Binding TransformationModel.CenterX}"
+                        StringFormat="{}{0:#,#.##}"
+                    />
 
                     <components:InputControl
-                    Title="Center Y"
-                    Grid.Column="2"
-                    Value="{Binding TransformationModel.CenterY}"
-                    StringFormat="{}{0:#,#.##}"
-                />
+                        Title="Center Y"
+                        Grid.Column="2"
+                        Value="{Binding TransformationModel.CenterY}"
+                        StringFormat="{}{0:#,#.##}"
+                    />
                 </Grid>
 
                 <Grid>
@@ -35,17 +35,17 @@
                     </Grid.ColumnDefinitions>
 
                     <components:InputControl
-                    Title="Width"
-                    Value="{Binding TransformationModel.Width}"
-                    StringFormat="{}{0:#,#.##}"
-                />
+                        Title="Width"
+                        Value="{Binding TransformationModel.Width}"
+                        StringFormat="{}{0:#,#.##}"
+                    />
 
                     <components:InputControl
-                    Title="Height"
-                    Grid.Column="2"
-                    Value="{Binding TransformationModel.Height}"
-                    StringFormat="{}{0:#,#.##}"
-                />
+                        Title="Height"
+                        Grid.Column="2"
+                        Value="{Binding TransformationModel.Height}"
+                        StringFormat="{}{0:#,#.##}"
+                    />
                 </Grid>
             </StackPanel>
         </Expander>

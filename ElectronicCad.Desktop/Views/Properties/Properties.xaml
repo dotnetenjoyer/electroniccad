@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="./Templates/CustomSections/TransformationCustomSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/TypographyCustomSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/LayoutGridSection.xaml"/>
+                <ResourceDictionary Source="./Templates/CustomSections/DiagramSizeSection.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <selectors:PrimitivePropertyDataTemplateSelector
@@ -30,7 +31,8 @@
                 TransformationSectionTemplate="{StaticResource TransformationCustomSection}"
                 ShapeSectionTemplate="{StaticResource ShapeCustomSection}"
                 TypographySectionTemplate="{StaticResource TypographyCustomSection}"
-                LayoutGridSectionTemplate="{StaticResource LayoutGridSectionTemplate}"
+                LayoutGridSectionTemplate="{StaticResource LayoutGridSection}"
+                DiagramSizeSectionTemplate="{StaticResource DiagramSizeSection}"
             />
 
         </ResourceDictionary>

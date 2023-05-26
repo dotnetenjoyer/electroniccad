@@ -1,7 +1,7 @@
-﻿using ElectronicCad.MVVM.Properties.Abstractions;
+﻿using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
-using System.ComponentModel;
+using ElectronicCad.MVVM.Properties.Abstractions;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections;
 
@@ -13,6 +13,8 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections;
 
 public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICustomSection where TProxy : IProxy where TModel : INotifyPropertyChanged
 {
+    private readonly IServiceProvider serviceProvider;
+
     /// <summary>
     /// Custom section proxy.
     /// </summary>
@@ -21,15 +23,7 @@ public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICus
     /// <summary>
     /// Custom section view model.
     /// </summary>
-    public TModel Model
-    {
-        get => model;
-        set => SetProperty(ref model, value);
-    }
-
-    private TModel model;
-
-    private readonly IServiceProvider serviceProvider;
+    public TModel Model { get; private set; }
 
     /// <summary>
     /// Constructor.
@@ -41,6 +35,7 @@ public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICus
 
         Proxy = proxy;
         Proxy.Updated += HandleProxyUpdated;
+        
         Model = CreateModel();
     }
 
@@ -64,13 +59,10 @@ public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICus
     protected void UpdateFromProxy()
     {
         Model.PropertyChanged -= HandleModelPropertyChanges;
+        
         UpdateFromProxyInternal();
+        
         Model.PropertyChanged += HandleModelPropertyChanges;
-    }
-
-    private void HandleModelPropertyChanges(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        UpdateProxy();
     }
 
     /// <summary>
@@ -78,6 +70,11 @@ public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICus
     /// </summary>
     protected virtual void UpdateFromProxyInternal()
     {
+    }
+
+    private void HandleModelPropertyChanges(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        UpdateProxy();
     }
 
     private void UpdateProxy()

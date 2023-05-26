@@ -115,7 +115,7 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryAdded += HandleDiagramGeometryAdded;
             GeometryDiagram.GeometryModified += HandleGeometryModified;
             GeometryDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
-            GeometryDiagram.LayoutGridsUpdated += HandleLayoutGridsUpdate;
+            GeometryDiagram.VersionChanged += HandleVersionChange;
 
             CalculateInitialOffsets();
             Redraw();
@@ -131,7 +131,7 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
             GeometryDiagram.GeometryModified -= HandleGeometryModified;
             GeometryDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
-            GeometryDiagram.LayoutGridsUpdated -= HandleLayoutGridsUpdate;
+            GeometryDiagram.VersionChanged -= HandleVersionChange;
         }
 
         private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
@@ -184,15 +184,15 @@ namespace ElectronicCad.Diagramming
             }
         }
 
-        private void HandleLayoutGridsUpdate(object? sender, EventArgs eventArgs)
+        private void HandleVersionChange(object? sender, EventArgs eventArgs)
         {
             Redraw();
         }
 
         private void CalculateInitialOffsets()
         {
-            OffsetX = ((float)SkiaCanvas.ActualWidth - GeometryDiagram.Width) / 2;
-            OffsetY = ((float)SkiaCanvas.ActualHeight - GeometryDiagram.Height) / 2;
+            OffsetX = (float)(SkiaCanvas.ActualWidth - GeometryDiagram.Size.Width) / 2;
+            OffsetY = (float)(SkiaCanvas.ActualHeight - GeometryDiagram.Size.Height) / 2;
         }
 
         #endregion
@@ -505,7 +505,7 @@ namespace ElectronicCad.Diagramming
 
         private void DrawWorkspaceArea(SkiaDrawingContext drawingContext)
         {
-            var workspaceArea = new SKRect(0, 0, GeometryDiagram.Width, GeometryDiagram.Height);
+            var workspaceArea = new SKRect(0, 0, (float)GeometryDiagram.Size.Width, (float)GeometryDiagram.Size.Height);
             var paint = new SKPaint { Color = Colors.SecondaryBackground };
             drawingContext.DrawRect(workspaceArea, paint);
         }

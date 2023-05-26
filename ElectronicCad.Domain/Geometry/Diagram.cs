@@ -1,4 +1,3 @@
-using ElectronicCad.Domain.Common;
 using ElectronicCad.Domain.Geometry.LayoutGrids;
 
 namespace ElectronicCad.Domain.Geometry;
@@ -12,16 +11,21 @@ public class Diagram : VersionableBase, IDisposable
     /// Diagram id.
     /// </summary>
     public Guid Id { get; init; }
-
+    
     /// <summary>
-    /// Diagram width.
+    /// Diagram size.
     /// </summary>
-    public float Width { get; set; } = 850;
+    public Size Size 
+    { 
+        get => size;
+        set
+        {
+            ValidateModification();
+            size = value;
+        } 
+    }
 
-    /// <summary>
-    /// Diagram height.
-    /// </summary>
-    public float Height { get; set; } = 600;
+    private Size size;
 
     /// <summary>
     /// Constructor.
@@ -29,6 +33,8 @@ public class Diagram : VersionableBase, IDisposable
     public Diagram()
     {
         Id = Guid.NewGuid();
+        size = new Size(850, 600);
+
         AddLayer("Default");
     }
 
@@ -199,11 +205,6 @@ public class Diagram : VersionableBase, IDisposable
     #region LayoutGrid
 
     /// <summary>
-    /// Calls when layout grids changes.
-    /// </summary>
-    public event EventHandler LayoutGridsUpdated;
-
-    /// <summary>
     /// Diagram layout grids.
     /// </summary>
     public IEnumerable<LayoutGrid> LayoutGrids => layoutGrids;
@@ -217,11 +218,7 @@ public class Diagram : VersionableBase, IDisposable
     public void AddLayoutGrid(LayoutGrid layoutGrid)
     {
         ValidateModification();
-       
         layoutGrids.Add(layoutGrid);
-        LayoutGridsUpdated?.Invoke(this, EventArgs.Empty);
-
-        IncrementVersion();
     }
 
     /// <summary>
@@ -238,11 +235,7 @@ public class Diagram : VersionableBase, IDisposable
         }
 
         ValidateModification();
-
         layoutGrids[index] = layoutGrid;
-        LayoutGridsUpdated?.Invoke(this, EventArgs.Empty);
-
-        IncrementVersion();
     }
 
     /// <summary>
@@ -252,11 +245,7 @@ public class Diagram : VersionableBase, IDisposable
     public void RemoveLayoutGrid(LayoutGrid layoutGrid)
     {
         ValidateModification();
-        
         layoutGrids.Remove(layoutGrid);
-        LayoutGridsUpdated?.Invoke(this, EventArgs.Empty);
-
-        IncrementVersion();
     }
 
     #endregion

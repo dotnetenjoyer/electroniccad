@@ -1,4 +1,5 @@
 ﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
@@ -16,45 +17,39 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
     /// <summary>
     /// Template for the transformation section.
     /// </summary>
-    public DataTemplate TransformationSectionTemplate { get; set; }
+    public DataTemplate? TransformationSectionTemplate { get; set; }
 
     /// <summary>
     /// Template for the shape section.
     /// </summary>
-    public DataTemplate ShapeSectionTemplate { get; set; }
+    public DataTemplate? ShapeSectionTemplate { get; set; }
 
     /// <summary>
     /// Template for the shape section.
     /// </summary>
-    public DataTemplate TypographySectionTemplate { get; set; }
+    public DataTemplate? TypographySectionTemplate { get; set; }
 
     /// <summary>
     /// Template for the layout grid section.
     /// </summary>
-    public DataTemplate LayoutGridSectionTemplate { get; set; }
+    public DataTemplate? LayoutGridSectionTemplate { get; set; }
+
+    /// <summary>
+    /// Template for diagram size section.
+    /// </summary>
+    public DataTemplate? DiagramSizeSectionTemplate { get; set; }
 
     /// <inheritdoc />
-    public override DataTemplate SelectTemplate(object item, DependencyObject container)
+    public override DataTemplate? SelectTemplate(object item, DependencyObject container)
     {
-        if (item is TransformationCustomSection)
+        return item switch
         {
-            return TransformationSectionTemplate;
-        }
-        else if (item is ShapeCustomSection)
-        {
-            return ShapeSectionTemplate;
-        }
-        else if (item is TypographyCustomSection)
-        {
-            return TypographySectionTemplate;
-        }
-        else if (item is LayoutGridCustomSection)
-        {
-            return LayoutGridSectionTemplate;
-        }
-        else
-        {
-            throw new NotSupportedException($"{item.GetType()} is not supported.");
-        }
+            TransformationCustomSection => TransformationSectionTemplate,
+            ShapeCustomSection => ShapeSectionTemplate,
+            TypographyCustomSection => TypographySectionTemplate,
+            LayoutGridCustomSection => LayoutGridSectionTemplate,
+            SizeCustomSection => DiagramSizeSectionTemplate,
+            _ => throw new NotSupportedException($"{item.GetType()} is not supported.")
+        };
     }
 }

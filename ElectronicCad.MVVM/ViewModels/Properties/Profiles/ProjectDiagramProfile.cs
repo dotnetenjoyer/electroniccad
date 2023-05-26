@@ -1,5 +1,6 @@
 ﻿using ElectronicCad.MVVM.Properties.Configuration;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
 using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Profiles;
@@ -16,6 +17,7 @@ internal class ProjectDiagramProfile : PropertyObjectProfile
     public ProjectDiagramProfile()
     {
         CreateConfiguration<ProjectDiagramPropertiesProxy>()
+            .HasCustomSection<SizeCustomSection>()
             .HasCustomSection<LayoutGridCustomSection>();
     }
 }

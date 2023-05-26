@@ -29,15 +29,15 @@ internal class GridLayoutGridDiagramItem : LayoutGridDiagramItem<GridLayoutGrid>
         using var paint = CreatePaint();
         var lineThickness = 2;
 
-        var columnCount = (int)(diagram.GeometryDiagram.Width / layoutGrid.Size);
-        var rowCount = (int)(diagram.GeometryDiagram.Height / layoutGrid.Size);
+        var columnCount = (int)(diagram.GeometryDiagram.Size.Width / layoutGrid.Size);
+        var rowCount = (int)(diagram.GeometryDiagram.Size.Height / layoutGrid.Size);
 
         for (int i = 1; i <= columnCount; i++) 
         {
             var left = (layoutGrid.Size * i) - (lineThickness / 2);
             var rigth = left + lineThickness;
             var top = 0;
-            var bottom = diagram.GeometryDiagram.Height;
+            var bottom = diagram.GeometryDiagram.Size.Height;
             var rect = new SKRect((float)left, (float)top, (float)rigth, (float)bottom);
             drawingContext.DrawRect(rect, paint);
         }
@@ -45,7 +45,7 @@ internal class GridLayoutGridDiagramItem : LayoutGridDiagramItem<GridLayoutGrid>
         for (int i = 1; i <= rowCount; i++)
         {
             var left = 0;
-            var rigth = diagram.GeometryDiagram.Width;
+            var rigth = diagram.GeometryDiagram.Size.Width;
             var top = (layoutGrid.Size * i) - (lineThickness / 2);
             var bottom = top + lineThickness;
             var rect = new SKRect((float)left, (float)top, (float)rigth, (float)bottom);
