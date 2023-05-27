@@ -5,7 +5,7 @@ namespace ElectronicCad.Domain.Geometry;
 /// <summary>
 /// Diagram.
 /// </summary>
-public class Diagram : VersionableBase, IDisposable
+public class Diagram : VersionableBase, IGeometryContainer, IDisposable
 {
     /// <summary>
     /// Diagram id.
@@ -38,7 +38,60 @@ public class Diagram : VersionableBase, IDisposable
         AddLayer("Default");
     }
 
-    #region Layer
+    #region Geometry changes events.
+
+    /// <summary>
+    /// The event raises on geomfiresdded within diagram.
+    /// </summary>
+    public event EventHandler<IEnumerable<GeometryObject>> GeometryAdded;
+
+    /// <summary>
+    /// The event raises on geomfires moved  withing diagram.
+    /// </summary>
+    public event EventHandler<IEnumerable<GeometryObject>> GeometryRemoved;
+
+    /// <summary>
+    /// The event raises when diagram geometry modified.
+    /// </summary>
+    public event EventHandler<IEnumerable<GeometryObject>> GeometryModified;
+
+    /// <summary>
+    /// Raises the geometry added event with the specified arguments.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry that has been added.</param>
+    internal void RaiseGeometryAdded(IEnumerable<GeometryObject> geometryObjects)
+    {
+        GeometryAdded?.Invoke(this, geometryObjects);
+    }
+
+    /// <summary>
+    /// Raises the geometry removed event with the specified arguments.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry that has been removed.</param>
+    internal void RaiseGeometryRemoved(IEnumerable<GeometryObject> geometryObjects)
+    {
+        GeometryRemoved?.Invoke(this, geometryObjects);
+    }
+
+    /// <summary>
+    /// Raises the geometry modified event with the specified arguments.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry that has been modified.</param>
+    internal void RaiseGeometryModified(IEnumerable<GeometryObject> modifiedGeometryObjects)
+    {
+        GeometryModified.Invoke(this, modifiedGeometryObjects);
+    }
+
+    #endregion
+
+    #region Layers.
+
+    /// <inheritdoc />
+    public IEnumerable<GeometryObject> Children
+        => layers.SelectMany(layer => layer.Children);
+
+    /// <inheritdoc />
+    public IGeometryContainer? Parent => null;
 
     /// <summary>
     /// Diagram active layer.
@@ -49,7 +102,7 @@ public class Diagram : VersionableBase, IDisposable
     /// Collection of layers.
     /// </summary>
     public IEnumerable<Layer> Layers => layers;
-
+    
     private readonly List<Layer> layers = new();
 
     /// <summary>
@@ -73,115 +126,101 @@ public class Diagram : VersionableBase, IDisposable
         layers.Remove(layer);
     }
 
-    /// <summary>
-    /// All diagram geometry objects.
-    /// </summary>
-    public IEnumerable<GeometryObject> GeometryObjects 
-        => layers.SelectMany(layer => layer.GeometryObjects);
-
-    /// <summary>
-    /// Add a geometry object to the specified layer, 
-    /// if the layer is null, then the geometry will be added to the active layer.
-    /// </summary>
-    /// <param name="geometry">Geometry object to add.</param>
-    /// <param name="layer">Layer.</param>
-    public void AddGeometry(GeometryObject geometry, Layer? layer = null)
+    /// <inheritdoc />
+    public void AddGeometry(GeometryObject geometryObject)
     {
-        layer ??= ActiveLayer;
-
-        if (!layers.Contains(layer))
-        {
-            throw new Exception("This layer does not belong to the chart.");
-        }
-
-        layer.AddGeometry(geometry);
+        AddGeometry(new[] { geometryObject });
     }
 
-    /// <summary>
-    /// Clone specified geometry object.
-    /// </summary>
-    /// <param name="geometry">Geometry object.</param>
-    public void CloneGeometry(GeometryObject geometryObject)
+    /// <inheritdoc />
+    public void AddGeometry(IEnumerable<GeometryObject> geometryObjects)
     {
-        var geometryObjectType = geometryObject.GetType();
-        var cloneConstructor = geometryObjectType.GetConstructors()
-            .FirstOrDefault(constructor =>
-            {
-                var parameters = constructor.GetParameters();
-
-                if (parameters.Count() != 1)
-                {
-                    return false;
-                }
-
-                var firstParameter = parameters.First();
-                return firstParameter.ParameterType == geometryObjectType && parameters.Count() == 1;
-            });
-
-        if (cloneConstructor != null && geometryObject.Layer != null)
-        {
-            var clone = (GeometryObject)cloneConstructor.Invoke(new object[] { geometryObject });
-            AddGeometry(clone);
-        }
+        ActiveLayer.AddGeometry(geometryObjects);
     }
 
     /// <summary>
     /// Removes geometry object from diagram.
     /// </summary>
-    /// <param name="geometry">Geometry object that will be deleted.</param>
-    public void RemoveGeometry(GeometryObject geometry)
+    /// <param name="geometryObject">Geometry object to remove.</param>
+    public void RemoveGeometry(GeometryObject geometryObject)
     {
-        var layer = layers.FirstOrDefault(layer => layer.GeometryObjects.Contains(geometry));
-        if(layer != null)
+        RemoveGeometry(new[] { geometryObject} );
+    }
+
+    /// <summary>
+    /// Removes the geometry objects from the diagram.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry objects to remove.</param>
+    public void RemoveGeometry(IEnumerable<GeometryObject> geometryObjects)
+    {
+        var geometryGroupsByParent = geometryObjects
+            .Where(x => x.Parent != null)
+            .GroupBy(x => x.Parent);
+
+        foreach (var groupOfGeometry in geometryGroupsByParent)
         {
-            layer.RemoveGeometry(geometry);
+            groupOfGeometry.Key!.RemoveGeometry(groupOfGeometry);
         }
     }
 
+    /// <summary>
+    /// Clone specified geometry object.
+    /// </summary>
+    /// <param name="geometry">Geometry object to clone.</param>
+    public void CloneGeometry(GeometryObject geometryObject)
+    {
+        if (geometryObject.Parent != null)
+        {
+            var clone = CreateClone();
+            AddGeometry(clone);
+        }
+
+        GeometryObject CreateClone()
+        {
+            var geometryType = geometryObject.GetType();
+
+            var cloneConstructor = geometryType.GetConstructors()
+                .First(constructor =>
+                {
+                    var parameters = constructor.GetParameters();
+                    return parameters.First().ParameterType == geometryType && parameters.Count() == 1;
+                });
+
+            var clone = (GeometryObject)cloneConstructor.Invoke(new object[] { geometryObject });
+            return clone;
+        }
+    }
+
+    /// <summary>
+    /// Creates geometry group.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry to group.</param>
+    public GeometryGroup CreateGroup(IEnumerable<GeometryObject> geometryObjects)
+    {
+        if (!geometryObjects.Any())
+        {
+            throw new Exception("It is impossible to create group without children.");
+        }
+
+        var parent = geometryObjects.First().Parent;
+        if (parent == null)
+        {
+            throw new InvalidOperationException("It is impossible to group geometry with different parents.");
+        }
+
+        bool isOneParent = geometryObjects.All(x => x.Parent == parent);
+        if (!isOneParent)
+        {
+            throw new InvalidOperationException("It is impossible to group geometry with different parents.");
+        }
+
+        parent.RemoveGeometry(geometryObjects);
+        var group = new GeometryGroup(geometryObjects);
+        parent.AddGeometry(group);
+        return group;
+    }
+
     #endregion
-
-    #region DiagramChangingNotification
-
-    /// <summary>
-    /// The event fires on geometry added within diagram.
-    /// </summary>
-    public event EventHandler<GeometryObject> GeometryAdded;
-
-    /// <summary>
-    /// The event fires on geometry removed  withing diagram.
-    /// </summary>
-    public event EventHandler<GeometryObject> GeometryRemoved;
-
-    /// <summary>
-    /// The event fires when diagram geometry modified.
-    /// </summary>
-    public event EventHandler<IEnumerable<GeometryObject>> GeometryModified;
-
-    /// <summary>
-    /// Notify diagram to add layer geometry
-    /// </summary>
-    /// <param name="geometryObject">Geometry that has been added.</param>
-    internal void HandleLayerGeometryAdd(GeometryObject geometryObject)
-    {
-        GeometryAdded?.Invoke(this, geometryObject);
-    }
-
-    /// <summary>
-    /// Notify diagram to add layer geometry
-    /// </summary>
-    /// <param name="geometryObject">Geometry that has been removed.</param>
-    internal void HandleLayerGeometryRemove(GeometryObject geometryObject)
-    {
-        GeometryRemoved?.Invoke(this, geometryObject);
-    }
-
-    /// <summary>
-    /// Notify diagram about geometry modification.
-    /// </summary>
-    internal void HandleGeometryModification(IEnumerable<GeometryObject> modifiedGeometryObjects)
-    {
-        GeometryModified.Invoke(this, modifiedGeometryObjects);
-    }
 
     internal DiagramModificationScope? ModificationScope { get; private set; }
 
@@ -199,8 +238,6 @@ public class Diagram : VersionableBase, IDisposable
         ModificationScope = new DiagramModificationScope(this);
         return ModificationScope;
     }
-
-    #endregion
 
     #region LayoutGrid
 
@@ -248,15 +285,6 @@ public class Diagram : VersionableBase, IDisposable
         layoutGrids.Remove(layoutGrid);
     }
 
-    #endregion
-
-    #region Group
-    
-    public void GroupGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
-    {
-
-    }
-    
     #endregion
 
     #region Dispose

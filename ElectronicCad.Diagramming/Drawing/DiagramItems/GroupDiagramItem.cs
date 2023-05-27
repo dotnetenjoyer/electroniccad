@@ -1,5 +1,8 @@
-﻿using SkiaSharp;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using SkiaSharp;
+using ElectronicCad.Diagramming.Utils;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
 
@@ -9,25 +12,53 @@ namespace ElectronicCad.Diagramming.Drawing.Items;
 internal class GroupDiagramItem : DiagramItem
 {
     /// <summary>
-    /// Collection of grouped items.
+    /// Children.
     /// </summary>
-    protected readonly ICollection<DiagramItem> GroupedItems = new List<DiagramItem>();
+    public IEnumerable<DiagramItem> Children { get; protected set; }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    public GroupDiagramItem()
+    {
+        Children = Array.Empty<DiagramItem>();
+        BoundingBox = SKRect.Empty;
+    }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="children">Children.</param>
+    public GroupDiagramItem(IEnumerable<DiagramItem> children)
+    {
+        Children = children;
+        RecalculateBoundingBox();
+    }
+
+    /// <summary>
+    /// Recalcualtes group bounds based on the children bounds.
+    /// </summary>
+    public void RecalculateBoundingBox()
+    {
+        BoundingBox = SkiaRectangleUtils
+            .CalculateScribedRectangle(Children.Select(x => x.BoundingBox));
+    }
 
     /// <inheritdoc />
     public override void Draw(SkiaDrawingContext context)
     {
-        foreach (DiagramItem item in GroupedItems)
+        foreach (var child in Children)
         {
-            item.Draw(context);
+            child.Draw(context);
         }
     }
 
     /// <inheritdoc />
     public override bool CheckShapeHit(ref SKPoint point)
     {
-        foreach (var item in GroupedItems)
+        foreach (var child in Children)
         {
-            if (item.CheckShapeHit(ref point))
+            if (child.CheckShapeHit(ref point))
             {
                 return true;
             }
@@ -39,9 +70,9 @@ internal class GroupDiagramItem : DiagramItem
     /// <inheritdoc />
     public override bool HandleDiagramMouseDown(MouseParameters mouse)
     {
-        foreach (var item in GroupedItems)
+        foreach (var child in Children)
         {
-            if (item.HandleDiagramMouseDown(mouse))
+            if (child.HandleDiagramMouseDown(mouse))
             {
                 return true;
             }
@@ -53,9 +84,9 @@ internal class GroupDiagramItem : DiagramItem
     /// <inheritdoc />
     public override bool HandleDiagramMouseUp(MouseParameters mouse)
     {
-        foreach (var item in GroupedItems)
+        foreach (var child in Children)
         {
-            if (item.HandleDiagramMouseUp(mouse))
+            if (child.HandleDiagramMouseUp(mouse))
             {
                 return true;
             }
@@ -67,9 +98,9 @@ internal class GroupDiagramItem : DiagramItem
     /// <inheritdoc />
     public override bool HandleDiagramMouseMove(MovingMouseParameters mouse)
     {
-        foreach (var item in GroupedItems)
+        foreach (var child in Children)
         {
-            if (item.HandleDiagramMouseMove(mouse))
+            if (child.HandleDiagramMouseMove(mouse))
             {
                 return true;
             }

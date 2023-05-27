@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Input;
 using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
@@ -36,7 +37,7 @@ internal abstract class DiagramItem : IDisposable
     /// <summary>
     /// Stroke geometry paint.
     /// </summary>
-    public SKPaint StrokePaint { get; protected set; }
+    public virtual SKPaint StrokePaint { get; protected set; }
 
     /// <summary>
     /// Draws itself.
@@ -80,6 +81,11 @@ internal abstract class DiagramItem : IDisposable
     /// Raises when mouse move on diagram item.
     /// </summary>
     public event EventHandler<MovingMouseParameters>? MouseMove;
+
+    /// <summary>
+    /// Raises when mouse leave from diagram item.
+    /// </summary>
+    public event EventHandler? MouseLeave;
 
     /// <summary>
     /// Handle the diagram mouse ups, if ups on the current item, invokes the apropriate event.
@@ -158,7 +164,24 @@ internal abstract class DiagramItem : IDisposable
         MouseMove?.Invoke(this, mouse);
     }
 
+    /// <summary>
+    /// Raise mouse leave directly.
+    /// </summary>
+    public void RaiseMouseLeave()
+    {
+        MouseLeave?.Invoke(this, EventArgs.Empty);
+    }
+
     #endregion
+
+    /// <summary>
+    /// Returns current diagram item cursors.
+    /// </summary>
+    /// <returns>Cursor.</returns>
+    public virtual Cursor GetCurrentCursor()
+    {
+        return Cursors.Arrow;
+    }
 
     /// <inheritdoc />
     public void Dispose()

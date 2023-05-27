@@ -16,11 +16,12 @@ public static class ProxyFactory
     public static IProxy Create(object sourceObject)
         => sourceObject switch
         {
+            ProjectDiagram diagram => new ProjectDiagramPropertiesProxy(diagram),
+            GeometryGroup group => new GeometryGroupPropertiesProxy(group),
             Line line => new LinePropertyProxy(line),
             Polygon polygon => new PolygonPropertiesProxy(polygon),
             Ellipse ellipse => new EllipsePropertyProxy(ellipse),
             Text text => new TextPropertiesProxy(text),
-            ProjectDiagram diagram => new ProjectDiagramPropertiesProxy(diagram),
             Image image => new ImagePropertiesProxy(image),
             _ => throw new InvalidOperationException()
         };

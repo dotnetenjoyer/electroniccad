@@ -17,7 +17,7 @@ using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
-
+using ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 
 namespace ElectronicCad.Diagramming
 {
@@ -84,6 +84,8 @@ namespace ElectronicCad.Diagramming
             SetDiagramMode(DiagramMode.Selection);
         }
 
+        internal readonly static Cursor DefaultCursor = Cursors.Arrow;
+
         #region GeometryDiagram
 
         /// <summary>
@@ -119,6 +121,14 @@ namespace ElectronicCad.Diagramming
 
             CalculateInitialOffsets();
             Redraw();
+
+            var firstRectangle = new Polygon(new Domain.Geometry.Point(100, 100), 200, 200);
+            var secondRectangle = new Polygon(new Domain.Geometry.Point(300, 300), 200, 200);
+            var ellipse = new Ellipse(new Domain.Geometry.Point(400, 400), 100);
+
+            GeometryDiagram.AddGeometry(new GeometryObject[] { firstRectangle, secondRectangle, ellipse });
+            var group = GeometryDiagram.CreateGroup(new[] { firstRectangle, secondRectangle });
+            var group2 = GeometryDiagram.CreateGroup(new GeometryObject[] { group, ellipse});
         }
 
         private void DeinitializeGeometryDiagram()
@@ -134,11 +144,15 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.VersionChanged -= HandleVersionChange;
         }
 
-        private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
+        private void HandleDiagramGeometryAdded(object? sender, IEnumerable<GeometryObject> geometryObjects)
         {
-            var diagramItem = DiagramItemsFactory.Create(geometryObject);
-            diagramItem.ZIndex = GetNextZIndex();
-            AddDiagramItem(diagramItem);
+            foreach (var geometryObject in geometryObjects)
+            {
+                var diagramItem = GeometryObjectDiagramItemsFactory.Create(geometryObject);
+                diagramItem.ZIndex = GetNextZIndex();
+                AddDiagramItem(diagramItem);
+            }
+
             Redraw();
         }
 
@@ -171,17 +185,19 @@ namespace ElectronicCad.Diagramming
             Redraw();
         }
 
-        private void HandleDiagramGeometryRemoved(object? sender, GeometryObject geometryObject)
+        private void HandleDiagramGeometryRemoved(object? sender, IEnumerable<GeometryObject> geometryObjects)
         {
-            var diagramItem = diagramItems
+            var itemsToRemove = diagramItems
                 .OfType<GeometryObjectDiagramItem>()
-                .FirstOrDefault(item => item.GeometryObject == geometryObject);
+                .Where(item => geometryObjects.Contains(item.GeometryObject))
+                .ToList();
 
-            if (diagramItem != null)
+            foreach (var itemToRemove in itemsToRemove)
             {
-                diagramItems.Remove(diagramItem);
-                Redraw();
+                diagramItems.Remove(itemToRemove);
             }
+
+            Redraw();
         }
 
         private void HandleVersionChange(object? sender, EventArgs eventArgs)
@@ -295,7 +311,7 @@ namespace ElectronicCad.Diagramming
         internal IEnumerable<DiagramItem> DiagramItems => diagramItems;
 
         private List<DiagramItem> diagramItems = new();
-
+        
         internal void AddDiagramItem(DiagramItem diagramItem)
         {
             diagramItems.Add(diagramItem);
@@ -416,6 +432,7 @@ namespace ElectronicCad.Diagramming
             }
             else if (InteractingItem != null)
             {
+                Cursor = InteractingItem.GetCurrentCursor();
                 InteractingItem.RaiseMouseMove(mouseParameters);
             }
             else
@@ -451,22 +468,29 @@ namespace ElectronicCad.Diagramming
 
         private void UpdateFocuItem(MovingMouseParameters mouse)
         {
-            var interactableItems = DiagramItems
+            var visibleItems = DiagramItems
                 .Where(item => item.IsVisible)
                 .Reverse()
                 .ToList();
             
-            foreach (var item in interactableItems)
+            foreach (var item in visibleItems)
             {
                 if (item.HandleDiagramMouseMove(mouse))
                 {
+                    if (FocusItem != item)
+                    {
+                        FocusItem?.RaiseMouseLeave();
+                    }
+
                     FocusItem = item;
+                    Cursor = item.GetCurrentCursor();
                     return;
                 }
             }
 
+            FocusItem?.RaiseMouseLeave();
             FocusItem = null;
-            return;
+            Cursor = DefaultCursor;
         }
 
         private void HandleCanvasPaint(object? sender, SKPaintSurfaceEventArgs eventArgs)

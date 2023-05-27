@@ -1,8 +1,6 @@
 using ElectronicCad.Domain.Exceptions;
 using ElectronicCad.Domain.Geometry.Utils;
 using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 
 namespace ElectronicCad.Domain.Geometry;
 
@@ -37,15 +35,34 @@ public abstract class GeometryObject : VersionableBase
     public Rectangle BoundingBox { get; private set; }
 
     /// <summary>
-    /// Related layer.
+    /// Parent container.
     /// </summary>
-    public Layer? Layer { get; internal set; }
+    public IGeometryContainer? Parent { get; set; }
 
     /// <summary>
-    /// Indicates whether the geometry object is related with the diagram.
+    /// Recursively get the related diagram.
     /// </summary>
-    public bool IsRelatedWithDiagram => Layer != null && Layer.Diagram != null;
+    /// <returns>Related diagram.</returns>
+    public Diagram GetDiagram()
+    {
+        if (Parent == null)
+        {
+            throw new DomainException("The geometry object isn't related with a diagram.");
+        }
 
+        return (Diagram)GetRootCotnainer(Parent);
+
+        IGeometryContainer GetRootCotnainer(IGeometryContainer container)
+        {
+            if (container.Parent != null)
+            {
+                return GetRootCotnainer(container.Parent);
+            }
+
+            return container;
+        }
+    }
+    
     /// <summary>
     /// Stroke color.
     /// </summary>
@@ -122,17 +139,19 @@ public abstract class GeometryObject : VersionableBase
     /// <inhertidoc />
     protected override void ValidateModification()
     {
-        if (Layer == null || Layer.Diagram == null || Layer.Diagram.ModificationScope == null)
-        {
-            throw new DomainException("Modification outisde scope are prohibited.");
-        }
-
         if (!IsModificationStarted)
         {
             throw new DomainException("Modification is not started.");
         }
 
-        Layer!.Diagram.ModificationScope!.AddModifiedItem(this);
+        var diagram = GetDiagram();
+     
+        if (diagram.ModificationScope == null)
+        {
+            throw new DomainException("Modification outisde scope are prohibited.");
+        }
+
+        diagram.ModificationScope.AddModifiedItem(this);
     }
 
     /// <summary>
@@ -141,12 +160,8 @@ public abstract class GeometryObject : VersionableBase
     /// <returns>Diagram modification scope.</returns>
     public DiagramModificationScope StartDiagramModifcation()
     {
-        if (Layer == null || Layer.Diagram == null)
-        {
-            throw new DomainException("The geometry object isn't related with a diagram.");
-        }
-
-        return Layer.Diagram.StartModificationScope();
+        var diagram = GetDiagram();
+        return diagram.StartModificationScope();
     }
 
     #endregion

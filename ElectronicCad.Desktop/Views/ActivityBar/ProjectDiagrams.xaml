@@ -19,12 +19,14 @@
         <converters:DomainObjectIconConverter 
             x:Key="IconConverter"
             ProjectDiagramIconPath="{StaticResource ProjectDiagramIcon}"
+            LayerIconPath="{StaticResource LayerIcon}"
             LineIconPath="{StaticResource LineIcon}"
             EllipseIconPath="{StaticResource ElipseIcon}"
             RectangleIconPath="{StaticResource RectIcon}"
             PenIconPath="{StaticResource PenIcon}"
             TextIconPath="{StaticResource TextIcon}"
             ImageIconPath="{StaticResource ImageIcon}"
+            GroupIconPath="{StaticResource GroupIcon}"
         />
 
         <HierarchicalDataTemplate DataType="{x:Type diagramTrees:DiagramTreeNode}" ItemsSource="{Binding Nodes}">

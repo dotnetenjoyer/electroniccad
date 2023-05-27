@@ -2,13 +2,14 @@
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Diagramming.Drawing.Items;
 
-namespace ElectronicCad.Diagramming.Drawing.Items;
+namespace ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 
 /// <summary>
-/// Base implementation of <see cref="IGeometryObjectDiagramItem"/>
+/// Diagram item base on domain geometry object.
 /// </summary>
-internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObjectDiagramItem
+internal abstract class GeometryObjectDiagramItem : DiagramItem
 {
     /// <summary>
     /// Domain geometry object.
@@ -58,7 +59,7 @@ internal abstract class GeometryObjectDiagramItem<TGeometryObject> : GeometryObj
     /// <summary>
     /// Certain geometry object.
     /// </summary>
-    public TGeometryObject CertainGeometryObject { get; private set; }
+    public new TGeometryObject GeometryObject { get; private set; }
 
     /// <summary>
     /// Constructor.
@@ -66,7 +67,6 @@ internal abstract class GeometryObjectDiagramItem<TGeometryObject> : GeometryObj
     /// <param name="geometryObject">Geometry object.</param>
     public GeometryObjectDiagramItem(TGeometryObject geometryObject) : base(geometryObject)
     {
-        CertainGeometryObject = geometryObject;
-        UpdateViewState();
+        GeometryObject = geometryObject;
     }
 }

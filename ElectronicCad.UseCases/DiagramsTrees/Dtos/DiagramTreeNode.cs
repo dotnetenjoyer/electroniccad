@@ -40,17 +40,17 @@ public abstract class DiagramTreeNode
 public abstract class DiagramTreeNode<TDomainObject> : DiagramTreeNode where TDomainObject : INotifyPropertyChanged
 {
     /// <summary>
-    /// Typed domain object.
+    /// Domain object.
     /// </summary>
-    public TDomainObject TypedDomainObject { get; init; }
+    public new TDomainObject DomainObject { get; init; }
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="typedDomainObject">Typed domain object.</param>
-    public DiagramTreeNode(TDomainObject typedDomainObject)
+    /// <param name="domainObject">Typed domain object.</param>
+    public DiagramTreeNode(TDomainObject domainObject)
     {
-        TypedDomainObject = typedDomainObject;
-        DomainObject = typedDomainObject;
+        DomainObject = domainObject;
+        base.DomainObject = domainObject;
     }
 }

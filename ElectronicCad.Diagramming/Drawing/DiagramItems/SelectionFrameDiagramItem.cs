@@ -1,10 +1,11 @@
+using System;
+using System.Numerics;
+using System.Windows.Input;
+using System.Collections.Generic;
 using SkiaSharp;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Domain.Geometry;
-using System.Diagnostics;
-using System.Numerics;
-using ElectronicCad.Diagramming.Drawing;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
 
@@ -21,42 +22,46 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     /// </summary>
     public GeometryObject? SelectedItem { get; internal set; }
 
-    private readonly SelectionFrameArea selectionFrameArea;
-
+    private readonly SelectionFrameArea frameArea;
     private readonly GizmoDiagramItem topLefGizmo;
     private readonly GizmoDiagramItem topRigthGizmo;
     private readonly GizmoDiagramItem bottomLeftGizmo;
     private readonly GizmoDiagramItem bottomRigthGizmo;
 
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     public SelectionFrameDiagramItem()
     {
         ZIndex = int.MaxValue;
-
-        selectionFrameArea = new SelectionFrameArea();
-        GroupedItems.Add(selectionFrameArea);
-
-        topLefGizmo = new GizmoDiagramItem();
-        GroupedItems.Add(topLefGizmo);
-
-        topRigthGizmo = new GizmoDiagramItem();
-        GroupedItems.Add(topRigthGizmo);
-
-        bottomLeftGizmo = new GizmoDiagramItem();
-        GroupedItems.Add(bottomLeftGizmo);
-
-        bottomRigthGizmo = new GizmoDiagramItem();
-        GroupedItems.Add(bottomRigthGizmo);
-
         MouseMove += HandleMouseMove;
+
+        frameArea = new SelectionFrameArea();
+        topLefGizmo = new GizmoDiagramItem(GizmoDiagramItem.DefaultSize);
+        topRigthGizmo = new GizmoDiagramItem(GizmoDiagramItem.DefaultSize);
+        bottomLeftGizmo = new GizmoDiagramItem(GizmoDiagramItem.DefaultSize);
+        bottomRigthGizmo = new GizmoDiagramItem(GizmoDiagramItem.DefaultSize);
+
+        var children = new List<DiagramItem>()
+        {
+            topLefGizmo,
+            topRigthGizmo,
+            bottomLeftGizmo,
+            bottomRigthGizmo,
+            frameArea
+        };
+
+        Children = children;
     }
 
     private void HandleMouseMove(object? sender, MovingMouseParameters mouse)
     {
         if (SelectedItem != null && mouse.LeftButton == MouseButtonState.Pressed)
         {
+            var translateMatrix = Matrix3x2.CreateTranslation(mouse.Delta.ToVector2());
+
             using var scope = SelectedItem.StartDiagramModifcation();
             SelectedItem.StartModification();
-            var translateMatrix = Matrix3x2.CreateTranslation(mouse.Delta.ToVector2());
             SelectedItem.Transform(translateMatrix);
             SelectedItem.CompleteModification();
         }
@@ -71,69 +76,93 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
         }
 
         var boundingBox = SelectedItem.BoundingBox.ToSKRect();
-        selectionFrameArea.BoundingBox = boundingBox;
         topLefGizmo.SetCenterPoint(boundingBox.GetTopLeft());
         topRigthGizmo.SetCenterPoint(boundingBox.GetTopRight());
         bottomLeftGizmo.SetCenterPoint(boundingBox.GetBottomLeft());
         bottomRigthGizmo.SetCenterPoint(boundingBox.GetBottomRight());
-
+        frameArea.BoundingBox = boundingBox;
+        
         base.Draw(context);
     }
 }
 
+/// <summary>
+/// Selection fram area item.
+/// </summary>
 internal class SelectionFrameArea : DiagramItem
 {
-    private static readonly SKPaint areaPaint;
-
-    static SelectionFrameArea()
+    /// <inheritdoc />
+    public override SKPaint StrokePaint => new SKPaint
     {
-        areaPaint = new SKPaint
-        {
-            Color = SKColors.White,
-            Style = SKPaintStyle.Stroke,
-            StrokeWidth = 1,
-            PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
-        };
-    }
+        Color = Colors.Foreground,
+        Style = SKPaintStyle.Stroke,
+        StrokeWidth = 1,
+        PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
+    };
 
+    /// <inheritdoc />
     public override void Draw(SkiaDrawingContext context)
     {
-        context.DrawRect(BoundingBox, areaPaint);
+        context.DrawRect(BoundingBox, StrokePaint);
     }
 }
 
+/// <summary>
+/// Gizmo diagram item.
+/// </summary>
 internal class GizmoDiagramItem : DiagramItem
 {
-    private static readonly SKPaint paint = new SKPaint
+    /// <summary>
+    /// Default size of gizmo element.
+    /// </summary>
+    public static readonly SKSize DefaultSize = new SKSize(10, 10);
+
+    /// <inheritdoc />
+    public override Cursor GetCurrentCursor()
+    {
+        return Cursors.SizeNS;
+    }
+
+    /// <inheritdoc />
+    public override SKPaint StrokePaint => new SKPaint
     {
         Color = Colors.Foreground,
-        Style = SKPaintStyle.StrokeAndFill,
+        Style = SKPaintStyle.StrokeAndFill
     };
 
-    private static readonly SKSize size = new SKSize(8, 8);
+    private readonly SKSize size;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public GizmoDiagramItem()
+    public GizmoDiagramItem(SKSize size)
     {
+        this.size = size;
+
         MouseMove += GizmoDiagramItem_MouseMove;
     }
 
     private void GizmoDiagramItem_MouseMove(object? sender, MovingMouseParameters e)
     {
-        Debug.WriteLine("");
+        Console.WriteLine();
     }
 
+    /// <summary>
+    /// Set the center point.
+    /// </summary>
+    /// <param name="point">Center point coordinates.</param>
     public void SetCenterPoint(SKPoint point)
     {
-        point.Offset(-(size.Width / 2), -(size.Height / 2));
-        BoundingBox = new SKRect(point.X, point.Y, point.X + size.Width, point.Y + size.Height);
+        var left = point.X - size.Width / 2;
+        var right = left + size.Width;
+        var top = point.Y - size.Height / 2;
+        var bottom = top + size.Height;
+        BoundingBox = new SKRect(left, top, right, bottom);
     }
 
     /// <inheritdoc />
     public override void Draw(SkiaDrawingContext context)
     {
-        context.DrawRect(BoundingBox, paint);
+        context.DrawRect(BoundingBox, StrokePaint);
     }
 }

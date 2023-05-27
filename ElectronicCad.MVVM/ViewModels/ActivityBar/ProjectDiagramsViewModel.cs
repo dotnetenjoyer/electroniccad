@@ -100,12 +100,12 @@ public class ProjectDiagramsViewModel : ViewModel
         await UpdateDiagramTrees();
     }
 
-    private async void HandleGeometryAdd(object? sender, GeometryObject geometry)
+    private async void HandleGeometryAdd(object? sender, IEnumerable<GeometryObject> geometry)
     {
         await UpdateDiagramTrees();
     }
 
-    private async void HandleGeometryRemove(object? sender, GeometryObject geometry)
+    private async void HandleGeometryRemove(object? sender, IEnumerable<GeometryObject> geometry)
     {
         await UpdateDiagramTrees();
     }
