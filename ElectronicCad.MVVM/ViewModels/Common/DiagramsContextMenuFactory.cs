@@ -1,6 +1,6 @@
 ﻿using ElectronicCad.Domain.Geometry;
 using Microsoft.Toolkit.Mvvm.Input;
-using System.Reflection.Metadata.Ecma335;
+using WorkspaceDiagram = ElectronicCad.Domain.Workspace.Diagram;
 
 namespace ElectronicCad.MVVM.ViewModels.Common;
 
@@ -17,31 +17,75 @@ public class DiagramsContextMenuFactory
     public IEnumerable<ContextMenuCommand> CreateContextMenu(IEnumerable<object> objects)
     {
         var commands = new List<ContextMenuCommand>();
-
-        var geometryObjects = objects.OfType<GeometryObject>();
-        if (geometryObjects.Count() == objects.Count())
-        {
-            commands.Add(new ContextMenuCommand("Clone", new RelayCommand(() => CloneGeometryObject(geometryObjects))));
-            commands.Add(new ContextMenuCommand("Remove", new RelayCommand(() => RemoveGeometryObjects(geometryObjects))));
-        }
-        
+        commands.AddRange(CreateGeometryObjectsCommands(objects));
+        commands.AddRange(CreateDiagramsCommands(objects));
         return commands;
-    }
-    
-    private void CloneGeometryObject(IEnumerable<GeometryObject> geometryObjects)
+    }   
+
+    private IEnumerable<ContextMenuCommand> CreateGeometryObjectsCommands(IEnumerable<object> objects)
     {
-        foreach (var geometryObject in geometryObjects) 
+        var commands = new List<ContextMenuCommand>();
+
+        var geometryObjects = objects
+            .OfType<GeometryObject>()
+            .ToList();
+        
+        if (geometryObjects.Count != objects.Count())
         {
-            geometryObject.Diagram?.DuplicateGeometry(geometryObject);
+            return commands;
+        }
+
+        commands.Add(new ContextMenuCommand("Clone", new RelayCommand(() => 
+            CloneGeometryObject(geometryObjects))));
+
+        commands.Add(new ContextMenuCommand("Remove", new RelayCommand(() => 
+            RemoveGeometryObjects(geometryObjects))));
+
+        commands.Add(new ContextMenuCommand("Group", new RelayCommand(() =>
+        {
+            var diagram = geometryObjects.First().Diagram;
+            var geometry = diagram.ActiveLayer.Children.ToList();
+            diagram.CreateGroup(geometry);
+        })));
+
+        return commands;
+
+        void CloneGeometryObject(IEnumerable<GeometryObject> geometryObjects)
+        {
+            foreach (var geometryObject in geometryObjects)
+            {
+                geometryObject.Diagram?.DuplicateGeometry(geometryObject);
+            }
+        }
+
+        void RemoveGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
+        {
+            foreach (var diagramGeometryObjects in geometryObjects.GroupBy(x => x.Diagram))
+            {
+                diagramGeometryObjects.Key!.RemoveGeometry(diagramGeometryObjects);
+            }
         }
     }
 
-    private void RemoveGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
+    private IEnumerable<ContextMenuCommand> CreateDiagramsCommands(IEnumerable<object> objects)
     {
-        geometryObjects = geometryObjects.Where(x => x.Diagram != null);
-        foreach(var diagramGeometryObjects in geometryObjects.GroupBy(x => x.Diagram))
+        var commands = new List<ContextMenuCommand>();
+
+        var diagrams = objects
+            .OfType<WorkspaceDiagram>()
+            .ToList();
+        
+        var diagram = diagrams.FirstOrDefault();
+        if (diagram == null || diagrams.Count != objects.Count() || diagrams.Count != 1)
         {
-            diagramGeometryObjects.Key!.RemoveGeometry(diagramGeometryObjects);
+            return commands;
         }
+
+        commands.Add(new ContextMenuCommand("Add layer", new RelayCommand(() =>
+        {
+            diagram.GeometryDiagram.AddLayer("New");
+        })));
+
+        return commands;
     }
 }

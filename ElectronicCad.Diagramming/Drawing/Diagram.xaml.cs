@@ -312,11 +312,30 @@ namespace ElectronicCad.Diagramming
 
         #region Diagram mode
 
-        private DiagramMode currentMode;
+        /// <inheritdoc cref="DiagramModeProperty"/>
+        public DiagramMode DiagramMode
+        {
+            get => (DiagramMode)GetValue(DiagramModeProperty);
+            set => SetValue(DiagramModeProperty, value);
+        }
 
-        private IDiagramMode diagramMode;
+        /// <summary>
+        /// Indicates which diagram mode is currently active.
+        /// </summary>
+        public static readonly DependencyProperty DiagramModeProperty = 
+            DependencyProperty.Register(
+                nameof(DiagramMode),
+                typeof(DiagramMode),
+                typeof(Diagram),
+                new PropertyMetadata(HandleDiagraModeChange));
 
-        public void SetDiagramMode(DiagramMode diagramMode)
+        private static void HandleDiagraModeChange(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs eventArgs)
+        {
+            var diagram = (Diagram)dependencyObject;
+            diagram.SetDiagramMode((DiagramMode)eventArgs.NewValue);
+        }
+
+        private void SetDiagramMode(DiagramMode diagramMode)
         {
             switch (diagramMode)
             {
@@ -340,18 +359,18 @@ namespace ElectronicCad.Diagramming
                     SetDiagramMode(new TextCreationMode());
                     break;
             }
-
-            currentMode = diagramMode;
         }
+
+        private IDiagramMode currentDiagramMode;
 
         private void SetDiagramMode(IDiagramMode diagramMode)
         {
-            if (this.diagramMode != null)
+            if (currentDiagramMode != null)
             {
-                this.diagramMode.Finish();
+                currentDiagramMode.Finish();
             }
 
-            this.diagramMode = diagramMode;
+            currentDiagramMode = diagramMode;
             diagramMode.Initialize(this);
         }
 
@@ -417,7 +436,25 @@ namespace ElectronicCad.Diagramming
                 nameof(SelectedItems),
                 typeof(IEnumerable<GeometryObject>),
                 typeof(Diagram),
-                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HandleSelectedItemsChange));
+
+        /// <summary>
+        /// Handle diagram selected items change.
+        /// </summary>
+        /// <param name="dependencyObject">Diagram.</param>
+        /// <param name="eventArgs">Event args.</param>
+        public static void HandleSelectedItemsChange(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs eventArgs)
+        {
+            var diagram = (Diagram)dependencyObject;
+
+            var selectedItems = (IEnumerable<GeometryObject>)eventArgs.NewValue;
+            if (selectedItems.Any() && diagram.DiagramMode != DiagramMode.Selection)
+            {
+                diagram.DiagramMode = DiagramMode.Selection;
+            }
+            
+            diagram.Redraw();
+        }
 
         /// <summary>
         /// The event to notify aboutn selected items changes.
@@ -598,7 +635,7 @@ namespace ElectronicCad.Diagramming
             
             DrawLayoutGrids(drawingContext);
 
-            Redraws.Invoke(this, drawingContext);
+            Redraws?.Invoke(this, drawingContext);
         }
 
         private void DrawWorkspaceArea(SkiaDrawingContext drawingContext)

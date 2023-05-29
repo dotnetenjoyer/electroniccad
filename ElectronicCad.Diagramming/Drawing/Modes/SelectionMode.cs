@@ -74,7 +74,6 @@ public class SelectionMode : BaseDiagramMode
         if (isSelectionStarted)
         {
             CompleteSelection();
-            Diagram.Redraw();
         }
     }
 

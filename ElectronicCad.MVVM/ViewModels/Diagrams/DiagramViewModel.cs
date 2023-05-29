@@ -56,20 +56,29 @@ public class DiagramViewModel : ViewModel
     public DiagramViewModel(IOpenDiagramProvider activeDiagramProvider, IMediator mediator, 
         ISelectionService selectionService)
     {
-        this.activeDiagramProvider = activeDiagramProvider;
         this.mediator = mediator;
+
+        this.activeDiagramProvider = activeDiagramProvider;
+        this.activeDiagramProvider.OpenDiagramChanged += HandleActiveDiagramChanges;
+        Diagram = activeDiagramProvider.Diagram;
+
         this.selectionService = selectionService;
+        this.selectionService.SelectionChanged += HandleSelectionChange; 
 
         AddNewImageCommand = new RelayCommand(AddNewImage);
         HandleGeometrySelectionCommand = new RelayCommand(HandleGeometrySelection);
-
-        Diagram = activeDiagramProvider.Diagram;
-        activeDiagramProvider.OpenDiagramChanged += HandleActiveDiagramChanges;
     }
 
-    private void HandleActiveDiagramChanges(object? sender, EventArgs e)
+    private void HandleActiveDiagramChanges(object? sender, EventArgs eventArgs)
     {
         Diagram = activeDiagramProvider.Diagram;
+    }
+
+    private void HandleSelectionChange(object? sender, EventArgs eventArgs)
+    {
+        SelectedGeometry = selectionService.SelectedObjects
+            .OfType<GeometryObject>()
+            .ToList();
     }
 
     private async void AddNewImage()
@@ -81,5 +90,4 @@ public class DiagramViewModel : ViewModel
     {
         selectionService.Select(SelectedGeometry.ToArray());
     }
-
 }

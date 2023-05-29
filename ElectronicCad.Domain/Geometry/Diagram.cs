@@ -39,7 +39,7 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
         Id = Guid.NewGuid();
         size = new Size(850, 600);
 
-        AddLayer("Default layer");
+        AddLayer("Default");
     }
 
     #region Layers.

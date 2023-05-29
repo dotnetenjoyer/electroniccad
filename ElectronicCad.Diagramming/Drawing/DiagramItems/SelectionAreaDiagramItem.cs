@@ -29,6 +29,9 @@ internal class SelectionAreaDiagramItem : DiagramItem
             Style = SKPaintStyle.StrokeAndFill,
             Color = new SKColor(12, 140, 233, 25)
         };
+
+        BoundingBox = SKRect.Empty;
+        IsVisible = false;
     }
 
     /// <summary>
