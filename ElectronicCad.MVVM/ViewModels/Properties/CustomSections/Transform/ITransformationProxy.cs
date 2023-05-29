@@ -5,7 +5,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation
 /// <summary>
 /// Set of properties for transformation custom section.
 /// </summary>
-public interface ITransformationProxy : IProxy
+public interface ITransformationProxy : IPropertiesProxy
 {
     /// <summary>
     /// Center X coordinate.

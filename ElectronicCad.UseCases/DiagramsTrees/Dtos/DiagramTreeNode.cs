@@ -3,14 +3,14 @@
 namespace ElectronicCad.UseCases.DiagramsTrees.Dtos;
 
 /// <summary>
-/// Node of the diagrams tree.
+/// Represent tree node.
 /// </summary>
-public abstract class DiagramTreeNode
+public abstract class TreeNode
 {
     /// <summary>
     /// Tree node name.
     /// </summary>
-    public virtual string Name { get; set; }
+    public virtual string Name { get; } = string.Empty;
 
     /// <summary>
     /// Indicates if current node expanded.
@@ -25,32 +25,40 @@ public abstract class DiagramTreeNode
     /// <summary>
     /// Related diagram node.
     /// </summary>
-    public INotifyPropertyChanged DomainObject { get; init; }
+    public object NodeObject { get; init; }
 
     /// <summary>
     /// Nested nodes.
     /// </summary>
-    public IEnumerable<DiagramTreeNode> Nodes { get; init; }
-}
-
-/// <summary>
-/// Diagram tree node with typed domain object.
-/// </summary>
-/// <typeparam name="TDomainObject">Type of domain object.</typeparam>
-public abstract class DiagramTreeNode<TDomainObject> : DiagramTreeNode where TDomainObject : INotifyPropertyChanged
-{
-    /// <summary>
-    /// Domain object.
-    /// </summary>
-    public new TDomainObject DomainObject { get; init; }
+    public IEnumerable<TreeNode>? Nodes { get; init; }
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="domainObject">Typed domain object.</param>
-    public DiagramTreeNode(TDomainObject domainObject)
+    /// <param name="nodeObject">Node object.</param>
+    public TreeNode(object nodeObject)
     {
-        DomainObject = domainObject;
-        base.DomainObject = domainObject;
+        NodeObject = nodeObject;
+    }
+}
+
+/// <summary>
+/// Diagram tree node.
+/// </summary>
+/// <typeparam name="TDiagramObject">Diagram object.</typeparam>
+public abstract class DiagramTreeNode<TDiagramObject> : TreeNode 
+{
+    /// <summary>
+    /// Domain object.
+    /// </summary>
+    public TDiagramObject DiagramObject { get; }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="diagramObject">Diagram object.</param>
+    public DiagramTreeNode(TDiagramObject diagramObject) : base(diagramObject)
+    {
+        DiagramObject = diagramObject;
     }
 }

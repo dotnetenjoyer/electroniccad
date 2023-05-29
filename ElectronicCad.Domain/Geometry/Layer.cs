@@ -16,19 +16,31 @@ public class Layer : DomainObservableObject, IGeometryContainer
     /// Layer name.
     /// </summary>
     public string Name { get; init; }
+    
+    /// <summary>
+    /// Is locked.
+    /// </summary>
+    public bool IsLocked { get; set; }
+
+    /// <summary>
+    /// Is visible.
+    /// </summary>
+    public bool IsVisible { get; set; } = true;
+
+    /// <summary>
+    /// Layer z-index.
+    /// </summary>
+    public int ZIndex { get; internal set; }
+
+    /// <summary>
+    /// Is the layer is active.
+    /// </summary>
+    public bool IsActive => Diagram.ActiveLayer == this;
 
     /// <summary>
     /// Related diagram.
     /// </summary>
     public Diagram Diagram { get; init; }
-
-    /// <inheritdoc />
-    public IEnumerable<GeometryObject> Children => children;
-
-    private readonly List<GeometryObject> children = new();
-    
-    /// <inheritdoc />
-    public IGeometryContainer Parent => Diagram;
 
     /// <summary>
     /// Constructor.
@@ -42,28 +54,23 @@ public class Layer : DomainObservableObject, IGeometryContainer
         Diagram = diagram;
     }
 
+    #region IGeometryContainer
+
     /// <inheritdoc />
-    public void AddGeometry(GeometryObject geometryObject)
-    {
-        AddGeometry(new[] { geometryObject });
-    }
+    public IEnumerable<GeometryObject> Children => children;
+
+    private readonly List<GeometryObject> children = new();
 
     /// <inheritdoc />
     public void AddGeometry(IEnumerable<GeometryObject> geometryObjects)
     {
-        foreach (var geometeryObject in geometryObjects)
+        foreach (var geometryObject in geometryObjects)
         {
-            geometeryObject.Parent = this;
-            children.Add(geometeryObject);
+            geometryObject.Layer = this;
+            children.Add(geometryObject);
         }
-        
-        Diagram.RaiseGeometryAdded(geometryObjects);
-    }
 
-    /// <inheritdoc />
-    public void RemoveGeometry(GeometryObject geometryObject)
-    {
-        RemoveGeometry(new[] { geometryObject });
+        Diagram.RaiseGeometryAdded(geometryObjects);
     }
 
     /// <inheritdoc />
@@ -71,10 +78,12 @@ public class Layer : DomainObservableObject, IGeometryContainer
     {
         foreach (var geometryObject in geometryObjects)
         {
-            geometryObject.Parent = null;
+            geometryObject.Layer = null;
             children.Remove(geometryObject);
         }
 
         Diagram.RaiseGeometryRemoved(geometryObjects);
     }
+
+    #endregion
 }

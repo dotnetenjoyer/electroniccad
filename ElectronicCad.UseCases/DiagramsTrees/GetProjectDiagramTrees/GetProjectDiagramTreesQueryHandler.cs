@@ -37,7 +37,7 @@ public class GetProjectDiagramTreesQueryHandler : IRequestHandler<GetProjectDiag
         return diagramTree;
     }
 
-    private DiagramTreeNode ComposeDiagramNode(WorkspaceDiagram diagram)
+    private TreeNode ComposeDiagramNode(WorkspaceDiagram diagram)
     {
         var childNodes = diagram.GeometryDiagram.Layers
             .Select(layer => ComposeLayerNode(layer));

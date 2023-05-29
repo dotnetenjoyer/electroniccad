@@ -33,9 +33,9 @@ public class TextPropertiesProxy : GeometryObjectProxy<Text>, ITypographyProxy
     }
 
     /// <inheritdoc />
-    public override void UpdateFromEntity()
+    public override void UpdateFromSource()
     {
-        base.UpdateFromEntity();
+        base.UpdateFromSource();
      
         Text = Source.Content;
         FontSize = Source.FontSize;
@@ -45,9 +45,9 @@ public class TextPropertiesProxy : GeometryObjectProxy<Text>, ITypographyProxy
     }
 
     /// <inheritdoc />
-    protected override void UpdateEntityInternal()
+    protected override void UpdateSourceInternal()
     {
-        base.UpdateEntityInternal();
+        base.UpdateSourceInternal();
         
         Source.Content = Text;
         Source.FontSize = FontSize;

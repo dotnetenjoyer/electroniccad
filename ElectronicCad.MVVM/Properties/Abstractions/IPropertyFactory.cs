@@ -9,7 +9,7 @@ public interface IPropertyFactory
     /// Creates property by configuration and releated model.
     /// </summary>
     /// <param name="propertyConfiguration">Property configuration.</param>
-    /// <param name="propertyModel">Property model.</param>
+    /// <param name="propertiesProxy">Properties proxy.</param>
     /// <returns>Property.</returns>
-    IProperty Create(IPropertyConfiguration propertyConfiguration, IPropertyModel propertyModel);
+    IProperty Create(IPropertyConfiguration propertyConfiguration, IPropertiesProxy propertiesProxy);
 }

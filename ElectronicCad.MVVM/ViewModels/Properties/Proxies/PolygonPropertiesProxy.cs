@@ -21,17 +21,17 @@ public class PolygonPropertiesProxy : ContentGeometryObjectProxy<Polygon>
     }
 
     /// <inheritdoc />
-    public override void UpdateFromEntity()
+    public override void UpdateFromSource()
     {
-        base.UpdateFromEntity();
+        base.UpdateFromSource();
 
         CornerRadius = Source.CornerRadius;
     }
 
     /// <inheritdoc />
-    protected override void UpdateEntityInternal()
+    protected override void UpdateSourceInternal()
     {
-        base.UpdateEntityInternal();
+        base.UpdateSourceInternal();
 
         Source.CornerRadius = CornerRadius;
     }

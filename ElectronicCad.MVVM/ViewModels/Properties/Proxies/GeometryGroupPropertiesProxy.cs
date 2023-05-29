@@ -5,7 +5,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Properties proxy to geometry group.
 /// </summary>
-public class GeometryGroupPropertiesProxy : BaseProxy<GeometryGroup>
+public class GeometryGroupPropertiesProxy : VersionablePropertiesProxy<GeometryGroup>
 {
     /// <summary>
     /// Constructor.
@@ -15,13 +15,7 @@ public class GeometryGroupPropertiesProxy : BaseProxy<GeometryGroup>
     {
     }
 
-    /// <inheritdoc />
-    public override void UpdateEntity()
-    {
-    }
-
-    /// <inheritdoc />
-    public override void UpdateFromEntity()
+    public override void UpdateFromSource()
     {
     }
 }

@@ -11,7 +11,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections;
 /// <typeparam name="TProxy">Custom section proxy type.</typeparam>
 /// <typeparam name="TModel">Custom section view model.</typeparam>
 
-public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICustomSection where TProxy : IProxy where TModel : INotifyPropertyChanged
+public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICustomSection where TProxy : IPropertiesProxy where TModel : INotifyPropertyChanged
 {
     private readonly IServiceProvider serviceProvider;
 
@@ -80,7 +80,7 @@ public abstract class BaseCustomSection<TProxy, TModel> : ObservableObject, ICus
     private void UpdateProxy()
     {
         UpdateProxyInternal();
-        Proxy.UpdateEntity();
+        Proxy.UpdateSource();
     }
 
     /// <summary>

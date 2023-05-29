@@ -19,9 +19,9 @@ public class PropertyObjectProfile
     /// Add new property object configuration.
     /// </summary>
     /// <returns></returns>
-    public ConfigurationBuilder<TPropertyModel> CreateConfiguration<TPropertyModel>() where TPropertyModel : IPropertyModel
+    public ConfigurationBuilder<TPropertiesProxy> CreateConfiguration<TPropertiesProxy>() where TPropertiesProxy : IPropertiesProxy
     {
-        var builder = new ConfigurationBuilder<TPropertyModel>();
+        var builder = new ConfigurationBuilder<TPropertiesProxy>();
         
         var configuration = builder.Build();
         objectConfigurations.Add(configuration);
@@ -29,7 +29,7 @@ public class PropertyObjectProfile
         return builder;
     }
 
-    public class ConfigurationBuilder<TPropertyModel> : PrimitivePropertyObjectConfigurationBuilder<ConfigurationBuilder<TPropertyModel>, TPropertyModel>
+    public class ConfigurationBuilder<TPropertiesProxy> : PrimitivePropertyObjectConfigurationBuilder<ConfigurationBuilder<TPropertiesProxy>, TPropertiesProxy>
     {
     }
 }

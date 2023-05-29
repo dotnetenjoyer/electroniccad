@@ -11,7 +11,7 @@ namespace ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;
 public class PrimitiveProperty<TValue> : ObservableObject, IProperty
 {
     private readonly PropertyInfo sourceProperty;
-    private readonly IProxy sourceObject;
+    private readonly IPropertiesProxy sourceObject;
 
     /// <inheritdoc />
     public string Name { get; init; }
@@ -53,7 +53,7 @@ public class PrimitiveProperty<TValue> : ObservableObject, IProperty
     /// </summary>
     /// <param name="sourceObject">Source object.</param>
     /// <param name="sourceProperty">Source property.</param>
-    public PrimitiveProperty(IProxy sourceObject, PropertyInfo sourceProperty, string name)
+    public PrimitiveProperty(IPropertiesProxy sourceObject, PropertyInfo sourceProperty, string name)
     {
         this.sourceObject = sourceObject;
         this.sourceProperty = sourceProperty;
@@ -78,7 +78,7 @@ public class PrimitiveProperty<TValue> : ObservableObject, IProperty
         sourceObject.Updated -= HandleSourceChanges;
         
         sourceProperty.SetValue(sourceObject, Value);
-        sourceObject.UpdateEntity();
+        sourceObject.UpdateSource();
  
         sourceObject.Updated += HandleSourceChanges;
     }

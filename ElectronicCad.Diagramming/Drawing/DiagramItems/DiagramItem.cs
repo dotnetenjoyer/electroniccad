@@ -25,14 +25,14 @@ internal abstract class DiagramItem : IDisposable
     public SKRect BoundingBox { get; set; }
 
     /// <summary>
-    /// Layer.
-    /// </summary>
-    public Layer? Layer { get; set; }
-
-    /// <summary>
     /// Z index.
     /// </summary>
     public int ZIndex { get; set; }
+
+    /// <summary>
+    /// Parent container.
+    /// </summary>
+    public IDiagramItemContainer? Parent { get; internal set; }
 
     /// <summary>
     /// Stroke geometry paint.

@@ -6,6 +6,8 @@ using SkiaSharp;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Domain.Geometry;
+using System.Linq;
+using ElectronicCad.Domain.Geometry.Utils;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
 
@@ -20,7 +22,7 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     /// <summary>
     /// Selected geometry object.
     /// </summary>
-    public GeometryObject? SelectedItem { get; internal set; }
+    public IEnumerable<GeometryObject> SelectedItems { get; internal set; }
 
     private readonly SelectionFrameArea frameArea;
     private readonly GizmoDiagramItem topLefGizmo;
@@ -42,40 +44,41 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
         bottomLeftGizmo = new GizmoDiagramItem(GizmoDiagramItem.DefaultSize);
         bottomRigthGizmo = new GizmoDiagramItem(GizmoDiagramItem.DefaultSize);
 
-        var children = new List<DiagramItem>()
-        {
-            topLefGizmo,
-            topRigthGizmo,
-            bottomLeftGizmo,
-            bottomRigthGizmo,
-            frameArea
-        };
-
-        Children = children;
+        AddChild(topLefGizmo);
+        AddChild(topRigthGizmo);
+        AddChild(bottomLeftGizmo);
+        AddChild(bottomRigthGizmo);
+        AddChild(frameArea);
     }
 
     private void HandleMouseMove(object? sender, MovingMouseParameters mouse)
     {
-        if (SelectedItem != null && mouse.LeftButton == MouseButtonState.Pressed)
+        if (SelectedItems.Any() && mouse.LeftButton == MouseButtonState.Pressed)
         {
             var translateMatrix = Matrix3x2.CreateTranslation(mouse.Delta.ToVector2());
 
-            using var scope = SelectedItem.StartDiagramModifcation();
-            SelectedItem.StartModification();
-            SelectedItem.Transform(translateMatrix);
-            SelectedItem.CompleteModification();
+            using var scope = SelectedItems.First().StartDiagramModifcation();
+    
+            foreach (var selectedItem in SelectedItems)
+            {
+                selectedItem.StartModification();
+                selectedItem.Transform(translateMatrix);
+                selectedItem.CompleteModification();
+            }
         }
     }
 
     /// <inheritdoc/>
     public override void Draw(SkiaDrawingContext context)
     {
-        if (SelectedItem == null)
+        if (!SelectedItems.Any())
         {
             return;
         }
 
-        var boundingBox = SelectedItem.BoundingBox.ToSKRect();
+        var points = SelectedItems.SelectMany(x => x.ControlPoints);
+        var boundingBox = PointsUtils.CalculateBoundingBox(points).ToSKRect();
+        
         topLefGizmo.SetCenterPoint(boundingBox.GetTopLeft());
         topRigthGizmo.SetCenterPoint(boundingBox.GetTopRight());
         bottomLeftGizmo.SetCenterPoint(boundingBox.GetBottomLeft());
@@ -164,5 +167,34 @@ internal class GizmoDiagramItem : DiagramItem
     public override void Draw(SkiaDrawingContext context)
     {
         context.DrawRect(BoundingBox, StrokePaint);
+    }
+}
+
+
+/// <summary>
+/// Selection area diagram item.
+/// </summary>
+internal class SelectionAreaDiagramItem : DiagramItem
+{
+    internal void SetStartPoint(SKPoint point)
+    {
+        BoundingBox = new SKRect(point.X, point.Y, point.X, point.Y);
+    }
+
+    internal void SetEndPoint(SKPoint point)
+    {
+        BoundingBox = new SKRect(BoundingBox.Left, BoundingBox.Top, point.X, point.Y);
+    }
+
+    /// <inheritdoc />
+    public override void Draw(SkiaDrawingContext drawingContext)
+    {
+        var paint = new SKPaint
+        {
+            Style = SKPaintStyle.StrokeAndFill,
+            Color = new SKColor(12, 140, 233, 25)
+        };
+
+        drawingContext.DrawRect(BoundingBox, paint);
     }
 }

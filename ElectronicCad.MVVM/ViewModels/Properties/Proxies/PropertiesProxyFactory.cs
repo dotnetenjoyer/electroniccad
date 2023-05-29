@@ -5,15 +5,15 @@ using ElectronicCad.MVVM.Properties.Abstractions;
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 /// <summary>
-/// Factory to create proxy object based on source object.
+/// Factory to create properties proxy object based on source object.
 /// </summary>
-public static class ProxyFactory
+public static class PropertiesProxyFactory
 {
     /// <summary>
     /// Creates proxy object.
     /// </summary>
     /// <returns>Proxy object.</returns>
-    public static IProxy Create(object sourceObject)
+    public static IPropertiesProxy Create(object sourceObject)
         => sourceObject switch
         {
             ProjectDiagram diagram => new ProjectDiagramPropertiesProxy(diagram),

@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using System;
+using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Domain.Geometry;
@@ -19,10 +20,16 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="domainObject">Domain object.</param>
-    public GeometryObjectDiagramItem(GeometryObject domainObject)
+    /// <param name="geometryObject">Domain object.</param>
+    public GeometryObjectDiagramItem(GeometryObject geometryObject)
     {
-        GeometryObject = domainObject;
+        GeometryObject = geometryObject;
+        GeometryObject.VersionChanged += HandleGeometryObjectVersionChange;
+    }
+
+    private void HandleGeometryObjectVersionChange(object? sender, EventArgs e)
+    {
+        UpdateViewState();
     }
 
     /// <inheritdoc />
@@ -47,6 +54,14 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem
     public override bool CheckShapeHit(ref SKPoint position)
     {
         return GeometryObject.CheckHit(position.ToDomainPoint());
+    }
+
+    /// <inheritdoc />
+    protected override void DisposeManagedResources()
+    {
+        base.DisposeManagedResources();
+     
+        GeometryObject.VersionChanged -= HandleGeometryObjectVersionChange;
     }
 }
 

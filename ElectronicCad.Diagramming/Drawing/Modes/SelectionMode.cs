@@ -1,5 +1,7 @@
 using System.Linq;
 using System.Windows.Input;
+using SkiaSharp;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 using ElectronicCad.Diagramming.Drawing.Items;
 
 namespace ElectronicCad.Diagramming.Drawing.Modes;
@@ -9,7 +11,10 @@ namespace ElectronicCad.Diagramming.Drawing.Modes;
 /// </summary>
 public class SelectionMode : BaseDiagramMode
 {
+    private bool isSelectionStarted;
+
     private SelectionFrameDiagramItem selectionFrame;
+    private SelectionAreaDiagramItem selectionArea;
 
     /// <inheritdoc/>
     public override Cursor Cursor => Cursors.Arrow;
@@ -19,38 +24,59 @@ public class SelectionMode : BaseDiagramMode
     {
         base.Initialize(diagram);
 
-        selectionFrame = GetOrCreateSelectionFrame();
+        selectionArea = GetSelectionArea();
+        selectionFrame = GetSelectionFrame();
     }
 
-    private SelectionFrameDiagramItem GetOrCreateSelectionFrame()
+    private SelectionAreaDiagramItem GetSelectionArea()
+    {
+        var selectionArea = Diagram.DiagramItems
+            .OfType<SelectionAreaDiagramItem>()
+            .FirstOrDefault() ?? CreateSelectionArea();
+
+        return selectionArea;
+
+        SelectionAreaDiagramItem CreateSelectionArea()
+        {
+            var selectionArea = new SelectionAreaDiagramItem()
+            {
+                IsVisible = false
+            };
+
+            Diagram.AddDiagramItem(selectionArea, Diagram.SystemLayer);
+            return selectionArea;
+        }
+    }
+
+    private SelectionFrameDiagramItem GetSelectionFrame()
     {
         var selectionFrame = Diagram.DiagramItems
             .OfType<SelectionFrameDiagramItem>()
-            .FirstOrDefault();
+            .FirstOrDefault() ?? CreateSelectionFrame();
 
-        if (selectionFrame == null)
+        return selectionFrame;
+
+        SelectionFrameDiagramItem CreateSelectionFrame()
         {
             selectionFrame = new SelectionFrameDiagramItem()
             {
                 IsVisible = false
             };
 
-            Diagram.AddDiagramItem(selectionFrame);
-        }
+            Diagram.AddDiagramItem(selectionFrame, Diagram.SystemLayer);
 
-        return selectionFrame;
+            return selectionFrame;
+        }
     }
 
     /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
-        if (Diagram.FocusItem != null && Diagram.FocusItem is GeometryObjectDiagramItem geometryDiagramItem)
+        if (isSelectionStarted)
         {
-            Diagram.Cursor = Cursors.Hand;
-        }
-        else
-        {
-            Diagram.Cursor = Cursors.Arrow;
+            var position = Diagram.CalculateDiagramPosition(args);
+            selectionArea.SetEndPoint(position);
+            Diagram.Redraw();
         }
     }
 
@@ -65,22 +91,55 @@ public class SelectionMode : BaseDiagramMode
         if (Diagram.FocusItem is GeometryObjectDiagramItem geometryDiagramItem)
         {
             selectionFrame.IsVisible = true;
-            selectionFrame.SelectedItem = geometryDiagramItem.GeometryObject;
+            selectionFrame.SelectedItems = new[] { geometryDiagramItem.GeometryObject };
         }
         else
         {
-            selectionFrame.IsVisible = false;
+            var position = Diagram.CalculateDiagramPosition(args);
+            StartSelection(position);
         }
 
         Diagram.Redraw();
+    }
+    
+    /// <inheritdoc/>
+    protected override void ProcessPrimaryButtonUp(MouseButtonEventArgs args)
+    {
+        if (isSelectionStarted)
+        {
+            CompleteSelection();
+            Diagram.Redraw();
+        }
+    /// <inheritdoc/>
+    }
+
+    private void StartSelection(SKPoint position)
+    {
+        isSelectionStarted = true;
+        selectionFrame.IsVisible = false;
+        selectionArea.IsVisible = true;
+        selectionArea.SetStartPoint(position);
+    }
+
+    private void CompleteSelection()
+    {
+        isSelectionStarted = false;
+        selectionArea.IsVisible = false;
+
+        var standardizedSelectionArea = selectionArea.BoundingBox.Standardized;
+        var selectedItems = Diagram.DiagramItems
+            .OfType<GeometryObjectDiagramItem>()
+            .Where(item => item.IsVisible)
+            .Where(item => item.BoundingBox.IntersectsWith(standardizedSelectionArea))
+            .Select(item => item.GeometryObject);
+        
+        selectionFrame.SelectedItems = selectedItems;
+        selectionFrame.IsVisible = true;
     }
 
     /// <inheritdoc/>
     public override void Finish()
     {
         base.Finish();
-
-        selectionFrame.IsVisible = false;
-        Diagram.Redraw();
     }
 }

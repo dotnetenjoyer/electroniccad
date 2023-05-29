@@ -34,18 +34,18 @@ public class ProjectDiagramsViewModel : ViewModel
     /// <summary>
     /// Selected node.
     /// </summary>
-    public DiagramTreeNode SelectedNode
+    public TreeNode SelectedNode
     {
         get => selectedNode;
         set
         {
-            var selectedObjects = new[] { value.DomainObject };
+            var selectedObjects = new[] { value.NodeObject };
             selectionService.Select(selectedObjects);
             SetProperty(ref selectedNode, value);
         }
     }
 
-    private DiagramTreeNode selectedNode;
+    private TreeNode selectedNode;
 
     /// <summary>
     /// Command to open context menu.
@@ -81,7 +81,7 @@ public class ProjectDiagramsViewModel : ViewModel
     {
         if (SelectedNode != null)
         {
-            var contextMenuCommands = contextMenuFactory.CreateContextMenu(new object[] { SelectedNode.DomainObject });
+            var contextMenuCommands = contextMenuFactory.CreateContextMenu(new object[] { SelectedNode.NodeObject });
             ContextMenuCommands = contextMenuCommands;
         }
     }

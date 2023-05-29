@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.Infrastructure.Abstractions.Interfaces;
 using ElectronicCad.Infrastructure.Abstractions.Services;
 using ElectronicCad.Infrastructure.Abstractions.Services.Projects.Diagrams;
 using Bitmap = System.Drawing.Bitmap;
-using System.Reflection.Metadata.Ecma335;
 
 namespace ElectronicCad.UseCases.ProjectDiagrams.AddNewImage;
 

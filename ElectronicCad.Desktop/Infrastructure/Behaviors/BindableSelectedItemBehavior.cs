@@ -26,10 +26,10 @@ internal class BindableSelectedItemBehavior : Behavior<TreeView>
 
     private static void OnSelectedItemChanged(DependencyObject sender, DependencyPropertyChangedEventArgs eventArgs)
     {
-        var diagramTreeNode = eventArgs.NewValue as DiagramTreeNode;
-        if (diagramTreeNode != null)
+        var treeNode = eventArgs.NewValue as TreeNode;
+        if (treeNode != null)
         {
-            diagramTreeNode.IsSelected = true;
+            treeNode.IsSelected = true;
         }
     }
 

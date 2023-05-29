@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using SkiaSharp;
 using ElectronicCad.Diagramming.Utils;
@@ -7,21 +6,20 @@ using ElectronicCad.Diagramming.Utils;
 namespace ElectronicCad.Diagramming.Drawing.Items;
 
 /// <summary>
-/// Group of diagram items.
+/// Group of the diagram items.
 /// </summary>
-internal class GroupDiagramItem : DiagramItem
+internal class GroupDiagramItem : DiagramItem, IDiagramItemContainer
 {
-    /// <summary>
-    /// Children.
-    /// </summary>
-    public IEnumerable<DiagramItem> Children { get; protected set; }
+    /// <inheritdoc />
+    public IEnumerable<DiagramItem> Children => children;
+
+    private readonly List<DiagramItem> children = new();
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public GroupDiagramItem()
     {
-        Children = Array.Empty<DiagramItem>();
         BoundingBox = SKRect.Empty;
     }
 
@@ -31,17 +29,47 @@ internal class GroupDiagramItem : DiagramItem
     /// <param name="children">Children.</param>
     public GroupDiagramItem(IEnumerable<DiagramItem> children)
     {
-        Children = children;
+        this.children.AddRange(children);
         RecalculateBoundingBox();
     }
 
     /// <summary>
-    /// Recalcualtes group bounds based on the children bounds.
+    /// Recalculates the group bounding box based on the children bounds.
     /// </summary>
-    public void RecalculateBoundingBox()
+    public virtual void RecalculateBoundingBox()
     {
         BoundingBox = SkiaRectangleUtils
             .CalculateScribedRectangle(Children.Select(x => x.BoundingBox));
+    }
+
+    /// <summary>
+    /// Adds the diagram item to the group. 
+    /// </summary>
+    /// <param name="diagramItem">Diagram item to add.</param>
+    public void AddChild(DiagramItem diagramItem)
+    {
+        children.Add(diagramItem);
+        RecalculateBoundingBox();
+    }
+
+    /// <summary>
+    /// Adds the diagram items to the group.
+    /// </summary>
+    /// <param name="items">DIagram items to add.</param>
+    public void AddChild(IEnumerable<DiagramItem> items)
+    {
+        children.AddRange(items);
+        RecalculateBoundingBox();
+    }
+
+    /// <summary>
+    /// Removes the diagram item from the group.
+    /// </summary>
+    /// <param name="diagramItem">Diagram item to remove.</param>
+    public void RemoveChild(DiagramItem diagramItem)
+    {
+        children.Remove(diagramItem);
+        RecalculateBoundingBox();
     }
 
     /// <inheritdoc />

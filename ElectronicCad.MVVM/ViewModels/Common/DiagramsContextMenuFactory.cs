@@ -32,23 +32,16 @@ public class DiagramsContextMenuFactory
     {
         foreach (var geometryObject in geometryObjects) 
         {
-            geometryObject.GetDiagram().CloneGeometry(geometryObject);
+            geometryObject.Diagram?.DuplicateGeometry(geometryObject);
         }
     }
 
     private void RemoveGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
     {
-        var geometryWithDiagram = geometryObjects
-            .Select(obj => new { GeometryObject = obj, Diagram = obj.GetDiagram() })
-            .ToList();
-
-        foreach(var diagramGeometry in geometryWithDiagram.GroupBy(x => x.Diagram))
+        geometryObjects = geometryObjects.Where(x => x.Diagram != null);
+        foreach(var diagramGeometryObjects in geometryObjects.GroupBy(x => x.Diagram))
         {
-            var geometry = diagramGeometry
-                .Select(x => x.GeometryObject)
-                .ToList();
-
-            diagramGeometry.Key.RemoveGeometry(geometry);
+            diagramGeometryObjects.Key!.RemoveGeometry(diagramGeometryObjects);
         }
     }
 }

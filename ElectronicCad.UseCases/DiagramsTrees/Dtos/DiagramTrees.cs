@@ -8,12 +8,12 @@ public class DiagramTrees
     /// <summary>
     /// Diagram trees.
     /// </summary>
-    public IEnumerable<DiagramTreeNode> Diagrams { get; }
+    public IEnumerable<TreeNode> Diagrams { get; }
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public DiagramTrees(IEnumerable<DiagramTreeNode> diagrams)
+    public DiagramTrees(IEnumerable<TreeNode> diagrams)
     {
         Diagrams = diagrams;
     }

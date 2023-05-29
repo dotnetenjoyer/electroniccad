@@ -1,6 +1,7 @@
-﻿using ElectronicCad.Diagramming.Extensions;
+﻿using System.Windows.Input;
+using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Domain.Geometry;
-using System.Windows.Input;
+using ElectronicCad.Domain.Geometry.Extensions;
 
 namespace ElectronicCad.Diagramming.Drawing.Modes;
 
