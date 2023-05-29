@@ -238,7 +238,7 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
     /// Creates geometry group.
     /// </summary>
     /// <param name="geometryObjects">Geometry objects to group.</param>
-    public GeometryGroup CreateGroup(params GeometryObject[] geometryObjects)
+    public GeometryGroup CreateGroup(IEnumerable<GeometryObject> geometryObjects)
     {
         var validationResult = CanCreateGroup(geometryObjects);
         if (!validationResult.IsSuccessed)

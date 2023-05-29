@@ -8,7 +8,6 @@ using SkiaSharp;
 using SkiaSharp.Views.WPF;
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Drawing;
@@ -46,7 +45,13 @@ namespace ElectronicCad.Diagramming
 
             SystemLayer = new DiagramLayer(int.MaxValue);
             layers.Add(SystemLayer);
-         
+
+            var selectionFrame = new SelectionFrameDiagramItem(this);
+            AddDiagramItem(selectionFrame, SystemLayer);
+
+            var selectionArea = new SelectionAreaDiagramItem();
+            AddDiagramItem(selectionArea, SystemLayer);
+
             SetDiagramMode(DiagramMode.Selection);
         }
 
@@ -77,7 +82,7 @@ namespace ElectronicCad.Diagramming
             diagramControl.Unsubscribe((GeometryDiagram)eventArgs.OldValue);
             diagramControl.Subscribe();
             diagramControl.CalculateInitialOffsets();
-            diagramControl.AddLayersAndGeometryFromDomainDiagram();
+            diagramControl.ReplicateGeometryFromDomainDiagram();
             diagramControl.Redraw();
         }
 
@@ -86,9 +91,9 @@ namespace ElectronicCad.Diagramming
             GeometryDiagram.LayerAdded += HandleLayerAdd;
             GeometryDiagram.LayerRemoved += HandleLayerRemove;
 
-            GeometryDiagram.GeometryAdded += HandleDiagramGeometryAdded;
-            GeometryDiagram.GeometryModified += HandleGeometryModified;
-            GeometryDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+            GeometryDiagram.GeometryAdded += HandleGeometryAdd;
+            GeometryDiagram.GeometryModified += HandleGeometryModify;
+            GeometryDiagram.GeometryRemoved += HandleGeometryRemove;
 
             GeometryDiagram.VersionChanged += HandleVersionChange;
         }
@@ -103,9 +108,9 @@ namespace ElectronicCad.Diagramming
             geometryDiagram.LayerAdded -= HandleLayerAdd;
             geometryDiagram.LayerRemoved -= HandleLayerRemove;
 
-            geometryDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
-            geometryDiagram.GeometryModified -= HandleGeometryModified;
-            geometryDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
+            geometryDiagram.GeometryAdded -= HandleGeometryAdd;
+            geometryDiagram.GeometryModified -= HandleGeometryModify;
+            geometryDiagram.GeometryRemoved -= HandleGeometryRemove;
 
             geometryDiagram.VersionChanged -= HandleVersionChange;
         }
@@ -128,7 +133,7 @@ namespace ElectronicCad.Diagramming
             Redraw();
         }
 
-        private void HandleDiagramGeometryAdded(object? sender, IEnumerable<GeometryObject> geometryObjects)
+        private void HandleGeometryAdd(object? sender, IEnumerable<GeometryObject> geometryObjects)
         {
             foreach (var geometryObject in geometryObjects)
             {
@@ -149,7 +154,7 @@ namespace ElectronicCad.Diagramming
             Redraw();
         }
 
-        private void HandleDiagramGeometryRemoved(object? sender, IEnumerable<GeometryObject> geometryObjects)
+        private void HandleGeometryRemove(object? sender, IEnumerable<GeometryObject> geometryObjects)
         {
             foreach (var geometryObject in geometryObjects)
             {
@@ -163,7 +168,7 @@ namespace ElectronicCad.Diagramming
             Redraw();
         }
 
-        private void HandleGeometryModified(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
+        private void HandleGeometryModify(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
         {
             Redraw();
         }
@@ -179,7 +184,7 @@ namespace ElectronicCad.Diagramming
             OffsetY = (float)(SkiaCanvas.ActualHeight - GeometryDiagram.Size.Height) / 2;
         }
 
-        private void AddLayersAndGeometryFromDomainDiagram()
+        private void ReplicateGeometryFromDomainDiagram()
         {
             // Clear odl geometry.
             layers.RemoveRange(0, layers.Count - 1);
@@ -194,17 +199,6 @@ namespace ElectronicCad.Diagramming
                     AddDiagramItem(diagramItem, diagramLayer);
                 }
             }
-
-            var firstRectangle = new Polygon(new Domain.Geometry.Point(100, 100), 200, 200);
-            var secondRectangle = new Polygon(new Domain.Geometry.Point(300, 300), 200, 200);
-            var ellipse = new Ellipse(new Domain.Geometry.Point(400, 400), 100);
-
-            GeometryDiagram.AddGeometry(new GeometryObject[] { firstRectangle, secondRectangle, ellipse });
-            var group = GeometryDiagram.CreateGroup(new[] { firstRectangle, secondRectangle });
-            var group2 = GeometryDiagram.CreateGroup(new GeometryObject[] { group, ellipse });
-
-            var redEllipse = new Ellipse(new Domain.Geometry.Point(200, 200), 300);
-            group2.AddGeometry(redEllipse);
         }
 
         #endregion
@@ -407,7 +401,14 @@ namespace ElectronicCad.Diagramming
             position.Offset(-OffsetX, -OffsetY);
             return position;
         }
-       
+
+        /// <inheritdoc cref="SelectedItemsProperty" />
+        public IEnumerable<GeometryObject> SelectedItems
+        {
+            get => (IEnumerable<GeometryObject>)GetValue(SelectedItemsProperty);
+            set => SetValue(SelectedItemsProperty, value);
+        }
+
         /// <summary>
         /// Collection of selected geometry objects.
         /// </summary>
@@ -417,13 +418,6 @@ namespace ElectronicCad.Diagramming
                 typeof(IEnumerable<GeometryObject>),
                 typeof(Diagram),
                 new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-        /// <inheritdoc cref="SelectedItemsProperty" />
-        public IEnumerable<GeometryObject> SelectedItems
-        {
-            get => (IEnumerable<GeometryObject>)GetValue(SelectedItemsProperty);
-            set => SetValue(SelectedItemsProperty, value);
-        }
 
         /// <summary>
         /// The event to notify aboutn selected items changes.

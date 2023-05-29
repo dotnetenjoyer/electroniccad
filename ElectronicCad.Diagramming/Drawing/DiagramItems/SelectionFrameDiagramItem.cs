@@ -2,11 +2,11 @@ using System;
 using System.Numerics;
 using System.Windows.Input;
 using System.Collections.Generic;
+using System.Linq;
 using SkiaSharp;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Domain.Geometry;
-using System.Linq;
 using ElectronicCad.Domain.Geometry.Utils;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
@@ -18,11 +18,14 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
 {
     /// <inhertidoc/>
     public override bool IsAuxiliary => true;
+    
+    /// <inhertidoc/>
+    public override bool IsVisible => SelectedItems.Any();
 
-    /// <summary>
-    /// Selected geometry object.
-    /// </summary>
-    public IEnumerable<GeometryObject> SelectedItems { get; internal set; }
+    private IEnumerable<GeometryObject> SelectedItems => diagram.SelectedItems;
+
+
+    private readonly Diagram diagram;
 
     private readonly SelectionFrameArea frameArea;
     private readonly GizmoDiagramItem topLefGizmo;
@@ -33,8 +36,9 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     /// <summary>
     /// Constructor.
     /// </summary>
-    public SelectionFrameDiagramItem()
+    public SelectionFrameDiagramItem(Diagram diagram)
     {
+        this.diagram = diagram;
         ZIndex = int.MaxValue;
         MouseMove += HandleMouseMove;
 
@@ -71,7 +75,7 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     /// <inheritdoc/>
     public override void Draw(SkiaDrawingContext context)
     {
-        if (!SelectedItems.Any())
+        if (!IsVisible)
         {
             return;
         }
@@ -99,7 +103,7 @@ internal class SelectionFrameArea : DiagramItem
     {
         Color = Colors.Foreground,
         Style = SKPaintStyle.Stroke,
-        StrokeWidth = 1,
+        StrokeWidth = 2,
         PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
     };
 
@@ -167,34 +171,5 @@ internal class GizmoDiagramItem : DiagramItem
     public override void Draw(SkiaDrawingContext context)
     {
         context.DrawRect(BoundingBox, StrokePaint);
-    }
-}
-
-
-/// <summary>
-/// Selection area diagram item.
-/// </summary>
-internal class SelectionAreaDiagramItem : DiagramItem
-{
-    internal void SetStartPoint(SKPoint point)
-    {
-        BoundingBox = new SKRect(point.X, point.Y, point.X, point.Y);
-    }
-
-    internal void SetEndPoint(SKPoint point)
-    {
-        BoundingBox = new SKRect(BoundingBox.Left, BoundingBox.Top, point.X, point.Y);
-    }
-
-    /// <inheritdoc />
-    public override void Draw(SkiaDrawingContext drawingContext)
-    {
-        var paint = new SKPaint
-        {
-            Style = SKPaintStyle.StrokeAndFill,
-            Color = new SKColor(12, 140, 233, 25)
-        };
-
-        drawingContext.DrawRect(BoundingBox, paint);
     }
 }
