@@ -7,6 +7,8 @@ using ElectronicCad.UseCases.DiagramsTrees.GetDiagramsTree;
 using ElectronicCad.Infrastructure.Abstractions.Services;
 using ElectronicCad.Infrastructure.Abstractions.Services.Projects;
 using ElectronicCad.MVVM.ViewModels.Common;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace ElectronicCad.MVVM.ViewModels.ActivityBar;
 
@@ -31,21 +33,20 @@ public class ProjectDiagramsViewModel : ViewModel
 
     private DiagramTrees? diagramTrees;
 
+    public IEnumerable<TreeNode> SelectedNodes => selectedItems
+        .OfType<TreeNode>()  
+        .ToList(); 
+
     /// <summary>
-    /// Selected node.
+    /// Selected diagram items.
     /// </summary>
-    public TreeNode SelectedNode
+    public IEnumerable<object> SelectedItems
     {
-        get => selectedNode;
-        set
-        {
-            var selectedObjects = new[] { value.NodeObject };
-            selectionService.Select(selectedObjects);
-            SetProperty(ref selectedNode, value);
-        }
+        get => selectedItems;
+        set => SetProperty(ref selectedItems, value);
     }
 
-    private TreeNode selectedNode;
+    private IEnumerable<object> selectedItems = Array.Empty<object>();
 
     /// <summary>
     /// Command to open context menu.
@@ -71,18 +72,79 @@ public class ProjectDiagramsViewModel : ViewModel
     {
         this.openProjectProvider = openProjectProvider;
         this.mediator = mediator;
-        this.selectionService = selectionService;
         this.contextMenuFactory = contextMenuFactory;
 
+        this.selectionService = selectionService;
+        this.selectionService.SelectionChanged += HandleSelectionServiceSelectedItemsChange;
+
         ContextMenuOpeningCommand = new RelayCommand(HandleContextMenuOpening);
+
+        PropertyChanged += HandlePropertyChange;
     }
-    
+
+    private void HandlePropertyChange(object? sender, System.ComponentModel.PropertyChangedEventArgs eventArgs)
+    {
+        if (eventArgs.PropertyName == nameof(SelectedItems) && !isSyncsWithSelectionService)
+        {
+            var selectedItems = SelectedNodes.Select(x => x.NodeObject).ToArray();
+            selectionService.Select(selectedItems);
+        }
+    }
+
+    private bool isSyncsWithSelectionService;
+
+    private void HandleSelectionServiceSelectedItemsChange(object? sender, EventArgs eventArgs)
+    {
+        isSyncsWithSelectionService = true;
+
+        var nodes = GetFlatDiagramTree();
+        SelectedItems = nodes
+            .Where(n => selectionService.SelectedObjects.Contains(n.NodeObject))
+            .ToList();
+
+        isSyncsWithSelectionService = false;
+    }
+
+    private IEnumerable<TreeNode> GetFlatDiagramTree()
+    {
+        if (DiagramTrees == null || !DiagramTrees.Diagrams.Any())
+        {
+            return Array.Empty<TreeNode>();
+        }
+
+        return DiagramTrees.Diagrams.SelectMany(diagram =>
+        {
+            if (diagram.Nodes == null || !diagram.Nodes.Any())
+            {
+                return Array.Empty<TreeNode>();
+            }
+
+            return diagram.Nodes.SelectMany(n => GetAllNodes(n));
+        });
+
+        IEnumerable<TreeNode> GetAllNodes(TreeNode node)
+        {
+            if (node.Nodes == null || !node.Nodes.Any())
+            {
+                return new TreeNode[] { node };
+            }
+
+            var nodes = node.Nodes
+                .SelectMany(n => GetAllNodes(n))
+                .ToList();
+
+            nodes.Insert(0, node);
+
+            return nodes;
+        }
+    }
+
     private void HandleContextMenuOpening()
     {
-        if (SelectedNode != null)
+        var selectedItems = SelectedNodes.Select(x => x.NodeObject).ToList();
+        if (selectedItems.Any())
         {
-            var contextMenuCommands = contextMenuFactory.CreateContextMenu(new object[] { SelectedNode.NodeObject });
-            ContextMenuCommands = contextMenuCommands;
+            ContextMenuCommands = contextMenuFactory.CreateContextMenu(selectedItems);
         }
     }
 

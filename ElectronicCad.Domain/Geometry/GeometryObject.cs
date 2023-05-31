@@ -12,12 +12,12 @@ public abstract class GeometryObject : VersionableBase
     /// <summary>
     /// Geometry object id.
     /// </summary>
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid Id { get; internal set; } = Guid.NewGuid();
 
     /// <summary>
     /// Name.
     /// </summary>
-    public virtual string Name { get; init; } = "Geometry object";
+    public virtual string Name { get; internal set; } = "Geometry object";
 
     /// <summary>
     /// Control points.
@@ -47,7 +47,7 @@ public abstract class GeometryObject : VersionableBase
     /// <summary>
     /// Geometry group.
     /// </summary>
-    public GeometryGroup? Group { get; set; }
+    public GeometryGroup? Group { get; internal set; }
     
     /// <summary>
     /// Stroke color.

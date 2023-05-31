@@ -6,7 +6,7 @@
 public class Polygon : ContentGeometry
 {
     /// <inheritdoc/>
-    public override string Name { get; init; } = nameof(Polygon);
+    public override string Name { get; internal set; } = nameof(Polygon);
 
     /// <summary>
     /// Corner radius.

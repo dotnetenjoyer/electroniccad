@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Mvvm.Input;
+﻿using System.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using MediatR;
 using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Infrastructure.Abstractions.Services;
@@ -17,6 +18,8 @@ public class DiagramViewModel : ViewModel
     private readonly IOpenDiagramProvider activeDiagramProvider;
     private readonly IMediator mediator;
     private readonly ISelectionService selectionService;
+
+    private bool isSyncsWithSelectionService;
 
     /// <summary>
     /// Active workspace diagram.
@@ -38,12 +41,7 @@ public class DiagramViewModel : ViewModel
         set => SetProperty(ref selectedGeometry, value);
     }
 
-    private IEnumerable<GeometryObject> selectedGeometry = Array.Empty<GeometryObject>();
-
-    /// <summary>
-    /// Command to handle selected diagram geometry changes.
-    /// </summary>
-    public RelayCommand HandleGeometrySelectionCommand { get; }
+    private IEnumerable<GeometryObject> selectedGeometry;
 
     /// <summary>
     /// Command to add new image.
@@ -63,10 +61,11 @@ public class DiagramViewModel : ViewModel
         Diagram = activeDiagramProvider.Diagram;
 
         this.selectionService = selectionService;
-        this.selectionService.SelectionChanged += HandleSelectionChange; 
+        this.selectionService.SelectionChanged += HandleSelectionServiceSelectedItemsChange; 
 
         AddNewImageCommand = new RelayCommand(AddNewImage);
-        HandleGeometrySelectionCommand = new RelayCommand(HandleGeometrySelection);
+
+        PropertyChanged += HandlePropertyChange;
     }
 
     private void HandleActiveDiagramChanges(object? sender, EventArgs eventArgs)
@@ -74,20 +73,27 @@ public class DiagramViewModel : ViewModel
         Diagram = activeDiagramProvider.Diagram;
     }
 
-    private void HandleSelectionChange(object? sender, EventArgs eventArgs)
+    private void HandleSelectionServiceSelectedItemsChange(object? sender, EventArgs eventArgs)
     {
+        isSyncsWithSelectionService = true;
+
         SelectedGeometry = selectionService.SelectedObjects
             .OfType<GeometryObject>()
             .ToList();
+        
+        isSyncsWithSelectionService = false;
+    }
+
+    private void HandlePropertyChange(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName == nameof(SelectedGeometry) && !isSyncsWithSelectionService)
+        {
+            selectionService.Select(SelectedGeometry.ToArray());
+        }
     }
 
     private async void AddNewImage()
     {
         await mediator.Send(new AddNewImageCommand(), CancellationToken.None);
-    }
-
-    private void HandleGeometrySelection()
-    {
-        selectionService.Select(SelectedGeometry.ToArray());
     }
 }

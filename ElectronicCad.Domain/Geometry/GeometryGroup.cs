@@ -9,7 +9,7 @@ namespace ElectronicCad.Domain.Geometry;
 public class GeometryGroup : ContentGeometry, IGeometryContainer
 {
     /// <inheritdoc />
-    public override string Name { get; init; } = "Group";
+    public override string Name { get; internal set; } = "Group";
     
     /// <inheritdoc />
     public IEnumerable<GeometryObject> Children => children;

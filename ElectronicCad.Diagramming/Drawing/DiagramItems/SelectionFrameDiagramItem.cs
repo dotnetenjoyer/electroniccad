@@ -20,7 +20,7 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
     public override bool IsAuxiliary => true;
     
     /// <inhertidoc/>
-    public override bool IsVisible => SelectedItems.Any();
+    public override bool IsVisible => SelectedItems != null && SelectedItems.Any();
 
     private IEnumerable<GeometryObject> SelectedItems => diagram.SelectedItems;
 

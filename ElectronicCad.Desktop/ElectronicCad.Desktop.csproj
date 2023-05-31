@@ -70,6 +70,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Infrastructure\Behaviors\" />
       <Folder Include="Views\Diagrams\" />
     </ItemGroup>
 

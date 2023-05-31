@@ -13,7 +13,7 @@
     <Grid>
         <local:Diagram 
             x:Name="Diagram" 
-            SelectedItems="{Binding SelectedGeometry}"
+            SelectedItems="{Binding SelectedGeometry, Mode=TwoWay}"
             GeometryDiagram="{Binding Diagram.GeometryDiagram}">
 
             <interaction:Interaction.Triggers>

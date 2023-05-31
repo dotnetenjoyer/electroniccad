@@ -10,17 +10,29 @@ public abstract class Diagram : DomainObservableObject
     /// <summary>
     /// Diagram id.
     /// </summary>
-    public Guid Id { get; init; }
+    public Guid Id { get; internal set; }
 
     /// <summary>
     /// Diagram name.
     /// </summary>
-    public string Name { get; }
+    public string Name { get; internal set; }
+
+    /// <summary>
+    /// Date of diagram creation.
+    /// </summary>
+    public DateTime CreatedAt { get; internal set; }
 
     /// <summary>
     /// Geometry diagram.
     /// </summary>
-    public Geometry.Diagram GeometryDiagram { get; }
+    public Geometry.Diagram GeometryDiagram { get; init; }
+
+    /// <summary>
+    /// Empty constructor.
+    /// </summary>
+    internal Diagram()
+    {
+    }
 
     /// <summary>
     /// Constructor.
@@ -31,6 +43,7 @@ public abstract class Diagram : DomainObservableObject
     {
         Id = Guid.NewGuid();
         Name = name;
+        CreatedAt = DateTime.Now;
         GeometryDiagram = geometryDiagram;
     }
 }

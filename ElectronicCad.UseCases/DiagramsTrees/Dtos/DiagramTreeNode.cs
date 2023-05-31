@@ -18,11 +18,6 @@ public abstract class TreeNode
     public bool IsExpanded { get; set; } = true;
 
     /// <summary>
-    /// Indicates if current node selected.
-    /// </summary>
-    public bool IsSelected { get; set; }
-
-    /// <summary>
     /// Related diagram node.
     /// </summary>
     public object NodeObject { get; init; }
@@ -39,6 +34,19 @@ public abstract class TreeNode
     public TreeNode(object nodeObject)
     {
         NodeObject = nodeObject;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        /// Hack: allow updates selected nodes
+        /// Todo: figure out why TreeViewIte.Header not updates.
+        if (obj is TreeNode anotherNode)
+        {
+            return Name == anotherNode.Name && IsExpanded == anotherNode.IsExpanded 
+                && NodeObject == anotherNode.NodeObject;
+        } 
+
+        return base.Equals(obj);
     }
 }
 

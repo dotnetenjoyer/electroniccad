@@ -436,7 +436,8 @@ namespace ElectronicCad.Diagramming
                 nameof(SelectedItems),
                 typeof(IEnumerable<GeometryObject>),
                 typeof(Diagram),
-                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HandleSelectedItemsChange));
+                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), 
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HandleSelectedItemsChange));
 
         /// <summary>
         /// Handle diagram selected items change.
@@ -448,7 +449,7 @@ namespace ElectronicCad.Diagramming
             var diagram = (Diagram)dependencyObject;
 
             var selectedItems = (IEnumerable<GeometryObject>)eventArgs.NewValue;
-            if (selectedItems.Any() && diagram.DiagramMode != DiagramMode.Selection)
+            if (selectedItems != null && selectedItems.Any() && diagram.DiagramMode != DiagramMode.Selection)
             {
                 diagram.DiagramMode = DiagramMode.Selection;
             }
