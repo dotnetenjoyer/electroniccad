@@ -1,4 +1,7 @@
 ﻿using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Domain.Geometry.Extensions;
+using ElectronicCad.Domain.Geometry.Utils;
+using ElectronicCad.Infrastructure.Abstractions.Services;
 using Microsoft.Toolkit.Mvvm.Input;
 using WorkspaceDiagram = ElectronicCad.Domain.Workspace.Diagram;
 
@@ -9,6 +12,17 @@ namespace ElectronicCad.MVVM.ViewModels.Common;
 /// </summary>
 public class DiagramsContextMenuFactory
 {
+    private readonly ISelectionService selectionService;
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="selectionService">Selection service.</param>
+    public DiagramsContextMenuFactory(ISelectionService selectionService)
+    {
+        this.selectionService = selectionService;
+    }
+
     /// <summary>
     /// Creates context menu for the specified objects.
     /// </summary>
@@ -30,40 +44,70 @@ public class DiagramsContextMenuFactory
             .OfType<GeometryObject>()
             .ToList();
         
-        if (geometryObjects.Count != objects.Count())
+        if (geometryObjects != null && geometryObjects.Any() &&  geometryObjects.Count != objects.Count())
         {
             return commands;
         }
 
         commands.Add(new ContextMenuCommand("Clone", new RelayCommand(() => 
-            CloneGeometryObject(geometryObjects))));
+            CloneGeometry(geometryObjects!))));
 
         commands.Add(new ContextMenuCommand("Remove", new RelayCommand(() => 
-            RemoveGeometryObjects(geometryObjects))));
+            RemoveGeometry(geometryObjects!))));
 
-        commands.Add(new ContextMenuCommand("Group", new RelayCommand(() =>
-        {
-            var diagram = geometryObjects.First().Diagram;
-            var geometry = diagram.ActiveLayer.Children.ToList();
-            diagram.CreateGroup(geometry);
-        })));
+        commands.Add(new ContextMenuCommand("Group",
+            new RelayCommand(GroupGeometry, CanGroupGeometry)));
 
         return commands;
 
-        void CloneGeometryObject(IEnumerable<GeometryObject> geometryObjects)
+        void CloneGeometry(IEnumerable<GeometryObject> geometryObjects)
         {
+            geometryObjects = GeometryUtils.FilterNestingGeometry(geometryObjects);
             foreach (var geometryObject in geometryObjects)
             {
                 geometryObject.Diagram?.DuplicateGeometry(geometryObject);
             }
         }
 
-        void RemoveGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
+        void RemoveGeometry(IEnumerable<GeometryObject> geometryObjects)
         {
             foreach (var diagramGeometryObjects in geometryObjects.GroupBy(x => x.Diagram))
             {
                 diagramGeometryObjects.Key!.RemoveGeometry(diagramGeometryObjects);
             }
+
+            var removedSelectedItems = selectionService.SelectedObjects
+                .Where(selected => geometryObjects.Contains(selected));
+
+            if (removedSelectedItems.Any())
+            {
+                var newSelectedItems = selectionService.SelectedObjects.Except(removedSelectedItems);
+                selectionService.Select(newSelectedItems);
+            }
+
+        }
+    
+        void GroupGeometry()
+        {
+            var diagram = geometryObjects!.First().Diagram;
+            if (diagram == null)
+            {
+                return;
+            }
+
+            diagram.CreateGroup(geometryObjects!);
+        }
+
+        bool CanGroupGeometry()
+        {
+            var diagram = geometryObjects!.First().Diagram;
+            if (diagram == null)
+            {
+                return false;
+            }
+            
+            var validationResult = diagram!.CanCreateGroup(geometryObjects!);
+            return validationResult.IsSuccessed;
         }
     }
 

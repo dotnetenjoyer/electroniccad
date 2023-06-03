@@ -24,4 +24,20 @@ public static class GeometryContainerExtensions
     {
         container.RemoveGeometry(new[] { geometryObject });
     }
+
+    /// <summary>
+    /// Indicates if geometry container contains geometry object (recursively). 
+    /// </summary>
+    /// <param name="container">Geometry object container.</param>
+    /// <param name="geometryObject">Target geometry object.</param>
+    /// <returns>True if contains geometry object.</returns>
+    public static bool Contains(this IGeometryContainer container, GeometryObject geometryObject)
+    {
+        var containers = container.Children
+            .OfType<IGeometryContainer>()
+            .ToList();
+            
+        return container.Children.Contains(geometryObject) 
+            || containers.Any(container => container.Contains(geometryObject));
+    }
 }

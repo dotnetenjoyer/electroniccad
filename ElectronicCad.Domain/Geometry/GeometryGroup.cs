@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.Domain.Geometry.Utils;
 
 namespace ElectronicCad.Domain.Geometry;
@@ -10,17 +11,17 @@ public class GeometryGroup : ContentGeometry, IGeometryContainer
 {
     /// <inheritdoc />
     public override string Name { get; internal set; } = "Group";
-    
+
     /// <inheritdoc />
     public IEnumerable<GeometryObject> Children => children;
 
     private readonly List<GeometryObject> children = new();
 
     /// <inheritdoc />
-    public override Layer? Layer 
-    { 
+    public override Layer? Layer
+    {
         get => layer;
-        internal set 
+        internal set
         {
             layer = value;
 
@@ -40,6 +41,19 @@ public class GeometryGroup : ContentGeometry, IGeometryContainer
     public GeometryGroup(IEnumerable<GeometryObject> geometryObjects)
     {
         AddGeometry(geometryObjects);
+    }
+
+    /// <summary>
+    /// Clone constructor
+    /// </summary>
+    /// <param name="cloneSource">Source to clone.</param>
+    public GeometryGroup(GeometryGroup cloneSource) : base(cloneSource)
+    {
+        var clonnedChildren = cloneSource.Children
+            .Select(child => child.Clone())
+            .ToList();
+
+        AddGeometry(clonnedChildren);
     }
 
     /// <inheritdoc />

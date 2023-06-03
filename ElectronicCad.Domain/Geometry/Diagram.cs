@@ -162,7 +162,8 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
         }
 
         var groupedGeometryObjects = geometryObjects
-            .Where(x => x.Group != null);
+            .Where(x => x.Group != null)
+            .ToList();
 
         foreach (var geometryObjectsByGroup in groupedGeometryObjects.GroupBy(g => g.Group))
         {
@@ -170,7 +171,8 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
         }
 
         var layerGeometryObjects = geometryObjects
-            .Except(groupedGeometryObjects);
+            .Except(groupedGeometryObjects)
+            .ToList();
 
         foreach (var geometryObjectsByLayer in layerGeometryObjects.GroupBy(g => g.Layer))
         {
@@ -184,25 +186,15 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
     /// <param name="geometry">Geometry object to clone.</param>
     public void DuplicateGeometry(GeometryObject geometryObject)
     {
-        if (geometryObject.Group != null)
+        var clone = geometryObject.Clone();
+        
+        if (geometryObject.Layer != null)
         {
-            var clone = CreateClone();
-            geometryObject.Group.AddGeometry(clone);
+            geometryObject.Layer.AddGeometry(clone);
         }
-
-        GeometryObject CreateClone()
+        else if (geometryObject.Group != null)
         {
-            var geometryType = geometryObject.GetType();
-
-            var cloneConstructor = geometryType.GetConstructors()
-                .First(constructor =>
-                {
-                    var parameters = constructor.GetParameters();
-                    return parameters.First().ParameterType == geometryType && parameters.Count() == 1;
-                });
-
-            var clone = (GeometryObject)cloneConstructor.Invoke(new object[] { geometryObject });
-            return clone;
+            geometryObject.Group.AddGeometry(clone);
         }
     }
 
