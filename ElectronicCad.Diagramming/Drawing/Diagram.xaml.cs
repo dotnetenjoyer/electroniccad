@@ -495,14 +495,6 @@ namespace ElectronicCad.Diagramming
                 FocusItem.HandleDiagramMouseDown(mouseParameters);
                 
                 InteractingItem = FocusItem;
-                if (FocusItem is GeometryObjectDiagramItem geometryObjectDiagramItem)
-                {
-                    var selectedGeometryObjects = new[] { geometryObjectDiagramItem.GeometryObject };
-                    SelectedItems = selectedGeometryObjects;
-
-                    var eventArgs = new RoutedEventArgs(SelectedItemsChangedEvent, this); 
-                    RaiseEvent(eventArgs);
-                }
             }
         }
 
