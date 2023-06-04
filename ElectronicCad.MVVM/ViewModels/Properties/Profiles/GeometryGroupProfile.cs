@@ -1,4 +1,5 @@
 ﻿using ElectronicCad.MVVM.Properties.Configuration;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Align;
 using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Profiles;
@@ -13,6 +14,7 @@ internal class GeometryGroupProfile : PropertyObjectProfile
     /// </summary>
     public GeometryGroupProfile()
     {
-        CreateConfiguration<GeometryGroupPropertiesProxy>();
+        CreateConfiguration<GeometryGroupPropertiesProxy>()
+            .HasCustomSection<AlignCustomSection>();
     }
 }

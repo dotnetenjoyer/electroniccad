@@ -5,6 +5,7 @@ using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Align;
 
 namespace ElectronicCad.MVVM.Properties.Implementation.CustomSections;
 
@@ -20,6 +21,7 @@ public class CustomSectionFactoriesFactory : ICustomSectionFactoriesFactory
         [typeof(TypographyCustomSection)] = typeof(TypographyCustomSectionFactory),
         [typeof(LayoutGridCustomSection)] = typeof(LayoutGridCustomSectionFactory),
         [typeof(SizeCustomSection)] = typeof(SizeCustomSectionFactory), 
+        [typeof(AlignCustomSection)] = typeof(AlignCustomSectionFactory), 
     };
 
     private readonly IServiceProvider serviceProvider;

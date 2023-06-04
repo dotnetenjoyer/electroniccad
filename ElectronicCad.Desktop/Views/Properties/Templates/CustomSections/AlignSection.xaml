@@ -1,0 +1,66 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI">
+
+    <DataTemplate x:Key="AlignSection">
+        <Grid Width="220">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+
+            <Button 
+                    Grid.Column="0"
+                    Style="{StaticResource IconButton}"
+                    Command="{Binding AlignStartCommand}">
+                <components:Icon Path="{StaticResource AlignStart}"/>
+            </Button>
+
+            <Button 
+                    Grid.Column="1"
+                    Style="{StaticResource IconButton}"
+                    Command="{Binding AlignCenterCommand}">
+                <components:Icon 
+                        Path="{StaticResource AlignCenter}"/>
+            </Button>
+
+            <Button 
+                    Grid.Column="2"
+                    Style="{StaticResource IconButton}"
+                    Command="{Binding AlignEndCommand}">
+                <components:Icon Path="{StaticResource AlignEnd}"/>
+            </Button>
+
+            <Button 
+                    Grid.Column="3"
+                    Style="{StaticResource IconButton}"
+                    Command="{Binding AlignTopCommand}">
+                <components:Icon Path="{StaticResource AlignTop}"/>
+            </Button>
+
+            <Button 
+                    Grid.Column="4"
+                    Style="{StaticResource IconButton}"
+                    Command="{Binding AlignMiddleCommand}">
+                <components:Icon Path="{StaticResource AlignMiddle}"/>
+            </Button>
+
+            <Button 
+                    Grid.Column="5"
+                    Style="{StaticResource IconButton}"
+                    Command="{Binding AlignBottomCommand}">
+                <components:Icon Path="{StaticResource AlignBottom}"/>
+            </Button>
+        </Grid>
+    </DataTemplate>
+    
+</ResourceDictionary>
