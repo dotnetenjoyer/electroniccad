@@ -15,10 +15,5 @@ namespace ElectronicCad.Diagramming
         {
             InitializeComponent();
         }
-
-        private void HandleToolbarModeChanged(object? sender, DiagramMode newMode)
-        {
-            Diagram.SetDiagramMode(newMode);
-        }
     }
 }

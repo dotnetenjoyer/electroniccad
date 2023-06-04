@@ -7,7 +7,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
 /// <summary>
 /// Typography custom section proxy.
 /// </summary>
-public interface ITypographyProxy : IProxy
+public interface ITypographyProxy : IPropertiesProxy
 {
     /// <summary>
     /// Text content.

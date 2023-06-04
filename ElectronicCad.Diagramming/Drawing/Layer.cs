@@ -2,58 +2,100 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ElectronicCad.Diagramming.Drawing.Items;
+using DomainLayer = ElectronicCad.Domain.Geometry.Layer;
 
 namespace ElectronicCad.Diagramming.Drawing;
 
 /// <summary>
 /// Diagram layer.
 /// </summary>
-internal class Layer
+internal class Layer : IDiagramItemContainer
 {
     /// <summary>
     /// Layer id.
     /// </summary>
-    public Guid Id { get; }
+    public Guid Id { get; init; }
 
     /// <summary>
-    /// Layer index.
+    /// Related diagram.
     /// </summary>
-    public int Index { get; }
+    public Diagram Diagram { get; init; }
 
     /// <summary>
-    /// Diagram items.
+    /// Layer z index.
     /// </summary>
-    public IEnumerable<DiagramItem> DiagramItems => _diagramItems;
+    public int ZIndex { get; }
 
-    private readonly List<DiagramItem> _diagramItems = new();
+    /// <summary>
+    /// Indicate if the layer is system.
+    /// </summary>
+    public bool IsSystem => DomainLayer == null;
+
+    /// <summary>
+    /// Related domain layer, can be null.
+    /// </summary>
+    public DomainLayer? DomainLayer { get; private set; }
+
+    /// <inheritdoc />
+    public IEnumerable<DiagramItem> Children => children;
+
+    private readonly List<DiagramItem> children = new();
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public Layer(int index)
+    /// <param name="diagram">Related diagram.</param>
+    /// <param name="index">Layer index.</param>
+    public Layer(Diagram diagram, int index)
     {
         Id = Guid.NewGuid();
-        Index = index;
+        Diagram = diagram;
+        ZIndex = index;
     }
 
     /// <summary>
-    /// Add diagram item.
+    /// Constructor.
     /// </summary>
-    /// <param name="item">Diagram item.</param>
-    public void AddItem(DiagramItem item)
+    /// <param name="diagram">Related diagram.</param>
+    /// <param name="index">Layer index.</param>
+    /// <param name="domainLayer">Domain layer.</param>
+    public Layer(Diagram diagram, int index, DomainLayer domainLayer) : this(diagram, index)
     {
-        item.Layer = this;
-        item.ZIndex = _diagramItems.Any() ? _diagramItems.Max(x => x.ZIndex) + 1 : 0;
-        _diagramItems.Add(item);
+        DomainLayer = domainLayer;
     }
 
-    /// <summary>
-    /// Remove diagram item.
-    /// </summary>
-    /// <param name="item">Diagram item to remove.</param>
-    public void RemoveItem(DiagramItem item)
+    /// <inheritdoc />
+    public void AddChildren(IEnumerable<DiagramItem> children)
     {
-        item.Layer = null;
-        _diagramItems.Remove(item);
+        foreach (var child in children)
+        {
+            child.ZIndex = GetMaxUserItemsZIndex() + 1;
+            child.Layer = this;
+            this.children.Add(child);
+        }
+    }
+
+    private int GetMaxUserItemsZIndex()
+    {
+        var userDiagramItems = children
+            .Where(x => !x.IsAuxiliary)
+            .ToList();
+
+        return userDiagramItems.Any()
+            ? userDiagramItems.Max(x => x.ZIndex)
+            : 0;
+    }
+
+    /// <inheritdoc />
+    public void RemoveChildren(IEnumerable<DiagramItem> children)
+    {
+        foreach (var child in children)
+        {
+            var isRemoveSuccessed = this.children.Remove(child);
+            if (isRemoveSuccessed)
+            {
+                child.Layer = null;
+            }
+        }
     }
 }

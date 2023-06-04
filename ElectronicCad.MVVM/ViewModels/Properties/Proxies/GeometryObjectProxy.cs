@@ -1,5 +1,4 @@
 ﻿using ElectronicCad.Domain.Geometry;
-using ElectronicCad.MVVM.Properties.Abstractions;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
@@ -7,7 +6,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Geometry object property proxy.
 /// </summary>
-public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometryObject>, IPropertyModel, ITransformationProxy 
+public abstract class GeometryObjectProxy<TGeometryObject> : VersionablePropertiesProxy<TGeometryObject>, ITransformationProxy 
     where TGeometryObject : GeometryObject
 {
     /// <inheritdoc />
@@ -31,7 +30,7 @@ public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometry
     }
 
     /// <inheritdoc />
-    public override void UpdateFromEntity()
+    public override void UpdateFromSource()
     {
         CenterX = Source.BoundingBox.Center.X; 
         CenterY = Source.BoundingBox.Center.Y;
@@ -40,18 +39,16 @@ public abstract class GeometryObjectProxy<TGeometryObject> : BaseProxy<TGeometry
     }
     
     /// <inheritdoc />
-    public sealed override void UpdateEntity()
+    public sealed override void UpdateSource()
     {
         using var scope = Source.StartDiagramModifcation();
         Source.StartModification();
-        UpdateEntityInternal();
+        UpdateSourceInternal();
         Source.CompleteModification();
     }
 
-    /// <summary>
-    /// Updates the state of the source entity.
-    /// </summary>
-    protected virtual void UpdateEntityInternal()
+    /// <inheritdoc />
+    protected override void UpdateSourceInternal()
     {
         Source.SetCenterAndSize(CenterX, CenterY, Width, Height);
     }

@@ -14,10 +14,13 @@ using ElectronicCad.Diagramming.Drawing;
 using ElectronicCad.Diagramming.Drawing.Items;
 using ElectronicCad.Diagramming.Drawing.Modes;
 using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
-
+using DiagramLayer = ElectronicCad.Diagramming.Drawing.Layer;
+using DomainLayer = ElectronicCad.Domain.Geometry.Layer;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.Extensions;
 
 namespace ElectronicCad.Diagramming
 {
@@ -26,46 +29,6 @@ namespace ElectronicCad.Diagramming
     /// </summary>
     public partial class Diagram : UserControl, IDisposable
     {
-        #region Layers
-
-        ///// <summary>
-        ///// Diagram layers.
-        ///// </summary>
-        //public IEnumerable<Layer> Layers => _layers;
-
-        //private readonly List<Layer> _layers = new();
-
-        ///// <summary>
-        ///// Active diagram layer.
-        ///// </summary>
-        //public Layer ActiveLayer { get; private set; }
-
-        ///// <summary>
-        ///// Add a new diagram layer.
-        ///// </summary>
-        ///// <returns>Created layer.</returns>
-        //public Layer AddLayer()
-        //{
-        //    int layerIndex = _layers.Any() ? _layers.Max(layer => layer.Index) + 1 : 0;
-        //    var layer = new Layer(layerIndex);
-        //    layer.ItemsChanged += HandleItemsChanged;
-        //    _layers!.Add(layer);
-        //    ActiveLayer = layer;
-        //    return layer;
-        //}
-
-        ///// <summary>
-        ///// Remove specified layer.
-        ///// </summary>
-        ///// <param name="layer">Layer to remove.</param>
-        //public void RemoveLayer(Layer layer)
-        //{
-        //    layer.ItemsChanged -= HandleItemsChanged;
-        //    _layers.Remove(layer);
-        //}
-
-        #endregion
-
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -81,107 +44,143 @@ namespace ElectronicCad.Diagramming
             MouseDown += HandleMouseDown;
             MouseWheel += HandleMouseWheel;
 
+            SystemLayer = new DiagramLayer(this, int.MaxValue);
+            layers.Add(SystemLayer);
+
+            var selectionFrame = new SelectionFrameDiagramItem();
+            AddDiagramItem(selectionFrame, SystemLayer);
+
+            var selectionArea = new SelectionAreaDiagramItem();
+            AddDiagramItem(selectionArea, SystemLayer);
+
             SetDiagramMode(DiagramMode.Selection);
         }
 
+        internal readonly static Cursor DefaultCursor = Cursors.Arrow;
+
         #region GeometryDiagram
+
+        /// <inheritdoc cref="GeometryDiagramProperty"/>
+        public GeometryDiagram GeometryDiagram
+        {
+            get => (GeometryDiagram)GetValue(GeometryDiagramProperty);
+            set => SetValue(GeometryDiagramProperty, value);
+        }
 
         /// <summary>
         /// Related geometry diagram.
         /// </summary>
-        public GeometryDiagram GeometryDiagram
-        {
-            get => (GeometryDiagram)GetValue(DomainDiagramProperty);
-            set => SetValue(DomainDiagramProperty, value);
-        }
-
-        private static readonly DependencyProperty DomainDiagramProperty = DependencyProperty
+        public static readonly DependencyProperty GeometryDiagramProperty = DependencyProperty
             .Register(nameof(GeometryDiagram),
                 typeof(GeometryDiagram),
                 typeof(Diagram),
-                new PropertyMetadata(DomainDiagramChanged));
+                new PropertyMetadata(HandleGeometryDiagramChange));
 
-        private static void DomainDiagramChanged(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
+        private static void HandleGeometryDiagramChange(DependencyObject obj, DependencyPropertyChangedEventArgs eventArgs)
         {
-            var diagram = (Diagram)obj;
-            diagram.InitializeGeometryDiagram((GeometryDiagram)eventArgs.NewValue);
+            var diagramControl = (Diagram)obj;
+
+            diagramControl.Unsubscribe((GeometryDiagram)eventArgs.OldValue);
+            diagramControl.Subscribe();
+            diagramControl.CalculateInitialOffsets();
+            diagramControl.ReplicateGeometryFromDomainDiagram();
+            diagramControl.Redraw();
         }
 
-        private void InitializeGeometryDiagram(GeometryDiagram geometryDiagram)
+        private void Subscribe()
         {
-            DeinitializeGeometryDiagram();
+            GeometryDiagram.LayerAdded += HandleLayerAdd;
+            GeometryDiagram.LayerRemoved += HandleLayerRemove;
 
-            GeometryDiagram = geometryDiagram;
-            GeometryDiagram.GeometryAdded += HandleDiagramGeometryAdded;
-            GeometryDiagram.GeometryModified += HandleGeometryModified;
-            GeometryDiagram.GeometryRemoved += HandleDiagramGeometryRemoved;
+            GeometryDiagram.GeometryAdded += HandleGeometryAdd;
+            GeometryDiagram.GeometryModified += HandleGeometryModify;
+            GeometryDiagram.GeometryRemoved += HandleGeometryRemove;
+
             GeometryDiagram.VersionChanged += HandleVersionChange;
-
-            CalculateInitialOffsets();
-            Redraw();
         }
 
-        private void DeinitializeGeometryDiagram()
+        private void Unsubscribe(GeometryDiagram geometryDiagram)
         {
-            if (GeometryDiagram == null)
+            if (geometryDiagram == null)
             {
                 return;
             }
 
-            GeometryDiagram.GeometryAdded -= HandleDiagramGeometryAdded;
-            GeometryDiagram.GeometryModified -= HandleGeometryModified;
-            GeometryDiagram.GeometryRemoved -= HandleDiagramGeometryRemoved;
-            GeometryDiagram.VersionChanged -= HandleVersionChange;
+            geometryDiagram.LayerAdded -= HandleLayerAdd;
+            geometryDiagram.LayerRemoved -= HandleLayerRemove;
+
+            geometryDiagram.GeometryAdded -= HandleGeometryAdd;
+            geometryDiagram.GeometryModified -= HandleGeometryModify;
+            geometryDiagram.GeometryRemoved -= HandleGeometryRemove;
+
+            geometryDiagram.VersionChanged -= HandleVersionChange;
         }
 
-        private void HandleDiagramGeometryAdded(object? sender, GeometryObject geometryObject)
+        private void HandleLayerAdd(object? sender, DomainLayer domainLayer)
         {
-            var diagramItem = DiagramItemsFactory.Create(geometryObject);
-            diagramItem.ZIndex = GetNextZIndex();
-            AddDiagramItem(diagramItem);
-            Redraw();
+            AddLayer(domainLayer);
         }
 
-        private int GetNextZIndex()
+        private void HandleLayerRemove(object? sender, DomainLayer layer)
         {
-            var userDiagramItems = diagramItems
-                .Where(x => !x.IsAuxiliary)
-                .ToList();
+            var layerToRemove = layers
+                .FirstOrDefault(x => x.DomainLayer == layer);
 
-            var maxZIndex = userDiagramItems.Any() 
-                ? userDiagramItems.Max(x => x.ZIndex) 
-                : 0;
-
-
-            return maxZIndex + 1;
-        }
-        
-        private void HandleGeometryModified(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
-        {
-            var modifiedItems = diagramItems
-                .OfType<GeometryObjectDiagramItem>()
-                .Where(item => modifiedGeometryObjects.Contains(item.GeometryObject))
-                .ToList();
-
-            foreach (var item in modifiedItems)
+            if (layerToRemove != null)
             {
-                item.UpdateViewState();
+                RemoveLayer(layerToRemove);
             }
 
             Redraw();
         }
 
-        private void HandleDiagramGeometryRemoved(object? sender, GeometryObject geometryObject)
+        private void HandleGeometryAdd(object? sender, IEnumerable<GeometryObject> geometryObjects)
         {
-            var diagramItem = diagramItems
-                .OfType<GeometryObjectDiagramItem>()
-                .FirstOrDefault(item => item.GeometryObject == geometryObject);
-
-            if (diagramItem != null)
+            foreach (var geometryObject in geometryObjects)
             {
-                diagramItems.Remove(diagramItem);
-                Redraw();
+                var diagramItem = GeometryObjectDiagramItemsFactory.Create(geometryObject);
+               
+                if (geometryObject.Group == null)
+                {
+                    var diagramLayer = Layers.First(l => l.DomainLayer == geometryObject.Layer);
+                    diagramLayer.AddChild(diagramItem);
+                }
+                else
+                {
+                    var container = (IDiagramItemContainer)FindRelatedDiagramItem(geometryObject.Group);
+                    container.AddChild(diagramItem);
+                }
             }
+
+            Redraw();
+        }
+
+        private void HandleGeometryRemove(object? sender, IEnumerable<GeometryObject> geometryObjects)
+        {
+            foreach (var geometryObject in geometryObjects)
+            {
+                var item = FindRelatedDiagramItem(geometryObject);
+                if (item == null)
+                {
+                    continue;
+                }
+            
+                if (item.Group != null)
+                {
+                    item.Group.RemoveChild(item);
+                }
+                else if (item.Layer != null)
+                {
+                    item.Layer.RemoveChild(item);
+                }
+            }
+
+            Redraw();
+        }
+
+        private void HandleGeometryModify(object? sender, IEnumerable<GeometryObject> modifiedGeometryObjects)
+        {
+            Redraw();
         }
 
         private void HandleVersionChange(object? sender, EventArgs eventArgs)
@@ -195,15 +194,154 @@ namespace ElectronicCad.Diagramming
             OffsetY = (float)(SkiaCanvas.ActualHeight - GeometryDiagram.Size.Height) / 2;
         }
 
+        private void ReplicateGeometryFromDomainDiagram()
+        {
+            // Clear odl geometry.
+            layers.RemoveRange(0, layers.Count - 1);
+
+            foreach (var domainLayer in GeometryDiagram.Layers)
+            {
+                var diagramLayer = AddLayer(domainLayer);
+
+                foreach (var geometry in domainLayer.Children)
+                {
+                    var diagramItem = GeometryObjectDiagramItemsFactory.Create(geometry);
+                    AddDiagramItem(diagramItem, diagramLayer);
+                }
+            }
+        }
+
+        #endregion
+
+        #region Layers
+
+        /// <summary>
+        /// System level is used for system mode tools.
+        /// </summary>
+        internal DiagramLayer SystemLayer { get; private set; }
+
+        /// <summary>
+        /// Layers
+        /// </summary>
+        internal IEnumerable<DiagramLayer> Layers => layers;
+
+        private readonly List<DiagramLayer> layers = new();
+
+        /// <summary>
+        /// Add a new diagram layer.
+        /// </summary>
+        /// <returns>Created layer.</returns>
+        internal DiagramLayer AddLayer(DomainLayer? domainLayer = null)
+        {
+            var index = GetMaxLayerIndex() + 1;
+            var layer = new DiagramLayer(this, index, domainLayer);
+            
+            // insert new layer before system layer.
+            layers.Insert(layers.Count - 1, layer);
+            
+            return layer;
+        }
+        
+        private int GetMaxLayerIndex()
+        {
+            var userLayers = layers.Where(layer => !layer.IsSystem);
+            return userLayers.Any()
+                ? userLayers.Max(l => l.ZIndex)
+                : 0;
+        }
+
+        /// <summary>
+        /// Remove specified layer.
+        /// </summary>
+        /// <param name="layer">Layer to remove.</param>
+        internal void RemoveLayer(DiagramLayer layer)
+        {
+            layers.Remove(layer);
+        }
+
+        #endregion
+
+        #region DiagramItems 
+
+        /// <summary>
+        /// All diagram item.
+        /// </summary>
+        internal IEnumerable<DiagramItem> DiagramItems => Layers
+            .SelectMany(layer => layer.Children);
+
+        /// <summary>
+        /// The focused diagram item.
+        /// </summary>
+        internal DiagramItem? FocusItem { get; private set; }
+
+        /// <summary>
+        /// The diagram item that is now interacted.
+        /// </summary>
+        internal DiagramItem? InteractingItem { get; private set; }
+
+        /// <summary>
+        /// Adds the diagram item to the layer
+        /// </summary>
+        /// <param name="diagramItem">Diagram item to add.</param>
+        /// <param name="layer">Layer when the diagram item will be added.</param>
+        internal void AddDiagramItem(DiagramItem diagramItem, DiagramLayer layer)
+        {
+            layer.AddChild(diagramItem);
+        }
+
+        private GeometryObjectDiagramItem? FindRelatedDiagramItem(GeometryObject geometryObject)
+        {
+            foreach (var item in GetFlatChildList())
+            {
+                if (item is GeometryObjectDiagramItem geometryDiagramItem 
+                    && geometryDiagramItem.GeometryObject == geometryObject)
+                {
+                    return geometryDiagramItem;
+                }
+            }
+
+            return null;
+        }
+
+        private IEnumerable<DiagramItem> GetFlatChildList()
+        {
+            foreach (var layer in Layers)
+            {
+                foreach (var item in layer.GetFlatChildList())
+                {
+                    yield return item;
+                }
+            }
+        }
+
         #endregion
 
         #region Diagram mode
 
-        private DiagramMode currentMode;
+        /// <inheritdoc cref="DiagramModeProperty"/>
+        public DiagramMode DiagramMode
+        {
+            get => (DiagramMode)GetValue(DiagramModeProperty);
+            set => SetValue(DiagramModeProperty, value);
+        }
 
-        private IDiagramMode diagramMode;
+        /// <summary>
+        /// Indicates which diagram mode is currently active.
+        /// </summary>
+        public static readonly DependencyProperty DiagramModeProperty = 
+            DependencyProperty.Register(
+                nameof(DiagramMode),
+                typeof(DiagramMode),
+                typeof(Diagram),
+                new PropertyMetadata(HandleDiagraModeChange));
 
-        public void SetDiagramMode(DiagramMode diagramMode)
+        private static void HandleDiagraModeChange(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs eventArgs)
+        {
+            var diagram = (Diagram)dependencyObject;
+            diagram.SetDiagramMode((DiagramMode)eventArgs.NewValue);
+        }
+
+        private void SetDiagramMode(DiagramMode diagramMode)
         {
             switch (diagramMode)
             {
@@ -227,18 +365,18 @@ namespace ElectronicCad.Diagramming
                     SetDiagramMode(new TextCreationMode());
                     break;
             }
-
-            currentMode = diagramMode;
         }
+
+        private IDiagramMode currentDiagramMode;
 
         private void SetDiagramMode(IDiagramMode diagramMode)
         {
-            if (this.diagramMode != null)
+            if (currentDiagramMode != null)
             {
-                this.diagramMode.Finish();
+                currentDiagramMode.Finish();
             }
 
-            this.diagramMode = diagramMode;
+            currentDiagramMode = diagramMode;
             diagramMode.Initialize(this);
         }
 
@@ -289,30 +427,12 @@ namespace ElectronicCad.Diagramming
             return position;
         }
 
-        /// <summary>
-        /// Collection of all diagram item on the diagram sorted by z index.
-        /// </summary>
-        internal IEnumerable<DiagramItem> DiagramItems => diagramItems;
-
-        private List<DiagramItem> diagramItems = new();
-
-        internal void AddDiagramItem(DiagramItem diagramItem)
+        /// <inheritdoc cref="SelectedItemsProperty" />
+        public IEnumerable<GeometryObject> SelectedItems
         {
-            diagramItems.Add(diagramItem);
-            diagramItems = diagramItems
-                .OrderBy(item => item.ZIndex)
-                .ToList();
+            get => (IEnumerable<GeometryObject>)GetValue(SelectedItemsProperty);
+            set => SetValue(SelectedItemsProperty, value);
         }
-
-        /// <summary>
-        /// Focused diagram item.
-        /// </summary>
-        internal DiagramItem? FocusItem { get; private set; }
-
-        /// <summary>
-        /// Diagram item that is now being interacted.
-        /// </summary>
-        internal DiagramItem? InteractingItem { get; private set; }
 
         /// <summary>
         /// Collection of selected geometry objects.
@@ -322,13 +442,25 @@ namespace ElectronicCad.Diagramming
                 nameof(SelectedItems),
                 typeof(IEnumerable<GeometryObject>),
                 typeof(Diagram),
-                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), 
+                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HandleSelectedItemsChange));
 
-        /// <inheritdoc cref="SelectedItemsProperty" />
-        public IEnumerable<GeometryObject> SelectedItems
+        /// <summary>
+        /// Handle diagram selected items change.
+        /// </summary>
+        /// <param name="dependencyObject">Diagram.</param>
+        /// <param name="eventArgs">Event args.</param>
+        public static void HandleSelectedItemsChange(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs eventArgs)
         {
-            get => (IEnumerable<GeometryObject>)GetValue(SelectedItemsProperty);
-            set => SetValue(SelectedItemsProperty, value);
+            var diagram = (Diagram)dependencyObject;
+
+            var selectedItems = (IEnumerable<GeometryObject>)eventArgs.NewValue;
+            if (selectedItems != null && selectedItems.Any() && diagram.DiagramMode != DiagramMode.Selection)
+            {
+                diagram.DiagramMode = DiagramMode.Selection;
+            }
+            
+            diagram.Redraw();
         }
 
         /// <summary>
@@ -369,14 +501,6 @@ namespace ElectronicCad.Diagramming
                 FocusItem.HandleDiagramMouseDown(mouseParameters);
                 
                 InteractingItem = FocusItem;
-                if (FocusItem is GeometryObjectDiagramItem geometryObjectDiagramItem)
-                {
-                    var selectedGeometryObjects = new[] { geometryObjectDiagramItem.GeometryObject };
-                    SelectedItems = selectedGeometryObjects;
-
-                    var eventArgs = new RoutedEventArgs(SelectedItemsChangedEvent, this); 
-                    RaiseEvent(eventArgs);
-                }
             }
         }
 
@@ -416,6 +540,7 @@ namespace ElectronicCad.Diagramming
             }
             else if (InteractingItem != null)
             {
+                Cursor = InteractingItem.GetCurrentCursor();
                 InteractingItem.RaiseMouseMove(mouseParameters);
             }
             else
@@ -451,22 +576,29 @@ namespace ElectronicCad.Diagramming
 
         private void UpdateFocuItem(MovingMouseParameters mouse)
         {
-            var interactableItems = DiagramItems
+            var visibleItems = DiagramItems
                 .Where(item => item.IsVisible)
                 .Reverse()
                 .ToList();
             
-            foreach (var item in interactableItems)
+            foreach (var item in visibleItems)
             {
                 if (item.HandleDiagramMouseMove(mouse))
                 {
+                    if (FocusItem != item)
+                    {
+                        FocusItem?.RaiseMouseLeave();
+                    }
+
                     FocusItem = item;
+                    Cursor = item.GetCurrentCursor();
                     return;
                 }
             }
 
+            FocusItem?.RaiseMouseLeave();
             FocusItem = null;
-            return;
+            Cursor = DefaultCursor;
         }
 
         private void HandleCanvasPaint(object? sender, SKPaintSurfaceEventArgs eventArgs)
@@ -489,18 +621,20 @@ namespace ElectronicCad.Diagramming
 
             DrawWorkspaceArea(drawingContext);
 
-            var visibleItems = diagramItems
-                .Where(item => item.IsVisible)
-                .ToList();
-
-            foreach (var item in visibleItems)
+            foreach (var layer in layers)
             {
-                item.Draw(drawingContext);
-            }
+                var visibleItems = layer.Children
+                    .Where(item => item.IsVisible);
 
+                foreach (var item in visibleItems)
+                {
+                    item.Draw(drawingContext);
+                }
+            }
+            
             DrawLayoutGrids(drawingContext);
 
-            Redraws.Invoke(this, drawingContext);
+            Redraws?.Invoke(this, drawingContext);
         }
 
         private void DrawWorkspaceArea(SkiaDrawingContext drawingContext)
@@ -550,7 +684,7 @@ namespace ElectronicCad.Diagramming
                 diagramItem.Dispose();
             }
 
-            DeinitializeGeometryDiagram();
+            Unsubscribe(GeometryDiagram);
         }
     }
 }

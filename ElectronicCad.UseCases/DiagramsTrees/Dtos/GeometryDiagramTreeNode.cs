@@ -3,18 +3,19 @@
 namespace ElectronicCad.UseCases.DiagramsTrees.Dtos;
 
 /// <summary>
-/// Represents geometry object in diagram tree.
+/// Represents the geometry object in the diagram tree.
 /// </summary>
 public class GeometryDiagramTreeNode : DiagramTreeNode<GeometryObject>
 {
     /// <inheritdoc />
-    public override string Name => TypedDomainObject.Name;
+    public override string Name => DiagramObject.Name;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="geometryObject">Geometry object.</param>
-    public GeometryDiagramTreeNode(GeometryObject geometryObject) : base(geometryObject)
+    public GeometryDiagramTreeNode(GeometryObject geometryObject, IEnumerable<TreeNode>? nodes = null) : base(geometryObject)
     {
+        Nodes = nodes ?? Array.Empty<TreeNode>();
     }
 }

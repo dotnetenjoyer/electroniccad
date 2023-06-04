@@ -10,12 +10,12 @@ public interface ICustomSectionFactory
     /// </summary>
     /// <param name="proxy">Proxy elemnent.</param>
     /// <returns>True if can create custom section.</returns>
-    bool CanCreate(IProxy proxy);
+    bool CanCreate(IPropertiesProxy proxy);
 
     /// <summary>
     /// Creates custom section.
     /// </summary>
     /// <param name="proxy">Proxy element.</param>
     /// <returns>Custom section.</returns>
-    ICustomSection Create(IProxy proxy);
+    ICustomSection Create(IPropertiesProxy proxy);
 }

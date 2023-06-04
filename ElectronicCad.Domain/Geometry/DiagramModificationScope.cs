@@ -36,7 +36,7 @@ public class DiagramModificationScope : IDisposable
         if (modifiedGeometry.Any())
         {
             CompleteObjectsModification();
-            Diagram.HandleGeometryModification(modifiedGeometry);
+            Diagram.RaiseGeometryModified(modifiedGeometry);
         }
     }
 

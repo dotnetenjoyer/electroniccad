@@ -3,7 +3,7 @@ using SkiaSharp.Views.Desktop;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Domain.Geometry;
 
-namespace ElectronicCad.Diagramming.Drawing.Items;
+namespace ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 
 /// <summary>
 /// The base diagram item that represent item with a content.
@@ -35,11 +35,10 @@ internal abstract class ContentGeometryObjectDiagramItem<TContentGeometry> : Geo
 
         FillPaint = new SKPaint
         {
-            Color = CertainGeometryObject.FillColor.ToSKColor(),
+            Color = GeometryObject.FillColor.ToSKColor(),
             Style = SKPaintStyle.Fill,
         };
     }
-
 
     /// <inheritdoc />
     protected override void DisposeManagedResources()

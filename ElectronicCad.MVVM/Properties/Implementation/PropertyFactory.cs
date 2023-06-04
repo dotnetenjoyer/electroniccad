@@ -14,7 +14,7 @@ public static class PropertyFactory
     /// <param name="configuration">Property configuration.</param>
     /// <param name="proxy">Source object.</param>
     /// <returns></returns>
-    public static IProperty Create(IPropertyConfiguration configuration, IProxy proxy)
+    public static IProperty Create(IPropertyConfiguration configuration, IPropertiesProxy proxy)
     {
         if (configuration is PrimitivePropertyConfiguration primitiveConfiguration)
         {
@@ -24,7 +24,7 @@ public static class PropertyFactory
         throw new NotSupportedException();
     }
 
-    private static IProperty CreatePrimitiveProperty(PrimitivePropertyConfiguration primitiveConfiguration, IProxy proxy)
+    private static IProperty CreatePrimitiveProperty(PrimitivePropertyConfiguration primitiveConfiguration, IPropertiesProxy proxy)
     {
         var propertyType = primitiveConfiguration.SourceProperty.PropertyType;
         var propertyName = primitiveConfiguration.SourceProperty.Name;

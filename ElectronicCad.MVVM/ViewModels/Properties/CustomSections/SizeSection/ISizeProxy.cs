@@ -6,7 +6,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
 /// <summary>
 /// Proxy for size custom section.
 /// </summary>
-public interface ISizeProxy : IProxy
+public interface ISizeProxy : IPropertiesProxy
 {
     /// <summary>
     /// Size.

@@ -57,6 +57,6 @@ public class TransformationCustomSection : ICustomSection
         transformationProxy.Width = TransformationModel.Width;
         transformationProxy.Height = TransformationModel.Height;
 
-        transformationProxy.UpdateEntity();
+        transformationProxy.UpdateSource();
     }
 }

@@ -7,34 +7,39 @@
     xmlns:converters="clr-namespace:ElectronicCad.Desktop.Infrastructure.Converters" 
     xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI"
     xmlns:diagramTrees="clr-namespace:ElectronicCad.UseCases.DiagramsTrees.Dtos;assembly=ElectronicCad.UseCases"
-    xmlns:behaviours="clr-namespace:ElectronicCad.Desktop.Infrastructure.Behaviors"
     xmlns:interaction="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:viewModels="clr-namespace:ElectronicCad.MVVM.ViewModels.ActivityBar;assembly=ElectronicCad.MVVM"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     Style="{StaticResource TabItem}"
     d:DataContext="{d:DesignInstance Type=viewModels:ProjectDiagramsViewModel}">
 
     <TabItem.Resources>
-
         <converters:DomainObjectIconConverter 
             x:Key="IconConverter"
             ProjectDiagramIconPath="{StaticResource ProjectDiagramIcon}"
+            LayerIconPath="{StaticResource LayerIcon}"
             LineIconPath="{StaticResource LineIcon}"
             EllipseIconPath="{StaticResource ElipseIcon}"
             RectangleIconPath="{StaticResource RectIcon}"
             PenIconPath="{StaticResource PenIcon}"
             TextIconPath="{StaticResource TextIcon}"
             ImageIconPath="{StaticResource ImageIcon}"
+            GroupIconPath="{StaticResource GroupIcon}"
         />
 
-        <HierarchicalDataTemplate DataType="{x:Type diagramTrees:DiagramTreeNode}" ItemsSource="{Binding Nodes}">
+        <Style TargetType="TreeViewItem" BasedOn="{StaticResource MultipleSelectTreeViewItem}">
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+        </Style>
+
+        <HierarchicalDataTemplate 
+            DataType="{x:Type diagramTrees:TreeNode}" 
+            ItemsSource="{Binding Nodes}">
             <Border Padding="8">
                 <StackPanel Orientation="Horizontal">
                     <components:Icon 
                         Margin="0 0 10 0"
                         Width="15" Height="15"
                         Focusable="False"
-                        Path="{Binding DomainObject, Converter={StaticResource IconConverter}}"/>
+                        Path="{Binding NodeObject, Converter={StaticResource IconConverter}}"/>
                     <TextBlock Text="{Binding Name}" />
                 </StackPanel>
             </Border>
@@ -46,20 +51,19 @@
     </TabItem.Header>
 
     <DockPanel>
-        <TreeView ItemsSource="{Binding DiagramTrees.Diagrams}">
-            <interaction:Interaction.Behaviors>
-                <behaviours:BindableSelectedItemBehavior SelectedItem="{Binding SelectedNode, Mode=TwoWay}"/>
-            </interaction:Interaction.Behaviors>
+        <components:MultiSelectTreeView 
+            ItemsSource="{Binding DiagramTrees.Diagrams}"
+            SelectedItems="{Binding SelectedItems, Mode=TwoWay}">
 
-            <TreeView.ContextMenu>
+            <components:MultiSelectTreeView.ContextMenu>
                 <ContextMenu ItemsSource="{Binding ContextMenuCommands}"/>
-            </TreeView.ContextMenu>
-            
+            </components:MultiSelectTreeView.ContextMenu>
+
             <interaction:Interaction.Triggers>
                 <interaction:EventTrigger EventName="ContextMenuOpening">
                     <interaction:InvokeCommandAction Command="{Binding ContextMenuOpeningCommand}"/>
                 </interaction:EventTrigger>
-            </interaction:Interaction.Triggers>
-        </TreeView>
+            </interaction:Interaction.Triggers>            
+        </components:MultiSelectTreeView>
     </DockPanel>
 </TabItem>

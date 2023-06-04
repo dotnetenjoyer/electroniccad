@@ -2,7 +2,7 @@ using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Diagramming.Extensions;
 
-namespace ElectronicCad.Diagramming.Drawing.Items;
+namespace ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 
 /// <summary>
 /// Line diagram item that bind with domain geometry object.
@@ -14,13 +14,15 @@ internal class LineDiagramItem : GeometryObjectDiagramItem<Line>
     /// </summary>
     public LineDiagramItem(Line line) : base(line)
     {
+        UpdateViewState();
     }
 
     /// <inheritdoc/>
     public override void Draw(SkiaDrawingContext context)
     {
-        var firstPoint = CertainGeometryObject.ControlPoints[Line.FirstPointIndex].ToSKPoint();
-        var secondPoint = CertainGeometryObject.ControlPoints[Line.SecondPointIndex].ToSKPoint();
+        var line = GeometryObject;
+        var firstPoint = line.FirstPoint.ToSKPoint();
+        var secondPoint = line.SecondPoint.ToSKPoint();
         context.DrawLine(firstPoint, secondPoint, StrokePaint);
     }
 }

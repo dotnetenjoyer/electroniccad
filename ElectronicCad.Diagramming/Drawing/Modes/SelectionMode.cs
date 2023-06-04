@@ -1,6 +1,10 @@
 using System.Linq;
 using System.Windows.Input;
+using SkiaSharp;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 using ElectronicCad.Diagramming.Drawing.Items;
+using System;
+using ElectronicCad.Domain.Geometry;
 
 namespace ElectronicCad.Diagramming.Drawing.Modes;
 
@@ -9,7 +13,8 @@ namespace ElectronicCad.Diagramming.Drawing.Modes;
 /// </summary>
 public class SelectionMode : BaseDiagramMode
 {
-    private SelectionFrameDiagramItem selectionFrame;
+    private bool isSelectionStarted;
+    private SelectionAreaDiagramItem selectionArea;
 
     /// <inheritdoc/>
     public override Cursor Cursor => Cursors.Arrow;
@@ -19,68 +24,84 @@ public class SelectionMode : BaseDiagramMode
     {
         base.Initialize(diagram);
 
-        selectionFrame = GetOrCreateSelectionFrame();
+        selectionArea = GetSelectionArea();
     }
 
-    private SelectionFrameDiagramItem GetOrCreateSelectionFrame()
+    private SelectionAreaDiagramItem GetSelectionArea()
     {
-        var selectionFrame = Diagram.DiagramItems
-            .OfType<SelectionFrameDiagramItem>()
-            .FirstOrDefault();
+        var selectionArea = Diagram.DiagramItems
+            .OfType<SelectionAreaDiagramItem>()
+            .First();
 
-        if (selectionFrame == null)
-        {
-            selectionFrame = new SelectionFrameDiagramItem()
-            {
-                IsVisible = false
-            };
-
-            Diagram.AddDiagramItem(selectionFrame);
-        }
-
-        return selectionFrame;
+        return selectionArea;
     }
 
     /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
     {
-        if (Diagram.FocusItem != null && Diagram.FocusItem is GeometryObjectDiagramItem geometryDiagramItem)
+        if (isSelectionStarted)
         {
-            Diagram.Cursor = Cursors.Hand;
-        }
-        else
-        {
-            Diagram.Cursor = Cursors.Arrow;
+            var position = Diagram.CalculateDiagramPosition(args);
+            selectionArea.SetEndPoint(position);
+            Diagram.Redraw();
         }
     }
 
     /// <inheritdoc/>
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        if (Diagram.FocusItem == selectionFrame)
+        if (Diagram.FocusItem is SelectionFrameDiagramItem)
         {
             return;
         }
 
         if (Diagram.FocusItem is GeometryObjectDiagramItem geometryDiagramItem)
         {
-            selectionFrame.IsVisible = true;
-            selectionFrame.SelectedItem = geometryDiagramItem.GeometryObject;
+            Diagram.SelectedItems = new[] { geometryDiagramItem.GeometryObject };
         }
         else
         {
-            selectionFrame.IsVisible = false;
+            var position = Diagram.CalculateDiagramPosition(args);
+            StartSelection(position);
         }
 
         Diagram.Redraw();
+    }
+    
+    /// <inheritdoc/>
+    protected override void ProcessPrimaryButtonUp(MouseButtonEventArgs args)
+    {
+        if (isSelectionStarted)
+        {
+            CompleteSelection();
+        }
+    }
+
+    private void StartSelection(SKPoint position)
+    {
+        isSelectionStarted = true;
+        selectionArea.IsVisible = true;
+        selectionArea.SetStartPoint(position);
+    }
+
+    private void CompleteSelection()
+    {
+        isSelectionStarted = false;
+        selectionArea.IsVisible = false;
+
+        var standardizedSelectionArea = selectionArea.BoundingBox.Standardized;
+        Diagram.SelectedItems = Diagram.DiagramItems
+            .Where(item => item.IsVisible)
+            .Where(item => item.BoundingBox.IntersectsWith(standardizedSelectionArea))
+            .OfType<GeometryObjectDiagramItem>()
+            .Select(item => item.GeometryObject)
+            .ToList();
     }
 
     /// <inheritdoc/>
     public override void Finish()
     {
+        Diagram.SelectedItems = Array.Empty<GeometryObject>();
         base.Finish();
-
-        selectionFrame.IsVisible = false;
-        Diagram.Redraw();
     }
 }

@@ -9,7 +9,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Contains proxy project diagram properties.
 /// </summary>
-public class ProjectDiagramPropertiesProxy : BaseProxy<ProjectDiagram>, ILayoutGridProxy, ISizeProxy
+public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<ProjectDiagram>, ILayoutGridProxy, ISizeProxy
 {
     /// <inhertidoc />
     public IEnumerable<LayoutGrid> LayoutGrids { get; set; }
@@ -50,18 +50,22 @@ public class ProjectDiagramPropertiesProxy : BaseProxy<ProjectDiagram>, ILayoutG
     }
 
     /// <inheritdoc />
-    public override void UpdateEntity()
-    {
-        using var scope = Source.GeometryDiagram.StartModificationScope();
-        Source.GeometryDiagram.StartModification();
-        Source.GeometryDiagram.Size = Size;
-        Source.GeometryDiagram.CompleteModification();
-    }
-
-    /// <inheritdoc />
-    public override void UpdateFromEntity()
+    public override void UpdateFromSource()
     {
         LayoutGrids = Source.GeometryDiagram.LayoutGrids;
         Size = Source.GeometryDiagram.Size;
+    }
+
+    /// <inheritdoc />
+    public override void UpdateSource()
+    {
+        Source.PropertyChanged -= HandleSourcePropertyChange;
+        using var scope = Source.GeometryDiagram.StartModificationScope();
+        Source.GeometryDiagram.StartModification();
+        
+        Source.GeometryDiagram.Size = Size;
+        
+        Source.GeometryDiagram.CompleteModification();
+        Source.PropertyChanged += HandleSourcePropertyChange;
     }
 }

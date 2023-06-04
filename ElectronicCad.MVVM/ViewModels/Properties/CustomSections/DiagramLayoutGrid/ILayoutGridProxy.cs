@@ -6,7 +6,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutG
 /// <summary>
 /// Describe proxy members to the layout grid custom section.
 /// </summary>
-public interface ILayoutGridProxy : IProxy
+public interface ILayoutGridProxy : IPropertiesProxy
 {
     /// <summary>
     /// Collection of the diagram layout grids.
