@@ -6,6 +6,7 @@ using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Align;
 
 namespace ElectronicCad.Desktop.Views.Properties.DataTemplateSelectors;
 
@@ -39,6 +40,11 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
     /// </summary>
     public DataTemplate? DiagramSizeSectionTemplate { get; set; }
 
+    /// <summary>
+    /// Template for align section.
+    /// </summary>
+    public DataTemplate? AlignSectionTemplate { get; set; }
+
     /// <inheritdoc />
     public override DataTemplate? SelectTemplate(object item, DependencyObject container)
     {
@@ -49,6 +55,7 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
             TypographyCustomSection => TypographySectionTemplate,
             LayoutGridCustomSection => LayoutGridSectionTemplate,
             SizeCustomSection => DiagramSizeSectionTemplate,
+            AlignCustomSection => AlignSectionTemplate,
             _ => throw new NotSupportedException($"{item.GetType()} is not supported.")
         };
     }

@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="./Templates/CustomSections/TypographyCustomSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/LayoutGridSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/DiagramSizeSection.xaml"/>
+                <ResourceDictionary Source="./Templates/CustomSections/AlignSection.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <selectors:PrimitivePropertyDataTemplateSelector
@@ -33,6 +34,7 @@
                 TypographySectionTemplate="{StaticResource TypographyCustomSection}"
                 LayoutGridSectionTemplate="{StaticResource LayoutGridSection}"
                 DiagramSizeSectionTemplate="{StaticResource DiagramSizeSection}"
+                AlignSectionTemplate="{StaticResource AlignSection}"
             />
 
         </ResourceDictionary>
