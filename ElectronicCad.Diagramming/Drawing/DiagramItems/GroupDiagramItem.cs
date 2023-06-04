@@ -42,39 +42,41 @@ internal class GroupDiagramItem : DiagramItem, IDiagramItemContainer
             .CalculateScribedRectangle(Children.Select(x => x.BoundingBox));
     }
 
-    /// <summary>
-    /// Adds the diagram item to the group. 
-    /// </summary>
-    /// <param name="diagramItem">Diagram item to add.</param>
-    public void AddChild(DiagramItem diagramItem)
+    /// <inheritdoc />
+    public void AddChildren(IEnumerable<DiagramItem> children)
     {
-        children.Add(diagramItem);
+        foreach (var child in children)
+        {
+            this.children.Add(child);
+            child.Group = this;
+        }
+
         RecalculateBoundingBox();
     }
 
-    /// <summary>
-    /// Adds the diagram items to the group.
-    /// </summary>
-    /// <param name="items">DIagram items to add.</param>
-    public void AddChild(IEnumerable<DiagramItem> items)
+    /// <inheritdoc />
+    public void RemoveChildren(IEnumerable<DiagramItem> children)
     {
-        children.AddRange(items);
-        RecalculateBoundingBox();
-    }
+        foreach (var child in children)
+        {
+            var isDeleteSuccessed = this.children.Remove(child);
+            if (isDeleteSuccessed)
+            {
+                child.Group = null;
+            }
+        }
 
-    /// <summary>
-    /// Removes the diagram item from the group.
-    /// </summary>
-    /// <param name="diagramItem">Diagram item to remove.</param>
-    public void RemoveChild(DiagramItem diagramItem)
-    {
-        children.Remove(diagramItem);
         RecalculateBoundingBox();
     }
 
     /// <inheritdoc />
     public override void Draw(SkiaDrawingContext context)
     {
+        if (!IsVisible)
+        {
+            return;
+        }
+
         foreach (var child in Children)
         {
             child.Draw(context);

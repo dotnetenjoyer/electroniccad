@@ -14,7 +14,12 @@ internal class Layer : IDiagramItemContainer
     /// <summary>
     /// Layer id.
     /// </summary>
-    public Guid Id { get; }
+    public Guid Id { get; init; }
+
+    /// <summary>
+    /// Related diagram.
+    /// </summary>
+    public Diagram Diagram { get; init; }
 
     /// <summary>
     /// Layer z index.
@@ -39,77 +44,58 @@ internal class Layer : IDiagramItemContainer
     /// <summary>
     /// Constructor.
     /// </summary>
+    /// <param name="diagram">Related diagram.</param>
     /// <param name="index">Layer index.</param>
-    public Layer(int index)
+    public Layer(Diagram diagram, int index)
     {
         Id = Guid.NewGuid();
+        Diagram = diagram;
         ZIndex = index;
     }
 
     /// <summary>
     /// Constructor.
     /// </summary>
+    /// <param name="diagram">Related diagram.</param>
     /// <param name="index">Layer index.</param>
     /// <param name="domainLayer">Domain layer.</param>
-    public Layer(int index, DomainLayer domainLayer) : this(index)
+    public Layer(Diagram diagram, int index, DomainLayer domainLayer) : this(diagram, index)
     {
         DomainLayer = domainLayer;
     }
 
-    /// <summary>
-    /// Add diagram item.
-    /// </summary>
-    /// <param name="diagramItem">Diagram item.</param>
-    public void AddChild(DiagramItem diagramItem)
+    /// <inheritdoc />
+    public void AddChildren(IEnumerable<DiagramItem> children)
     {
-        diagramItem.ZIndex = GetMaxUserItemsZIndex() + 1;
-        diagramItem.Parent = this;
-        children.Add(diagramItem);
+        foreach (var child in children)
+        {
+            child.ZIndex = GetMaxUserItemsZIndex() + 1;
+            child.Layer = this;
+            this.children.Add(child);
+        }
     }
 
     private int GetMaxUserItemsZIndex()
     {
         var userDiagramItems = children
-            .Where(x => !x.IsAuxiliary);
+            .Where(x => !x.IsAuxiliary)
+            .ToList();
 
         return userDiagramItems.Any()
             ? userDiagramItems.Max(x => x.ZIndex)
             : 0;
     }
 
-    /// <summary>
-    /// Removes the diagram item.
-    /// </summary>
-    /// <param name="diagramItem">Diagram item to remove.</param>
-    public void RemoveChild(DiagramItem diagramItem)
+    /// <inheritdoc />
+    public void RemoveChildren(IEnumerable<DiagramItem> children)
     {
-        children.Remove(diagramItem);
-    }
-
-    public IEnumerable<DiagramItem> GetFlatChildList()
-    {
-        foreach(var child in Children)
+        foreach (var child in children)
         {
-            foreach (var item in GetAllItems(child))
+            var isRemoveSuccessed = this.children.Remove(child);
+            if (isRemoveSuccessed)
             {
-               yield return item;
+                child.Layer = null;
             }
-        }
-        
-        IEnumerable<DiagramItem> GetAllItems(DiagramItem item)
-        {
-            if (item is IDiagramItemContainer container)
-            {
-                foreach(var child in container.Children)
-                {
-                    foreach (var nestedItem in GetAllItems(child))
-                    {
-                        yield return nestedItem;
-                    }
-                }
-            }
-
-            yield return item;
         }
     }
 }

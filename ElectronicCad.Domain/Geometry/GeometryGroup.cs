@@ -88,10 +88,13 @@ public class GeometryGroup : ContentGeometry, IGeometryContainer
     {
         foreach (var geometryObject in geometryObjects)
         {
-            geometryObject.Layer = null;
-            geometryObject.Group = null;
-            geometryObject.VersionChanged -= HandleGeometryVersionChange;
-            children.Remove(geometryObject);
+            var isRemoveSuccessed = children.Remove(geometryObject);
+            if (isRemoveSuccessed)
+            {
+                geometryObject.Layer = null;
+                geometryObject.Group = null;
+                geometryObject.VersionChanged -= HandleGeometryVersionChange;
+            }
         }
 
         RecalculateControlPoints();

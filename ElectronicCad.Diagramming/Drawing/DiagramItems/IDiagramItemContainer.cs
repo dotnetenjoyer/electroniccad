@@ -13,14 +13,14 @@ internal interface IDiagramItemContainer
     IEnumerable<DiagramItem> Children { get; }
 
     /// <summary>
-    /// Adds the diagram item to the children collection.
+    /// Adds the diagram items to the children collection.
     /// </summary>
-    /// <param name="item">Diagram item to add.</param>
-    void AddChild(DiagramItem item);
+    /// <param name="items">Diagram items to add.</param>
+    void AddChildren(IEnumerable<DiagramItem> items);
 
     /// <summary>
-    /// Removes the diagram item from the children collection.
+    /// Removes the specified children from the children collection.
     /// </summary>
-    /// <param name="item">Diagram item to remove.</param>
-    void RemoveChild(DiagramItem item);
+    /// <param name="children">Children to remove.</param>
+    void RemoveChildren(IEnumerable<DiagramItem> children);
 }

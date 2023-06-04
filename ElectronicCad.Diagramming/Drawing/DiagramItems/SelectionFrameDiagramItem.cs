@@ -8,6 +8,7 @@ using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Utils;
 using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Domain.Geometry.Utils;
+using System.Security.Cryptography.Pkcs;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
 
@@ -16,29 +17,26 @@ namespace ElectronicCad.Diagramming.Drawing.Items;
 /// </summary>
 internal class SelectionFrameDiagramItem : GroupDiagramItem
 {
-    /// <inhertidoc/>
-    public override bool IsAuxiliary => true;
-    
-    /// <inhertidoc/>
-    public override bool IsVisible => SelectedItems != null && SelectedItems.Any();
-
-    private IEnumerable<GeometryObject> SelectedItems => diagram.SelectedItems;
-
-
-    private readonly Diagram diagram;
-
     private readonly SelectionFrameArea frameArea;
     private readonly GizmoDiagramItem topLefGizmo;
     private readonly GizmoDiagramItem topRigthGizmo;
     private readonly GizmoDiagramItem bottomLeftGizmo;
     private readonly GizmoDiagramItem bottomRigthGizmo;
 
+    /// <inhertidoc/>
+    public override bool IsAuxiliary => true;
+    
+    /// <inhertidoc/>
+    public override bool IsVisible => SelectedItems.Any();
+
+    private IEnumerable<GeometryObject> SelectedItems 
+        => Diagram?.SelectedItems ?? Array.Empty<GeometryObject>();
+        
     /// <summary>
     /// Constructor.
     /// </summary>
-    public SelectionFrameDiagramItem(Diagram diagram)
+    public SelectionFrameDiagramItem()
     {
-        this.diagram = diagram;
         ZIndex = int.MaxValue;
         MouseMove += HandleMouseMove;
 
@@ -48,22 +46,25 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
         bottomLeftGizmo = new GizmoDiagramItem(GizmoDiagramItem.DefaultSize);
         bottomRigthGizmo = new GizmoDiagramItem(GizmoDiagramItem.DefaultSize);
 
-        AddChild(topLefGizmo);
-        AddChild(topRigthGizmo);
-        AddChild(bottomLeftGizmo);
-        AddChild(bottomRigthGizmo);
-        AddChild(frameArea);
+        AddChildren(new DiagramItem[]
+        {
+            topLefGizmo,
+            topRigthGizmo,
+            bottomLeftGizmo,
+            bottomRigthGizmo,
+            frameArea
+        });
     }
 
     private void HandleMouseMove(object? sender, MovingMouseParameters mouse)
     {
         if (SelectedItems.Any() && mouse.LeftButton == MouseButtonState.Pressed)
         {
+            var geometryObjectsToInteraction = GeometryUtils.FilterNestingGeometry(SelectedItems);
             var translateMatrix = Matrix3x2.CreateTranslation(mouse.Delta.ToVector2());
-
             using var scope = SelectedItems.First().StartDiagramModifcation();
-    
-            foreach (var selectedItem in SelectedItems)
+
+            foreach (var selectedItem in geometryObjectsToInteraction)
             {
                 selectedItem.StartModification();
                 selectedItem.Transform(translateMatrix);
@@ -91,26 +92,28 @@ internal class SelectionFrameDiagramItem : GroupDiagramItem
         
         base.Draw(context);
     }
-}
-
-/// <summary>
-/// Selection fram area item.
-/// </summary>
-internal class SelectionFrameArea : DiagramItem
-{
-    /// <inheritdoc />
-    public override SKPaint StrokePaint => new SKPaint
+    
+    private class SelectionFrameArea : DiagramItem
     {
-        Color = Colors.Foreground,
-        Style = SKPaintStyle.Stroke,
-        StrokeWidth = 2,
-        PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
-    };
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public SelectionFrameArea()
+        {
+            StrokePaint = new SKPaint
+            {
+                Color = Colors.Foreground,
+                Style = SKPaintStyle.Stroke,
+                StrokeWidth = 2,
+                PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
+            };
+        }
 
-    /// <inheritdoc />
-    public override void Draw(SkiaDrawingContext context)
-    {
-        context.DrawRect(BoundingBox, StrokePaint);
+        /// <inheritdoc />
+        public override void Draw(SkiaDrawingContext context)
+        {
+            context.DrawRect(BoundingBox, StrokePaint);
+        }
     }
 }
 
@@ -130,13 +133,6 @@ internal class GizmoDiagramItem : DiagramItem
         return Cursors.SizeNS;
     }
 
-    /// <inheritdoc />
-    public override SKPaint StrokePaint => new SKPaint
-    {
-        Color = Colors.Foreground,
-        Style = SKPaintStyle.StrokeAndFill
-    };
-
     private readonly SKSize size;
 
     /// <summary>
@@ -145,6 +141,12 @@ internal class GizmoDiagramItem : DiagramItem
     public GizmoDiagramItem(SKSize size)
     {
         this.size = size;
+
+        StrokePaint = new SKPaint
+        {
+            Color = Colors.Foreground,
+            Style = SKPaintStyle.StrokeAndFill
+        };
 
         MouseMove += GizmoDiagramItem_MouseMove;
     }

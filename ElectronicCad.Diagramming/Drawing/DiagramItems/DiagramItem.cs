@@ -1,5 +1,7 @@
 using System;
 using System.Windows.Input;
+using ElectronicCad.Diagramming.Utils;
+using ElectronicCad.Domain.Geometry;
 using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
@@ -20,6 +22,11 @@ internal abstract class DiagramItem : IDisposable
     public virtual bool IsVisible { get; set; } = true;
 
     /// <summary>
+    /// Indicates whether it is locked.
+    /// </summary>
+    public virtual bool IsLock { get; set; } = false;
+
+    /// <summary>
     /// Diagram item bounding box.
     /// </summary>
     public SKRect BoundingBox { get; set; }
@@ -30,14 +37,43 @@ internal abstract class DiagramItem : IDisposable
     public int ZIndex { get; set; }
 
     /// <summary>
-    /// Parent container.
+    /// Related diagram.
     /// </summary>
-    public IDiagramItemContainer? Parent { get; internal set; }
+    public Diagram? Diagram => Layer?.Diagram;
 
+    /// <summary>
+    /// Related layer.
+    /// </summary>
+    public Layer? Layer { get; set; }
+
+    /// <summary>
+    /// Group.
+    /// </summary>
+    public IDiagramItemContainer? Group { get; set; }
+   
     /// <summary>
     /// Stroke geometry paint.
     /// </summary>
-    public virtual SKPaint StrokePaint { get; protected set; }
+    public SKPaint StrokePaint 
+    { 
+        get => strokePaint; 
+        protected set
+        {
+            if (strokePaint != null)
+            {
+                strokePaint.Dispose();
+            }
+
+            strokePaint = value;
+        } 
+    } 
+    
+    private SKPaint strokePaint = new SKPaint()
+    {
+        Color = Colors.Foreground,
+        StrokeWidth = 2,
+        Style = SKPaintStyle.Stroke
+    };
 
     /// <summary>
     /// Draws itself.
@@ -60,7 +96,7 @@ internal abstract class DiagramItem : IDisposable
     /// </summary>
     /// <param name="position">Hit point.</param>
     /// <returns>True if hit to the bounding box.</returns>
-    public virtual bool CheckBoundingBoxHit(ref SKPoint point)
+    public bool CheckBoundingBoxHit(ref SKPoint point)
     {
         return BoundingBox.Contains(point);
     }

@@ -188,13 +188,13 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
     {
         var clone = geometryObject.Clone();
         
-        if (geometryObject.Layer != null)
-        {
-            geometryObject.Layer.AddGeometry(clone);
-        }
-        else if (geometryObject.Group != null)
+        if (geometryObject.Group != null)
         {
             geometryObject.Group.AddGeometry(clone);
+        }
+        else if (geometryObject.Layer != null)
+        {
+            geometryObject.Layer.AddGeometry(clone);
         }
     }
 

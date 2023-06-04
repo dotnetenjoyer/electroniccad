@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using SkiaSharp;
 using ElectronicCad.Diagramming.Drawing.Items;
 using ElectronicCad.Domain.Geometry;
@@ -8,46 +10,31 @@ namespace ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramIt
 /// <summary>
 /// Group of geometry diagram items.
 /// </summary>
-internal class GeometryGroupDiagramItem : GeometryObjectDiagramItem<GeometryGroup>
+internal class GeometryGroupDiagramItem : GeometryObjectDiagramItem<GeometryGroup>, IDiagramItemContainer
 {
-    public IEnumerable<GeometryObjectDiagramItem> Children => children;
-
     private readonly List<GeometryObjectDiagramItem> children = new();
 
     private readonly GroupDiagramItem groupDiagramItem;
+
+    /// <inheritdoc />
+    IEnumerable<DiagramItem> IDiagramItemContainer.Children => Children;
+
+    /// <summary>
+    /// Children geometry object diagram items.
+    /// </summary>
+    public IEnumerable<GeometryObjectDiagramItem> Children => children;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="geometryGroup">Geometry group.</param>
     /// <param name="children">Children geometry object diagram items.</param>
-    public GeometryGroupDiagramItem(GeometryGroup geometryGroup, 
+    public GeometryGroupDiagramItem(GeometryGroup geometryGroup,
         IEnumerable<GeometryObjectDiagramItem> children) : base(geometryGroup)
     {
-        this.children.AddRange(children);
-        groupDiagramItem = new GroupDiagramItem(children);
-        
+        groupDiagramItem = new GroupDiagramItem();
+        AddChildren(children);
         UpdateViewState();
-    }
-
-    /// <summary>
-    /// Adds a new child.
-    /// </summary>
-    /// <param name="child">Child to add.</param>
-    public void AddChild(GeometryObjectDiagramItem child)
-    {
-        children.Add(child);
-        groupDiagramItem.AddChild(child);
-    }
-
-    /// <summary>
-    /// Removes the child.
-    /// </summary>
-    /// <param name="child">Child to remove.</param>
-    public void RemoveChild(GeometryObjectDiagramItem child)
-    {
-        children.Remove(child);
-        groupDiagramItem.RemoveChild(child);
     }
 
     /// <inheritdoc />
@@ -61,15 +48,14 @@ internal class GeometryGroupDiagramItem : GeometryObjectDiagramItem<GeometryGrou
     /// <inheritdoc />
     public override void Draw(SkiaDrawingContext drawingContext)
     {
+        if (!IsVisible)
+        {
+            return;
+        }
+
         groupDiagramItem.Draw(drawingContext);
     }
 
-    /// <inheritdoc />
-    public override bool CheckBoundingBoxHit(ref SKPoint point)
-    {
-        return groupDiagramItem.CheckBoundingBoxHit(ref point);
-    }
-    
     /// <inheritdoc />
     public override bool CheckShapeHit(ref SKPoint position)
     {
@@ -92,5 +78,51 @@ internal class GeometryGroupDiagramItem : GeometryObjectDiagramItem<GeometryGrou
     public override bool HandleDiagramMouseMove(MovingMouseParameters mouse)
     {
         return groupDiagramItem.HandleDiagramMouseMove(mouse);
+    }
+
+    /// <inheritdoc />
+    public void AddChildren(IEnumerable<DiagramItem> children)
+    {
+        var geometryDiagramItems = children
+            .OfType<GeometryObjectDiagramItem>()
+            .ToList();
+
+        if (geometryDiagramItems.Count != children.Count())
+        {
+            throw new ArgumentException("The items to add is not geometry diagram items.");
+        }
+
+        this.children.AddRange(geometryDiagramItems);
+        groupDiagramItem.AddChildren(geometryDiagramItems);
+
+        foreach (var item in geometryDiagramItems)
+        {
+            item.Group = this;
+        }
+    }
+
+    /// <inheritdoc />
+    public void RemoveChildren(IEnumerable<DiagramItem> children)
+    {
+        var geometryDiagramItems = children
+            .OfType<GeometryObjectDiagramItem>()
+            .ToList();
+
+        if (geometryDiagramItems.Count != children.Count())
+        {
+            throw new ArgumentException("The items to remove is not geometry diagram items.");
+        }
+
+        groupDiagramItem.RemoveChildren(geometryDiagramItems);
+
+        foreach (var item in geometryDiagramItems)
+        {
+            var isRemoveSuccessed = this.children.Remove(item);
+        
+            if (isRemoveSuccessed)
+            {
+                item.Group = null;
+            }
+        }
     }
 }

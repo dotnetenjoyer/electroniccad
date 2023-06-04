@@ -20,6 +20,7 @@ using Colors = ElectronicCad.Diagramming.Utils.Colors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
 using DiagramLayer = ElectronicCad.Diagramming.Drawing.Layer;
 using DomainLayer = ElectronicCad.Domain.Geometry.Layer;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.Extensions;
 
 namespace ElectronicCad.Diagramming
 {
@@ -43,10 +44,10 @@ namespace ElectronicCad.Diagramming
             MouseDown += HandleMouseDown;
             MouseWheel += HandleMouseWheel;
 
-            SystemLayer = new DiagramLayer(int.MaxValue);
+            SystemLayer = new DiagramLayer(this, int.MaxValue);
             layers.Add(SystemLayer);
 
-            var selectionFrame = new SelectionFrameDiagramItem(this);
+            var selectionFrame = new SelectionFrameDiagramItem();
             AddDiagramItem(selectionFrame, SystemLayer);
 
             var selectionArea = new SelectionAreaDiagramItem();
@@ -146,8 +147,8 @@ namespace ElectronicCad.Diagramming
                 }
                 else
                 {
-                    var group = (GeometryGroupDiagramItem)FindRelatedDiagramItem(geometryObject.Group);
-                    group.AddChild(diagramItem);
+                    var container = (IDiagramItemContainer)FindRelatedDiagramItem(geometryObject.Group);
+                    container.AddChild(diagramItem);
                 }
             }
 
@@ -159,9 +160,18 @@ namespace ElectronicCad.Diagramming
             foreach (var geometryObject in geometryObjects)
             {
                 var item = FindRelatedDiagramItem(geometryObject);
-                if (item != null)
+                if (item == null)
                 {
-                    item.Parent!.RemoveChild(item);
+                    continue;
+                }
+            
+                if (item.Group != null)
+                {
+                    item.Group.RemoveChild(item);
+                }
+                else if (item.Layer != null)
+                {
+                    item.Layer.RemoveChild(item);
                 }
             }
 
@@ -224,7 +234,7 @@ namespace ElectronicCad.Diagramming
         internal DiagramLayer AddLayer(DomainLayer? domainLayer = null)
         {
             var index = GetMaxLayerIndex() + 1;
-            var layer = new DiagramLayer(index, domainLayer);
+            var layer = new DiagramLayer(this, index, domainLayer);
             
             // insert new layer before system layer.
             layers.Insert(layers.Count - 1, layer);
@@ -283,12 +293,8 @@ namespace ElectronicCad.Diagramming
         {
             foreach (var item in GetFlatChildList())
             {
-                if (item is not GeometryObjectDiagramItem geometryDiagramItem)
-                {
-                    continue;
-                }
-
-                if (geometryDiagramItem.GeometryObject == geometryObject)
+                if (item is GeometryObjectDiagramItem geometryDiagramItem 
+                    && geometryDiagramItem.GeometryObject == geometryObject)
                 {
                     return geometryDiagramItem;
                 }
