@@ -8,14 +8,14 @@ namespace ElectronicCad.UseCases.DiagramsTrees.Dtos;
 public class WorkspaceDiagramDiagramTreeNode : DiagramTreeNode<WorkspaceDiagram>
 {
     /// <inheritdoc />
-    public override string Name => TypedDomainObject.Name;
+    public override string Name => DiagramObject.Name;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="diagram">Workspace diagram.</param>
-    public WorkspaceDiagramDiagramTreeNode(WorkspaceDiagram diagram) : base(diagram)
+    public WorkspaceDiagramDiagramTreeNode(WorkspaceDiagram diagram, IEnumerable<TreeNode> nodes) : base(diagram)
     {
-
+        Nodes = nodes;
     }
 }

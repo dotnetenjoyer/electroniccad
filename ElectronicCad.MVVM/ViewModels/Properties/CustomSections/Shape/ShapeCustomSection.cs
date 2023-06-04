@@ -61,6 +61,6 @@ public class ShapeCustomSection : ObservableObject, ICustomSection
         proxy.FillColor = ShapeModel.FillColor;
         proxy.StrokeColor = ShapeModel.StrokeColor;
         proxy.StrokeWidth = ShapeModel.StrokeWidth;
-        proxy.UpdateEntity();
+        proxy.UpdateSource();
     }
 }

@@ -6,7 +6,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 /// <summary>
 /// Contains set of properties for shape custom section.
 /// </summary>
-public interface IShapeProxy : IProxy
+public interface IShapeProxy : IPropertiesProxy
 {
     /// <summary>
     /// Geometry object fill color.

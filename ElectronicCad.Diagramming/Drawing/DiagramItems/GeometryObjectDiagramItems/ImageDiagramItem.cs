@@ -3,7 +3,7 @@ using SkiaSharp;
 using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Diagramming.Extensions;
 
-namespace ElectronicCad.Diagramming.Drawing.Items;
+namespace ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 
 /// <summary>
 /// Diagram item that draws image.
@@ -18,12 +18,13 @@ internal class ImageDiagramItem : ContentGeometryObjectDiagramItem<Image>
     /// <param name="image">Image.</param>
     public ImageDiagramItem(Image image) : base(image)
     {
+        UpdateViewState();
         InitializeSkiaImage();
     }
 
     private void InitializeSkiaImage()
     {
-        var content = File.ReadAllBytes(CertainGeometryObject.Reference);
+        var content = File.ReadAllBytes(GeometryObject.Reference);
         var bitmap = SKBitmap.Decode(content);
         skiaImage = SKImage.FromBitmap(bitmap);
     }
@@ -31,6 +32,6 @@ internal class ImageDiagramItem : ContentGeometryObjectDiagramItem<Image>
     /// <inheritdoc />
     public override async void Draw(SkiaDrawingContext context)
     {
-        context.DrawImage(skiaImage!, CertainGeometryObject.BoundingBox.Start.ToSKPoint());
+        context.DrawImage(skiaImage!, GeometryObject.BoundingBox.Start.ToSKPoint());
     }
 }

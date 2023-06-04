@@ -9,7 +9,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections;
 /// <typeparam name="TCustomSection">Type of custom section.</typeparam>
 /// <typeparam name="TProxy">Type of related proxy.</typeparam>
 public abstract class BaseCustomSectionFactory<TCustomSection, TProxy> : ICustomSectionFactory
-    where TCustomSection : ICustomSection where TProxy : IProxy
+    where TCustomSection : ICustomSection where TProxy : IPropertiesProxy
 {
     private readonly IServiceProvider serviceProvider;
 
@@ -23,7 +23,7 @@ public abstract class BaseCustomSectionFactory<TCustomSection, TProxy> : ICustom
     }
 
     /// <inheritdoc />
-    public bool CanCreate(IProxy proxy)
+    public bool CanCreate(IPropertiesProxy proxy)
     {
         if (proxy is TProxy)
         {
@@ -34,7 +34,7 @@ public abstract class BaseCustomSectionFactory<TCustomSection, TProxy> : ICustom
     }
     
     /// <inheritdoc />
-    public ICustomSection Create(IProxy proxy)
+    public ICustomSection Create(IPropertiesProxy proxy)
     {
         if (!CanCreate(proxy))
         {

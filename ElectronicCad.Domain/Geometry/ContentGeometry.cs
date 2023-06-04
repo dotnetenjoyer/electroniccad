@@ -73,11 +73,20 @@ public abstract class ContentGeometry : GeometryObject
     /// <summary>
     /// Constructor.
     /// </summary>
+    /// <param name="isTemporary">Indicate if geometry object is temporary.</param>
+    public ContentGeometry(bool isTemporary = false) : base(isTemporary)
+    {
+        controlPoints = new Point[5];
+    }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
     /// <param name="center">Center point.</param>
     /// <param name="width">Widht.</param>
     /// <param name="height">Height.</param>
     /// <param name="isTemporary">Is geometry object temporary.</param>
-    public ContentGeometry(Point center, double width, double height, bool isTemporary = false) : base(isTemporary)
+    public ContentGeometry(Point center, double width, double height, bool isTemporary = false) : this(isTemporary)
     {
         var widthHalf = width / 2;
         var heightHalf = height / 2;
@@ -87,7 +96,6 @@ public abstract class ContentGeometry : GeometryObject
         var bottomLeft = new Point(center.X - widthHalf, center.Y + heightHalf);
         var bottomRight = new Point(center.X + widthHalf, center.Y + heightHalf);
 
-        controlPoints = new Point[5];
         SetControlPoints(center, topLeft, topRight, bottomLeft, bottomRight);
     }
 

@@ -24,7 +24,10 @@
         </Style>
     </UserControl.Resources>
     
-    <Border Style="{StaticResource ComponentWrapper}">
+    <Border 
+        Style="{StaticResource ComponentWrapper}" 
+        BorderBrush="{StaticResource BackgroundBrush}" 
+        BorderThickness="1">
         <StackPanel Orientation="Vertical">
             <Button 
                 Command="{Binding ChangeModeCommand, ElementName=Toolbar}"

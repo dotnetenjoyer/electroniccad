@@ -1,9 +1,11 @@
+using ElectronicCad.Domain.Common;
+
 namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
 /// Diagram layer.
 /// </summary>
-public class Layer
+public class Layer : DomainObservableObject, IGeometryContainer
 {
     /// <summary>
     /// Layer id.
@@ -14,18 +16,31 @@ public class Layer
     /// Layer name.
     /// </summary>
     public string Name { get; init; }
+    
+    /// <summary>
+    /// Is locked.
+    /// </summary>
+    public bool IsLocked { get; set; }
+
+    /// <summary>
+    /// Is visible.
+    /// </summary>
+    public bool IsVisible { get; set; } = true;
+
+    /// <summary>
+    /// Layer z-index.
+    /// </summary>
+    public int ZIndex { get; internal set; }
+
+    /// <summary>
+    /// Is the layer is active.
+    /// </summary>
+    public bool IsActive => Diagram.ActiveLayer == this;
 
     /// <summary>
     /// Related diagram.
     /// </summary>
-    public Diagram Diagram { get; set; }
-
-    /// <summary>
-    /// Geometry objects.
-    /// </summary>
-    public IEnumerable<GeometryObject> GeometryObjects => geometryObjects;
-
-    private readonly List<GeometryObject> geometryObjects = new();
+    public Diagram Diagram { get; init; }
 
     /// <summary>
     /// Constructor.
@@ -39,25 +54,36 @@ public class Layer
         Diagram = diagram;
     }
 
-    /// <summary>
-    /// Add geometry to layer.
-    /// </summary>
-    /// <param name="geometry">Geometry object.</param>
-    public void AddGeometry(GeometryObject geometry)
+    #region IGeometryContainer
+
+    /// <inheritdoc />
+    public IEnumerable<GeometryObject> Children => children;
+
+    private readonly List<GeometryObject> children = new();
+
+    /// <inheritdoc />
+    public void AddGeometry(IEnumerable<GeometryObject> geometryObjects)
     {
-        geometry.Layer = this;
-        geometryObjects.Add(geometry);
-        Diagram.HandleLayerGeometryAdd(geometry);
+        foreach (var geometryObject in geometryObjects)
+        {
+            geometryObject.Layer = this;
+            children.Add(geometryObject);
+        }
+
+        Diagram.RaiseGeometryAdded(geometryObjects);
     }
 
-    /// <summary>
-    /// Remove geometry from layer.
-    /// </summary>
-    /// <param name="geometry">Geometry object.</param>
-    public void RemoveGeometry(GeometryObject geometry)
+    /// <inheritdoc />
+    public void RemoveGeometry(IEnumerable<GeometryObject> geometryObjects)
     {
-        geometry.Layer = null;
-        geometryObjects.Remove(geometry);
-        Diagram.HandleLayerGeometryRemove(geometry);
+        foreach (var geometryObject in geometryObjects)
+        {
+            geometryObject.Layer = null;
+            children.Remove(geometryObject);
+        }
+
+        Diagram.RaiseGeometryRemoved(geometryObjects);
     }
+
+    #endregion
 }

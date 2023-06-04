@@ -1,14 +1,16 @@
-﻿using SkiaSharp;
+﻿using System;
+using SkiaSharp;
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Diagramming.Drawing.Items;
 
-namespace ElectronicCad.Diagramming.Drawing.Items;
+namespace ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 
 /// <summary>
-/// Base implementation of <see cref="IGeometryObjectDiagramItem"/>
+/// Diagram item base on domain geometry object.
 /// </summary>
-internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObjectDiagramItem
+internal abstract class GeometryObjectDiagramItem : DiagramItem
 {
     /// <summary>
     /// Domain geometry object.
@@ -18,10 +20,16 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="domainObject">Domain object.</param>
-    public GeometryObjectDiagramItem(GeometryObject domainObject)
+    /// <param name="geometryObject">Domain object.</param>
+    public GeometryObjectDiagramItem(GeometryObject geometryObject)
     {
-        GeometryObject = domainObject;
+        GeometryObject = geometryObject;
+        GeometryObject.VersionChanged += HandleGeometryObjectVersionChange;
+    }
+
+    private void HandleGeometryObjectVersionChange(object? sender, EventArgs e)
+    {
+        UpdateViewState();
     }
 
     /// <inheritdoc />
@@ -47,6 +55,14 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem, IGeometryObject
     {
         return GeometryObject.CheckHit(position.ToDomainPoint());
     }
+
+    /// <inheritdoc />
+    protected override void DisposeManagedResources()
+    {
+        base.DisposeManagedResources();
+     
+        GeometryObject.VersionChanged -= HandleGeometryObjectVersionChange;
+    }
 }
 
 /// <summary>
@@ -58,7 +74,7 @@ internal abstract class GeometryObjectDiagramItem<TGeometryObject> : GeometryObj
     /// <summary>
     /// Certain geometry object.
     /// </summary>
-    public TGeometryObject CertainGeometryObject { get; private set; }
+    public new TGeometryObject GeometryObject { get; private set; }
 
     /// <summary>
     /// Constructor.
@@ -66,7 +82,6 @@ internal abstract class GeometryObjectDiagramItem<TGeometryObject> : GeometryObj
     /// <param name="geometryObject">Geometry object.</param>
     public GeometryObjectDiagramItem(TGeometryObject geometryObject) : base(geometryObject)
     {
-        CertainGeometryObject = geometryObject;
-        UpdateViewState();
+        GeometryObject = geometryObject;
     }
 }

@@ -96,4 +96,20 @@ public static class SkiaRectExtensions
     {
         return new SKPoint(skRect.Right, skRect.MidY);
     }
+
+    /// <summary>
+    /// Returns collection of plot points.
+    /// </summary>
+    /// <param name="rectangle">Rectangle.</param>
+    /// <returns>Collection of plot points.</returns>
+    public static SKPoint[] GetPlotPoints(this SKRect rectangle)
+    {
+        return new[]
+        {
+            rectangle.GetTopLeft(),
+            rectangle.GetTopRight(),
+            rectangle.GetBottomLeft(),
+            rectangle.GetBottomRight()
+        };
+    }
 }

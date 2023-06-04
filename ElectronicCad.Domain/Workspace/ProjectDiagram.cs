@@ -6,6 +6,13 @@ namespace ElectronicCad.Domain.Workspace;
 public class ProjectDiagram : Diagram
 {
     /// <summary>
+    /// Empty cnstructor.
+    /// </summary>
+    internal ProjectDiagram()
+    {
+    }
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="name">Diagram name.</param>

@@ -52,7 +52,7 @@ public class PropertyObjectFactory
     /// Creates property object.
     /// </summary>
     /// <returns></returns>
-    public PropertyObject Create<TProxy>(TProxy proxy) where TProxy : IProxy
+    public PropertyObject Create<TProxy>(TProxy proxy) where TProxy : IPropertiesProxy
     {
         var configuration = GetConfiguration(proxy);
         var propertyObject = new PropertyObject()
@@ -64,7 +64,7 @@ public class PropertyObjectFactory
         return propertyObject;
     }
 
-    private IPropertyObjectConfiguration GetConfiguration(IProxy proxy)
+    private IPropertyObjectConfiguration GetConfiguration(IPropertiesProxy proxy)
     {
         var configuration = propertyObjectsConfigurations
             .FirstOrDefault(c => c.SourceType == proxy.GetType());
@@ -77,7 +77,7 @@ public class PropertyObjectFactory
         return configuration;
     }
 
-    private IEnumerable<ICustomSection> CreateCustomSections(IPropertyObjectConfiguration configuration, IProxy proxy)
+    private IEnumerable<ICustomSection> CreateCustomSections(IPropertyObjectConfiguration configuration, IPropertiesProxy proxy)
     {
         var sections = new List<ICustomSection>();
 
@@ -96,7 +96,7 @@ public class PropertyObjectFactory
         return sections;
     }
 
-    private IEnumerable<PropertyGroup> CreatePropertyGroups(IPropertyObjectConfiguration configuration, IProxy proxy)
+    private IEnumerable<PropertyGroup> CreatePropertyGroups(IPropertyObjectConfiguration configuration, IPropertiesProxy proxy)
     {
         var properties = new List<IProperty>();
         foreach (var propertyConfiguration in configuration.PropertyConfigurations)

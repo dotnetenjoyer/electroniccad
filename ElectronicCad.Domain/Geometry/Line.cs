@@ -16,7 +16,7 @@ public class Line : GeometryObject
     public const int SecondPointIndex = 1;
 
     /// <inheritdoc/>
-    public override string Name { get; init; } = nameof(Line);
+    public override string Name { get; internal set; } = nameof(Line);
 
     /// <summary>
     /// First point of the line.

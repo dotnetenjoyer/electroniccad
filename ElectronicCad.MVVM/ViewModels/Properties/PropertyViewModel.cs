@@ -49,7 +49,7 @@ public class PropertyViewModel : ViewModel
     {
         if (selectionService.SelectedObjects.Any())
         {
-            var proxy = ProxyFactory.Create(selectionService.SelectedObjects.First());
+            var proxy = PropertiesProxyFactory.Create(selectionService.SelectedObjects.First());
             PropertyObject = propertyObjectFactory.Create(proxy);
         }
     }

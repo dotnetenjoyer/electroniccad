@@ -19,7 +19,7 @@ public interface ISelectionService
     /// Select new items.
     /// </summary>
     /// <param name="selectedObject">Objects to select.</param>
-    void Select(object[] selectedObject);
+    void Select(IEnumerable<object> selectedObject);
 
     /// <summary>
     /// Clear selected objects.

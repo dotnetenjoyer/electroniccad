@@ -24,9 +24,9 @@ public abstract class ContentGeometryObjectProxy<TContentGeometry> : GeometryObj
     }
 
     /// <inheritdoc />
-    public override void UpdateFromEntity()
+    public override void UpdateFromSource()
     {
-        base.UpdateFromEntity();
+        base.UpdateFromSource();
 
         FillColor = Source.FillColor;
         StrokeColor = Source.StrokeColor;
@@ -34,9 +34,9 @@ public abstract class ContentGeometryObjectProxy<TContentGeometry> : GeometryObj
     }
     
     /// <inheritdoc />
-    protected override void UpdateEntityInternal()
+    protected override void UpdateSourceInternal()
     {
-        base.UpdateEntityInternal();
+        base.UpdateSourceInternal();
 
         Source.FillColor = FillColor;
         Source.StrokeColor = StrokeColor;

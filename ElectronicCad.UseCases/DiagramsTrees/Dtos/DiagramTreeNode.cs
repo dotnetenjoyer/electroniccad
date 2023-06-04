@@ -3,14 +3,14 @@
 namespace ElectronicCad.UseCases.DiagramsTrees.Dtos;
 
 /// <summary>
-/// Node of the diagrams tree.
+/// Represent tree node.
 /// </summary>
-public abstract class DiagramTreeNode
+public abstract class TreeNode
 {
     /// <summary>
     /// Tree node name.
     /// </summary>
-    public virtual string Name { get; set; }
+    public virtual string Name { get; } = string.Empty;
 
     /// <summary>
     /// Indicates if current node expanded.
@@ -18,39 +18,55 @@ public abstract class DiagramTreeNode
     public bool IsExpanded { get; set; } = true;
 
     /// <summary>
-    /// Indicates if current node selected.
-    /// </summary>
-    public bool IsSelected { get; set; }
-
-    /// <summary>
     /// Related diagram node.
     /// </summary>
-    public INotifyPropertyChanged DomainObject { get; init; }
+    public object NodeObject { get; init; }
 
     /// <summary>
     /// Nested nodes.
     /// </summary>
-    public IEnumerable<DiagramTreeNode> Nodes { get; init; }
-}
-
-/// <summary>
-/// Diagram tree node with typed domain object.
-/// </summary>
-/// <typeparam name="TDomainObject">Type of domain object.</typeparam>
-public abstract class DiagramTreeNode<TDomainObject> : DiagramTreeNode where TDomainObject : INotifyPropertyChanged
-{
-    /// <summary>
-    /// Typed domain object.
-    /// </summary>
-    public TDomainObject TypedDomainObject { get; init; }
+    public IEnumerable<TreeNode>? Nodes { get; init; }
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    /// <param name="typedDomainObject">Typed domain object.</param>
-    public DiagramTreeNode(TDomainObject typedDomainObject)
+    /// <param name="nodeObject">Node object.</param>
+    public TreeNode(object nodeObject)
     {
-        TypedDomainObject = typedDomainObject;
-        DomainObject = typedDomainObject;
+        NodeObject = nodeObject;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        /// Hack: allow updates selected nodes
+        /// Todo: figure out why TreeViewIte.Header not updates.
+        if (obj is TreeNode anotherNode)
+        {
+            return Name == anotherNode.Name && IsExpanded == anotherNode.IsExpanded 
+                && NodeObject == anotherNode.NodeObject;
+        } 
+
+        return base.Equals(obj);
+    }
+}
+
+/// <summary>
+/// Diagram tree node.
+/// </summary>
+/// <typeparam name="TDiagramObject">Diagram object.</typeparam>
+public abstract class DiagramTreeNode<TDiagramObject> : TreeNode 
+{
+    /// <summary>
+    /// Domain object.
+    /// </summary>
+    public TDiagramObject DiagramObject { get; }
+
+    /// <summary>
+    /// Constructor.
+    /// </summary>
+    /// <param name="diagramObject">Diagram object.</param>
+    public DiagramTreeNode(TDiagramObject diagramObject) : base(diagramObject)
+    {
+        DiagramObject = diagramObject;
     }
 }

@@ -6,7 +6,7 @@ namespace ElectronicCad.Domain.Geometry;
 public class Ellipse : ContentGeometry
 {
     /// <inheritdoc/>
-    public override string Name { get; init; } = nameof(Ellipse);
+    public override string Name { get; internal set; } = nameof(Ellipse);
 
     /// <summary>
     /// The x radius of the ellipse. 

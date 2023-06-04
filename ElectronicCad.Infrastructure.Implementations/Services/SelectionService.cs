@@ -14,9 +14,9 @@ public class SelectionService : ISelectionService
     public event EventHandler SelectionChanged;
     
     /// <inheritdoc />
-    public void Select(object[] selectedObject)
+    public void Select(IEnumerable<object> selectedObject)
     {
-        SelectedObjects = selectedObject;
+        SelectedObjects = selectedObject.ToList();
         SelectionChanged?.Invoke(this, EventArgs.Empty);
     }
 
