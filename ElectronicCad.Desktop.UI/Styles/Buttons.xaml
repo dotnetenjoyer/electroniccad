@@ -4,10 +4,11 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml"/>
+        <ResourceDictionary Source="Brushes.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="ButtonBase" TargetType="Button">
-        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
         <Setter Property="MinHeight" Value="30"/>
         <Setter Property="Width" Value="Auto"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -47,17 +48,20 @@
     </Style>
 
     <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource ButtonBase}">
-        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundBrush}"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource PrimaryHoverBrush}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource PrimaryHoverBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource PrimaryHoverBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHoverBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{StaticResource PrimaryActiveBrush}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource PrimaryActiveBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource PrimaryActiveBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryActiveBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -100,7 +104,7 @@
     <Style x:Key="IconButton" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource SecondaryForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource SecondaryForegroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -116,15 +120,15 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
                 <Setter Property="Cursor" Value="Hand"/>
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style x:Key="CloseButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -155,10 +159,10 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style x:Key="MinimazeButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -181,17 +185,17 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource ComponentBackgroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource ComponentBackgroundBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="Background" Value="{StaticResource ComponentBackgroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource ComponentBackgroundBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style x:Key="MaximazeButton" TargetType="Button" BasedOn="{StaticResource IconButton}">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -217,10 +221,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource ComponentBackgroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource ComponentBackgroundBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="Background" Value="{StaticResource ComponentBackgroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource ComponentBackgroundBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -72,7 +72,7 @@
                     <Grid Grid.Column="1">
                         <diagramming:DiagramControl 
                             DataContext="{Binding Diagram}"
-                            Background="{StaticResource BackgroundBrush}"/>
+                            Background="{DynamicResource DiagramBackgroundBrush}"/>
                     </Grid>
 
                     <properties:Properties Grid.Column="2" DataContext="{Binding Property}"/>

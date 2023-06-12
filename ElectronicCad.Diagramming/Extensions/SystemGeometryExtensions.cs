@@ -1,4 +1,5 @@
 ﻿using ElectronicCad.Domain.Geometry;
+using SkiaSharp;
 
 namespace ElectronicCad.Diagramming.Extensions;
 

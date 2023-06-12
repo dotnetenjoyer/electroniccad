@@ -52,7 +52,7 @@ internal class PolygonCreationMode : ShapeCreationMode<Polygon>
         {
             var gizmosPaint = new SKPaint()
             {
-                Color = SKColors.White,
+                Color = Diagram.DrawingColors.PrimaryForeground,
                 Style = SKPaintStyle.Stroke,
                 PathEffect = SKPathEffect.CreateDash(new float[] { 5, 5 }, 0),
             };

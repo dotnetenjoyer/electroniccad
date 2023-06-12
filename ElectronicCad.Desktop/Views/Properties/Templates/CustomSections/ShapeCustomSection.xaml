@@ -18,7 +18,6 @@
                 <StackPanel>
                     <Label 
                         Margin="0 0 0 5"
-                        Foreground="White" 
                         Target="{Binding ElementName=StrokeColorPicker}" 
                         Content="Stroke color"/>
 
@@ -37,7 +36,6 @@
                 <StackPanel>
                     <Label 
                         Margin="0 0 0 5"
-                        Foreground="White" 
                         Target="{Binding ElementName=FillColorPicker}" 
                         Content="Fill color"/>
                     

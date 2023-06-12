@@ -26,7 +26,7 @@ internal static class GeometryObjectDiagramItemsFactory
     /// <param name="geometryObject">Geometry object.</param>
     /// <returns>Geometry object diagram item.</returns>
     public static GeometryObjectDiagramItem Create(GeometryObject geometryObject)
-    {
+    {   
         return factories[geometryObject.GetType()].Invoke(geometryObject);
     }
 }

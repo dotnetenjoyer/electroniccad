@@ -11,6 +11,11 @@
             <MenuItem Header="Save project"/>
         </MenuItem>
         <MenuItem Header="Windows"/>
-        <MenuItem Header="Views"/>
+        <MenuItem Header="Views">
+            <MenuItem Header="Themes">
+                <MenuItem Header="White theme"/>
+                <MenuItem Header="Dark theme"/>
+            </MenuItem>
+        </MenuItem>
     </Menu>
 </UserControl>

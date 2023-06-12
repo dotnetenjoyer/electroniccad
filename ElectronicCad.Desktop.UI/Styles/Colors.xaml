@@ -1,11 +1,6 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Color x:Key="Background">#0d1116</Color>
-    <Color x:Key="SecondaryBackground">#1d232a</Color>
-    <Color x:Key="ComponentBackground">#161c23</Color>
-
-    <Color x:Key="PrimaryForeground">#FFFFFF</Color>
-    <Color x:Key="SecondaryForeground">#777f88</Color>
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Color x:Key="Primary">#0c8ce9</Color>
     <Color x:Key="PrimaryHover">#5ec7ff</Color>
@@ -22,28 +17,4 @@
     <Color x:Key="Success">#52c41a</Color>
     <Color x:Key="SuccessHover">#95de64</Color>
     <Color x:Key="SuccessActive">#389e0d</Color>
-
-    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource Background}"/>
-    <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="{StaticResource SecondaryBackground}"/>
-    <SolidColorBrush x:Key="ComponentBackgroundBrush" Color="{StaticResource ComponentBackground}"/>
-    <SolidColorBrush x:Key="SecondaryComponentBackgroundBrush" Color="{StaticResource ComponentBackground}" Opacity=".45"/>
-
-    <SolidColorBrush x:Key="PrimaryForegroundBrush" Color="{StaticResource PrimaryForeground}"/>
-    <SolidColorBrush x:Key="SecondaryForegroundBrush" Color="{StaticResource SecondaryForeground}"/>
-
-    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
-    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{StaticResource PrimaryHover}"/>
-    <SolidColorBrush x:Key="PrimaryActiveBrush" Color="{StaticResource PrimaryActive}"/>
-
-    <SolidColorBrush x:Key="ErrorBrush" Color="{StaticResource Error}"/>
-    <SolidColorBrush x:Key="ErrorHoverBrush" Color="{StaticResource ErrorHover}"/>
-    <SolidColorBrush x:Key="ErrorActiveBrush" Color="{StaticResource ErrorActive}"/>
-
-    <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource Warning}"/>
-    <SolidColorBrush x:Key="WarningHoverBrush" Color="{StaticResource WarningHover}"/>
-    <SolidColorBrush x:Key="WarningActiveBrush" Color="{StaticResource WarningActive}"/>
-
-    <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource Success}"/>
-    <SolidColorBrush x:Key="SuccessHoverBrush" Color="{StaticResource SuccessHover}"/>
-    <SolidColorBrush x:Key="SuccessActiveBrush" Color="{StaticResource SuccessHover}"/>
 </ResourceDictionary>

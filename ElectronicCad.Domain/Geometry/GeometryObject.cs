@@ -62,7 +62,7 @@ public abstract class GeometryObject : VersionableBase
         }
     }
 
-    private Color strokeColor = Color.White;
+    private Color strokeColor = Theme.Foreground;
 
     /// <summary>
     /// Determines the geometry object stoke thickness.

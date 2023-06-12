@@ -63,21 +63,21 @@ internal class GeometryGroupDiagramItem : GeometryObjectDiagramItem<GeometryGrou
     }
 
     /// <inheritdoc />
-    public override bool HandleDiagramMouseDown(MouseParameters mouse)
+    public override bool CheckMouseDown(MouseParameters mouse, out DiagramItem? interactionItem)
     {
-        return groupDiagramItem.HandleDiagramMouseDown(mouse);
+        return groupDiagramItem.CheckMouseDown(mouse, out interactionItem);
     }
 
     /// <inheritdoc />
-    public override bool HandleDiagramMouseUp(MouseParameters mouse)
+    public override bool CheckMouseUp(MouseParameters mouse, out DiagramItem? interactionItem)
     {
-        return groupDiagramItem.HandleDiagramMouseUp(mouse);
+        return groupDiagramItem.CheckMouseUp(mouse, out interactionItem);
     }
 
     /// <inheritdoc />
-    public override bool HandleDiagramMouseMove(MovingMouseParameters mouse)
+    public override bool CheckMouseMove(MovingMouseParameters mouse, out DiagramItem? interactionItem)
     {
-        return groupDiagramItem.HandleDiagramMouseMove(mouse);
+        return groupDiagramItem.CheckMouseMove(mouse, out interactionItem);
     }
 
     /// <inheritdoc />

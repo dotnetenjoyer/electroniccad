@@ -60,6 +60,16 @@ internal static class GeometryExtensions
     }
 
     /// <summary>
+    /// Converts skia color to domain color.
+    /// </summary>
+    /// <param name="color">Skia color.</param>
+    /// <returns>Domain color.</returns>
+    public static Color ToDomainColor(this SKColor color)
+    {
+        return new Color(color.Red, color.Green, color.Blue, color.Alpha);
+    }
+
+    /// <summary>
     /// Scale the specified skia point.
     /// </summary>
     /// <param name="point">Skia point.</param>

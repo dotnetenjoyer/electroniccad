@@ -31,8 +31,7 @@
                 <Label 
                     Target="PrototypeSelector"
                     Content="Prototype" 
-                    Margin="0 0 0 5"
-                    Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                    Margin="0 0 0 5"/>
 
                 <ComboBox 
                     x:Name="PrototypeSelector"

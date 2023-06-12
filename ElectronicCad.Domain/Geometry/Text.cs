@@ -75,7 +75,7 @@ public class Text : ContentGeometry
     /// </summary>
     public Text(Point center, double width, double height) : base(center, width, height)
     {
-        fillColor = Color.White;
+        fillColor = Theme.Foreground;
     }
 
     /// <summary>

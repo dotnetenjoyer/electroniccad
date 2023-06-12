@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SkiaSharp;
 using ElectronicCad.Diagramming.Utils;
+using System.Configuration.Internal;
 
 namespace ElectronicCad.Diagramming.Drawing.Items;
 
@@ -98,44 +99,50 @@ internal class GroupDiagramItem : DiagramItem, IDiagramItemContainer
     }
 
     /// <inheritdoc />
-    public override bool HandleDiagramMouseDown(MouseParameters mouse)
+    public override bool CheckMouseDown(MouseParameters mouse, out DiagramItem? interactionItem)
     {
         foreach (var child in Children)
         {
-            if (child.HandleDiagramMouseDown(mouse))
+            if (child.CheckMouseDown(mouse, out var childInteractionItem))
             {
+                interactionItem = childInteractionItem;
                 return true;
             }
         }
 
+        interactionItem = null;
         return false;
     }
 
     /// <inheritdoc />
-    public override bool HandleDiagramMouseUp(MouseParameters mouse)
+    public override bool CheckMouseUp(MouseParameters mouse, out DiagramItem? interactionItem)
     {
         foreach (var child in Children)
         {
-            if (child.HandleDiagramMouseUp(mouse))
+            if (child.CheckMouseUp(mouse, out var childInteractionItem))
             {
+                interactionItem = childInteractionItem;
                 return true;
             }
         }
 
+        interactionItem = null;
         return false;
     }
 
     /// <inheritdoc />
-    public override bool HandleDiagramMouseMove(MovingMouseParameters mouse)
+    public override bool CheckMouseMove(MovingMouseParameters mouse, out DiagramItem? interactionItem)
     {
         foreach (var child in Children)
         {
-            if (child.HandleDiagramMouseMove(mouse))
+            if (child.CheckMouseMove(mouse, out DiagramItem? childInteractionItem))
             {
+                interactionItem = childInteractionItem;
                 return true;
             }
         }
 
+        interactionItem = null;
         return false;
     }
 }

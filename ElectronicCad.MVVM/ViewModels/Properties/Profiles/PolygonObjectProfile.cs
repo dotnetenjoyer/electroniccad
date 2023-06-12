@@ -6,14 +6,14 @@ using ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 namespace ElectronicCad.MVVM.ViewModels.Properties.Profiles;
 
 /// <summary>
-/// Creates configuration for rectangle.
+/// Creates properties configuration for rectangle.
 /// </summary>
-internal class PolygoneObjectProfile : PropertyObjectProfile
+internal class PolygonObjectProfile : PropertyObjectProfile
 {
     /// <summary>
     /// Constructor.
     /// </summary>
-    public PolygoneObjectProfile()
+    public PolygonObjectProfile()
     {
         CreateConfiguration<PolygonPropertiesProxy>()
             .HasCustomSection<TransformationCustomSection>()

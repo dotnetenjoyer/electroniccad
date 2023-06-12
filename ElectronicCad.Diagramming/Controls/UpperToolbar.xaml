@@ -18,7 +18,7 @@
             
             <Style.Triggers>
                 <Trigger Property="control:UpperToolbarAssist.IsToolSelected" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -26,8 +26,9 @@
     
     <Border 
         Style="{StaticResource ComponentWrapper}" 
-        BorderBrush="{StaticResource BackgroundBrush}" 
-        BorderThickness="1">
+        Background="{DynamicResource DiagramToolbarBackgroundBrush}"
+        BorderBrush="{StaticResource DiagramBackgroundBrush}" 
+        BorderThickness="2">
         <StackPanel Orientation="Vertical">
             <Button 
                 Command="{Binding ChangeModeCommand, ElementName=Toolbar}"

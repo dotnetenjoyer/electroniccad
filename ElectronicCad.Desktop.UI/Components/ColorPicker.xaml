@@ -11,6 +11,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Styles/Colors.xaml"/>
+                <ResourceDictionary Source="../Styles/Brushes.xaml"/>
                 <ResourceDictionary Source="../Styles/Typography.xaml"/>
                 <ResourceDictionary Source="../Styles/TextBox.xaml"/>
                 <ResourceDictionary Source="../Styles/Icons.xaml"/>
@@ -26,7 +27,7 @@
                         Padding="10 8"
                         CornerRadius="5"
                         Background="Transparent"
-                        BorderBrush="{StaticResource ComponentBackgroundBrush}" 
+                        BorderBrush="{StaticResource ComponentBorderBrush}" 
                         BorderThickness="2">
 
                         <DockPanel>
@@ -71,6 +72,8 @@
                 Padding="15 15 15 15" 
                 Width="230" 
                 Background="{StaticResource ComponentBackgroundBrush}"
+                BorderBrush="{StaticResource ComponentBorderBrush}"
+                BorderThickness="2"
                 CornerRadius="5">
 
                 <DockPanel>

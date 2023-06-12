@@ -8,6 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="ViewModels\**" />
+      <EmbeddedResource Remove="ViewModels\**" />
+      <None Remove="ViewModels\**" />
+      <Page Remove="ViewModels\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="CalcBinding" Version="2.5.2" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Toolkit.Mvvm" Version="7.0.0" />
@@ -21,10 +28,6 @@
       <ProjectReference Include="..\ElectronicCad.Domain\ElectronicCad.Domain.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM.Common\ElectronicCad.MVVM.Common.csproj" />
       <ProjectReference Include="..\ElectronicCad.MVVM\ElectronicCad.MVVM.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="ViewModels\" />
     </ItemGroup>
 
 </Project>

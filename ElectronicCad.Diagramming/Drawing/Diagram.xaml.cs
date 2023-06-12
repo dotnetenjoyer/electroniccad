@@ -16,7 +16,7 @@ using ElectronicCad.Diagramming.Drawing.Modes;
 using ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 using ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
-using Colors = ElectronicCad.Diagramming.Utils.Colors;
+using DrawingColors = ElectronicCad.Diagramming.Drawing.DrawingColors;
 using MouseButtonState = ElectronicCad.Diagramming.Drawing.MouseButtonState;
 using DiagramLayer = ElectronicCad.Diagramming.Drawing.Layer;
 using DomainLayer = ElectronicCad.Domain.Geometry.Layer;
@@ -30,12 +30,32 @@ namespace ElectronicCad.Diagramming
     public partial class Diagram : UserControl, IDisposable
     {
         /// <summary>
+        /// Selection frame.
+        /// </summary>
+        internal SelectionFrameDiagramItem SelectionFrame { get; private set; }
+
+        /// <summary>
+        /// Selection area.
+        /// </summary>
+        internal SelectionAreaDiagramItem SelectionArea { get; private set; }
+
+        /// <summary>
+        /// Diagram drawing colors.
+        /// </summary>
+        internal DrawingColors DrawingColors { get; private set; }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         public Diagram()
         {
             InitializeComponent();
-            Colors.Initialize(this);
+
+            DrawingColors = new DrawingColors();
+            DrawingColors.Initialize(this);
+
+            var foregroundColor = DrawingColors.PrimaryForeground.ToDomainColor();
+            Theme.Initialize(foregroundColor);
 
             SkiaCanvas.PaintSurface += HandleCanvasPaint;
 
@@ -47,11 +67,11 @@ namespace ElectronicCad.Diagramming
             SystemLayer = new DiagramLayer(this, int.MaxValue);
             layers.Add(SystemLayer);
 
-            var selectionFrame = new SelectionFrameDiagramItem();
-            AddDiagramItem(selectionFrame, SystemLayer);
+            SelectionFrame = new SelectionFrameDiagramItem();
+            AddDiagramItem(SelectionFrame, SystemLayer);
 
-            var selectionArea = new SelectionAreaDiagramItem();
-            AddDiagramItem(selectionArea, SystemLayer);
+            SelectionArea = new SelectionAreaDiagramItem();
+            AddDiagramItem(SelectionArea, SystemLayer);
 
             SetDiagramMode(DiagramMode.Selection);
         }
@@ -498,9 +518,8 @@ namespace ElectronicCad.Diagramming
             if (FocusItem != null)
             {
                 var mouseParameters = CreateMouseParameters(mouseEventArgs);
-                FocusItem.HandleDiagramMouseDown(mouseParameters);
-                
-                InteractingItem = FocusItem;
+                FocusItem.CheckMouseDown(mouseParameters, out var interactionItem);
+                InteractingItem = interactionItem;
             }
         }
 
@@ -509,7 +528,7 @@ namespace ElectronicCad.Diagramming
             if (InteractingItem != null)
             {
                 var mouseParameters = CreateMouseParameters(mouseEventArgs);
-                InteractingItem.HandleDiagramMouseUp(mouseParameters);
+                InteractingItem.RaiseMouseUp(mouseParameters);
                 InteractingItem = null;
             }
         }
@@ -583,15 +602,15 @@ namespace ElectronicCad.Diagramming
             
             foreach (var item in visibleItems)
             {
-                if (item.HandleDiagramMouseMove(mouse))
+                if (item.CheckMouseMove(mouse, out var interactionItem))
                 {
-                    if (FocusItem != item)
+                    if (FocusItem != interactionItem)
                     {
                         FocusItem?.RaiseMouseLeave();
                     }
 
-                    FocusItem = item;
-                    Cursor = item.GetCurrentCursor();
+                    FocusItem = interactionItem;
+                    Cursor = interactionItem!.GetCurrentCursor();
                     return;
                 }
             }
@@ -640,7 +659,7 @@ namespace ElectronicCad.Diagramming
         private void DrawWorkspaceArea(SkiaDrawingContext drawingContext)
         {
             var workspaceArea = new SKRect(0, 0, (float)GeometryDiagram.Size.Width, (float)GeometryDiagram.Size.Height);
-            var paint = new SKPaint { Color = Colors.SecondaryBackground };
+            using var paint = new SKPaint { Color = DrawingColors.WorkspaceBackground };
             drawingContext.DrawRect(workspaceArea, paint);
         }
 

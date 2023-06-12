@@ -17,10 +17,9 @@
 
                 <StackPanel  Margin="0 0 0 15">
                     <Label 
-                    Margin="0 0 0 5"
-                    Foreground="White" 
-                    Target="{Binding ElementName=FontFamilySelector}" 
-                    Content="Font family"/>
+                        Margin="0 0 0 5"
+                        Target="{Binding ElementName=FontFamilySelector}" 
+                        Content="Font family"/>
 
                     <ComboBox 
                         x:Name="FontFamilySelector" 
@@ -37,33 +36,31 @@
 
                     <StackPanel>
                         <Label 
-                        Margin="0 0 0 5"
-                        Foreground="White" 
-                        Target="{Binding ElementName=FontWeightsSelector}" 
-                        Content="Color"/>
+                            Margin="0 0 0 5"
+                            Target="{Binding ElementName=FontWeightsSelector}" 
+                            Content="Color"/>
 
                         <ComboBox 
-                        x:Name="FontWeightsPicker" 
-                        SelectedValue="{Binding Model.FontWeight}" 
-                        ItemsSource="{Binding Model.FontWeights}"/>
+                            x:Name="FontWeightsPicker" 
+                            SelectedValue="{Binding Model.FontWeight}" 
+                            ItemsSource="{Binding Model.FontWeights}"/>
                     </StackPanel>
 
                     <components:InputControl 
-                    Title="Size"
-                    Value="{Binding Model.FontSize}"
-                    Grid.Column="3"/>
+                        Title="Size"
+                        Value="{Binding Model.FontSize}"
+                        Grid.Column="3"/>
                 </Grid>
 
                 <StackPanel>
                     <Label 
-                    Margin="0 0 0 5"
-                    Foreground="White" 
-                    Target="{Binding ElementName=ForegroundColorPicker}" 
-                    Content="Color"/>
+                        Margin="0 0 0 5"
+                        Target="{Binding ElementName=ForegroundColorPicker}" 
+                        Content="Color"/>
 
                     <components:ColorPicker 
-                    x:Name="ForegroundColorPicker"
-                    Value="{Binding Model.ForegroundColor, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
+                        x:Name="ForegroundColorPicker"
+                        Value="{Binding Model.ForegroundColor, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
                 </StackPanel>
             </StackPanel>
         </Expander>

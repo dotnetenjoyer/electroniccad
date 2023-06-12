@@ -6,6 +6,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/ElectronicCad.Desktop.UI;component/Styles/Themes/WhiteTheme.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/ElectronicCad.Desktop.UI;component/Styles.xaml"/>
                 <ResourceDictionary Source="/Views/Common/Dialogs/Dialogs.xaml"/>
             </ResourceDictionary.MergedDictionaries>
