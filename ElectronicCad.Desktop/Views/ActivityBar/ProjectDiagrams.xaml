@@ -47,12 +47,13 @@
     </TabItem.Resources>
 
     <TabItem.Header>
-        <TextBlock Text="Diagrams"/>
+        <TextBlock Text="Холсты"/>
     </TabItem.Header>
 
     <DockPanel>
         <components:MultiSelectTreeView 
             ItemsSource="{Binding DiagramTrees.Diagrams}"
+            FontWeight="Medium"
             SelectedItems="{Binding SelectedItems, Mode=TwoWay}">
 
             <components:MultiSelectTreeView.ContextMenu>

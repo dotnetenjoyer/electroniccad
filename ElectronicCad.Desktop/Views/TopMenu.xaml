@@ -1,20 +1,19 @@
-<UserControl x:Class="ElectronicCad.Desktop.Views.TopMenu"
+﻿<UserControl x:Class="ElectronicCad.Desktop.Views.TopMenu"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d">
     <Menu>
-        <MenuItem Header="File">
-            <MenuItem Header="Open project"/>
-            <MenuItem Header="New project"/>
-            <MenuItem Header="Save project"/>
+        <MenuItem Header="Файл">
+            <MenuItem Header="Открыть проект"/>
+            <MenuItem Header="Создать проект"/>
+            <MenuItem Header="Сохранить проект"/>
         </MenuItem>
-        <MenuItem Header="Windows"/>
-        <MenuItem Header="Views">
-            <MenuItem Header="Themes">
-                <MenuItem Header="White theme"/>
-                <MenuItem Header="Dark theme"/>
+        <MenuItem Header="Представление">
+            <MenuItem Header="Темы">
+                <MenuItem Header="Белая тема"/>
+                <MenuItem Header="Черная тема"/>
             </MenuItem>
         </MenuItem>
     </Menu>

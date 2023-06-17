@@ -6,7 +6,7 @@
 public class Image : ContentGeometry
 {
     /// <inheritdoc />
-    public override string Name { get; internal set; } = nameof(Image);
+    public override string Name { get; internal set; } = "Изображение";
 
     /// <summary>
     /// Image to reference.

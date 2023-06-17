@@ -4,7 +4,7 @@
     xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI">
 
     <DataTemplate x:Key="TransformationCustomSection">
-        <Expander Header="Transformation" IsExpanded="True">
+        <Expander Header="Трансформация" IsExpanded="True">
             <StackPanel Orientation="Vertical">
                 <Grid Margin="0 15">
                     <Grid.ColumnDefinitions>
@@ -14,13 +14,13 @@
                     </Grid.ColumnDefinitions>
 
                     <components:InputControl
-                        Title="Center X"
+                        Title="Центр X"
                         Value="{Binding TransformationModel.CenterX}"
                         StringFormat="{}{0:#,#.##}"
                     />
 
                     <components:InputControl
-                        Title="Center Y"
+                        Title="Центр Y"
                         Grid.Column="2"
                         Value="{Binding TransformationModel.CenterY}"
                         StringFormat="{}{0:#,#.##}"
@@ -35,13 +35,13 @@
                     </Grid.ColumnDefinitions>
 
                     <components:InputControl
-                        Title="Width"
+                        Title="Ширина"
                         Value="{Binding TransformationModel.Width}"
                         StringFormat="{}{0:#,#.##}"
                     />
 
                     <components:InputControl
-                        Title="Height"
+                        Title="Высота"
                         Grid.Column="2"
                         Value="{Binding TransformationModel.Height}"
                         StringFormat="{}{0:#,#.##}"

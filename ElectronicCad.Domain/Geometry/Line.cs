@@ -1,4 +1,4 @@
-namespace ElectronicCad.Domain.Geometry;
+﻿namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
 /// Line.
@@ -16,7 +16,7 @@ public class Line : GeometryObject
     public const int SecondPointIndex = 1;
 
     /// <inheritdoc/>
-    public override string Name { get; internal set; } = nameof(Line);
+    public override string Name { get; internal set; } = "Линия";
 
     /// <summary>
     /// First point of the line.

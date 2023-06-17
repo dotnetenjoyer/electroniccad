@@ -8,7 +8,7 @@
     Style="{StaticResource TabItem}">
 
     <TabItem.Header>
-        <TextBlock Text="Components"/>
+        <TextBlock Text="Компоненты"/>
     </TabItem.Header>
     
     <DockPanel>
