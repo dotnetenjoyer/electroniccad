@@ -10,7 +10,7 @@ namespace ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramIt
 /// </summary>
 internal class ImageDiagramItem : ContentGeometryObjectDiagramItem<Image>
 {
-    private SKImage skiaImage;
+    private readonly SKBitmap skiaBitmap;
 
     /// <summary>
     /// Constructor,
@@ -19,19 +19,12 @@ internal class ImageDiagramItem : ContentGeometryObjectDiagramItem<Image>
     public ImageDiagramItem(Image image) : base(image)
     {
         UpdateViewState();
-        InitializeSkiaImage();
-    }
-
-    private void InitializeSkiaImage()
-    {
-        var content = File.ReadAllBytes(GeometryObject.Reference);
-        var bitmap = SKBitmap.Decode(content);
-        skiaImage = SKImage.FromBitmap(bitmap);
+        skiaBitmap = SKBitmap.Decode(File.ReadAllBytes(GeometryObject.Reference));
     }
 
     /// <inheritdoc />
     public override async void Draw(SkiaDrawingContext context)
     {
-        context.DrawImage(skiaImage!, GeometryObject.BoundingBox.Start.ToSKPoint());
+        context.DrawBitmap(skiaBitmap, BoundingBox);
     }
 }
