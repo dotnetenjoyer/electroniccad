@@ -8,7 +8,7 @@ namespace ElectronicCad.Domain.Geometry;
 public class Text : ContentGeometry
 {
     /// <inheritdoc />
-    public override string Name => nameof(Text);
+    public override string Name => "Текст";
 
     /// <summary>
     /// Text content.
@@ -23,7 +23,7 @@ public class Text : ContentGeometry
         }
     }
 
-    private string? content = "Text";
+    private string? content = "Текст";
 
     /// <summary>
     /// Font size.
@@ -75,7 +75,7 @@ public class Text : ContentGeometry
     /// </summary>
     public Text(Point center, double width, double height) : base(center, width, height)
     {
-        fillColor = Color.White;
+        fillColor = Theme.Foreground;
     }
 
     /// <summary>

@@ -1,0 +1,18 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="Background">#f0f0f0</Color>
+    <Color x:Key="SecondaryBackground">#FFFFFF</Color>
+    <Color x:Key="ComponentBackground">#FFFFFF</Color>
+    <Color x:Key="ComponentBorder">#f0f0f0</Color>
+
+    <Color x:Key="PrimaryForeground">#000</Color>
+    <Color x:Key="SecondaryForeground">#7f7f7f</Color>
+    <Color x:Key="ButtonForeground">#FFFFFF</Color>
+
+    <Color x:Key="DiagramBackground">#f0f0f0</Color>
+    <Color x:Key="DiagramPrimaryForeground">#000</Color>
+    <Color x:Key="DiagramWorkspaceBackground">#FFFFFF</Color>
+    <Color x:Key="DiagramToolbarBackground">#FFFFFF</Color>
+</ResourceDictionary>

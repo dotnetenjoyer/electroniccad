@@ -5,6 +5,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml"/>
+        <ResourceDictionary Source="Brushes.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <converters:TooltipVisibilityConverter x:Key="TooltipVisibilityConverter"/>
@@ -28,5 +29,14 @@
 
     <Style x:Key="SecondaryText" TargetType="TextBlock" BasedOn="{StaticResource BaseText}">
         <Setter Property="Foreground" Value="{StaticResource SecondaryForegroundBrush}"/>
+    </Style>
+
+    <Style x:Key="Title" TargetType="TextBlock" BasedOn="{StaticResource PrimaryText}">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    
+    <Style TargetType="Label">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
     </Style>
 </ResourceDictionary>

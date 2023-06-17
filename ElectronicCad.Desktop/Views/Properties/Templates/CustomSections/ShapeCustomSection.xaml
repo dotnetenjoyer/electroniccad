@@ -18,9 +18,8 @@
                 <StackPanel>
                     <Label 
                         Margin="0 0 0 5"
-                        Foreground="White" 
                         Target="{Binding ElementName=StrokeColorPicker}" 
-                        Content="Stroke color"/>
+                        Content="Цвет обводки"/>
 
                     <components:ColorPicker 
                         x:Name="StrokeColorPicker"
@@ -28,7 +27,7 @@
                 </StackPanel>
 
                 <components:InputControl 
-                    Title="Weight"
+                    Title="Толщина"
                     Value="{Binding ShapeModel.StrokeWidth}"
                     Grid.Column="3"/>
             </Grid>
@@ -37,9 +36,8 @@
                 <StackPanel>
                     <Label 
                         Margin="0 0 0 5"
-                        Foreground="White" 
                         Target="{Binding ElementName=FillColorPicker}" 
-                        Content="Fill color"/>
+                        Content="Цвет заливки"/>
                     
                     <components:ColorPicker 
                         x:Name="FillColorPicker"

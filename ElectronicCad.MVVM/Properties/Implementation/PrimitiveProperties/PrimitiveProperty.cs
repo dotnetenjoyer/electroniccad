@@ -17,7 +17,7 @@ public class PrimitiveProperty<TValue> : ObservableObject, IProperty
     public string Name { get; init; }
 
     /// <inheritdoc />
-    public string GroupName { get; init; } = "Properties";
+    public string GroupName { get; init; } = "Свойства";
 
     /// <inheritdoc />
     public bool IsReadOnly { get; init; }

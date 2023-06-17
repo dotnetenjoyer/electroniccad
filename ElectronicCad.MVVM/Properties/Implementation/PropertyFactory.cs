@@ -27,7 +27,7 @@ public static class PropertyFactory
     private static IProperty CreatePrimitiveProperty(PrimitivePropertyConfiguration primitiveConfiguration, IPropertiesProxy proxy)
     {
         var propertyType = primitiveConfiguration.SourceProperty.PropertyType;
-        var propertyName = primitiveConfiguration.SourceProperty.Name;
+        var propertyName = primitiveConfiguration.Name;
 
         var primitivePropertyType = typeof(PrimitiveProperty<>).MakeGenericType(propertyType);
         var property = (IProperty)Activator.CreateInstance(primitivePropertyType, proxy,

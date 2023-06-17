@@ -5,6 +5,7 @@ using ElectronicCad.Diagramming.Drawing.DiagramItems.GeometryObjectDiagramItems;
 using ElectronicCad.Diagramming.Drawing.Items;
 using System;
 using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Diagramming.Drawing.DiagramItems.Extensions;
 
 namespace ElectronicCad.Diagramming.Drawing.Modes;
 
@@ -14,27 +15,14 @@ namespace ElectronicCad.Diagramming.Drawing.Modes;
 public class SelectionMode : BaseDiagramMode
 {
     private bool isSelectionStarted;
-    private SelectionAreaDiagramItem selectionArea;
+    
+    private SelectionAreaDiagramItem SelectionArea => Diagram.SelectionArea;
 
+    private SelectionFrameDiagramItem SelectionFrame => Diagram.SelectionFrame;
+    
     /// <inheritdoc/>
     public override Cursor Cursor => Cursors.Arrow;
 
-    /// <inheritdoc />
-    public override void Initialize(Diagram diagram)
-    {
-        base.Initialize(diagram);
-
-        selectionArea = GetSelectionArea();
-    }
-
-    private SelectionAreaDiagramItem GetSelectionArea()
-    {
-        var selectionArea = Diagram.DiagramItems
-            .OfType<SelectionAreaDiagramItem>()
-            .First();
-
-        return selectionArea;
-    }
 
     /// <inheritdoc/>
     protected override void ProcessMouseMove(MouseEventArgs args)
@@ -42,7 +30,7 @@ public class SelectionMode : BaseDiagramMode
         if (isSelectionStarted)
         {
             var position = Diagram.CalculateDiagramPosition(args);
-            selectionArea.SetEndPoint(position);
+            SelectionArea.SetEndPoint(position);
             Diagram.Redraw();
         }
     }
@@ -50,7 +38,7 @@ public class SelectionMode : BaseDiagramMode
     /// <inheritdoc/>
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)
     {
-        if (Diagram.FocusItem is SelectionFrameDiagramItem)
+        if (Diagram.FocusItem != null && SelectionFrame.Contains(Diagram.FocusItem))
         {
             return;
         }
@@ -80,16 +68,16 @@ public class SelectionMode : BaseDiagramMode
     private void StartSelection(SKPoint position)
     {
         isSelectionStarted = true;
-        selectionArea.IsVisible = true;
-        selectionArea.SetStartPoint(position);
+        SelectionArea.IsVisible = true;
+        SelectionArea.SetStartPoint(position);
     }
 
     private void CompleteSelection()
     {
         isSelectionStarted = false;
-        selectionArea.IsVisible = false;
+        SelectionArea.IsVisible = false;
 
-        var standardizedSelectionArea = selectionArea.BoundingBox.Standardized;
+        var standardizedSelectionArea = SelectionArea.BoundingBox.Standardized;
         Diagram.SelectedItems = Diagram.DiagramItems
             .Where(item => item.IsVisible)
             .Where(item => item.BoundingBox.IntersectsWith(standardizedSelectionArea))

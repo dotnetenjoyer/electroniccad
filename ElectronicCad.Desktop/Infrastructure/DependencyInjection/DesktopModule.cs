@@ -5,6 +5,7 @@ using ElectronicCad.MVVM;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
 using ElectronicCad.MVVM.Utils;
 using ElectronicCad.MVVM.ViewModels;
+using ElectronicCad.UseCases.Projects;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ElectronicCad.Desktop.Infrastructure.DependencyInjection;
@@ -13,7 +14,7 @@ internal class DesktopModule
 {
     public static void Register(IServiceCollection services, MainWindow mainWindow)
     {
-        services.AddAutoMapper(typeof(MainViewModel));
+        services.AddAutoMapper(typeof(MainViewModel), typeof(ProjectsProfile));
         
         services.AddSingleton<ViewModelFactory>();
         services.AddSingleton<IDialogService, DialogService>();

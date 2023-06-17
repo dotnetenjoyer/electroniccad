@@ -49,14 +49,15 @@ public class DiagramsContextMenuFactory
             return commands;
         }
 
-        commands.Add(new ContextMenuCommand("Clone", new RelayCommand(() => 
+        commands.Add(new ContextMenuCommand("Сгруппировать",
+            new RelayCommand(GroupGeometry, CanGroupGeometry)));
+
+        commands.Add(new ContextMenuCommand("Клонировать", new RelayCommand(() => 
             CloneGeometry(geometryObjects!))));
 
-        commands.Add(new ContextMenuCommand("Remove", new RelayCommand(() => 
+        commands.Add(new ContextMenuCommand("Удалить", new RelayCommand(() => 
             RemoveGeometry(geometryObjects!))));
 
-        commands.Add(new ContextMenuCommand("Group",
-            new RelayCommand(GroupGeometry, CanGroupGeometry)));
 
         return commands;
 
@@ -125,7 +126,7 @@ public class DiagramsContextMenuFactory
             return commands;
         }
 
-        commands.Add(new ContextMenuCommand("Add layer", new RelayCommand(() =>
+        commands.Add(new ContextMenuCommand("Добавить слой", new RelayCommand(() =>
         {
             diagram.GeometryDiagram.AddLayer("New");
         })));

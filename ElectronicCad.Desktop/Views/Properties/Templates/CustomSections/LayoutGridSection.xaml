@@ -22,13 +22,13 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <components:InputControl Title="Count" Value="{Binding Count}"/>
-                            <components:InputControl Grid.Column="2" Title="Width" Value="{Binding Width}"/>
-                            <components:InputControl Grid.Column="4" Title="Offset" Value="{Binding Offset}"/>
+                            <components:InputControl Grid.Column="0" Title="Количество" Value="{Binding Count}"/>
+                            <components:InputControl Grid.Column="2" Title="Ширина" Value="{Binding Width}"/>
+                            <components:InputControl Grid.Column="4" Title="Смещение" Value="{Binding Offset}"/>
                         </Grid>
 
                         <StackPanel>
-                            <Label Content="Color" Foreground="White"/>
+                            <Label Content="Цвет"/>
                             <components:ColorPicker Value="{Binding Color, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
                         </StackPanel>
                     </StackPanel>
@@ -41,7 +41,7 @@
                                 Width="25" 
                                 Height="25" 
                                 Path="{StaticResource ColumnsIcon}"
-                                Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                                Foreground="{DynamicResource PrimaryForegroundBrush}"/>
                         </StackPanel>
                     </ControlTemplate>
                 </components:DropDown.PreviewTemplate>
@@ -49,7 +49,7 @@
 
             <TextBlock Margin="10 0 0 0" VerticalAlignment="Center" Style="{StaticResource PrimaryText}">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0} columns ({1}px)">
+                    <MultiBinding StringFormat="{}{0} колонок ({1}px)">
                         <Binding Path="Count" />
                         <Binding Path="Width" />
                     </MultiBinding>
@@ -72,13 +72,13 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <components:InputControl Title="Count" Value="{Binding Count}"/>
-                            <components:InputControl Grid.Column="2" Title="Height" Value="{Binding Height}"/>
-                            <components:InputControl Grid.Column="4" Title="Offset" Value="{Binding Offset}"/>
+                            <components:InputControl Grid.Column="0" Title="Количество" Value="{Binding Count}"/>
+                            <components:InputControl Grid.Column="2" Title="Высота" Value="{Binding Height}"/>
+                            <components:InputControl Grid.Column="4" Title="Смещение" Value="{Binding Offset}"/>
                         </Grid>
 
                         <StackPanel>
-                            <Label Content="Color" Foreground="White"/>
+                            <Label Content="Цвет"/>
                             <components:ColorPicker Value="{Binding Color, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
                         </StackPanel>
                     </StackPanel>
@@ -90,7 +90,7 @@
                                 Width="25" 
                                 Height="25" 
                                 Path="{StaticResource RowsIcon}"
-                                Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                                Foreground="{DynamicResource PrimaryForegroundBrush}"/>
                         </StackPanel>
                     </ControlTemplate>
                 </components:DropDown.PreviewTemplate>
@@ -98,7 +98,7 @@
 
             <TextBlock Margin="10 0 0 0" VerticalAlignment="Center" Style="{StaticResource PrimaryText}">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0} rows ({1}px)">
+                    <MultiBinding StringFormat="{}{0} строк ({1}px)">
                         <Binding Path="Count" />
                         <Binding Path="Height" />
                     </MultiBinding>
@@ -112,10 +112,10 @@
             <components:DropDown Placement="Left">
                 <components:DropDown.Content>
                     <StackPanel Width="280">
-                        <components:InputControl Title="Size" Value="{Binding Size}"/>
+                        <components:InputControl Title="Размер" Value="{Binding Size}"/>
 
                         <StackPanel>
-                            <Label Content="Color" Foreground="White"/>
+                            <Label Content="Цвет"/>
                             <components:ColorPicker Value="{Binding Color, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
                         </StackPanel>
                     </StackPanel>
@@ -127,7 +127,7 @@
                                 Width="25" 
                                 Height="25" 
                                 Path="{StaticResource GridIcon}"
-                                Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                                Foreground="{DynamicResource PrimaryForegroundBrush}"/>
                         </StackPanel>
                     </ControlTemplate>
                 </components:DropDown.PreviewTemplate>
@@ -135,7 +135,7 @@
 
             <TextBlock Margin="10 0 0 0" VerticalAlignment="Center" Style="{StaticResource PrimaryText}">
                 <TextBlock.Text>
-                    <MultiBinding StringFormat="{}Grid ({0}px)">
+                    <MultiBinding StringFormat="{}Сетка ({0}px)">
                         <Binding Path="Size" />
                     </MultiBinding>
                 </TextBlock.Text>
@@ -144,7 +144,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="LayoutGridSection">
-        <Expander Header="Layout grid" IsExpanded="True">
+        <Expander Header="Компоновочная сетка" IsExpanded="True">
             <StackPanel Margin="0 10 0 0">
                 <ItemsControl
                     ItemsSource="{Binding Model.LayoutGrids}">
@@ -192,7 +192,7 @@
                         HorizontalAlignment="Stretch"
                         Style="{StaticResource PrimaryButton}" 
                         Command="{Binding Model.AddLayoutGridCommand}">
-                        <TextBlock Text="Add layout grid" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Добавить компановку" HorizontalAlignment="Center"/>
                     </Button>
                 </Grid>
             </StackPanel>

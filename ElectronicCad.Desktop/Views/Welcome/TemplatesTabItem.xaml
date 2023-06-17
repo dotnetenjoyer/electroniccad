@@ -15,7 +15,7 @@
             <components:Icon 
                 Path="{StaticResource TemplatesIcon}"
                 Margin="0 0 8 0"/>
-            <TextBlock Text="Templates"/>
+            <TextBlock Text="Шаблоны"/>
         </StackPanel>
     </TabItem.Header>
     

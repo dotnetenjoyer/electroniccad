@@ -15,7 +15,7 @@
             <components:Icon 
                 Path="{StaticResource ClockIcon}"
                 Margin="0 0 8 0"/>
-            <TextBlock Text="Recent Projects"/>
+            <TextBlock Text="Проекты"/>
         </StackPanel>
     </TabItem.Header>
     
@@ -38,9 +38,14 @@
             
             <DataGrid.Columns>
                 <DataGridTemplateColumn 
-                    Header="Project Name"
                     CanUserResize="False"
-                    Width="35*">
+                    Width="20*">
+                    <DataGridTemplateColumn.Header>
+                        <StackPanel>
+                            <TextBlock Text="Test" Margin="5 0 10 0"/>
+                        </StackPanel>
+                    </DataGridTemplateColumn.Header>
+                    
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -48,7 +53,7 @@
                                     Path="{StaticResource FileIcon}"
                                     Width="12"
                                     Focusable="False"
-                                    Margin="0 0 10 0"/>
+                                    Margin="5 0 10 0"/>
                                 <TextBlock Text="{Binding Name}"/>
                             </StackPanel>
                         </DataTemplate>
@@ -56,13 +61,20 @@
                 </DataGridTemplateColumn>
                 
                 <DataGridTextColumn 
-                    Header="Project Id" 
-                    Width="35*"
+                    Header="Описание" 
+                    Width="30*"
                     CanUserResize="False"
-                    Binding="{Binding Name}"/>
-                
+                    Binding="{Binding Description}"/>
+
                 <DataGridTextColumn 
-                    Header="Last Access" 
+                    Header="Заказчик" 
+                    Width="20*"
+                    CanUserResize="False"
+                    Binding="{Binding Customer}"/>
+
+
+                <DataGridTextColumn 
+                    Header="Пследний доступ" 
                     Width="30*"
                     CanUserResize="False"
                     Binding="{Binding LastAccessTime}"/>

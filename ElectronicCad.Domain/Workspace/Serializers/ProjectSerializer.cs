@@ -11,15 +11,21 @@ public class ProjectSerializer : IEntitySerializer<Project>
     public Project Deserialize(StorageDictionary dictionary)
     {
         var project = new Project();
-        project.Name = dictionary.Parse<string>("name");
         project.CreatedAt = dictionary.Parse<DateTime>("createdAt");
+        project.Name = dictionary.Parse<string>("name");
+        project.Description = dictionary.Parse<string>("description");
+        project.Customer = dictionary.Parse<string>("customer");
+        project.CustomerContact = dictionary.Parse<string>("customerContact");
         return project;
     }
 
     /// <inheritdoc />
     public void Serialize(StorageDictionary dictionary, Project project)
     {
-        dictionary["name"] = project.Name;
         dictionary["createdAt"] = project.CreatedAt;
+        dictionary["name"] = project.Name;
+        dictionary["description"] = project.Description;
+        dictionary["customer"] = project.Customer;
+        dictionary["customerContact"] = project.CustomerContact;
     }
 }

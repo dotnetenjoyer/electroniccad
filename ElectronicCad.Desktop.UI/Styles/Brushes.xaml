@@ -1,0 +1,36 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource Background}"/>
+    <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="{DynamicResource SecondaryBackground}"/>
+
+    <SolidColorBrush x:Key="ComponentBackgroundBrush" Color="{DynamicResource ComponentBackground}"/>
+    <SolidColorBrush x:Key="ComponentBorderBrush" Color="{DynamicResource ComponentBorder}"/>
+   
+    <SolidColorBrush x:Key="SecondaryComponentBackgroundBrush" Color="{DynamicResource ComponentBackground}" Opacity=".45"/>
+
+    <SolidColorBrush x:Key="PrimaryForegroundBrush" Color="{DynamicResource PrimaryForeground}"/>
+    <SolidColorBrush x:Key="SecondaryForegroundBrush" Color="{DynamicResource SecondaryForeground}"/>
+
+    <SolidColorBrush x:Key="ButtonForegroundBrush" Color="{DynamicResource ButtonForeground}"/>
+    
+    <SolidColorBrush x:Key="DiagramBackgroundBrush" Color="{DynamicResource DiagramBackground}"/>
+    <SolidColorBrush x:Key="DiagramToolbarBackgroundBrush" Color="{DynamicResource DiagramToolbarBackground}"/>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource Primary}"/>
+    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="{DynamicResource PrimaryHover}"/>
+    <SolidColorBrush x:Key="PrimaryActiveBrush" Color="{DynamicResource PrimaryActive}"/>
+
+    <SolidColorBrush x:Key="ErrorBrush" Color="{DynamicResource Error}"/>
+    <SolidColorBrush x:Key="ErrorHoverBrush" Color="{DynamicResource ErrorHover}"/>
+    <SolidColorBrush x:Key="ErrorActiveBrush" Color="{DynamicResource ErrorActive}"/>
+
+    <SolidColorBrush x:Key="WarningBrush" Color="{DynamicResource Warning}"/>
+    <SolidColorBrush x:Key="WarningHoverBrush" Color="{DynamicResource WarningHover}"/>
+    <SolidColorBrush x:Key="WarningActiveBrush" Color="{DynamicResource WarningActive}"/>
+
+    <SolidColorBrush x:Key="SuccessBrush" Color="{DynamicResource Success}"/>
+    <SolidColorBrush x:Key="SuccessHoverBrush" Color="{DynamicResource SuccessHover}"/>
+    <SolidColorBrush x:Key="SuccessActiveBrush" Color="{DynamicResource SuccessHover}"/>
+</ResourceDictionary>

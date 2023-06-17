@@ -31,7 +31,8 @@ public class GetProjectDiagramTreesQueryHandler : IRequestHandler<GetProjectDiag
         var projectDiagrams = project.Diagrams.Where(d => d is ProjectDiagram);
 
         var diagramNodes = projectDiagrams
-            .Select(diagram => ComposeDiagramNode(diagram));
+            .Select(diagram => ComposeDiagramNode(diagram))
+            .ToList();
 
         var diagramTree = new DiagramTrees(diagramNodes);
         return diagramTree;
@@ -40,7 +41,8 @@ public class GetProjectDiagramTreesQueryHandler : IRequestHandler<GetProjectDiag
     private TreeNode ComposeDiagramNode(WorkspaceDiagram diagram)
     {
         var childNodes = diagram.GeometryDiagram.Layers
-            .Select(layer => ComposeLayerNode(layer));
+            .Select(layer => ComposeLayerNode(layer))
+            .ToList();
 
         return new WorkspaceDiagramDiagramTreeNode(diagram, childNodes);
     }
@@ -48,7 +50,9 @@ public class GetProjectDiagramTreesQueryHandler : IRequestHandler<GetProjectDiag
     private LayerDiagramTreeNode ComposeLayerNode(Layer layer)
     {
         var childNodes = layer.Children
-            .Select(obj => ComposeGeometryObjectNode(obj));
+            .Where(obj => !obj.IsTemporary)
+            .Select(obj => ComposeGeometryObjectNode(obj))
+            .ToList();
     
         return new LayerDiagramTreeNode(layer, childNodes);
     }
@@ -57,10 +61,12 @@ public class GetProjectDiagramTreesQueryHandler : IRequestHandler<GetProjectDiag
     {
         GeometryDiagramTreeNode geometryNode;
 
+
         if (geometryObject is IGeometryContainer container)
         {
             var childNodes = container.Children
-                .Select(x => ComposeGeometryObjectNode(x))
+                .Where(obj => !obj.IsTemporary)
+                .Select(obj => ComposeGeometryObjectNode(obj))
                 .ToList();
 
             geometryNode = new(geometryObject, childNodes);

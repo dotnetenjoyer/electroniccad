@@ -1,6 +1,6 @@
-﻿using ElectronicCad.MVVM.Properties.Configuration;
+﻿using System.Linq.Expressions;
+using ElectronicCad.MVVM.Properties.Configuration;
 using ElectronicCad.MVVM.Properties.Helpers;
-using System.Linq.Expressions;
 
 namespace ElectronicCad.MVVM.Properties.Implementation.PrimitiveProperties;
 
@@ -13,18 +13,28 @@ public class PrimitivePropertyObjectConfigurationBuilder<SELF, TPropertiesProxy>
     /// <summary>
     /// Adds primitive property to configuration.
     /// </summary>
-    /// <param name="name">Name of primitive property.</param>
-    public SELF HasPrimitive<TValue>(Expression<Func<TPropertiesProxy, TValue>> propertySelector)
+    /// <param name="propertySelector">Property selector.</param>
+    /// <param name="primitiveOptionsBuilder">Primitive optiosn builder..</param>
+    public SELF HasPrimitive<TValue>(Expression<Func<TPropertiesProxy, TValue>> propertySelector, Action<PrimitivePropertyOptionsBuilder>? primitiveOptionsBuilder = null)
     {
         var property = ReflectionHelper.FindPropertyInfo(propertySelector);
 
-        var primitive = new PrimitivePropertyConfiguration() 
+        var configuration = new PrimitivePropertyConfiguration() 
         { 
             Name = property.Name,
             SourceProperty = property,
         };
 
-        PropertyConfigurations.Add(primitive);
+        if (primitiveOptionsBuilder != null)
+        {
+            var optionsBuilder = new PrimitivePropertyOptionsBuilder();
+            primitiveOptionsBuilder?.Invoke(optionsBuilder);
+            var options = optionsBuilder.Build();
+
+            configuration.Name = options.Name ?? property.Name;
+        }
+
+        PropertyConfigurations.Add(configuration);
         
         return (SELF)this;
     }

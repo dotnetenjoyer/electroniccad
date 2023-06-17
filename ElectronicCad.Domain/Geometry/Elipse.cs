@@ -1,4 +1,4 @@
-namespace ElectronicCad.Domain.Geometry;
+﻿namespace ElectronicCad.Domain.Geometry;
 
 /// <summary>
 /// Ellipse.
@@ -6,7 +6,7 @@ namespace ElectronicCad.Domain.Geometry;
 public class Ellipse : ContentGeometry
 {
     /// <inheritdoc/>
-    public override string Name { get; internal set; } = nameof(Ellipse);
+    public override string Name { get; internal set; } = "Эллипс";
 
     /// <summary>
     /// The x radius of the ellipse. 

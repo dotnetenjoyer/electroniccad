@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
 using ElectronicCad.MVVM.ViewModels.Projects.Models;
@@ -21,7 +21,7 @@ public class ProjectPropertiesViewModel : ViewModel
     /// <summary>
     /// Dialog title.
     /// </summary>
-    public string Title => "Project";
+    public string Title => "Создание проекта";
 
     /// <summary>
     /// Close dialog command.
@@ -59,7 +59,7 @@ public class ProjectPropertiesViewModel : ViewModel
 
     private void SaveProjectProperties()
     {
-        if(Model.Id == Guid.Empty)
+        if (Model.Id == Guid.Empty)
         {
             CreateProject();
         }

@@ -4,7 +4,7 @@
     xmlns:components="clr-namespace:ElectronicCad.Desktop.UI.Components;assembly=ElectronicCad.Desktop.UI">
 
     <DataTemplate x:Key="DiagramSizeSection">
-        <Expander Header="Diagram size" IsExpanded="True">
+        <Expander Header="Размер холста" IsExpanded="True">
             <StackPanel>
 
                 <Grid Margin="0 20">
@@ -15,13 +15,13 @@
                     </Grid.ColumnDefinitions>
 
                     <components:InputControl
-                        Title="Width"
+                        Title="Ширина"
                         Value="{Binding Model.Size.Width}"
                         StringFormat="{}{0:#,#.##}"
                     />
 
                     <components:InputControl
-                        Title="Height"
+                        Title="Высота"
                         Grid.Column="2"
                         Value="{Binding Model.Size.Height}"
                         StringFormat="{}{0:#,#.##}"
@@ -30,9 +30,8 @@
 
                 <Label 
                     Target="PrototypeSelector"
-                    Content="Prototype" 
-                    Margin="0 0 0 5"
-                    Foreground="{StaticResource PrimaryForegroundBrush}"/>
+                    Content="Прототипы" 
+                    Margin="0 0 0 5"/>
 
                 <ComboBox 
                     x:Name="PrototypeSelector"

@@ -1,4 +1,4 @@
-using ElectronicCad.Domain.Workspace.Commands;
+﻿using ElectronicCad.Domain.Workspace.Commands;
 using GeometryDiagram = ElectronicCad.Domain.Geometry.Diagram;
 
 namespace ElectronicCad.Domain.Workspace;
@@ -19,6 +19,21 @@ public class Project
     public DateTime CreatedAt { get; internal set; }
 
     /// <summary>
+    /// Project description
+    /// </summary>
+    public string Description { get; internal set; }
+
+    /// <summary>
+    /// Customer
+    /// </summary>
+    public string Customer { get; internal set; }
+
+    /// <summary>
+    /// Customer contact.
+    /// </summary>
+    public string CustomerContact { get; internal set; }
+
+    /// <summary>
     /// Project diagrams.
     /// </summary>
     public IEnumerable<Diagram> Diagrams => diagrams;
@@ -33,7 +48,7 @@ public class Project
         diagrams = new List<Diagram>();
 
         var geometryDiagram = new GeometryDiagram();
-        var diagram = new ProjectDiagram("Diagram", geometryDiagram);
+        var diagram = new ProjectDiagram("Холст", geometryDiagram);
         diagrams.Add(diagram);
     }
 
@@ -46,7 +61,10 @@ public class Project
         var project = new Project()
         {
             Name = command.Name,
-            CreatedAt = DateTime.Now
+            Description = command.Description,
+            CreatedAt = DateTime.Now,
+            Customer = command.Customer,
+            CustomerContact = command.CustomerContact,
         };
 
         return project;

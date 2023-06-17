@@ -8,9 +8,14 @@
     mc:Ignorable="d" >
 
     <UserControl.Resources>
-        <ResourceDictionary Source="../Styles/Colors.xaml"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/Colors.xaml"/>
+                <ResourceDictionary Source="../Styles/Brushes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
-
+    
     <UserControl.Template>
         <ControlTemplate TargetType="{x:Type local:DropDown}">
             <Grid>
@@ -28,7 +33,9 @@
 
                     <Border 
                         Padding="15 15 15 15" 
-                        Background="{StaticResource SecondaryBackgroundBrush}"
+                        Background="{DynamicResource ComponentBackgroundBrush}"
+                        BorderBrush="{DynamicResource ComponentBorderBrush}"
+                        BorderThickness="2"
                         CornerRadius="5">
                         <ContentPresenter Content="{TemplateBinding Content}"/>
                     </Border>

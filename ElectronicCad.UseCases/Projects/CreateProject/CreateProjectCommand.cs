@@ -3,17 +3,32 @@ using MediatR;
 namespace ElectronicCad.UseCases.Projects.CreateProject;
 
 /// <summary>
-/// Create new project command.
+/// Command to create new project.
 /// </summary>
 public class CreateProjectCommand : IRequest
 {
     /// <summary>
     /// Project name.
     /// </summary>
-    public string ProjectName { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
-    /// Project folder name.
+    /// Project file name.
     /// </summary>
-    public string ProjectFolderName { get; set; }
+    public string FileName { get; set; }
+
+    /// <summary>
+    /// Project description.
+    /// </summary>
+    public string Description { get; set; }
+
+    /// <summary>
+    /// Name of customer.
+    /// </summary>
+    public string Customer { get; set; }
+
+    /// <summary>
+    /// Contact of customer.
+    /// </summary>
+    public string CustomerContact { get; set; }
 }

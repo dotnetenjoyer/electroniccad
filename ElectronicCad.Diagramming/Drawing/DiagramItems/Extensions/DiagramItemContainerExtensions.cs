@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace ElectronicCad.Diagramming.Drawing.DiagramItems.Extensions;
 
@@ -60,5 +61,17 @@ internal static class DiagramItemContainerExtensions
         
             yield return diagramItem;
         }
+    }
+
+    /// <summary>
+    /// Indicates if container contains specfieid diagram item.
+    /// </summary>
+    /// <param name="container">Container.</param>
+    /// <param name="diagramItem">Target item.</param>
+    /// <returns></returns>
+    public static bool Contains(this IDiagramItemContainer container, DiagramItem diagramItem)
+    {
+        var containers = container.Children.OfType<IDiagramItemContainer>();
+        return container.Children.Contains(diagramItem) || containers.Any(c => c.Contains(diagramItem));
     }
 }

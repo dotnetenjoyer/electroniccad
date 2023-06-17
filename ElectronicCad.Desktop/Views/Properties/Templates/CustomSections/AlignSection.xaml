@@ -19,45 +19,45 @@
             </Grid.RowDefinitions>
 
             <Button 
-                    Grid.Column="0"
-                    Style="{StaticResource IconButton}"
-                    Command="{Binding AlignStartCommand}">
+                Grid.Column="0"
+                Style="{StaticResource IconButton}"
+                Command="{Binding AlignStartCommand}">
                 <components:Icon Path="{StaticResource AlignStart}"/>
             </Button>
 
             <Button 
-                    Grid.Column="1"
-                    Style="{StaticResource IconButton}"
-                    Command="{Binding AlignCenterCommand}">
+                Grid.Column="1"
+                Style="{StaticResource IconButton}"
+                Command="{Binding AlignCenterCommand}">
                 <components:Icon 
                         Path="{StaticResource AlignCenter}"/>
             </Button>
 
             <Button 
-                    Grid.Column="2"
-                    Style="{StaticResource IconButton}"
-                    Command="{Binding AlignEndCommand}">
+                Grid.Column="2"
+                Style="{StaticResource IconButton}"
+                Command="{Binding AlignEndCommand}">
                 <components:Icon Path="{StaticResource AlignEnd}"/>
             </Button>
 
             <Button 
-                    Grid.Column="3"
-                    Style="{StaticResource IconButton}"
-                    Command="{Binding AlignTopCommand}">
+                Grid.Column="3"
+                Style="{StaticResource IconButton}"
+                Command="{Binding AlignTopCommand}">
                 <components:Icon Path="{StaticResource AlignTop}"/>
             </Button>
 
             <Button 
-                    Grid.Column="4"
-                    Style="{StaticResource IconButton}"
-                    Command="{Binding AlignMiddleCommand}">
+                Grid.Column="4"
+                Style="{StaticResource IconButton}"
+                Command="{Binding AlignMiddleCommand}">
                 <components:Icon Path="{StaticResource AlignMiddle}"/>
             </Button>
 
             <Button 
-                    Grid.Column="5"
-                    Style="{StaticResource IconButton}"
-                    Command="{Binding AlignBottomCommand}">
+                Grid.Column="5"
+                Style="{StaticResource IconButton}"
+                Command="{Binding AlignBottomCommand}">
                 <components:Icon Path="{StaticResource AlignBottom}"/>
             </Button>
         </Grid>

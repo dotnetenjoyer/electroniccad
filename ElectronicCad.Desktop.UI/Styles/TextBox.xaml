@@ -4,6 +4,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml"/>
+        <ResourceDictionary Source="Brushes.xaml"/>
     </ResourceDictionary.MergedDictionaries>
     
     <Style TargetType="TextBox">
@@ -12,11 +13,11 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{StaticResource ComponentBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ComponentBorderBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Cursor" Value="IBeam"/>
-        <Setter Property="CaretBrush" Value="{StaticResource PrimaryForegroundBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource PrimaryForegroundBrush}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource PrimaryForegroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
         <Setter Property="AllowDrop" Value="True"/>
 
         <Setter Property="Template">

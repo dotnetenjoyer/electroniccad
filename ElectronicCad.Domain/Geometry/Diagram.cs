@@ -1,4 +1,4 @@
-using ElectronicCad.Domain.Exceptions;
+﻿using ElectronicCad.Domain.Exceptions;
 using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.Domain.Validations;
@@ -39,7 +39,7 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
         Id = Guid.NewGuid();
         size = new Size(850, 600);
 
-        AddLayer("Default");
+        AddLayer("Слой");
     }
 
     #region Layers.

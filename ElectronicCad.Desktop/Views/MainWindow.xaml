@@ -11,7 +11,7 @@
     xmlns:properties="clr-namespace:ElectronicCad.Desktop.Views.Properties"
     d:DataContext="{d:DesignInstance Type=viewModels:MainViewModel, IsDesignTimeCreatable=False}"
     mc:Ignorable="d"
-    Title="Electronics" Icon="/Resources/Images/logo.png"
+    Title="Nuldes" Icon="/Resources/Images/logo.png"
     WindowStyle="None" WindowState="Maximized" 
     SourceInitialized="Window_SourceInitialized">
     
@@ -40,7 +40,7 @@
                         Margin="10 0"/>
     
                     <TextBlock
-                        Text="Electronics"
+                        Text="Nuldes"
                         Style="{StaticResource PrimaryText}"
                         VerticalAlignment="Center"
                         Margin="0 0 10 0"/>
@@ -72,7 +72,7 @@
                     <Grid Grid.Column="1">
                         <diagramming:DiagramControl 
                             DataContext="{Binding Diagram}"
-                            Background="{StaticResource BackgroundBrush}"/>
+                            Background="{DynamicResource DiagramBackgroundBrush}"/>
                     </Grid>
 
                     <properties:Properties Grid.Column="2" DataContext="{Binding Property}"/>

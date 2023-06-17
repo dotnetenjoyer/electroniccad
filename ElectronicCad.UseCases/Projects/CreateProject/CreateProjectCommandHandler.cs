@@ -5,6 +5,7 @@ using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using CreateProjectDomainCommand = ElectronicCad.Domain.Workspace.Commands.CreateProjectCommand;
 using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.Infrastructure.Abstractions.Models.Projects;
+using AutoMapper;
 
 namespace ElectronicCad.UseCases.Projects.CreateProject;
 
@@ -13,57 +14,62 @@ namespace ElectronicCad.UseCases.Projects.CreateProject;
 /// </summary>
 public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand>
 {
-    private readonly IFolderPicker _folderPicker;
-    private readonly IProjectSaver _projectSaver;
-    private readonly IRecentProjectsService _recentProjectsService;
+    private readonly IFolderPicker folderPicker;
+    private readonly IProjectSaver projectSaver;
+    private readonly IRecentProjectsService recentProjectsService;
+    private readonly IMapper mapper;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public CreateProjectCommandHandler(IFolderPicker folderPicker, IProjectSaver projectSaver, 
-        IRecentProjectsService recentProjectService)
+        IRecentProjectsService recentProjectService, IMapper mapper)
     {
-        _folderPicker = folderPicker;
-        _projectSaver = projectSaver;
-        _recentProjectsService = recentProjectService;
+        this.folderPicker = folderPicker;
+        this.projectSaver = projectSaver;
+        this.recentProjectsService = recentProjectService;
+        this.mapper = mapper;
     }
     
     /// <inheritdoc/>
     public async Task<Unit> Handle(CreateProjectCommand command, CancellationToken cancellationToken)
     {
         var project = CreateProject(command);
-        var projectFolderPath = GetProjectFolderPath(command.ProjectFolderName);
-        await _projectSaver.Save(project, projectFolderPath, cancellationToken);
-
+        var projectFileName = GetProjectFolderPath(command.FileName);
+        await projectSaver.Save(project, projectFileName, cancellationToken);
+            
         var localProject = new LocalProject
         {
-            Name = command.ProjectName,
-            Path = projectFolderPath,
+            Name = command.Name,
+            Description = command.Description,
+            Customer = command.Customer,
+            Path = projectFileName,
             LastAccessTime = DateTime.Now
         };
-        await _recentProjectsService.AddRecentProject(localProject, cancellationToken);
+
+        await recentProjectsService.AddRecentProject(localProject, cancellationToken);
 
         return new Unit();
     }
 
     private Project CreateProject(CreateProjectCommand command)
     {
-        var createCommand = new CreateProjectDomainCommand { Name = command.ProjectName };
+        var createCommand = mapper.Map<CreateProjectDomainCommand>(command);
         var project = Project.Create(createCommand);
         return project;
     }
 
-    private string GetProjectFolderPath(string projectFolderName)
+    private string GetProjectFolderPath(string projectFileName)
     {
-        var projectLocation = _folderPicker.PickFolder("Select project folder");
-        var projectFolder = Path.Combine(projectLocation, projectFolderName);
+        var projectLocation = folderPicker.PickFolder("Select project folder");
+        var projectFile = Path.Combine(projectLocation, projectFileName);
 
-        if (Directory.Exists(projectFolder) && Directory.GetFiles(projectFolder).Any())
+        if (Directory.Exists(projectFile) && Directory.GetFiles(projectFile).Any())
         {
-            throw new Exception($"Cannot create {projectFolder}, because a directory with the " +
+            throw new Exception($"Cannot create {projectFile}, because a directory with the " +
                                 $"same name already exits and contains files.");
         }
 
-        return projectFolder;
+        return projectFile;
     }
 }
