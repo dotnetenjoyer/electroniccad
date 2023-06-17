@@ -18,6 +18,6 @@ internal class PolygonObjectProfile : PropertyObjectProfile
         CreateConfiguration<PolygonPropertiesProxy>()
             .HasCustomSection<TransformationCustomSection>()
             .HasCustomSection<ShapeCustomSection>()
-            .HasPrimitive(source => source.CornerRadius);
+            .HasPrimitive(source => source.CornerRadius, options => options.HasName("Угол скругления"));
     }
 }

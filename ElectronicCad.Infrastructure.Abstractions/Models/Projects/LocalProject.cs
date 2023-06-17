@@ -22,6 +22,16 @@ public class LocalProject
     public string Name { get; init; }
 
     /// <summary>
+    /// Project description.
+    /// </summary>
+    public string Description { get; init; }
+
+    /// <summary>
+    /// Customer.
+    /// </summary>
+    public string Customer { get; init; }
+
+    /// <summary>
     /// Local project path.
     /// </summary>
     public string Path { get; init; }

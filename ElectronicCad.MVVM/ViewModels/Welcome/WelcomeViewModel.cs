@@ -2,7 +2,7 @@ using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.ServiceAbstractions.Navigation;
 using ElectronicCad.MVVM.Utils;
 using ElectronicCad.MVVM.ViewModels.Projects;
-using ElectronicCad.UseCases.Projects.CreateProject;
+using ElectronicCad.UseCases.Projects.OpenProject;
 using MediatR;
 using Microsoft.Toolkit.Mvvm.Input;
 
@@ -13,9 +13,9 @@ namespace ElectronicCad.MVVM.ViewModels.Welcome;
 /// </summary>
 public class WelcomeViewModel : ViewModel
 {
-    private readonly IDialogService _dialogService;
+    private readonly IDialogService dialogService;
     private readonly ViewModelFactory _viewModelFactory;
-    private readonly IMediator _mediator;
+    private readonly IMediator mediator;
 
     /// <summary>
     /// Close dialog command.
@@ -52,8 +52,8 @@ public class WelcomeViewModel : ViewModel
     /// </summary>
     public WelcomeViewModel(IDialogService dialogService, IMediator mediator, ViewModelFactory viewModelFactory)
     {
-        _dialogService = dialogService;
-        _mediator = mediator;
+        this.dialogService = dialogService;
+        this.mediator = mediator;
         _viewModelFactory = viewModelFactory;
 
         RecentProjects = _viewModelFactory.Create<RecentProjectsViewModel>();
@@ -67,17 +67,17 @@ public class WelcomeViewModel : ViewModel
 
     private void CloseWelcomeDialog()
     {
-        _dialogService.Close();
+        dialogService.Close();
     }
 
     private void CreateProject()
     {
-        _dialogService.OpenAsync<ProjectPropertiesViewModel>();
+        dialogService.OpenAsync<ProjectPropertiesViewModel>();
     }
 
     private void OpenProject()
     {
-        throw new NotImplementedException();
+        mediator.Send(new OpenProjectCommand());
     }
 
     /// <inheritdoc/>

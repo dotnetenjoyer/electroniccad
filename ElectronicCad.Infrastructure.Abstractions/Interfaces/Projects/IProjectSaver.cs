@@ -13,5 +13,5 @@ public interface IProjectSaver
     /// <param name="project">Project to save.</param>
     /// <param name="folderPath">Location of project.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    Task Save(Domain.Workspace.Project project, string folderPath, CancellationToken cancellationToken);
+    Task Save(Project project, string folderPath, CancellationToken cancellationToken);
 }

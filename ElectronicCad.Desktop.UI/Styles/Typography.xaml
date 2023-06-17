@@ -31,6 +31,11 @@
         <Setter Property="Foreground" Value="{StaticResource SecondaryForegroundBrush}"/>
     </Style>
 
+    <Style x:Key="Title" TargetType="TextBlock" BasedOn="{StaticResource PrimaryText}">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+    
     <Style TargetType="Label">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryForegroundBrush}"/>
     </Style>

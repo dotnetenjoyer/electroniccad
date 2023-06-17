@@ -36,7 +36,7 @@ internal class GizmoDiagramItem : DiagramItem
         {
             Style = SKPaintStyle.StrokeAndFill,
             StrokeWidth = 2,
-            Color = SKColors.White
+            Color = new SKColor(12, 140, 233, 100)
         };
     }
 
