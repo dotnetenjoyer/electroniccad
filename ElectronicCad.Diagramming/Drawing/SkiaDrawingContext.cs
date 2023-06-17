@@ -133,6 +133,18 @@ public class SkiaDrawingContext
         AfterDraw();
     }
 
+    /// <summary>
+    /// Draw a bitmap on the canvas.
+    /// </summary>
+    /// <param name="bitmap">Skia bitmap.</param>
+    /// <param name="destination">Destination position and size.</param>
+    public void DrawBitmap(SKBitmap bitmap, SKRect destination)
+    {
+        BeforeDraw();
+        canvas.DrawBitmap(bitmap, destination);
+        AfterDraw();
+    }
+
     private void BeforeDraw()
     {
         canvas.Scale((float)scale);
