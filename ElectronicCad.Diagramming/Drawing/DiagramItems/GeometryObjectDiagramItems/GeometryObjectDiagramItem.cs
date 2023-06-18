@@ -36,6 +36,8 @@ internal abstract class GeometryObjectDiagramItem : DiagramItem
     public virtual void UpdateViewState()
     {
         BoundingBox = GeometryObject.BoundingBox.ToSKRect();
+        IsVisible = GeometryObject.IsVisible;
+        IsLock = GeometryObject.IsLock;
 
         if (StrokePaint != null)
         {

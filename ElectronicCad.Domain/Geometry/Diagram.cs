@@ -3,6 +3,7 @@ using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.Domain.Validations;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace ElectronicCad.Domain.Geometry;
 
@@ -249,6 +250,57 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
         container.AddGeometry(group);
         
         return group;
+    }
+
+    /// <summary>
+    /// Shows the geometry objects.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry objects to show.</param>
+    public void ShowGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
+    {
+        ModifyGeometryObjects(geometryObjects, geometryObject => geometryObject.IsVisible = true);
+    }
+
+    /// <summary>
+    /// Hides the geometry objects.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry objects to hide.</param>
+    public void HideGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
+    {
+        ModifyGeometryObjects(geometryObjects, geometryObject => geometryObject.IsVisible = false);
+
+    }
+    
+    /// <summary>
+    /// Locks the geometry objects.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry objects to lock.</param>
+    public void LockGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
+    {
+        ModifyGeometryObjects(geometryObjects, geometryObject => geometryObject.IsLock = true);
+    }
+
+    /// <summary>
+    /// Unlocks the geometry objects.
+    /// </summary>
+    /// <param name="geometryObjects">Geometry objects to unlock.</param>
+    public void UnlockGeometryObjects(IEnumerable<GeometryObject> geometryObjects)
+    {
+        ModifyGeometryObjects(geometryObjects, geometryObject => geometryObject.IsLock = false);
+    }
+
+    private void ModifyGeometryObjects(IEnumerable<GeometryObject> geometryObjects, Action<GeometryObject> modifyAction)
+    {
+        var ownGeometryObjects = geometryObjects
+            .Where(x => x.Diagram == this)
+            .ToList();
+
+        foreach (var geometryObject in ownGeometryObjects)
+        {
+            geometryObject.StartModification();
+            modifyAction.Invoke(geometryObject);
+            geometryObject.CompleteModification();
+        }
     }
 
     #endregion

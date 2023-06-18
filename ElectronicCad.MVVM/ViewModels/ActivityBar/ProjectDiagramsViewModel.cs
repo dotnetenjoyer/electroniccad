@@ -82,6 +82,8 @@ public class ProjectDiagramsViewModel : ViewModel
         PropertyChanged += HandlePropertyChange;
     }
 
+    #region Sync with selection service.
+
     private void HandlePropertyChange(object? sender, System.ComponentModel.PropertyChangedEventArgs eventArgs)
     {
         if (eventArgs.PropertyName == nameof(SelectedItems) && !isSyncsWithSelectionService)
@@ -90,6 +92,7 @@ public class ProjectDiagramsViewModel : ViewModel
             selectionService.Select(selectedItems);
         }
     }
+
 
     private bool isSyncsWithSelectionService;
 
@@ -139,6 +142,8 @@ public class ProjectDiagramsViewModel : ViewModel
         }
     }
 
+    #endregion
+    
     private void HandleContextMenuOpening()
     {
         var selectedItems = SelectedNodes.Select(x => x.NodeObject).ToList();

@@ -88,11 +88,41 @@ public abstract class GeometryObject : VersionableBase
         set
         {
             ValidateModification();
-            IsTemporary = value;
+            isTemporary = value;
         }
     }
 
     private bool isTemporary;
+
+    /// <summary>
+    /// Indicates if geometry object is visible.
+    /// </summary>
+    public bool IsVisible 
+    { 
+        get => isVisible;
+        set
+        {
+            ValidateModification();
+            isVisible = value;
+        }
+    }
+
+    private bool isVisible = true;
+
+    /// <summary>
+    /// Indicates if geometry object is locked.
+    /// </summary>
+    public bool IsLock
+    {
+        get => isLock;
+        set
+        {
+            ValidateModification();
+            isLock = value;
+        }
+    }
+
+    private bool isLock;
 
     /// <summary>
     /// Constructor.

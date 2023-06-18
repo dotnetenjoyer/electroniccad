@@ -41,7 +41,7 @@ public class DiagramViewModel : ViewModel
         set => SetProperty(ref selectedGeometry, value);
     }
 
-    private IEnumerable<GeometryObject> selectedGeometry;
+    private IEnumerable<GeometryObject> selectedGeometry = Array.Empty<GeometryObject>();
 
     /// <summary>
     /// Command to add new image.
@@ -79,6 +79,7 @@ public class DiagramViewModel : ViewModel
 
         SelectedGeometry = selectionService.SelectedObjects
             .OfType<GeometryObject>()
+            .Where(geometry => geometry.IsVisible && !geometry.IsLock)
             .ToList();
         
         isSyncsWithSelectionService = false;
