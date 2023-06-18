@@ -5,7 +5,7 @@ namespace ElectronicCad.Domain.Workspace;
 /// <summary>
 /// Woorkbook diagram base.
 /// </summary>
-public abstract class Diagram : DomainObservableObject
+public abstract class Diagram : DomainObservableObject, IHaveName
 {
     /// <summary>
     /// Diagram id.

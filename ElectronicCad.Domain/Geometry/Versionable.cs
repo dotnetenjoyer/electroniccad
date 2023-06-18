@@ -6,7 +6,7 @@ namespace ElectronicCad.Domain.Geometry;
 /// <summary>
 /// Base versionable implementation.
 /// </summary>
-public class VersionableBase : IVersionable
+public class VersionableBase : DomainObservableObject, IVersionable
 {
     /// <inheritdoc />
     public int Version { get; private set; }

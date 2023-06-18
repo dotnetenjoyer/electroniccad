@@ -5,9 +5,6 @@
 /// </summary>
 public class Ellipse : ContentGeometry
 {
-    /// <inheritdoc/>
-    public override string Name { get; internal set; } = "Эллипс";
-
     /// <summary>
     /// The x radius of the ellipse. 
     /// </summary>
@@ -25,6 +22,7 @@ public class Ellipse : ContentGeometry
     /// <param name="radius">The radius of the ellipse</param>
     public Ellipse(Point center, double radius, bool isTemporary = false) : base(center, radius * 2, radius * 2, isTemporary)
     {
+        Name = "Эллипс";
     }
 
     /// <summary>

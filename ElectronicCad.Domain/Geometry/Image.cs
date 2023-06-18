@@ -5,9 +5,6 @@
 /// </summary>
 public class Image : ContentGeometry
 {
-    /// <inheritdoc />
-    public override string Name { get; internal set; } = "Изображение";
-
     /// <summary>
     /// Image to reference.
     /// </summary>
@@ -17,7 +14,7 @@ public class Image : ContentGeometry
         set 
         {
             ValidateModification();
-            reference = value;
+            SetProperty(ref reference, value);
         } 
     }
 
@@ -32,6 +29,8 @@ public class Image : ContentGeometry
     /// <param name="reference">Reference to image.</param>
     public Image(Point center, double width, double height, string reference) : base(center, width, height)
     {
+        Name = "Изображение";
+     
         this.reference = reference;
     }
 

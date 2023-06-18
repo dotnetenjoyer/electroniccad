@@ -7,9 +7,6 @@ namespace ElectronicCad.UseCases.DiagramsTrees.Dtos;
 /// </summary>
 public class LayerDiagramTreeNode : DiagramTreeNode<Layer>
 {
-    /// <inheritdoc />
-    public override string Name => DiagramObject.Name;
-
     /// <summary>
     /// Constructor.
     /// </summary>

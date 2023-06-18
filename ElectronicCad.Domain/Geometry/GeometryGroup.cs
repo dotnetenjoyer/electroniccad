@@ -10,9 +10,6 @@ namespace ElectronicCad.Domain.Geometry;
 public class GeometryGroup : ContentGeometry, IGeometryContainer
 {
     /// <inheritdoc />
-    public override string Name { get; internal set; } = "Группа";
-
-    /// <inheritdoc />
     public IEnumerable<GeometryObject> Children => children;
 
     private readonly List<GeometryObject> children = new();
@@ -40,6 +37,8 @@ public class GeometryGroup : ContentGeometry, IGeometryContainer
     /// <param name="geometryObjects">Grouped geometry objects.</param>
     public GeometryGroup(IEnumerable<GeometryObject> geometryObjects)
     {
+        Name = "Группа";
+
         AddGeometry(geometryObjects);
     }
 

@@ -1,4 +1,5 @@
 ﻿using ElectronicCad.Domain.Geometry;
+using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
@@ -9,6 +10,11 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 public abstract class GeometryObjectProxy<TGeometryObject> : VersionablePropertiesProxy<TGeometryObject>, ITransformationProxy 
     where TGeometryObject : GeometryObject
 {
+    /// <summary>
+    /// Geometry object name.
+    /// </summary>
+    public string Name { get; set; }
+
     /// <inheritdoc />
     public double CenterX { get; set; }
 
@@ -32,6 +38,7 @@ public abstract class GeometryObjectProxy<TGeometryObject> : VersionableProperti
     /// <inheritdoc />
     public override void UpdateFromSource()
     {
+        Name = Source.Name;
         CenterX = Source.BoundingBox.Center.X; 
         CenterY = Source.BoundingBox.Center.Y;
         Width = Source.BoundingBox.Width;
@@ -50,6 +57,7 @@ public abstract class GeometryObjectProxy<TGeometryObject> : VersionableProperti
     /// <inheritdoc />
     protected override void UpdateSourceInternal()
     {
+        Source.Rename(Name);
         Source.SetCenterAndSize(CenterX, CenterY, Width, Height);
     }
 }

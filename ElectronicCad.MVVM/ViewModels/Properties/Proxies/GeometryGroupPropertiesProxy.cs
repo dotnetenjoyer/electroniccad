@@ -6,7 +6,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Properties proxy to geometry group.
 /// </summary>
-public class GeometryGroupPropertiesProxy : VersionablePropertiesProxy<GeometryGroup>, IAlignPropertiesProxy
+public class GeometryGroupPropertiesProxy : GeometryObjectProxy<GeometryGroup>, IAlignPropertiesProxy
 {
     /// <summary>
     /// Constructor.
@@ -21,7 +21,24 @@ public class GeometryGroupPropertiesProxy : VersionablePropertiesProxy<GeometryG
 
     public override void UpdateFromSource()
     {
-        // Clone? 
+        base.UpdateFromSource();
         GeometryObjects = Source.Children;
+    }
+}
+
+public class VirtualGeometryGroupPropertiesProxy : IAlignPropertiesProxy
+{
+    public IEnumerable<GeometryObject> GeometryObjects => throw new NotImplementedException();
+
+    public event EventHandler<EventArgs> Updated;
+
+    public void UpdateFromSource()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateSource()
+    {
+        throw new NotImplementedException();
     }
 }

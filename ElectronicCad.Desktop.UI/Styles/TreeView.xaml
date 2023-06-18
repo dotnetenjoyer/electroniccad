@@ -35,8 +35,9 @@
                             Background="{TemplateBinding Background}"
                             Padding="5">
 
-                            <StackPanel Orientation="Horizontal">
+                            <DockPanel LastChildFill="True">
                                 <ToggleButton 
+                                    DockPanel.Dock="Left"
                                     x:Name="Expander"
                                     Style="{StaticResource ExpanderDownHeaderStyle}"
                                     IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"/>
@@ -44,9 +45,9 @@
                                 <ContentPresenter 
                                     Name="PART_Header"                 
                                     ContentSource="Header"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center" />
-                            </StackPanel>
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch" />
+                            </DockPanel>
                         </Border>
 
                         <ItemsPresenter x:Name="ItemsPresenter"  Grid.Row="1"/>

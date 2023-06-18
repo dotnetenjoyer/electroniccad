@@ -1,4 +1,5 @@
-﻿using ElectronicCad.Domain.Exceptions;
+﻿using ElectronicCad.Domain.Common;
+using ElectronicCad.Domain.Exceptions;
 using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.Domain.Validations;

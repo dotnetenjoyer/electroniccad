@@ -5,7 +5,7 @@ namespace ElectronicCad.Domain.Geometry;
 /// <summary>
 /// Diagram layer.
 /// </summary>
-public class Layer : DomainObservableObject, IGeometryContainer
+public class Layer : DomainObservableObject, IGeometryContainer, IHaveName
 {
     /// <summary>
     /// Layer id.
@@ -15,22 +15,46 @@ public class Layer : DomainObservableObject, IGeometryContainer
     /// <summary>
     /// Layer name.
     /// </summary>
-    public string Name { get; init; }
+    public string Name 
+    { 
+        get => name; 
+        internal set => SetProperty(ref name, value); 
+    }
+
+    private string name;
     
     /// <summary>
     /// Is locked.
     /// </summary>
-    public bool IsLocked { get; set; }
+    public bool IsLocked 
+    { 
+        get => isLocked; 
+        set => SetProperty(ref isLocked, value);
+    }
+
+    private bool isLocked;
 
     /// <summary>
     /// Is visible.
     /// </summary>
-    public bool IsVisible { get; set; } = true;
+    public bool IsVisible 
+    {
+        get => isVisible; 
+        set => SetProperty(ref isVisible, value); 
+    }
+
+    private bool isVisible = true;
 
     /// <summary>
     /// Layer z-index.
     /// </summary>
-    public int ZIndex { get; internal set; }
+    public int ZIndex 
+    { 
+        get => zIndex; 
+        internal set => SetProperty(ref zIndex, value); 
+    }
+
+    private int zIndex;
 
     /// <summary>
     /// Is the layer is active.
@@ -41,7 +65,7 @@ public class Layer : DomainObservableObject, IGeometryContainer
     /// Related diagram.
     /// </summary>
     public Diagram Diagram { get; init; }
-
+    
     /// <summary>
     /// Constructor.
     /// </summary>

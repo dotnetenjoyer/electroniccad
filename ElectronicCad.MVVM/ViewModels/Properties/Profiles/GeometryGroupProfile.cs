@@ -15,6 +15,7 @@ internal class GeometryGroupProfile : PropertyObjectProfile
     public GeometryGroupProfile()
     {
         CreateConfiguration<GeometryGroupPropertiesProxy>()
-            .HasCustomSection<AlignCustomSection>();
+            .HasCustomSection<AlignCustomSection>()
+            .HasPrimitive(source => source.Name, options => options.HasName("Наименование"));
     }
 }

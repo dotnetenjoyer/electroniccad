@@ -15,9 +15,6 @@ public class Line : GeometryObject
     /// </summary>
     public const int SecondPointIndex = 1;
 
-    /// <inheritdoc/>
-    public override string Name { get; internal set; } = "Линия";
-
     /// <summary>
     /// First point of the line.
     /// </summary>
@@ -33,6 +30,7 @@ public class Line : GeometryObject
     /// </summary>
     public Line(bool isTemporary) : base(isTemporary)
     {
+        Name = "Линия";
         controlPoints = new Point[2];
     }
 

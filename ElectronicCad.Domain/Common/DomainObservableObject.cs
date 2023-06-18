@@ -18,4 +18,23 @@ public class DomainObservableObject : INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
+    /// <summary>
+    /// Set new value to property. 
+    /// </summary>
+    /// <typeparam name="T">Type of property.</typeparam>
+    /// <param name="value">Target property..</param>
+    /// <param name="newValue">New value.</param>
+    /// <returns>True, if a new value has been set.</returns>
+    public virtual bool SetProperty<T>(ref T value, T newValue, [CallerMemberName] string? propertyName = null)
+    {
+        if (Equals(value, newValue))
+        {   
+            return false;
+        }
+
+        value = newValue;
+        OnPropertyChanged(propertyName);
+        return true;
+    }
 }

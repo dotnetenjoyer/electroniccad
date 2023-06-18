@@ -160,23 +160,18 @@ public class ProjectDiagramsViewModel : ViewModel
 
         foreach (var projectDiagram in currentProject.Diagrams)
         {
-            projectDiagram.GeometryDiagram.GeometryAdded += HandleGeometryAdd;
-            projectDiagram.GeometryDiagram.GeometryRemoved += HandleGeometryRemove;
+            projectDiagram.GeometryDiagram.GeometryAdded += HandleGeometyUpdate;
+            projectDiagram.GeometryDiagram.GeometryRemoved += HandleGeometyUpdate;
         }
 
         await UpdateDiagramTrees();
     }
 
-    private async void HandleGeometryAdd(object? sender, IEnumerable<GeometryObject> geometry)
+    private async void HandleGeometyUpdate(object? sender, IEnumerable<GeometryObject> geometry)
     {
         await UpdateDiagramTrees();
     }
-
-    private async void HandleGeometryRemove(object? sender, IEnumerable<GeometryObject> geometry)
-    {
-        await UpdateDiagramTrees();
-    }
-
+    
     private async Task UpdateDiagramTrees()
     {
         // TODO: can be optimized.
