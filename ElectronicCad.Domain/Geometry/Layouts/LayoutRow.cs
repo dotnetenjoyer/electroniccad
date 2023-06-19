@@ -1,10 +1,10 @@
 ﻿
-namespace ElectronicCad.Domain.Geometry.LayoutGrids;
+namespace ElectronicCad.Domain.Geometry.Layouts;
 
 /// <summary>
-/// Describes the grid rows according to the specified values.
+/// Describes the layout rows according to the specified values.
 /// </summary>
-public class RowLayoutGrid : LayoutGrid
+public class LayoutRow : Layout
 {
     /// <summary>
     /// Number of rows.
@@ -20,4 +20,9 @@ public class RowLayoutGrid : LayoutGrid
     /// Offset on the top.
     /// </summary>
     public double Offset { get; init; }
+
+    /// <summary>
+    /// Rows gutter.
+    /// </summary>
+    public double Gutter { get; init; }
 }

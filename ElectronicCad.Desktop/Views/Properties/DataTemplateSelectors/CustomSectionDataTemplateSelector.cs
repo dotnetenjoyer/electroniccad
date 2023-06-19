@@ -1,4 +1,4 @@
-﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
+﻿using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayout;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
@@ -31,9 +31,9 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
     public DataTemplate? TypographySectionTemplate { get; set; }
 
     /// <summary>
-    /// Template for the layout grid section.
+    /// Template for the layout section.
     /// </summary>
-    public DataTemplate? LayoutGridSectionTemplate { get; set; }
+    public DataTemplate? LayoutSectionTemplate { get; set; }
 
     /// <summary>
     /// Template for diagram size section.
@@ -53,7 +53,7 @@ internal class CustomSectionDataTemplateSelector : DataTemplateSelector
             TransformationCustomSection => TransformationSectionTemplate,
             ShapeCustomSection => ShapeSectionTemplate,
             TypographyCustomSection => TypographySectionTemplate,
-            LayoutGridCustomSection => LayoutGridSectionTemplate,
+            LayoutCustomSection => LayoutSectionTemplate,
             SizeCustomSection => DiagramSizeSectionTemplate,
             AlignCustomSection => AlignSectionTemplate,
             _ => throw new NotSupportedException($"{item.GetType()} is not supported.")

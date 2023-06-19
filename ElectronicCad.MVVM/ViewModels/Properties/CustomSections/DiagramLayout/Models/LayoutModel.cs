@@ -1,27 +1,27 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Domain.Geometry.LayoutGrids;
+using ElectronicCad.Domain.Geometry.Layouts;
 
-namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid.Models;
+namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayout.Models;
 
 /// <summary>
-/// Layout grid view model.
+/// Layout view model.
 /// </summary>
-public abstract class LayoutGridModel : ObservableObject
+public abstract class LayoutModel : ObservableObject
 {
-    /// <inheritdoc cref="LayoutGrid.Id">
+    /// <inheritdoc cref="Layout.Id">
     public Guid Id { get; init; } = Guid.NewGuid();
 
-    /// <inheritdoc cref="LayoutGrid.Color">
+    /// <inheritdoc cref="Layout.Color">
     public Color Color
     {
         get => color;
         set => SetProperty(ref color, value);
     }
 
-    private Color color = LayoutGrid.DefaultColor;
+    private Color color = Layout.DefaultColor;
 
-    /// <inheritdoc cref="LayoutGrid.IsVisible">
+    /// <inheritdoc cref="Layout.IsVisible">
     public bool IsVisible
     {
         get => isVisible;

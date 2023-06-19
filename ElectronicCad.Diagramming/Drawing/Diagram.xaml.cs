@@ -8,7 +8,7 @@ using SkiaSharp;
 using SkiaSharp.Views.WPF;
 using SkiaSharp.Views.Desktop;
 using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Domain.Geometry.LayoutGrids;
+using ElectronicCad.Domain.Geometry.Layouts;
 using ElectronicCad.Diagramming.Extensions;
 using ElectronicCad.Diagramming.Drawing;
 using ElectronicCad.Diagramming.Drawing.Items;
@@ -676,23 +676,23 @@ namespace ElectronicCad.Diagramming
 
         private void DrawLayoutGrids(SkiaDrawingContext drawingContext)
         {
-            foreach(var layoutGrid in GeometryDiagram.LayoutGrids)
+            foreach(var layoutGrid in GeometryDiagram.Layouts)
             {
-                if (layoutGrid is ColumnLayoutGrid columnLayoutGrid)
+                if (layoutGrid is LayoutColumn columnLayoutGrid)
                 {
-                    var layoutGridDiagramItem = new ColumnLayoutGridDiagramItem(this, columnLayoutGrid);
+                    var layoutGridDiagramItem = new LayoutColumnDiagramItem(this, columnLayoutGrid);
                     layoutGridDiagramItem.Draw(drawingContext);
                 }
 
-                if (layoutGrid is RowLayoutGrid rowLayoutGrid)
+                if (layoutGrid is LayoutRow rowLayoutGrid)
                 {
-                    var layoutGridDiagramItem = new RowLayoutGridDiagramItem(this, rowLayoutGrid);
+                    var layoutGridDiagramItem = new LayoutRowDiagramItem(this, rowLayoutGrid);
                     layoutGridDiagramItem.Draw(drawingContext);
                 }
 
-                if (layoutGrid is GridLayoutGrid gridLayoutGrid)
+                if (layoutGrid is LayoutGrid gridLayoutGrid)
                 {
-                    var gridLayoutGridDiagramItem = new GridLayoutGridDiagramItem(this, gridLayoutGrid);
+                    var gridLayoutGridDiagramItem = new LayoutGridDiagramItem(this, gridLayoutGrid);
                     gridLayoutGridDiagramItem.Draw(drawingContext);
                 }
             }

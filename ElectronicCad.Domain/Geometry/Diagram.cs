@@ -1,7 +1,7 @@
 ﻿using ElectronicCad.Domain.Common;
 using ElectronicCad.Domain.Exceptions;
 using ElectronicCad.Domain.Geometry.Extensions;
-using ElectronicCad.Domain.Geometry.LayoutGrids;
+using ElectronicCad.Domain.Geometry.Layouts;
 using ElectronicCad.Domain.Validations;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -337,32 +337,32 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
         return ModificationScope;
     }
 
-    #region LayoutGrid
+    #region Layout
 
     /// <summary>
-    /// Diagram layout grids.
+    /// Diagram layouts.
     /// </summary>
-    public IEnumerable<LayoutGrid> LayoutGrids => layoutGrids;
+    public IEnumerable<Layout> Layouts => layouts;
 
-    private List<LayoutGrid> layoutGrids = new();
+    private List<Layout> layouts = new();
 
     /// <summary>
-    /// Add a new layout grid.
+    /// Add a new layout.
     /// </summary>
-    /// <param name="layoutGrid">New layout grid.</param>
-    public void AddLayoutGrid(LayoutGrid layoutGrid)
+    /// <param name="layout">New layout.</param>
+    public void AddLayout(Layout layout)
     {
         ValidateModification();
-        layoutGrids.Add(layoutGrid);
+        layouts.Add(layout);
     }
 
     /// <summary>
-    /// Updates a layout grid.
+    /// Updates a layout.
     /// </summary>
-    /// <param name="layoutGrid">Updated layout grid.</param>
-    public void UpdateLayoutGrid(LayoutGrid layoutGrid)
+    /// <param name="layout">Updated layout.</param>
+    public void UpdateLayout(Layout layout)
     {
-        var index = layoutGrids.FindIndex(l => l.Id == layoutGrid.Id);
+        var index = layouts.FindIndex(l => l.Id == layout.Id);
 
         if (index < 0)
         {
@@ -370,17 +370,17 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
         }
 
         ValidateModification();
-        layoutGrids[index] = layoutGrid;
+        layouts[index] = layout;
     }
 
     /// <summary>
-    /// Remove a layout grid.
+    /// Remove a layout.
     /// </summary>
-    /// <param name="layoutGrid">Layout grid.</param>
-    public void RemoveLayoutGrid(LayoutGrid layoutGrid)
+    /// <param name="layout">Layout.</param>
+    public void RemoveLayout(Layout layout)
     {
         ValidateModification();
-        layoutGrids.Remove(layoutGrid);
+        layouts.Remove(layout);
     }
 
     #endregion

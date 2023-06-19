@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ElectronicCad.MVVM.Properties.Abstractions;
-using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayout;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
@@ -19,7 +19,7 @@ public class CustomSectionFactoriesFactory : ICustomSectionFactoriesFactory
         [typeof(TransformationCustomSection)] = typeof(TransformationCustomSectionFactory),
         [typeof(ShapeCustomSection)] = typeof(ShapeCustomSectionFactory),
         [typeof(TypographyCustomSection)] = typeof(TypographyCustomSectionFactory),
-        [typeof(LayoutGridCustomSection)] = typeof(LayoutGridCustomSectionFactory),
+        [typeof(LayoutCustomSection)] = typeof(LayoutCustomSectionFactory),
         [typeof(SizeCustomSection)] = typeof(SizeCustomSectionFactory), 
         [typeof(AlignCustomSection)] = typeof(AlignCustomSectionFactory), 
     };

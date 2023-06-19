@@ -1,7 +1,7 @@
 ﻿using ElectronicCad.Domain.Workspace;
 using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Domain.Geometry.LayoutGrids;
-using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
+using ElectronicCad.Domain.Geometry.Layouts;
+using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayout;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
 using ElectronicCad.Domain.Exceptions;
 
@@ -10,7 +10,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Contains proxy project diagram properties.
 /// </summary>
-public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<ProjectDiagram>, ILayoutGridProxy, ISizeProxy
+public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<ProjectDiagram>, ILayoutProxy, ISizeProxy
 {
     /// <summary>
     /// Project diagram name.
@@ -18,7 +18,7 @@ public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<Project
     public string Name { get; set; }
     
     /// <inhertidoc />
-    public IEnumerable<LayoutGrid> LayoutGrids { get; set; }
+    public IEnumerable<Layout> Layouts { get; set; }
 
     /// <inhertidoc />
     public Size Size { get; set; }
@@ -32,26 +32,26 @@ public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<Project
     }
 
     /// <inhertidoc />
-    public void AddLayoutGrid(LayoutGrid layoutGrid)
+    public void AddLayout(Layout layoutGrid)
     {
         Source.GeometryDiagram.StartModification();
-        Source.GeometryDiagram.AddLayoutGrid(layoutGrid);
+        Source.GeometryDiagram.AddLayout(layoutGrid);
         Source.GeometryDiagram.CompleteModification();
     }
 
     /// <inhertidoc />
-    public void UpdateLayoutGrid(LayoutGrid updatedLayoutGrid)
+    public void UpdateLayout(Layout updatedLayoutGrid)
     {
         Source.GeometryDiagram.StartModification();
-        Source.GeometryDiagram.UpdateLayoutGrid(updatedLayoutGrid);
+        Source.GeometryDiagram.UpdateLayout(updatedLayoutGrid);
         Source.GeometryDiagram.CompleteModification();
     }
 
     /// <inhertidoc />
-    public void RemoveLayoutGrid(LayoutGrid layoutGrid)
+    public void RemoveLayout(Layout layoutGrid)
     {
         Source.GeometryDiagram.StartModification();
-        Source.GeometryDiagram.RemoveLayoutGrid(layoutGrid);
+        Source.GeometryDiagram.RemoveLayout(layoutGrid);
         Source.GeometryDiagram.CompleteModification();
     }
 
@@ -59,7 +59,7 @@ public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<Project
     public override void UpdateFromSource()
     {
         Name = Source.Name;
-        LayoutGrids = Source.GeometryDiagram.LayoutGrids;
+        Layouts = Source.GeometryDiagram.Layouts;
         Size = Source.GeometryDiagram.Size;
     }
 

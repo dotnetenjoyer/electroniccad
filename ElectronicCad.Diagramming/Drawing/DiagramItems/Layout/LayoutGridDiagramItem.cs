@@ -1,44 +1,56 @@
 ﻿using SkiaSharp;
-using ElectronicCad.Diagramming.Drawing.Items;
-using ElectronicCad.Diagramming.Extensions;
-using ElectronicCad.Domain.Geometry.LayoutGrids;
+using ElectronicCad.Domain.Geometry.Layouts;
 
 namespace ElectronicCad.Diagramming.Drawing.DiagramItems.Layout;
 
 /// <summary>
 /// Represent the layout grid visual presentation.
 /// </summary>
-internal abstract class LayoutGridDiagramItem<TLayoutGrid> : DiagramItem where TLayoutGrid : LayoutGrid
+internal class LayoutGridDiagramItem : LayoutDiagramItem<LayoutGrid>
 {
-    protected readonly Diagram diagram;
-    protected readonly TLayoutGrid layoutGrid;
-
-    /// <inheritdoc />
-    public override bool IsAuxiliary => false;
-
     /// <summary>
     /// Constructor.
     /// </summary>
     /// <param name="diagram">Related diagram.</param>
-    /// <param name="layoutGrid">Domain layout grid.</param>
-    public LayoutGridDiagramItem(Diagram diagram, TLayoutGrid layoutGrid)
+    /// <param name="layoutGrid">Row layout grid.</param>
+    public LayoutGridDiagramItem(Diagram diagram, LayoutGrid layoutGrid)
+        : base(diagram, layoutGrid)
     {
-        this.diagram = diagram;
-        this.layoutGrid = layoutGrid;
     }
 
-    /// <summary>
-    /// Creates skia paint to layout grid.
-    /// </summary>
-    /// <returns>Skia paint.</returns>
-    protected virtual SKPaint CreatePaint()
+    /// <inheritdoc />
+    public override void Draw(SkiaDrawingContext drawingContext)
     {
-        var paint = new SKPaint
+        if (!layout.IsVisible)
         {
-            Color = layoutGrid.Color.ToSKColor(),
-            Style = SKPaintStyle.StrokeAndFill
-        };
+            return;
+        }
 
-        return paint;
+        using var paint = CreatePaint();
+        var lineThickness = 2;
+
+        var columnCount = (int)(diagram.GeometryDiagram.Size.Width / layout.Size);
+        var rowCount = (int)(diagram.GeometryDiagram.Size.Height / layout.Size);
+
+        for (int i = 1; i <= columnCount; i++) 
+        {
+            var left = (layout.Size * i) - (lineThickness / 2);
+            var rigth = left + lineThickness;
+            var top = 0;
+            var bottom = diagram.GeometryDiagram.Size.Height;
+            var rect = new SKRect((float)left, (float)top, (float)rigth, (float)bottom);
+            drawingContext.DrawRect(rect, paint);
+        }
+
+        for (int i = 1; i <= rowCount; i++)
+        {
+            var left = 0;
+            var rigth = diagram.GeometryDiagram.Size.Width;
+            var top = (layout.Size * i) - (lineThickness / 2);
+            var bottom = top + lineThickness;
+            var rect = new SKRect((float)left, (float)top, (float)rigth, (float)bottom);
+            drawingContext.DrawRect(rect, paint);
+        }
     }
 }
+

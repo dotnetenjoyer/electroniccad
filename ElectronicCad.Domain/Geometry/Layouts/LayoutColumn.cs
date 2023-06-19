@@ -1,10 +1,10 @@
 ﻿
-namespace ElectronicCad.Domain.Geometry.LayoutGrids;
+namespace ElectronicCad.Domain.Geometry.Layouts;
 
 /// <summary>
-/// Describes the grid columns according to the specified values.
+/// Describes the layout columns according to the specified values.
 /// </summary>
-public class ColumnLayoutGrid : LayoutGrid
+public class LayoutColumn : Layout
 {
     /// <summary>
     /// Number of columns.
@@ -20,4 +20,9 @@ public class ColumnLayoutGrid : LayoutGrid
     /// Offset on the left.
     /// </summary>
     public double Offset { get; init; }
+
+    /// <summary>
+    /// Columns gutter.
+    /// </summary>
+    public double Gutter { get; init; }
 }

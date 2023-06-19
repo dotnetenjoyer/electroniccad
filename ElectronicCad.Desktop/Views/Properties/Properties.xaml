@@ -15,7 +15,7 @@
                 <ResourceDictionary Source="./Templates/CustomSections/ShapeCustomSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/TransformationCustomSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/TypographyCustomSection.xaml"/>
-                <ResourceDictionary Source="./Templates/CustomSections/LayoutGridSection.xaml"/>
+                <ResourceDictionary Source="./Templates/CustomSections/LayoutSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/DiagramSizeSection.xaml"/>
                 <ResourceDictionary Source="./Templates/CustomSections/AlignSection.xaml"/>
             </ResourceDictionary.MergedDictionaries>
@@ -32,7 +32,7 @@
                 TransformationSectionTemplate="{StaticResource TransformationCustomSection}"
                 ShapeSectionTemplate="{StaticResource ShapeCustomSection}"
                 TypographySectionTemplate="{StaticResource TypographyCustomSection}"
-                LayoutGridSectionTemplate="{StaticResource LayoutGridSection}"
+                LayoutSectionTemplate="{StaticResource LayoutSection}"
                 DiagramSizeSectionTemplate="{StaticResource DiagramSizeSection}"
                 AlignSectionTemplate="{StaticResource AlignSection}"
             />
