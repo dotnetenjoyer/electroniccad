@@ -5,7 +5,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Line proxy.
 /// </summary>
-public class LinePropertyProxy : GeometryObjectProxy<Line>
+public class LinePropertyProxy : GeometryObjectPropertiesProxy<Line>
 {
     /// <summary>
     /// Constructor.

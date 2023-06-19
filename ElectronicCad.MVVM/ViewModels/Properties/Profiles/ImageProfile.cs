@@ -15,6 +15,7 @@ internal class ImageProfile : PropertyObjectProfile
     public ImageProfile()
     {
         CreateConfiguration<ImagePropertiesProxy>()
-            .HasCustomSection<TransformationCustomSection>();
+            .HasCustomSection<TransformationCustomSection>()
+            .HasPrimitive(source => source.Name, options => options.HasName("Наименование"));
     }
 }

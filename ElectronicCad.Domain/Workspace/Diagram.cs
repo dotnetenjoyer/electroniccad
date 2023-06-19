@@ -5,7 +5,7 @@ namespace ElectronicCad.Domain.Workspace;
 /// <summary>
 /// Woorkbook diagram base.
 /// </summary>
-public abstract class Diagram : DomainObservableObject
+public abstract class Diagram : DomainObservableObject, IHaveName
 {
     /// <summary>
     /// Diagram id.
@@ -15,7 +15,13 @@ public abstract class Diagram : DomainObservableObject
     /// <summary>
     /// Diagram name.
     /// </summary>
-    public string Name { get; internal set; }
+    public string Name 
+    { 
+        get => name; 
+        internal set => SetProperty(ref name, value); 
+    }
+
+    private string name;
 
     /// <summary>
     /// Date of diagram creation.
@@ -45,5 +51,11 @@ public abstract class Diagram : DomainObservableObject
         Name = name;
         CreatedAt = DateTime.Now;
         GeometryDiagram = geometryDiagram;
+    }
+
+    /// <inheritdoc />
+    public void Rename(string name)
+    {
+        Name = name;
     }
 }

@@ -17,6 +17,7 @@ internal class EllipseObjectProfile : PropertyObjectProfile
     {
         CreateConfiguration<EllipsePropertyProxy>()
             .HasCustomSection<TransformationCustomSection>()
-            .HasCustomSection<ShapeCustomSection>();
+            .HasCustomSection<ShapeCustomSection>()
+            .HasPrimitive(source => source.Name, options => options.HasName("Наименование"));
     }
 }

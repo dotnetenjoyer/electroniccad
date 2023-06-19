@@ -7,45 +7,48 @@
     <converters:DomainColorToWpfColorConverter x:Key="DomainColorToWpfColorConverter"/>
 
     <DataTemplate x:Key="ShapeCustomSection">
-        <StackPanel Orientation="Vertical">
-            <Grid Margin="0 0 0 15">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
 
-                <StackPanel>
-                    <Label 
+        <Expander Header="Фигура" IsExpanded="True">
+            <StackPanel Orientation="Vertical">
+                <Grid Margin="0 15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <Label 
                         Margin="0 0 0 5"
                         Target="{Binding ElementName=StrokeColorPicker}" 
                         Content="Цвет обводки"/>
 
-                    <components:ColorPicker 
+                        <components:ColorPicker 
                         x:Name="StrokeColorPicker"
                         Value="{Binding ShapeModel.StrokeColor, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <components:InputControl 
+                    <components:InputControl 
                     Title="Толщина"
                     Value="{Binding ShapeModel.StrokeWidth}"
                     Grid.Column="3"/>
-            </Grid>
+                </Grid>
 
-            <Grid>
-                <StackPanel>
-                    <Label 
+                <Grid>
+                    <StackPanel>
+                        <Label 
                         Margin="0 0 0 5"
                         Target="{Binding ElementName=FillColorPicker}" 
                         Content="Цвет заливки"/>
-                    
-                    <components:ColorPicker 
+
+                        <components:ColorPicker 
                         x:Name="FillColorPicker"
                         Value="{Binding ShapeModel.FillColor, Converter={StaticResource DomainColorToWpfColorConverter}}"/>
-                </StackPanel>
-            </Grid>
+                    </StackPanel>
+                </Grid>
 
-        </StackPanel>
+            </StackPanel>
+        </Expander>
     </DataTemplate>
     
 </ResourceDictionary>

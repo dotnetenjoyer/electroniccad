@@ -462,8 +462,19 @@ namespace ElectronicCad.Diagramming
                 nameof(SelectedItems),
                 typeof(IEnumerable<GeometryObject>),
                 typeof(Diagram),
-                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(), 
-                    FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HandleSelectedItemsChange));
+                new FrameworkPropertyMetadata(Array.Empty<GeometryObject>(),  FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, HandleSelectedItemsChange),
+                ValidateSelectedItemsChange);
+
+        /// <summary>
+        /// Validates selected items when change it.
+        /// </summary>
+        /// <param name="value">New selected items.</param>
+        /// <returns>True if new value satisfied.</returns>
+        public static bool ValidateSelectedItemsChange(object value)
+        {
+            var selectedItems = (IEnumerable<GeometryObject>)value;
+            return selectedItems.All(item => item.IsVisible && !item.IsLock);
+        }
 
         /// <summary>
         /// Handle diagram selected items change.
@@ -475,7 +486,7 @@ namespace ElectronicCad.Diagramming
             var diagram = (Diagram)dependencyObject;
 
             var selectedItems = (IEnumerable<GeometryObject>)eventArgs.NewValue;
-            if (selectedItems != null && selectedItems.Any() && diagram.DiagramMode != DiagramMode.Selection)
+            if (selectedItems.Any() && diagram.DiagramMode != DiagramMode.Selection)
             {
                 diagram.DiagramMode = DiagramMode.Selection;
             }

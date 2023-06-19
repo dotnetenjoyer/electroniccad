@@ -3,7 +3,7 @@ using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Shape;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
-public abstract class ContentGeometryObjectProxy<TContentGeometry> : GeometryObjectProxy<TContentGeometry>, IShapeProxy 
+public abstract class ContentGeometryObjectProxy<TContentGeometry> : GeometryObjectPropertiesProxy<TContentGeometry>, IShapeProxy 
     where TContentGeometry : ContentGeometry
 {
     /// <inheritdoc />

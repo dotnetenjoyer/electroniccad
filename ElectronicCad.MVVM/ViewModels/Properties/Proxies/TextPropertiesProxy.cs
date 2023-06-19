@@ -7,7 +7,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Text properties proxy
 /// </summary>
-public class TextPropertiesProxy : GeometryObjectProxy<Text>, ITypographyProxy
+public class TextPropertiesProxy : GeometryObjectPropertiesProxy<Text>, ITypographyProxy
 {
     /// <inheritdoc />
     public string? Text { get; set; }

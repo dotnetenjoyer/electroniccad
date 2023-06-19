@@ -5,7 +5,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Image properties proxy.
 /// </summary>
-public class ImagePropertiesProxy : GeometryObjectProxy<Image>
+public class ImagePropertiesProxy : GeometryObjectPropertiesProxy<Image>
 {
     /// <summary>
     /// Constructor.

@@ -26,6 +26,8 @@
             GroupIconPath="{StaticResource GroupIcon}"
         />
 
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
         <Style TargetType="TreeViewItem" BasedOn="{StaticResource MultipleSelectTreeViewItem}">
             <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
         </Style>
@@ -34,14 +36,54 @@
             DataType="{x:Type diagramTrees:TreeNode}" 
             ItemsSource="{Binding Nodes}">
             <Border Padding="8">
-                <StackPanel Orientation="Horizontal">
+                <DockPanel>
                     <components:Icon 
                         Margin="0 0 10 0"
                         Width="15" Height="15"
                         Focusable="False"
                         Path="{Binding NodeObject, Converter={StaticResource IconConverter}}"/>
-                    <TextBlock Text="{Binding Name}" />
-                </StackPanel>
+                    
+                    <TextBlock Text="{Binding DiagramObject.Name}" />
+                </DockPanel>
+            </Border>
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate
+            DataType="{x:Type diagramTrees:GeometryDiagramTreeNode}"
+            ItemsSource="{Binding Nodes}">
+            <Border Padding="8">
+                <DockPanel>
+                    <StackPanel 
+                        Orientation="Horizontal" 
+                        VerticalAlignment="Center"  
+                        DockPanel.Dock="Right" 
+                        Margin="10 0">
+
+                        <components:IconCheckBox 
+                            IsChecked="{Binding DiagramObject.IsLock, Mode=OneWay}"
+                            EnableIconPath="{StaticResource LockIcon}"
+                            DisableIconPath="{StaticResource UnlockIcon}"
+                            Visibility="{Binding DiagramObject.IsLock, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Width="12"
+                            Margin="5 0"/>
+                        
+                        <components:IconCheckBox 
+                            IsChecked="{Binding DiagramObject.IsVisible, Mode=OneWay}"
+                            EnableIconPath="{StaticResource EyeIcon}"
+                            DisableIconPath="{StaticResource EyeClosedIcon}"
+                            Visibility="{Binding DiagramObject.IsVisible, Converter={StaticResource BooleanToVisibilityConverter},ConverterParameter=True}"
+                            Width="14"
+                            Margin="5 0"/>
+                    </StackPanel>
+
+                    <components:Icon 
+                        Margin="0 0 10 0"
+                        Width="15" Height="15"
+                        Focusable="False"
+                        Path="{Binding NodeObject, Converter={StaticResource IconConverter}}"/>
+
+                    <TextBlock Text="{Binding DiagramObject.Name}" />
+                </DockPanel>
             </Border>
         </HierarchicalDataTemplate>
     </TabItem.Resources>

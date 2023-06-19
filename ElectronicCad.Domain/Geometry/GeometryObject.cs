@@ -1,4 +1,5 @@
 using System.Numerics;
+using ElectronicCad.Domain.Common;
 using ElectronicCad.Domain.Exceptions;
 using ElectronicCad.Domain.Geometry.Utils;
 
@@ -7,17 +8,21 @@ namespace ElectronicCad.Domain.Geometry;
 /// <summary>
 /// The class represents a simple geometry objects that can be drawn from lines.
 /// </summary>
-public abstract class GeometryObject : VersionableBase
+public abstract class GeometryObject : VersionableBase, IHaveName
 {
     /// <summary>
     /// Geometry object id.
     /// </summary>
     public Guid Id { get; internal set; } = Guid.NewGuid();
 
-    /// <summary>
-    /// Name.
-    /// </summary>
-    public virtual string Name { get; internal set; } = "Geometry object";
+    /// <inheritdoc />
+    public string Name 
+    {
+        get => name; 
+        internal set => SetProperty(ref name, value);
+    }
+
+    protected string name = "Geometry object";
 
     /// <summary>
     /// Control points.
@@ -32,7 +37,13 @@ public abstract class GeometryObject : VersionableBase
     /// <summary>
     /// Geometry object bounding box.
     /// </summary>
-    public Rectangle BoundingBox { get; private set; }
+    public Rectangle BoundingBox 
+    { 
+        get => boundingBox; 
+        private set => SetProperty(ref boundingBox, value); 
+    }
+
+    private Rectangle boundingBox;
 
     /// <summary>
     /// Related layer.
@@ -47,7 +58,13 @@ public abstract class GeometryObject : VersionableBase
     /// <summary>
     /// Geometry group.
     /// </summary>
-    public GeometryGroup? Group { get; internal set; }
+    public GeometryGroup? Group
+    {
+        get => group;
+        internal set => SetProperty(ref group, value);
+    }
+
+    private GeometryGroup? group;
     
     /// <summary>
     /// Stroke color.
@@ -73,7 +90,7 @@ public abstract class GeometryObject : VersionableBase
         set
         {
             ValidateModification();
-            strokeWidth = value;
+            SetProperty(ref strokeWidth, value);
         }
     }
 
@@ -88,11 +105,41 @@ public abstract class GeometryObject : VersionableBase
         set
         {
             ValidateModification();
-            IsTemporary = value;
+            SetProperty(ref isTemporary, value);
         }
     }
 
     private bool isTemporary;
+
+    /// <summary>
+    /// Indicates if geometry object is visible.
+    /// </summary>
+    public bool IsVisible 
+    { 
+        get => isVisible;
+        set
+        {
+            ValidateModification();
+            SetProperty(ref isVisible, value);
+        }
+    }
+
+    private bool isVisible = true;
+
+    /// <summary>
+    /// Indicates if geometry object is locked.
+    /// </summary>
+    public bool IsLock
+    {
+        get => isLock;
+        set
+        {
+            ValidateModification();
+            SetProperty(ref isLock, value);
+        }
+    }
+
+    private bool isLock;
 
     /// <summary>
     /// Constructor.
@@ -118,6 +165,12 @@ public abstract class GeometryObject : VersionableBase
             .ToArray();
 
         RecalculateBoundingBox();
+    }
+
+    /// <inheritdoc />
+    public void Rename(string name)
+    {
+        Name = name;
     }
 
     #region Versioning

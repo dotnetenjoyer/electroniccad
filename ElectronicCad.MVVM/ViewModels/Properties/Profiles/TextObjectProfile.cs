@@ -17,6 +17,7 @@ internal class TextObjectProfile : PropertyObjectProfile
     {
         CreateConfiguration<TextPropertiesProxy>()
             .HasCustomSection<TransformationCustomSection>()
-            .HasCustomSection<TypographyCustomSection>();
+            .HasCustomSection<TypographyCustomSection>()
+            .HasPrimitive(source => source.Name, options => options.HasName("Наименование"));
     }
 }

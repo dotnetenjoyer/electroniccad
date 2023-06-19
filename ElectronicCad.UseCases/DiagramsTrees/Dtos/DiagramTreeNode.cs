@@ -1,16 +1,23 @@
-﻿using System.ComponentModel;
+﻿using ElectronicCad.Domain.Common;
+using System.ComponentModel;
 
 namespace ElectronicCad.UseCases.DiagramsTrees.Dtos;
 
 /// <summary>
 /// Represent tree node.
 /// </summary>
-public abstract class TreeNode
+public abstract class TreeNode : DomainObservableObject
 {
-    /// <summary>
-    /// Tree node name.
-    /// </summary>
-    public virtual string Name { get; } = string.Empty;
+    ///// <summary>
+    ///// Tree node name.
+    ///// </summary>
+    public virtual string Name
+    {
+        get => name;
+        set => SetProperty(ref name, value);
+    }
+
+    private string name;
 
     /// <summary>
     /// Indicates if current node expanded.
@@ -42,7 +49,7 @@ public abstract class TreeNode
         /// Todo: figure out why TreeViewIte.Header not updates.
         if (obj is TreeNode anotherNode)
         {
-            return Name == anotherNode.Name && IsExpanded == anotherNode.IsExpanded 
+            return IsExpanded == anotherNode.IsExpanded 
                 && NodeObject == anotherNode.NodeObject;
         } 
 
@@ -54,8 +61,11 @@ public abstract class TreeNode
 /// Diagram tree node.
 /// </summary>
 /// <typeparam name="TDiagramObject">Diagram object.</typeparam>
-public abstract class DiagramTreeNode<TDiagramObject> : TreeNode 
+public abstract class DiagramTreeNode<TDiagramObject> : TreeNode where TDiagramObject : INotifyPropertyChanged, IHaveName
 {
+    /// <inheritdoc />
+    public override string Name => DiagramObject.Name;
+
     /// <summary>
     /// Domain object.
     /// </summary>
@@ -68,5 +78,15 @@ public abstract class DiagramTreeNode<TDiagramObject> : TreeNode
     public DiagramTreeNode(TDiagramObject diagramObject) : base(diagramObject)
     {
         DiagramObject = diagramObject;
+
+        diagramObject.PropertyChanged += HandleDiagramObjectPropertyChange;
+    }
+
+    private void HandleDiagramObjectPropertyChange(object? sender, PropertyChangedEventArgs args)
+    {
+        if (args.PropertyName == nameof(IHaveName.Name))
+        {
+            OnPropertyChanged(nameof(Name));
+        }
     }
 }

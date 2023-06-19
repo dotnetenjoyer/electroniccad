@@ -15,6 +15,7 @@ internal class LineObjectProfile : PropertyObjectProfile
     public LineObjectProfile()
     {
         CreateConfiguration<LinePropertyProxy>()
-            .HasCustomSection<TransformationCustomSection>();
+            .HasCustomSection<TransformationCustomSection>()
+            .HasPrimitive(source => source.Name, options => options.HasName("Наименование"));
     }
 }

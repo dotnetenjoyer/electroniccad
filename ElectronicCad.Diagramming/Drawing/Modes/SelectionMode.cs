@@ -79,7 +79,7 @@ public class SelectionMode : BaseDiagramMode
 
         var standardizedSelectionArea = SelectionArea.BoundingBox.Standardized;
         Diagram.SelectedItems = Diagram.DiagramItems
-            .Where(item => item.IsVisible)
+            .Where(item => item.IsVisible && !item.IsLock)
             .Where(item => item.BoundingBox.IntersectsWith(standardizedSelectionArea))
             .OfType<GeometryObjectDiagramItem>()
             .Select(item => item.GeometryObject)

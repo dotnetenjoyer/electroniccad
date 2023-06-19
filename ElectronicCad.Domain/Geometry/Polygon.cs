@@ -5,9 +5,6 @@
 /// </summary>
 public class Polygon : ContentGeometry
 {
-    /// <inheritdoc/>
-    public override string Name { get; internal set; } = "Прямоугольник";
-
     /// <summary>
     /// Corner radius.
     /// </summary>
@@ -17,7 +14,7 @@ public class Polygon : ContentGeometry
         set
         {
             ValidateModification();
-            cornerRadius = value;
+            SetProperty(ref cornerRadius, value);
         }
     }
 
@@ -28,6 +25,7 @@ public class Polygon : ContentGeometry
     /// </summary>
     public Polygon(Point center, double width, double height, bool isTemperary = false) : base(center, width, height, isTemperary)
     {
+        Name = "Прямоугольник";
     }
 
     /// <summary>

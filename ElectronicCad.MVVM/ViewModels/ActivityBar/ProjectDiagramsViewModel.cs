@@ -82,6 +82,8 @@ public class ProjectDiagramsViewModel : ViewModel
         PropertyChanged += HandlePropertyChange;
     }
 
+    #region Sync with selection service.
+
     private void HandlePropertyChange(object? sender, System.ComponentModel.PropertyChangedEventArgs eventArgs)
     {
         if (eventArgs.PropertyName == nameof(SelectedItems) && !isSyncsWithSelectionService)
@@ -90,6 +92,7 @@ public class ProjectDiagramsViewModel : ViewModel
             selectionService.Select(selectedItems);
         }
     }
+
 
     private bool isSyncsWithSelectionService;
 
@@ -112,15 +115,7 @@ public class ProjectDiagramsViewModel : ViewModel
             return Array.Empty<TreeNode>();
         }
 
-        return DiagramTrees.Diagrams.SelectMany(diagram =>
-        {
-            if (diagram.Nodes == null || !diagram.Nodes.Any())
-            {
-                return Array.Empty<TreeNode>();
-            }
-
-            return diagram.Nodes.SelectMany(n => GetAllNodes(n));
-        });
+        return DiagramTrees.Diagrams.SelectMany(diagram => GetAllNodes(diagram));
 
         IEnumerable<TreeNode> GetAllNodes(TreeNode node)
         {
@@ -139,6 +134,8 @@ public class ProjectDiagramsViewModel : ViewModel
         }
     }
 
+    #endregion
+    
     private void HandleContextMenuOpening()
     {
         var selectedItems = SelectedNodes.Select(x => x.NodeObject).ToList();
@@ -155,23 +152,25 @@ public class ProjectDiagramsViewModel : ViewModel
 
         foreach (var projectDiagram in currentProject.Diagrams)
         {
-            projectDiagram.GeometryDiagram.GeometryAdded += HandleGeometryAdd;
-            projectDiagram.GeometryDiagram.GeometryRemoved += HandleGeometryRemove;
+            projectDiagram.GeometryDiagram.GeometryAdded += HandleGeometyUpdate;
+            projectDiagram.GeometryDiagram.GeometryRemoved += HandleGeometyUpdate;
+            projectDiagram.GeometryDiagram.LayerAdded += HandleLayersUpdate;
+            projectDiagram.GeometryDiagram.LayerRemoved += HandleLayersUpdate;
         }
 
         await UpdateDiagramTrees();
     }
 
-    private async void HandleGeometryAdd(object? sender, IEnumerable<GeometryObject> geometry)
+    private async void HandleLayersUpdate(object? sender, Layer layer)
     {
         await UpdateDiagramTrees();
     }
 
-    private async void HandleGeometryRemove(object? sender, IEnumerable<GeometryObject> geometry)
+    private async void HandleGeometyUpdate(object? sender, IEnumerable<GeometryObject> geometry)
     {
         await UpdateDiagramTrees();
     }
-
+    
     private async Task UpdateDiagramTrees()
     {
         // TODO: can be optimized.
