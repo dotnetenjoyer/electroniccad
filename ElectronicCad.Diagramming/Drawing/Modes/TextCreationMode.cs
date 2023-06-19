@@ -18,7 +18,7 @@ internal class TextCreationMode : BaseDiagramMode
     /// <summary>
     /// Initial text height.
     /// </summary>
-    internal const double InitialHeight = 25;
+    internal const double InitialHeight = 30;
 
     /// <inheritdoc />
     protected override void ProcessPrimaryButtonDown(MouseButtonEventArgs args)

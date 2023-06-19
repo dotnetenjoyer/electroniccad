@@ -29,6 +29,9 @@ internal class TextDiagramItem : GeometryObjectDiagramItem<Text>
             .FontSize((float)text.FontSize)
             .FontWeight((int)text.FontWeight)
             .TextColor(text.FillColor.ToSKColor())
+            .LineHeight((float)text.LineHeight)
+            .LetterSpacing((float)text.LetterSpacing)
+            .Alignment((TextAlignment)text.Align)
             .Add(text.Content);
 
         richString.MaxWidth = (float)text.BoundingBox.Width;

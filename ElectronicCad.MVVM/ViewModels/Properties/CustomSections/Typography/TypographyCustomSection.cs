@@ -3,12 +3,12 @@
 /// <summary>
 /// Typography custom section.
 /// </summary>
-public class TypographyCustomSection : BaseCustomSection<ITypographyProxy, TypographyModel>
+public class TypographyCustomSection : BaseCustomSection<ITypographyPropertiesProxy, TypographyModel>
 {
     /// <summary>
     /// Constructor.
     /// </summary>
-    public TypographyCustomSection(ITypographyProxy typographyProxy, IServiceProvider serviceProvider) 
+    public TypographyCustomSection(ITypographyPropertiesProxy typographyProxy, IServiceProvider serviceProvider) 
         : base(typographyProxy, serviceProvider)
     {
         UpdateFromProxy();
@@ -24,6 +24,9 @@ public class TypographyCustomSection : BaseCustomSection<ITypographyProxy, Typog
         Model.FontWeight = Proxy.FontWeight;
         Model.FontFamily = Proxy.FontFamily;
         Model.ForegroundColor = Proxy.ForegroundColor;
+        Model.LineHeight = Proxy.LineHeight;
+        Model.LetterSpacing = Proxy.LetterSpacing;
+        Model.Align = Proxy.Align;
     }
 
     /// <inheritdoc />
@@ -36,5 +39,8 @@ public class TypographyCustomSection : BaseCustomSection<ITypographyProxy, Typog
         Proxy.FontWeight = Model.FontWeight;
         Proxy.FontFamily = Model.FontFamily;
         Proxy.ForegroundColor = Model.ForegroundColor;
+        Proxy.LineHeight = Model.LineHeight;
+        Proxy.LetterSpacing = Model.LetterSpacing;
+        Proxy.Align = Model.Align;
     }
 }

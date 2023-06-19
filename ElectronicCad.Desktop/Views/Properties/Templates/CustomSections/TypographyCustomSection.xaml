@@ -38,7 +38,7 @@
                         <Label 
                             Margin="0 0 0 5"
                             Target="{Binding ElementName=FontWeightsSelector}" 
-                            Content="Цвет"/>
+                            Content="Толщина"/>
 
                         <ComboBox 
                             x:Name="FontWeightsPicker" 
@@ -51,6 +51,36 @@
                         Value="{Binding Model.FontSize}"
                         Grid.Column="3"/>
                 </Grid>
+
+                <Grid Margin="0 0 0 15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <components:InputControl 
+                        Title="Интервал между буквами"
+                        Value="{Binding Model.LetterSpacing}"
+                        Grid.Column="0"/>
+
+                    <components:InputControl 
+                        Title="Высота линии"
+                        Value="{Binding Model.LineHeight}"
+                        Grid.Column="3"/>
+                </Grid>
+
+                <StackPanel Margin="0 0 0 15">
+                    <Label 
+                        Margin="0 0 0 5"
+                        Target="{Binding ElementName=AlignPicker}" 
+                        Content="Выравнивание"/>
+
+                    <ComboBox 
+                            x:Name="AlignPicker" 
+                            SelectedValue="{Binding Model.Align}" 
+                            ItemsSource="{Binding Model.Alignments}"/>
+                </StackPanel>
 
                 <StackPanel>
                     <Label 

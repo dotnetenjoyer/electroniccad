@@ -3,7 +3,7 @@
 /// <summary>
 /// Factory to typography custom section.
 /// </summary>
-public class TypographyCustomSectionFactory : BaseCustomSectionFactory<TypographyCustomSection, ITypographyProxy>
+public class TypographyCustomSectionFactory : BaseCustomSectionFactory<TypographyCustomSection, ITypographyPropertiesProxy>
 {
     /// <summary>
     /// Constructor.

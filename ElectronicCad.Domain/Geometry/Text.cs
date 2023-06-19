@@ -68,6 +68,51 @@ public class Text : ContentGeometry
     private string fontFamily = "Times New Roman";
 
     /// <summary>
+    /// Text line height.
+    /// </summary>
+    public double LineHeight
+    { 
+        get => lineHeight;
+        set
+        {
+            ValidateModification();
+            SetProperty(ref lineHeight, value);
+        }  
+    }
+
+    private double lineHeight = 2;
+
+    /// <summary>
+    /// Text letter spacing.
+    /// </summary>
+    public double LetterSpacing
+    {
+        get => letterSpacing;
+        set
+        {
+            ValidateModification();
+            SetProperty(ref letterSpacing, value);
+        }
+    }
+
+    private double letterSpacing = 0;
+
+    /// <summary>
+    /// Text align.
+    /// </summary>
+    public TextAlign Align 
+    { 
+        get => align;
+        set
+        {
+            ValidateModification();
+            SetProperty(ref align, value);
+        }
+    }
+
+    private TextAlign align = TextAlign.Center;
+
+    /// <summary>
     /// Constructor.
     /// </summary>
     public Text(Point center, double width, double height) : base(center, width, height)

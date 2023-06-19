@@ -7,7 +7,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Typography;
 /// <summary>
 /// Typography custom section proxy.
 /// </summary>
-public interface ITypographyProxy : IPropertiesProxy
+public interface ITypographyPropertiesProxy : IPropertiesProxy
 {
     /// <summary>
     /// Text content.
@@ -33,4 +33,19 @@ public interface ITypographyProxy : IPropertiesProxy
     /// Foreground text color.
     /// </summary>
     public Color ForegroundColor { get; set; }
+
+    /// <summary>
+    /// Text line height.
+    /// </summary>
+    public double LineHeight { get; set; }
+
+    /// <summary>
+    /// Text letter spacing.
+    /// </summary>
+    public double LetterSpacing { get; set; }
+
+    /// <summary>
+    /// Text align.
+    /// </summary>
+    public TextAlign Align { get; set; }
 }

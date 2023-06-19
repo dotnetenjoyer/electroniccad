@@ -79,13 +79,52 @@ public class TypographyModel : ObservableObject
     }
 
     private string fontFamily;
-    
+
+    /// <summary>
+    /// Text line height.
+    /// </summary>
+    public double LineHeight
+    {
+        get => lineHeight;
+        set => SetProperty(ref lineHeight, value);
+    }
+
+    private double lineHeight;
+
+    /// <summary>
+    /// Text letter spacing.
+    /// </summary>
+    public double LetterSpacing
+    {
+        get => letterSpacing;
+        set => SetProperty(ref letterSpacing, value);
+    }
+
+    private double letterSpacing;
+
+    /// <summary>
+    /// Text align.
+    /// </summary>
+    public TextAlign Align 
+    { 
+        get => align;
+        set => SetProperty(ref align, value);
+    }
+
+    private TextAlign align;
+
+    /// <summary>
+    /// Available text aligments.
+    /// </summary>
+    public IEnumerable<TextAlign> Alignments { get; }
+
     /// <summary>
     /// Constructor.
     /// </summary>
     public TypographyModel(IFontFamilyStorage fontFamilyStorage)
     {
         FontWeights = Enum.GetValues<FontWeight>();
+        Alignments = Enum.GetValues<TextAlign>();
         FontFamilies = fontFamilyStorage.GetFontFamilyNames();
     }
 }

@@ -7,11 +7,11 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Text properties proxy
 /// </summary>
-public class TextPropertiesProxy : GeometryObjectPropertiesProxy<Text>, ITypographyProxy
+public class TextPropertiesProxy : GeometryObjectPropertiesProxy<Text>, ITypographyPropertiesProxy
 {
     /// <inheritdoc />
     public string? Text { get; set; }
-    
+
     /// <inheritdoc />
     public double FontSize { get; set; }
 
@@ -23,6 +23,15 @@ public class TextPropertiesProxy : GeometryObjectPropertiesProxy<Text>, ITypogra
 
     /// <inheritdoc />
     public Color ForegroundColor { get; set; }
+
+    /// <inheritdoc />
+    public double LineHeight { get; set; }
+
+    /// <inheritdoc />
+    public double LetterSpacing { get; set; }
+
+    /// <inheritdoc />
+    public TextAlign Align { get; set; }
 
     /// <summary>
     /// Constructor.
@@ -42,6 +51,9 @@ public class TextPropertiesProxy : GeometryObjectPropertiesProxy<Text>, ITypogra
         FontWeight = Source.FontWeight;
         FontFamily = Source.FontFamily;
         ForegroundColor = Source.FillColor;
+        LineHeight = Source.LineHeight;
+        LetterSpacing = Source.LetterSpacing;
+        Align = Source.Align;
     }
 
     /// <inheritdoc />
@@ -54,5 +66,8 @@ public class TextPropertiesProxy : GeometryObjectPropertiesProxy<Text>, ITypogra
         Source.FontWeight = FontWeight;
         Source.FontFamily = FontFamily;
         Source.FillColor = ForegroundColor;
+        Source.LineHeight = LineHeight;
+        Source.LetterSpacing = LetterSpacing;
+        Source.Align = Align;
     }
 }
