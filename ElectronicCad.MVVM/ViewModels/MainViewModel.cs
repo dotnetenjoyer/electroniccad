@@ -1,5 +1,3 @@
-using ElectronicCad.Domain.Geometry;
-using ElectronicCad.Infrastructure.Abstractions.Interfaces.Projects;
 using ElectronicCad.MVVM.Common;
 using ElectronicCad.MVVM.Utils;
 using ElectronicCad.MVVM.ViewModels.ActivityBar;
@@ -15,37 +13,25 @@ public class MainViewModel : ViewModel
 {
     private readonly ViewModelFactory viewModelFactory;
 
+    /// <summary>
+    /// Top menu view model
+    /// </summary>
+    public TopMenuViewModel TopMenu { get; }
+
+
     /// Activity bar view model.
     /// </summary>
-    public ActivityBarViewModel ActivityBar
-    {
-        get => activityBar;
-        set => SetProperty(ref activityBar, value);
-    }
-
-    private ActivityBarViewModel activityBar;
+    public ActivityBarViewModel ActivityBar { get; }
 
     /// <summary>
     /// Diagram view model.
     /// </summary>
-    public DiagramViewModel Diagram
-    {
-        get => diagramControl;
-        set => SetProperty(ref diagramControl, value);
-    }
-
-    private DiagramViewModel diagramControl;
+    public DiagramViewModel Diagram { get; }
 
     /// <summary>
     /// Property view model.
     /// </summary>
-    public PropertyViewModel Property
-    {
-        get => property;
-        set => SetProperty(ref property, value);
-    }
-
-    private PropertyViewModel property;
+    public PropertyViewModel Property { get; }
 
     /// <summary>
     /// Constructor.
@@ -53,7 +39,8 @@ public class MainViewModel : ViewModel
     public MainViewModel(ViewModelFactory viewModelFactory)
     {
         this.viewModelFactory = viewModelFactory;
-
+        
+        TopMenu = viewModelFactory.Create<TopMenuViewModel>();
         ActivityBar = viewModelFactory.Create<ActivityBarViewModel>();
         Property = viewModelFactory.Create<PropertyViewModel>();
         Diagram = viewModelFactory.Create<DiagramViewModel>();
@@ -62,6 +49,11 @@ public class MainViewModel : ViewModel
     /// <inheritdoc />
     public override Task LoadAsync()
     {
-        return activityBar.LoadAsync();
+        var loadTopMenu = TopMenu.LoadAsync();
+        var loadActivityBar = ActivityBar.LoadAsync();
+        var loadProperty = Property.LoadAsync();
+        var loadDiagram = Diagram.LoadAsync();
+
+        return Task.WhenAll(loadTopMenu, loadActivityBar, loadProperty, loadDiagram);
     }
 }

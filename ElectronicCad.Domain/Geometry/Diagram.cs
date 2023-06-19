@@ -1,10 +1,7 @@
-﻿using ElectronicCad.Domain.Common;
-using ElectronicCad.Domain.Exceptions;
+﻿using ElectronicCad.Domain.Exceptions;
 using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.Domain.Geometry.Layouts;
 using ElectronicCad.Domain.Validations;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace ElectronicCad.Domain.Geometry;
 

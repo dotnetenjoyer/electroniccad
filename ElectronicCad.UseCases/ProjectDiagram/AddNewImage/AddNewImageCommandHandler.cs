@@ -31,13 +31,21 @@ public class AddNewImageCommandHandler : IRequestHandler<AddNewImageCommand>
     /// <inheritdoc />
     public async Task<Unit> Handle(AddNewImageCommand request, CancellationToken cancellationToken)
     {
-        var diagram = activeDiagramProvider.Diagram.GeometryDiagram;
+        try
+        {
+            var diagram = activeDiagramProvider.Diagram.GeometryDiagram;
 
-        var imagePath = PickImage();
-        var imageSize = GetImageSize(imagePath);
-        var imageCenterPoint = new Point(diagram.Size.Width / 2, diagram.Size.Height / 2);
-        var image = new Image(imageCenterPoint, imageSize.Width, imageSize.Height, imagePath);
-        diagram.AddGeometry(image);
+            var imagePath = PickImage();
+            var imageSize = GetImageSize(imagePath);
+            var imageCenterPoint = new Point(diagram.Size.Width / 2, diagram.Size.Height / 2);
+            var image = new Image(imageCenterPoint, imageSize.Width, imageSize.Height, imagePath);
+            diagram.AddGeometry(image);
+        }
+        catch(TaskCanceledException)
+        {
+            // Ignore
+        }
+
 
         return Unit.Value;    
     }

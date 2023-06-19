@@ -45,7 +45,7 @@
                         VerticalAlignment="Center"
                         Margin="0 0 10 0"/>
     
-                    <views:TopMenu DockPanel.Dock="Top"/>
+                    <views:TopMenu DockPanel.Dock="Top" DataContext="{Binding TopMenu}"/>
                 </StackPanel>
                 
                 <!-- Panel for drag move -->
