@@ -47,19 +47,18 @@
             <ItemsControl 
                 DockPanel.Dock="Top" 
                 ItemsSource="{Binding PropertyObject.CustomSections}"
-                Margin="0 0 0 20">
+                Margin="0 0 0 0">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
                             <Border Padding="10">
                                 <ContentControl
                                     Content="{Binding}"
-                                    Margin="0 0 0 15"
                                     ContentTemplateSelector="{StaticResource CustomSectionDataTemplateSelector }"
                                 />
                             </Border>
 
-                            <Separator/>
+                            <Separator Height="2"/>
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -70,12 +69,12 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Expander IsExpanded="True" Header="{Binding Name}" Padding="10">
-                            <ItemsControl ItemsSource="{Binding Properties}" Margin="0 12 0 0">
+                            <ItemsControl ItemsSource="{Binding Properties}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <ContentControl
                                             Content="{Binding}"
-                                            Margin="0 0 0 20"
+                                            Margin="0 0 0 15"
                                             ContentTemplateSelector="{StaticResource PrimitivePropertyDataTemplateSelector}"
                                         />
                                     </DataTemplate>

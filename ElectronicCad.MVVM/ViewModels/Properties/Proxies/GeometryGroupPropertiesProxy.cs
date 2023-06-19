@@ -6,7 +6,7 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// <summary>
 /// Properties proxy to geometry group.
 /// </summary>
-public class GeometryGroupPropertiesProxy : GeometryObjectProxy<GeometryGroup>, IAlignPropertiesProxy
+public class GeometryGroupPropertiesProxy : GeometryObjectPropertiesProxy<GeometryGroup>, IAlignPropertiesProxy
 {
     /// <summary>
     /// Constructor.

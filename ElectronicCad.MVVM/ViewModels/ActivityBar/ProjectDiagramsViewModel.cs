@@ -115,15 +115,7 @@ public class ProjectDiagramsViewModel : ViewModel
             return Array.Empty<TreeNode>();
         }
 
-        return DiagramTrees.Diagrams.SelectMany(diagram =>
-        {
-            if (diagram.Nodes == null || !diagram.Nodes.Any())
-            {
-                return Array.Empty<TreeNode>();
-            }
-
-            return diagram.Nodes.SelectMany(n => GetAllNodes(n));
-        });
+        return DiagramTrees.Diagrams.SelectMany(diagram => GetAllNodes(diagram));
 
         IEnumerable<TreeNode> GetAllNodes(TreeNode node)
         {
@@ -162,8 +154,15 @@ public class ProjectDiagramsViewModel : ViewModel
         {
             projectDiagram.GeometryDiagram.GeometryAdded += HandleGeometyUpdate;
             projectDiagram.GeometryDiagram.GeometryRemoved += HandleGeometyUpdate;
+            projectDiagram.GeometryDiagram.LayerAdded += HandleLayersUpdate;
+            projectDiagram.GeometryDiagram.LayerRemoved += HandleLayersUpdate;
         }
 
+        await UpdateDiagramTrees();
+    }
+
+    private async void HandleLayersUpdate(object? sender, Layer layer)
+    {
         await UpdateDiagramTrees();
     }
 

@@ -53,13 +53,18 @@
             ItemsSource="{Binding Nodes}">
             <Border Padding="8">
                 <DockPanel>
-                    <DockPanel DockPanel.Dock="Right" Margin="10 0">
+                    <StackPanel 
+                        Orientation="Horizontal" 
+                        VerticalAlignment="Center"  
+                        DockPanel.Dock="Right" 
+                        Margin="10 0">
+
                         <components:IconCheckBox 
                             IsChecked="{Binding DiagramObject.IsLock, Mode=OneWay}"
                             EnableIconPath="{StaticResource LockIcon}"
                             DisableIconPath="{StaticResource UnlockIcon}"
                             Visibility="{Binding DiagramObject.IsLock, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Width="18"
+                            Width="12"
                             Margin="5 0"/>
                         
                         <components:IconCheckBox 
@@ -67,9 +72,9 @@
                             EnableIconPath="{StaticResource EyeIcon}"
                             DisableIconPath="{StaticResource EyeClosedIcon}"
                             Visibility="{Binding DiagramObject.IsVisible, Converter={StaticResource BooleanToVisibilityConverter},ConverterParameter=True}"
-                            Width="18"
+                            Width="14"
                             Margin="5 0"/>
-                    </DockPanel>
+                    </StackPanel>
 
                     <components:Icon 
                         Margin="0 0 10 0"

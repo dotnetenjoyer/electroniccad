@@ -1,13 +1,14 @@
-﻿using ElectronicCad.Domain.Geometry;
+﻿using ElectronicCad.Domain.Exceptions;
+using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.Transformation;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
 /// <summary>
-/// Geometry object property proxy.
+/// Geometry object properties proxy.
 /// </summary>
-public abstract class GeometryObjectProxy<TGeometryObject> : VersionablePropertiesProxy<TGeometryObject>, ITransformationProxy 
+public abstract class GeometryObjectPropertiesProxy<TGeometryObject> : VersionablePropertiesProxy<TGeometryObject>, ITransformationProxy 
     where TGeometryObject : GeometryObject
 {
     /// <summary>
@@ -31,7 +32,7 @@ public abstract class GeometryObjectProxy<TGeometryObject> : VersionableProperti
     /// Constructor.
     /// </summary>
     /// <param name="geometryObject">Geometry object.</param>
-    public GeometryObjectProxy(TGeometryObject geometryObject) : base(geometryObject)
+    public GeometryObjectPropertiesProxy(TGeometryObject geometryObject) : base(geometryObject)
     {
     }
 

@@ -15,9 +15,7 @@ public abstract class GeometryObject : VersionableBase, IHaveName
     /// </summary>
     public Guid Id { get; internal set; } = Guid.NewGuid();
 
-    /// <summary>
-    /// Name.
-    /// </summary>
+    /// <inheritdoc />
     public string Name 
     {
         get => name; 
@@ -167,6 +165,12 @@ public abstract class GeometryObject : VersionableBase, IHaveName
             .ToArray();
 
         RecalculateBoundingBox();
+    }
+
+    /// <inheritdoc />
+    public void Rename(string name)
+    {
+        Name = name;
     }
 
     #region Versioning

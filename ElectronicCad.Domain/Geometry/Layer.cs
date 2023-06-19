@@ -78,6 +78,12 @@ public class Layer : DomainObservableObject, IGeometryContainer, IHaveName
         Diagram = diagram;
     }
 
+    /// <inheritdoc />
+    public void Rename(string name)
+    {
+        Name = name;
+    }
+
     #region IGeometryContainer
 
     /// <inheritdoc />

@@ -76,9 +76,23 @@ public class Diagram : VersionableBase, IGeometryContainer, IDisposable
     {
         var layer = new Layer(name, this);
         layers.Add(layer);
-        ActiveLayer = layer;
+        ActivateLayer(layer);
         LayerAdded?.Invoke(this, layer);
         return layer;
+    }
+
+    /// <summary>
+    /// Activates related layer.
+    /// </summary>
+    /// <param name="layer">Layer to activate.</param>
+    public void ActivateLayer(Layer layer)
+    {
+        if (!layers.Contains(layer))
+        {
+            throw new DomainException("It isn't possible to activate a layer that is not related with the diagram");
+        }
+
+        ActiveLayer = layer;
     }
 
     /// <summary>

@@ -3,6 +3,8 @@ using ElectronicCad.Domain.Geometry.Extensions;
 using ElectronicCad.Domain.Geometry.Utils;
 using ElectronicCad.Infrastructure.Abstractions.Services;
 using Microsoft.Toolkit.Mvvm.Input;
+using System.Net.Http.Headers;
+using System.Runtime.InteropServices.ObjectiveC;
 using System.Security.Cryptography.X509Certificates;
 using WorkspaceDiagram = ElectronicCad.Domain.Workspace.Diagram;
 
@@ -33,6 +35,7 @@ public class DiagramsContextMenuFactory
     {
         var commands = new List<ContextMenuCommand>();
         commands.AddRange(CreateGeometryObjectsCommands(objects));
+        commands.AddRange(CreateLayerCommands(objects));
         commands.AddRange(CreateDiagramsCommands(objects));
         return commands;
     }   
@@ -45,10 +48,21 @@ public class DiagramsContextMenuFactory
             .OfType<GeometryObject>()
             .ToList();
         
-        if (geometryObjects != null && geometryObjects.Any() &&  geometryObjects.Count != objects.Count())
+        if (geometryObjects == null || !geometryObjects.Any() || geometryObjects.Count != objects.Count())
         {
             return commands;
         }
+
+        if(geometryObjects.Count == 1)
+        {
+            var geometryObject = geometryObjects.First();
+
+            commands.Add(new ContextMenuCommand("Поднять", new RelayCommand(Foo, CanFoo)));
+            commands.Add(new ContextMenuCommand("Поднять вверх", new RelayCommand(Foo, CanFoo)));
+            commands.Add(new ContextMenuCommand("Опустить", new RelayCommand(Foo, CanFoo)));
+            commands.Add(new ContextMenuCommand("Опустить вниз", new RelayCommand(Foo, CanFoo)));
+        }
+
 
         commands.Add(new ContextMenuCommand("Сгруппировать",
             new RelayCommand(GroupGeometry, CanGroupGeometry)));
@@ -101,6 +115,16 @@ public class DiagramsContextMenuFactory
             RemoveGeometry(geometryObjects!))));
 
         return commands;
+
+        void Foo()
+        {
+
+        }
+
+        bool CanFoo()
+        {
+            return true;
+        }
 
         void CloneGeometry(IEnumerable<GeometryObject> geometryObjects)
         {
@@ -203,6 +227,58 @@ public class DiagramsContextMenuFactory
         }
     }
 
+    private IEnumerable<ContextMenuCommand> CreateLayerCommands(IEnumerable<object> objects)
+    {
+        var commands = new List<ContextMenuCommand>();
+
+        var layers = objects
+            .OfType<Layer>()
+            .ToList();
+
+        if (layers == null || !layers.Any() || layers.Count() != objects.Count())
+        {
+            return commands;
+        }
+
+        if (layers.Count == 1)
+        {
+            var layer = layers.First();
+
+            commands.Add(new ContextMenuCommand("Поднять", new RelayCommand(Foo, CanFoo)));
+            commands.Add(new ContextMenuCommand("Поднять вверх", new RelayCommand(Foo, CanFoo)));
+            commands.Add(new ContextMenuCommand("Опустить", new RelayCommand(Foo, CanFoo)));
+            commands.Add(new ContextMenuCommand("Опустить вниз", new RelayCommand(Foo, CanFoo)));
+            
+            commands.Add(new ContextMenuCommand("Активировать", new RelayCommand(()
+                => ActivateLayer(layer), () => CanActivateLayer(layer))));
+        }
+
+        commands.Add(new ContextMenuCommand("Удалить", new RelayCommand(Foo, CanFoo)));
+
+        return commands;
+
+        void Foo()
+        {
+
+        }
+
+        bool CanFoo()
+        {
+            return true;
+        }
+        
+        void ActivateLayer(Layer layer)
+        {
+            layer.Diagram.ActivateLayer(layer);
+        }
+
+        bool CanActivateLayer(Layer layer)
+        {
+            return !layer.IsActive;
+        }
+    
+    }
+
     private IEnumerable<ContextMenuCommand> CreateDiagramsCommands(IEnumerable<object> objects)
     {
         var commands = new List<ContextMenuCommand>();
@@ -219,7 +295,7 @@ public class DiagramsContextMenuFactory
 
         commands.Add(new ContextMenuCommand("Добавить слой", new RelayCommand(() =>
         {
-            diagram.GeometryDiagram.AddLayer("New");
+            diagram.GeometryDiagram.AddLayer("Слой");
         })));
 
         return commands;

@@ -18,6 +18,7 @@ internal class ProjectDiagramProfile : PropertyObjectProfile
     {
         CreateConfiguration<ProjectDiagramPropertiesProxy>()
             .HasCustomSection<SizeCustomSection>()
-            .HasCustomSection<LayoutGridCustomSection>();
+            .HasCustomSection<LayoutGridCustomSection>()
+            .HasPrimitive(source => source.Name, options => options.HasName("Наименования"));
     }
 }

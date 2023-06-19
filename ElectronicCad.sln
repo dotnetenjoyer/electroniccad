@@ -21,11 +21,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.MVVM.Common",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.UseCases", "ElectronicCad.UseCases\ElectronicCad.UseCases.csproj", "{84B9F5BE-C6BC-43BC-8C85-E70663AC3131}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.Infrastructure.Abstractions", "ElectronicCad.Infrastructure.Abstractions\ElectronicCad.Infrastructure.Abstractions.csproj", "{391FAA68-A58D-4F0E-B06B-48D6B645DAE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Infrastructure.Abstractions", "ElectronicCad.Infrastructure.Abstractions\ElectronicCad.Infrastructure.Abstractions.csproj", "{391FAA68-A58D-4F0E-B06B-48D6B645DAE5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructures", "Infrastructures", "{8299F3CC-9C82-44E6-965D-365F4F234B43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicCad.Infrastructure.Implementations", "ElectronicCad.Infrastructure.Implementations\ElectronicCad.Infrastructure.Implementations.csproj", "{5F7BCCBF-7EA5-4C99-8DAC-38CC139F12A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicCad.Infrastructure.Implementations", "ElectronicCad.Infrastructure.Implementations\ElectronicCad.Infrastructure.Implementations.csproj", "{5F7BCCBF-7EA5-4C99-8DAC-38CC139F12A3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6C52B9FE-3C74-4386-8A30-3BCB2DC7E7D7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

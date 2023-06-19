@@ -24,14 +24,4 @@ public static class GeometryObjectsExtensions
         var clone = (GeometryObject)cloneConstructor.Invoke(new object[] { geometryObject });
         return clone;
     }
-
-    /// <summary>
-    /// The extension method to rename geometry object.
-    /// </summary>
-    /// <param name="geometry"></param>
-    /// <param name="name"></param>
-    public static void Rename(this GeometryObject geometry, string name)
-    {
-        geometry.Name = name;
-    }
 }

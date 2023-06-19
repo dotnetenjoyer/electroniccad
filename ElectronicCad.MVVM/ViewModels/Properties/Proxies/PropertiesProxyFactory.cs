@@ -17,6 +17,7 @@ public static class PropertiesProxyFactory
         => sourceObject switch
         {
             ProjectDiagram diagram => new ProjectDiagramPropertiesProxy(diagram),
+            Layer layer => new LayerPropertiesProxy(layer),
             GeometryGroup group => new GeometryGroupPropertiesProxy(group),
             Line line => new LinePropertyProxy(line),
             Polygon polygon => new PolygonPropertiesProxy(polygon),

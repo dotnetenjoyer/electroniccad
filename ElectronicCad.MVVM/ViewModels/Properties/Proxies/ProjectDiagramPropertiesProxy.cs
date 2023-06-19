@@ -3,6 +3,7 @@ using ElectronicCad.Domain.Geometry;
 using ElectronicCad.Domain.Geometry.LayoutGrids;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.DiagramLayoutGrid;
 using ElectronicCad.MVVM.ViewModels.Properties.CustomSections.SizeSection;
+using ElectronicCad.Domain.Exceptions;
 
 namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 
@@ -11,6 +12,11 @@ namespace ElectronicCad.MVVM.ViewModels.Properties.Proxies;
 /// </summary>
 public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<ProjectDiagram>, ILayoutGridProxy, ISizeProxy
 {
+    /// <summary>
+    /// Project diagram name.
+    /// </summary>
+    public string Name { get; set; }
+    
     /// <inhertidoc />
     public IEnumerable<LayoutGrid> LayoutGrids { get; set; }
 
@@ -52,6 +58,7 @@ public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<Project
     /// <inheritdoc />
     public override void UpdateFromSource()
     {
+        Name = Source.Name;
         LayoutGrids = Source.GeometryDiagram.LayoutGrids;
         Size = Source.GeometryDiagram.Size;
     }
@@ -60,12 +67,13 @@ public class ProjectDiagramPropertiesProxy : NotificationPropertiesProxy<Project
     public override void UpdateSource()
     {
         Source.PropertyChanged -= HandleSourcePropertyChange;
+        
         using var scope = Source.GeometryDiagram.StartModificationScope();
         Source.GeometryDiagram.StartModification();
-        
         Source.GeometryDiagram.Size = Size;
-        
+        Source.Rename(Name);
         Source.GeometryDiagram.CompleteModification();
+    
         Source.PropertyChanged += HandleSourcePropertyChange;
     }
 }
