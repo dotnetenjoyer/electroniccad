@@ -253,7 +253,7 @@ public class DiagramsContextMenuFactory
                 => ActivateLayer(layer), () => CanActivateLayer(layer))));
         }
 
-        commands.Add(new ContextMenuCommand("Удалить", new RelayCommand(Foo, CanFoo)));
+        commands.Add(new ContextMenuCommand("Удалить", new RelayCommand(() => RemoveLayer(layers), () => CanRemoveLayer(layers))));
 
         return commands;
 
@@ -277,6 +277,18 @@ public class DiagramsContextMenuFactory
             return !layer.IsActive;
         }
     
+        void RemoveLayer(IEnumerable<Layer> layers)
+        {
+            foreach (var layer in layers)
+            {
+               layer.Diagram.RemoveLayer(layer);
+            }
+        }
+
+        bool CanRemoveLayer(IEnumerable<Layer> layers)
+        {
+            return true;
+        }
     }
 
     private IEnumerable<ContextMenuCommand> CreateDiagramsCommands(IEnumerable<object> objects)
